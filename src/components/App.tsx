@@ -1,20 +1,13 @@
-import React from 'react';
-import NavBar from './NavBar';
+import React from "react";
+import Sidebar from "./Sidebar";
+import "./App.css";
 
-interface AppProps {
-}
-
-interface AppState {
-}
-
-class App extends React.Component<AppProps, AppState> {
-  render() {
-    return (
-      <div id="app">
-        <NavBar />
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="app">
+      <Sidebar />
+    </div>
+  );
 }
 
 export default App;

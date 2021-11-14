@@ -1,0 +1,14 @@
+.sidebarNavItem {
+  color: gray;
+  cursor: pointer;
+  margin: 10px;
+  font-size: x-large;
+}
+
+.sidebarNavItem--unselected:hover {
+  color: lightgray;
+}
+
+.sidebarNavItem--selected {
+  color: white;
+}

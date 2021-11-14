@@ -1,0 +1,17 @@
+.connectionInfo {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.connectionInfo--connected {
+  color: #4fb185;
+}
+
+.connectionInfo--disconnected {
+  color: #ff0000;
+}
+
+.connectionInfo > p {
+  margin-left: 5px;
+}

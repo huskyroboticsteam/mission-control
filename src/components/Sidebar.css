@@ -1,0 +1,11 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0.15;
+  height: 100vh;
+  background-color: #2f3135;
+}
+
+.sidebar__nav {
+  flex: 1;
+}
