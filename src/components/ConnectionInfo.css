@@ -1,7 +1,8 @@
-.connectionInfo {
+.connectionInfo--connected, .connectionInfo--disconnected {
   display: flex;
   align-items: center;
   cursor: default;
+  margin: 5px;
 }
 
 .connectionInfo--connected {
@@ -12,6 +13,6 @@
   color: #ff0000;
 }
 
-.connectionInfo > p {
-  margin-left: 5px;
+.connectionInfo--connected > p, .connectionInfo--disconnected > p {
+  margin: 5px;
 }

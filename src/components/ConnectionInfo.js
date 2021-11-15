@@ -1,11 +1,10 @@
-import React from "react";
 import "./ConnectionInfo.css";
 import SignalCellularAltIcon from "@material-ui/icons/SignalCellularAlt";
 
-function ConnectionInfo(props: { connected: boolean; }) {
-  if (props.connected) {
+function ConnectionInfo({ connected }) {
+  if (connected) {
     return (
-      <div className="connectionInfo connectionInfo--connected">
+      <div className="connectionInfo--connected">
         <SignalCellularAltIcon
           className="connectionInfo__icon"
           fontSize="large"
@@ -15,7 +14,7 @@ function ConnectionInfo(props: { connected: boolean; }) {
     );
   } else {
     return (
-      <div className="connectionInfo connectionInfo--disconnected">
+      <div className="connectionInfo--disconnected">
         <SignalCellularAltIcon
           className="connectionInfo__icon"
           fontSize="large"

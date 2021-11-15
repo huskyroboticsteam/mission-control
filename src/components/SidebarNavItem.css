@@ -1,14 +1,21 @@
-.sidebarNavItem {
-  color: gray;
+.sidebarNavItem--selected, .sidebarNavItem--unselected {
   cursor: pointer;
   margin: 10px;
   font-size: x-large;
 }
 
-.sidebarNavItem--unselected:hover {
-  color: lightgray;
+.sidebarNavItem--unselected {
+  color: gray;
 }
 
 .sidebarNavItem--selected {
   color: white;
+}
+
+.sidebarNavItem--selected > h2 {
+  margin-left: 10px;
+}
+
+.sidebarNavItem--unselected:hover {
+  color: lightgray;
 }
