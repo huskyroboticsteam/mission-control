@@ -1,0 +1,46 @@
+.navBar {
+  flex: 1;
+}
+
+.navBar > ul {
+  list-style: none;
+  padding: 0;
+}
+
+.navBar > ul > li {
+  margin: 10px;
+  margin: 0;
+}
+
+.navBar__navLink {
+  cursor: pointer;
+  font-size: 36px;
+  font-weight: 500;
+  color: gray;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  margin: 10px 10px;
+  border-radius: 10px;
+  -webkit-user-drag: none;
+}
+
+.navBar__navLink--active {
+  color: white;
+  background-color: #3f4145;
+}
+
+.navBar__navLink:hover {
+  color: lightgray;
+  background-color: #3f4145;
+}
+
+.navBar__navLink--active:hover {
+  color: white;
+  background-color: #3f4145;
+}
+
+.navBar__icon {
+  margin-right: 10px;
+}

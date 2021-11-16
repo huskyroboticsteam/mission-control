@@ -1,0 +1,28 @@
+.inputInfo {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  padding: 10px;
+  border-top: 1px solid gray;
+  font-size: large;
+  justify-content: space-around;
+}
+
+.inputInfo__info--connected, .inputInfo__info--disconnected {
+  flex: 0.33;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputInfo__info--connected > p, .inputInfo__info--disconnected > p {
+  font-size: small;
+}
+
+.inputInfo__info--connected {
+  color: #4fb185;
+}
+
+.inputInfo__info--disconnected {
+  color: gray;
+}

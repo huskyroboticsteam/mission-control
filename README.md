@@ -21,7 +21,7 @@ The React app providing the user interface for operating the Husky Robotics rove
 4. Run `cd MissionControl` to navigate to the repository.
 5. Run `npm install` to install dependencies.
 
-### Mac
+### macOS
 1. Install [Node.js for macOS](https://nodejs.org/en/download/).
 2. Open your terminal.
 3. Run `git clone https://github.com/huskyroboticsteam/MissionControl.git` to clone the Mission Control repository to your local machine.

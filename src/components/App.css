@@ -1,7 +1,4 @@
 .app {
   display: flex;
-}
-
-main {
-  flex: 0.85;
+  user-select: none;
 }

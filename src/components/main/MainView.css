@@ -1,0 +1,6 @@
+.mainView {
+  flex: 0.85;
+  background-color: #474b53;
+  color: white;
+  height: 100vh;
+}
