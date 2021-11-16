@@ -13,10 +13,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0px 10px;
 }
 
 .inputInfo__info--connected > p, .inputInfo__info--disconnected > p {
   font-size: small;
+  text-align: center;
 }
 
 .inputInfo__info--connected {

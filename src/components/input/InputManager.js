@@ -10,7 +10,7 @@ const initialInput = {
 function InputManager({ setGamepad1Connected, setGamepad2Connected }) {
   const [input, setInput] = useState(initialInput);
 
-  useEffect(handlInput, [input]);
+  useEffect(handleInput, [input]);
 
   return (
     <>
@@ -23,7 +23,7 @@ function InputManager({ setGamepad1Connected, setGamepad2Connected }) {
   );
 }
 
-function handlInput() {
+function handleInput() {
   // TODO: send commands to rover.
 }
 

@@ -7,20 +7,16 @@
   padding: 0;
 }
 
-.navBar > ul > li {
-  margin: 10px;
-  margin: 0;
-}
-
 .navBar__navLink {
   cursor: pointer;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 500;
   color: gray;
   text-decoration: none;
   display: flex;
   align-items: center;
-  padding: 0px 10px;
+  padding-left: 5px;
+  padding-right: 10px;
   margin: 10px 10px;
   border-radius: 10px;
   -webkit-user-drag: none;
@@ -42,5 +38,5 @@
 }
 
 .navBar__icon {
-  margin-right: 10px;
+  margin-right: 20px;
 }

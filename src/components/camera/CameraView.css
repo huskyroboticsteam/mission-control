@@ -2,9 +2,14 @@
   box-sizing: border-box;
   padding: 10px;
   display: flex;
+  background-color: black;
+  height: 100%;
+  justify-content: center;
 }
 
 .cameraView > video {
   max-width: 100%;
   max-height: 100%;
+  /* TODO: Figure out how to maintain the border radius when resizing. */
+  border-radius: 15px;
 }

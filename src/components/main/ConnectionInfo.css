@@ -1,8 +1,9 @@
 .connectionInfo--connected, .connectionInfo--disconnected {
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: default;
-  padding: 5px;
+  padding: 5px 10px 5px 5px;
   border-top: 1px solid gray;
   font-size: large;
 }

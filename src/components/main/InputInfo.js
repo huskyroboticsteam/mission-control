@@ -19,7 +19,7 @@ function KeyboardInfo({ connected }) {
   return (
     <div className={className}>
       <KeyboardIcon fontSize="large" className={className} />
-      <p>Keyboard</p>
+      <p>Keyboard Controls</p>
     </div>
   );
 }
@@ -31,7 +31,7 @@ function GamepadInfo({ label, connected }) {
   return (
     <div className={className}>
       <GamepadIcon fontSize="large" className={className} />
-      <p>{label}</p>
+      <p>{label} Gamepad</p>
     </div>
   );
 }
