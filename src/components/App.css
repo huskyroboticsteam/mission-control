@@ -1,3 +1,7 @@
 .app {
   display: flex;
 }
+
+main {
+  flex: 0.85;
+}

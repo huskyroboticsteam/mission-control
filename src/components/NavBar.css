@@ -1,0 +1,19 @@
+.navBar__navLink {
+  cursor: pointer;
+  margin: 10px;
+  font-size: xx-large;
+  color: gray;
+  text-decoration: none;
+}
+
+.navBar__navLink--active {
+  color: white;
+}
+
+.navBar__navLink:hover {
+  color: lightgray;
+}
+
+.navBar__navLink--active:hover {
+  color: white;
+}

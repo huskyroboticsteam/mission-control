@@ -9,3 +9,8 @@
 .sidebar__nav {
   flex: 1;
 }
+
+.sidebar__nav > ul {
+  list-style: none;
+  padding: 0;
+}
