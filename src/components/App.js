@@ -1,7 +1,7 @@
+import { useState } from "react";
 import Sidebar from "./main/Sidebar";
 import MainView from "./main/MainView";
 import InputManager from "./input/InputManager";
-import { useState } from "react";
 import Socket from "./network/Socket";
 import "./App.css";
 

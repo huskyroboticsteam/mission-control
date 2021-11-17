@@ -17,5 +17,5 @@
 }
 
 .connectionInfo--connected > p, .connectionInfo--disconnected > p {
-  margin: 10px;
+  padding: 10px;
 }

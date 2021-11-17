@@ -31,7 +31,7 @@ function GamepadInfo({ label, connected }) {
   return (
     <div className={className}>
       <GamepadIcon fontSize="large" className={className} />
-      <p>{label} Gamepad</p>
+      <p>{label + " Gamepad"}</p>
     </div>
   );
 }
