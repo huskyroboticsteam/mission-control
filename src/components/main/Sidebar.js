@@ -4,7 +4,7 @@ import InputInfo from "./InputInfo";
 import ConnectionInfo from "./ConnectionInfo";
 import "./Sidebar.css";
 
-function Sidebar({ roverConnected, stopEngaged, setStopEngaged, gamepad1Connected, gamepad2Connected }) {
+function Sidebar({ roverConnected, stopEngaged, setStopEngaged, driveGamepadConnected, armGamepadConnected }) {
   return (
     <div className="sidebar">
       <NavBar />
@@ -12,8 +12,8 @@ function Sidebar({ roverConnected, stopEngaged, setStopEngaged, gamepad1Connecte
       {/* The keyboard should always be connected. */}
       <InputInfo
         keyboardConnected={true}
-        gamepad1Connected={gamepad1Connected}
-        gamepad2Connected={gamepad2Connected}
+        driveGamepadConnected={driveGamepadConnected}
+        armGamepadConnected={armGamepadConnected}
       />
       < ConnectionInfo roverConnected={roverConnected} />
     </div>

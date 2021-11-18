@@ -20,8 +20,8 @@ const initialUserInput = {
 function App() {
   const [roverConnected, setRoverConnected] = useState(false);
   const [stopEngaged, setStopEngaged] = useState(false);
-  const [gamepad1Connected, setGamepad1Connected] = useState(false);
-  const [gamepad2Connected, setGamepad2Connected] = useState(false);
+  const [driveGamepadConnected, setDriveGamepadConnected] = useState(false);
+  const [armGamepadConnected, setArmGamepadConnected] = useState(false);
   const [userInput, setUserInput] = useState(initialUserInput);
 
   return (
@@ -30,8 +30,8 @@ function App() {
         roverConnected={roverConnected}
         stopEngaged={stopEngaged}
         setStopEngaged={setStopEngaged}
-        setgamepad1Connected={gamepad1Connected}
-        gamepad2Connected={gamepad2Connected}
+        driveGamepadConnected={driveGamepadConnected}
+        armGamepadConnected={armGamepadConnected}
       />
       <MainView />
       <Socket
@@ -42,8 +42,8 @@ function App() {
         onReceiveMessage={handleRoverMessage}
       />
       <InputManager
-        setGamepad1Connected={setGamepad1Connected}
-        setGamepad2Connected={setGamepad2Connected}
+        setDriveGamepadConnected={setDriveGamepadConnected}
+        setArmGamepadConnected={setArmGamepadConnected}
         userInput={userInput}
         setUserInput={setUserInput}
       />

@@ -1,15 +1,16 @@
 import KeyboardControls from "./KeyboardControls";
 import GamepadControls from "./GamepadControls";
 
-function InputManager({ setGamepad1Connected, setGamepad2Connected, userInput, setUserInput }) {
+function InputManager({ setDriveGamepadConnected, setArmGamepadConnected, userInput, setUserInput }) {
   return (
     <>
       <KeyboardControls userInput={userInput} setUserInput={setUserInput} />
       <GamepadControls
-        setGamepad1Connected={setGamepad1Connected}
-        setGamepad2Connected={setGamepad2Connected}
+        setDriveGamepadConnected={setDriveGamepadConnected}
+        setArmGamepadConnected={setArmGamepadConnected}
         userInput={userInput}
-        setUserInput={setUserInput} />
+        setUserInput={setUserInput}
+      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect, Fragment } from "react";
 
 function Socket({ setRoverConnected, stopEngaged, setStopEngaged, onReceiveMessage, userInput }) {
   const socketRef = useRef(null);
@@ -44,7 +44,7 @@ function Socket({ setRoverConnected, stopEngaged, setStopEngaged, onReceiveMessa
     [userInput.hand]);
 
   // We don't need to render anything.
-  return <React.Fragment />;
+  return <Fragment />;
 }
 
 function connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage) {
@@ -63,7 +63,6 @@ function connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage)
 }
 
 function sendCommand(socketRef, command) {
-  console.log(command);
   const socket = socketRef.current;
   if (socket !== null && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(command));

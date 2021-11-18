@@ -2,12 +2,12 @@ import KeyboardIcon from "@material-ui/icons/Keyboard";
 import GamepadIcon from "@material-ui/icons/Gamepad";
 import "./InputInfo.css";
 
-function InputInfo({ keyboardConnected, gamepad1Connected, gamepad2Connected }) {
+function InputInfo({ keyboardConnected, driveGamepadConnected, armGamepadConnected }) {
   return (
     <div className="inputInfo">
       <KeyboardInfo connected={keyboardConnected} />
-      <GamepadInfo label="Driver" connected={gamepad1Connected} />
-      <GamepadInfo label="Arm" connected={gamepad2Connected} />
+      <GamepadInfo label="Driver" connected={driveGamepadConnected} />
+      <GamepadInfo label="Arm" connected={armGamepadConnected} />
     </div>
   );
 }
