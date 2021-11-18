@@ -7,8 +7,15 @@ import "./App.css";
 
 const initialUserInput = {
   driveX: 0,
-  driveY: 0
-}
+  driveY: 0,
+  armBase: 0,
+  shoulder: 0,
+  elbow: 0,
+  forearm: 0,
+  diffLeft: 0,
+  diffRight: 0,
+  hand: 0
+};
 
 function App() {
   const [roverConnected, setRoverConnected] = useState(false);
