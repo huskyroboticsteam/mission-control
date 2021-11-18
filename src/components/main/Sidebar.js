@@ -3,7 +3,7 @@ import InputInfo from "./InputInfo";
 import ConnectionInfo from "./ConnectionInfo";
 import "./Sidebar.css";
 
-function Sidebar({ gamepad1Connected, gamepad2Connected }) {
+function Sidebar({ roverConnected, gamepad1Connected, gamepad2Connected }) {
   return (
     <div className="sidebar">
       <NavBar />
@@ -13,7 +13,7 @@ function Sidebar({ gamepad1Connected, gamepad2Connected }) {
         keyboardConnected={true}
         gamepad1Connected={gamepad1Connected}
         gamepad2Connected={gamepad2Connected} />
-      < ConnectionInfo connected={true} />
+      < ConnectionInfo roverConnected={roverConnected} />
     </div>
   );
 }

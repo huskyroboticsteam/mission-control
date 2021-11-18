@@ -1,30 +1,16 @@
 import KeyboardControls from "./KeyboardControls";
 import GamepadControls from "./GamepadControls";
-import { useEffect, useState } from "react";
 
-const initialInput = {
-  driveX: 0,
-  driveY: 0
-}
-
-function InputManager({ setGamepad1Connected, setGamepad2Connected }) {
-  const [input, setInput] = useState(initialInput);
-
-  useEffect(handleInput, [input]);
-
+function InputManager({ setGamepad1Connected, setGamepad2Connected, setUserInput }) {
   return (
     <>
-      <KeyboardControls setInput={setInput} />
+      <KeyboardControls setUserInput={setUserInput} />
       <GamepadControls
         setGamepad1Connected={setGamepad1Connected}
         setGamepad2Connected={setGamepad2Connected}
-        setInput={setInput} />
+        setUserInput={setUserInput} />
     </>
   );
-}
-
-function handleInput() {
-  // TODO: send commands to rover.
 }
 
 export default InputManager;

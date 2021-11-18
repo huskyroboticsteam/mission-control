@@ -1,6 +1,6 @@
 import Gamepad from "react-gamepad";
 
-function GamepadControls({ setGamepad1Connected, setGamepad2Connected }) {
+function GamepadControls({ setGamepad1Connected, setGamepad2Connected, setUserInput }) {
   return (
     <>
       <Gamepad1 setConnected={setGamepad1Connected} />

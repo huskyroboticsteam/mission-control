@@ -30,7 +30,7 @@ function MainView() {
           <ScienceView />
         </Route>
 
-        <Redirect to="/main" />
+        <Redirect to="/home" />
       </Switch>
     </div>
   );

@@ -1,8 +1,8 @@
 import "./ConnectionInfo.css";
 import SignalCellularAltIcon from "@material-ui/icons/SignalCellularAlt";
 
-function ConnectionInfo({ connected }) {
-  if (connected) {
+function ConnectionInfo({ roverConnected }) {
+  if (roverConnected) {
     return (
       <div className="connectionInfo--connected">
         <SignalCellularAltIcon fontSize="large" />
@@ -13,7 +13,7 @@ function ConnectionInfo({ connected }) {
     return (
       <div className="connectionInfo--disconnected">
         <SignalCellularAltIcon fontSize="large" />
-        <p>Disconnected from rover</p>
+        <p>Rover not connected</p>
       </div>
     );
   }
