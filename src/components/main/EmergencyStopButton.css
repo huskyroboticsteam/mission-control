@@ -1,0 +1,35 @@
+.emergencyStopButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid gray;
+}
+.emergencyStopButton > button {
+  display: block;
+  border: none;
+  color: white;
+  margin: 14px;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.emergencyStopButton--operational > button {
+  background-color: #ed4245;
+}
+
+.emergencyStopButton--stopped > button {
+  background-color: #4fb185;
+}
+
+.emergencyStopButton--stopped > button:hover, .emergencyStopButton--operational > button:hover {
+  cursor: pointer;
+}
+
+.emergencyStopButton--disabled > button {
+  color: gray;
+  background-color: #3f4145;
+  cursor: not-allowed;
+}

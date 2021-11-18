@@ -1,11 +1,15 @@
 import React, { useRef, useEffect } from "react";
 
-function Socket({ setRoverConnected, onReceiveMessage, userInput }) {
+function Socket({ setRoverConnected, stopEngaged, setStopEngaged, onReceiveMessage, userInput }) {
   const socketRef = useRef(null);
 
-  useEffect(() => {
-    connect(socketRef, setRoverConnected, onReceiveMessage);
-  }, [setRoverConnected, onReceiveMessage]);
+  useEffect(() =>
+    connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage),
+    [setRoverConnected, setStopEngaged, onReceiveMessage]);
+
+  useEffect(() =>
+    sendStopCommand(socketRef, stopEngaged),
+    [stopEngaged]);
 
   useEffect(() =>
     sendDriveCommand(socketRef, userInput.driveX, userInput.driveY),
@@ -15,34 +19,43 @@ function Socket({ setRoverConnected, onReceiveMessage, userInput }) {
   return <React.Fragment />;
 }
 
-function connect(socketRef, setRoverConnected, onReceiveMessage) {
+function connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage) {
   const socket = new WebSocket("ws://localhost:3001/");
   socket.onopen = () => setRoverConnected(true);
-  socket.onmessage = (ev) => {
-    onReceiveMessage(JSON.parse(ev.data));
-  };
+  socket.onmessage = (ev) => onReceiveMessage(JSON.parse(ev.data));
   socket.onclose = () => {
     setRoverConnected(false);
+    // The rover will likely be reset when the socket is closed, so disable the
+    // emergency stop.
+    setStopEngaged(false);
     // Try to reconnect.
-    connect(socketRef, setRoverConnected, onReceiveMessage);
+    connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage);
   }
   socketRef.current = socket;
 }
 
-function sendCommand(socket, command) {
-  socket.send(JSON.stringify(command));
+function sendCommand(socketRef, command) {
+  const socket = socketRef.current;
+  if (socket !== null && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(command));
+  }
+}
+
+function sendStopCommand(socketRef, engageStop) {
+  const command = {
+    "type": "estop",
+    "release": !engageStop
+  };
+  sendCommand(socketRef, command);
 }
 
 function sendDriveCommand(socketRef, driveX, driveY) {
-  const socket = socketRef.current;
-  if (socket !== null && socket.readyState === WebSocket.OPEN) {
-    const command = {
-      "type": "drive",
-      "forward_backward": driveY,
-      "left_right": driveX
-    };
-    sendCommand(socket, command);
-  }
+  const command = {
+    "type": "drive",
+    "forward_backward": driveY,
+    "left_right": driveX
+  };
+  sendCommand(socketRef, command);
 }
 
 export default Socket;

@@ -1,19 +1,32 @@
 import "./EmergencyStopButton.css";
 
-function EmergencyStopButton({ stopped }) {
-  if (stopped) {
-    return (
-      <div class="emergencyStopButton--stopped">
-        <button></button>
-      </div>
-    );
+function EmergencyStopButton({ roverConnected, stopEngaged, setStopEngaged }) {
+  const handleClick = () => {
+    if (roverConnected) {
+      setStopEngaged(!stopEngaged);
+    }
+  };
+
+  let className = "emergencyStopButton";
+  let text;
+  if (roverConnected) {
+    if (stopEngaged) {
+      className += " emergencyStopButton--stopped";
+      text = "Resume"
+    } else {
+      className += " emergencyStopButton--operational";
+      text = "Emergency Stop"
+    }
   } else {
-    return (
-      <div class="emergencyStopButton--operational">
-        <button></button>
-      </div>
-    );
+    className += " emergencyStopButton--disabled";
+    text = "Emergency Stop"
   }
+
+  return (
+    <div className={className}>
+      <button onClick={handleClick}>{text}</button>
+    </div>
+  );
 }
 
 export default EmergencyStopButton;
