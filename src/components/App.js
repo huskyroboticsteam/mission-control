@@ -24,6 +24,7 @@ function App() {
       <InputManager
         setGamepad1Connected={setGamepad1Connected}
         setGamepad2Connected={setGamepad2Connected}
+        userInput={userInput}
         setUserInput={setUserInput}
       />
     </div >

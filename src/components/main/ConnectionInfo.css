@@ -14,7 +14,7 @@
 }
 
 .connectionInfo--disconnected {
-  color: #ff0000;
+  color: #ed4245;
 }
 
 .connectionInfo--connected > p, .connectionInfo--disconnected > p {

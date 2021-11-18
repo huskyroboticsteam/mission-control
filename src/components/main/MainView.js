@@ -3,7 +3,8 @@ import HomeView from "../home/HomeView";
 import ArmView from "../arm/ArmView";
 import CameraView from "../camera/CameraView";
 import MapView from "../map/MapView";
-import ScienceView from "../science//ScienceView";
+import ScienceView from "../science/ScienceView";
+import HelpView from "../help/HelpView";
 import "./MainView.css";
 
 function MainView() {
@@ -28,6 +29,10 @@ function MainView() {
 
         <Route path="/science">
           <ScienceView />
+        </Route>
+
+        <Route path="/help">
+          <HelpView />
         </Route>
 
         <Redirect to="/home" />

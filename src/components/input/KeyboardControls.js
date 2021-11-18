@@ -1,40 +1,42 @@
 import { useRef, useEffect } from "react";
 
-function KeyboardControls({ setUserInput }) {
+function KeyboardControls({ userInput, setUserInput }) {
   const pressedKeysRef = useRef([]);
-  useEffect(() => addKeyboardListeners(pressedKeysRef, setUserInput), [setUserInput]);
+  useEffect(() => addKeyboardListeners(pressedKeysRef, userInput, setUserInput),
+    [userInput, setUserInput]);
   return (
     <></>
   );
 }
 
-function addKeyboardListeners(pressedKeysRef, setUserInput) {
+function addKeyboardListeners(pressedKeysRef, userInput, setUserInput) {
   const handleKeyDown = (ev) => {
     const pressedKey = ev.key;
     if (!pressedKeysRef.current.includes(pressedKey)) {
       pressedKeysRef.current = [...pressedKeysRef.current, pressedKey];
-      updateUserInput(pressedKeysRef.current, setUserInput);
+      updateUserInput(pressedKeysRef.current, userInput, setUserInput);
     }
   }
 
   const handleKeyUp = (ev) => {
     const releasedKey = ev.key;
     pressedKeysRef.current = pressedKeysRef.current.filter((key) => key !== releasedKey);
-    updateUserInput(pressedKeysRef.current, setUserInput);
+    updateUserInput(pressedKeysRef.current, userInput, setUserInput);
   }
 
   document.onkeydown = handleKeyDown;
   document.onkeyup = handleKeyUp;
 }
 
-function updateUserInput(pressedKeys, setUserInput) {
+function updateUserInput(pressedKeys, userInput, setUserInput) {
   const driveX = getAxis(pressedKeys, "ArrowLeft", "ArrowRight");
   const driveY = getAxis(pressedKeys, "ArrowUp", "ArrowDown");
-  const userInput = {
+  const newUserInput = {
+    ...userInput,
     driveX,
     driveY
   }
-  setUserInput(userInput);
+  setUserInput(newUserInput);
 }
 
 function getAxis(pressedKeys, positiveKey, negativeKey) {
