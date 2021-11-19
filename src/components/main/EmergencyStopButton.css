@@ -4,6 +4,7 @@
   align-items: center;
   border-top: 1px solid gray;
 }
+
 .emergencyStopButton > button {
   display: block;
   border: none;
@@ -24,12 +25,21 @@
   background-color: #4fb185;
 }
 
-.emergencyStopButton--stopped > button:hover, .emergencyStopButton--operational > button:hover {
-  cursor: pointer;
-}
-
 .emergencyStopButton--disabled > button {
   color: gray;
   background-color: #3f4145;
+}
+
+.emergencyStopButton--operational > button:hover {
+  cursor: pointer;
+  background-color: #dc3134;
+}
+
+.emergencyStopButton--stopped > button:hover {
+  cursor: pointer;
+  background-color: #3ea074;
+}
+
+.emergencyStopButton--disabled > button:hover {
   cursor: not-allowed;
 }

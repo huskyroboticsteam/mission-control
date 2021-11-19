@@ -7,9 +7,9 @@ import ScienceView from "../science/ScienceView";
 import HelpView from "../help/HelpView";
 import "./MainView.css";
 
-function MainView() {
+function MainView({ webcamFrameBytes }) {
   return (
-    <div className="mainView">
+    <main className="mainView">
       <Switch>
         <Route path="/home">
           <HomeView />
@@ -20,7 +20,7 @@ function MainView() {
         </Route>
 
         <Route path="/camera">
-          <CameraView />
+          <CameraView webcamFrameBytes={webcamFrameBytes} />
         </Route>
 
         <Route path="/map">
@@ -37,7 +37,7 @@ function MainView() {
 
         <Redirect to="/home" />
       </Switch>
-    </div>
+    </main>
   );
 }
 

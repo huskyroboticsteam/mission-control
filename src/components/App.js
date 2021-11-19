@@ -23,6 +23,24 @@ function App() {
   const [driveGamepadConnected, setDriveGamepadConnected] = useState(false);
   const [armGamepadConnected, setArmGamepadConnected] = useState(false);
   const [userInput, setUserInput] = useState(initialUserInput);
+  const [webcamFrameBytes, setWebcamFrameBytes] = useState(null);
+
+  const handleRoverConnect = () => {
+    setRoverConnected(true);
+  }
+
+  const handleRoverDisconnect = () => {
+    setRoverConnected(false);
+    // The rover will likely be reset when the socket is closed, so disable the
+    // emergency stop.
+    setStopEngaged(false);
+    setWebcamFrameBytes(null);
+  };
+
+  const handleRoverMessage = (message) => {
+    setWebcamFrameBytes(message.bytes);
+  };
+
 
   return (
     <div className="app">
@@ -33,13 +51,13 @@ function App() {
         driveGamepadConnected={driveGamepadConnected}
         armGamepadConnected={armGamepadConnected}
       />
-      <MainView />
+      <MainView webcamFrameBytes={webcamFrameBytes} />
       <Socket
-        setRoverConnected={setRoverConnected}
-        stopEngaged={stopEngaged}
-        setStopEngaged={setStopEngaged}
-        userInput={userInput}
+        onConnect={handleRoverConnect}
         onReceiveMessage={handleRoverMessage}
+        onDisconnect={handleRoverDisconnect}
+        stopEngaged={stopEngaged}
+        userInput={userInput}
       />
       <InputManager
         setDriveGamepadConnected={setDriveGamepadConnected}
@@ -49,10 +67,6 @@ function App() {
       />
     </div >
   );
-}
-
-function handleRoverMessage() {
-  // TODO
 }
 
 export default App;

@@ -1,11 +1,11 @@
 import { useRef, useEffect, Fragment } from "react";
 
-function Socket({ setRoverConnected, stopEngaged, setStopEngaged, onReceiveMessage, userInput }) {
+function Socket({ onConnect, onDisconnect, onReceiveMessage, stopEngaged, userInput }) {
   const socketRef = useRef(null);
 
   useEffect(() =>
-    connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage),
-    [setRoverConnected, setStopEngaged, onReceiveMessage]);
+    connect(socketRef, onConnect, onDisconnect, onReceiveMessage),
+    []);
 
   useEffect(() =>
     sendStopCommand(socketRef, stopEngaged),
@@ -47,17 +47,14 @@ function Socket({ setRoverConnected, stopEngaged, setStopEngaged, onReceiveMessa
   return <Fragment />;
 }
 
-function connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage) {
-  const socket = new WebSocket("ws://localhost:3001/");
-  socket.onopen = () => setRoverConnected(true);
+function connect(socketRef, onConnect, onDisconnect, onReceiveMessage) {
+  const socket = new WebSocket("ws://localhost:3001/mission-control");
+  socket.onopen = () => onConnect();
   socket.onmessage = (ev) => onReceiveMessage(JSON.parse(ev.data));
   socket.onclose = () => {
-    setRoverConnected(false);
-    // The rover will likely be reset when the socket is closed, so disable the
-    // emergency stop.
-    setStopEngaged(false);
+    onDisconnect();
     // Try to reconnect.
-    connect(socketRef, setRoverConnected, setStopEngaged, onReceiveMessage);
+    connect(socketRef, onConnect, onDisconnect, onReceiveMessage);
   }
   socketRef.current = socket;
 }
