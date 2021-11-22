@@ -1,6 +1,6 @@
-.mainView {
+.panelContainer {
   flex: 0.85;
-  background-color: #36393f;
+  background-color: #27292e;
   color: white;
   height: 100vh;
 }

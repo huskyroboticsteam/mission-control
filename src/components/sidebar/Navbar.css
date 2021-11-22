@@ -1,14 +1,13 @@
-.navBar {
+.navbar {
   flex: 1;
 }
 
-.navBar > ul {
+.navbar > ul {
   list-style: none;
   padding: 0;
 }
 
-.navBar__navLink {
-  cursor: pointer;
+.navbar__navLink {
   font-size: 32px;
   font-weight: 500;
   color: gray;
@@ -18,25 +17,25 @@
   padding-left: 5px;
   padding-right: 10px;
   margin: 10px 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   -webkit-user-drag: none;
 }
 
-.navBar__navLink--active {
+.navbar__navLink--active {
   color: white;
   background-color: #3f4145;
 }
 
-.navBar__navLink:hover {
+.navbar__navLink:hover {
   color: lightgray;
-  background-color: #3f4145;
+  background-color: #2f3135;
 }
 
-.navBar__navLink--active:hover {
+.navbar__navLink--active:hover {
   color: white;
   background-color: #3f4145;
 }
 
-.navBar__icon {
+.navbar__icon {
   margin-right: 20px;
 }

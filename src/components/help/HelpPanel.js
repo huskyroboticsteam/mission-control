@@ -1,9 +1,9 @@
-import "./HelpView.css";
+import "./HelpPanel.css";
 import driverControls from "../../assets/controls.jpg";
 
-function HelpView() {
+function HelpPanel() {
   return (
-    <div className="helpView">
+    <div className="helpPanel">
       <img src={driverControls} alt="driver gamepad controls" />
       <img src={driverControls} alt="driver gamepad controls" />
       <img src={driverControls} alt="driver gamepad controls" />
@@ -11,4 +11,4 @@ function HelpView() {
   );
 }
 
-export default HelpView;
+export default HelpPanel;

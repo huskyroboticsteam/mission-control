@@ -1,5 +1,5 @@
 import KeyboardIcon from "@material-ui/icons/Keyboard";
-import GamepadIcon from "@material-ui/icons/Gamepad";
+import GamepadIcon from "@material-ui/icons/SportsEsports";
 import "./InputInfo.css";
 
 function InputInfo({ keyboardConnected, driveGamepadConnected, armGamepadConnected }) {

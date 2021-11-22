@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Sidebar from "./main/Sidebar";
-import MainView from "./main/MainView";
-import InputManager from "./input/InputManager";
 import Socket from "./network/Socket";
+import InputManager from "./input/InputManager";
+import Sidebar from "./sidebar/Sidebar";
+import PanelContainer from "./panelContainer/PanelContainer";
 import "./App.css";
 
 const initialUserInput = {
@@ -44,14 +44,6 @@ function App() {
 
   return (
     <div className="app">
-      <Sidebar
-        roverConnected={roverConnected}
-        stopEngaged={stopEngaged}
-        setStopEngaged={setStopEngaged}
-        driveGamepadConnected={driveGamepadConnected}
-        armGamepadConnected={armGamepadConnected}
-      />
-      <MainView webcamFrameBytes={webcamFrameBytes} />
       <Socket
         onConnect={handleRoverConnect}
         onReceiveMessage={handleRoverMessage}
@@ -59,12 +51,23 @@ function App() {
         stopEngaged={stopEngaged}
         userInput={userInput}
       />
+
       <InputManager
         setDriveGamepadConnected={setDriveGamepadConnected}
         setArmGamepadConnected={setArmGamepadConnected}
         userInput={userInput}
         setUserInput={setUserInput}
       />
+
+      <Sidebar
+        roverConnected={roverConnected}
+        stopEngaged={stopEngaged}
+        setStopEngaged={setStopEngaged}
+        driveGamepadConnected={driveGamepadConnected}
+        armGamepadConnected={armGamepadConnected}
+      />
+
+      <PanelContainer />
     </div >
   );
 }

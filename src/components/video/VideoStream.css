@@ -1,0 +1,26 @@
+.videoStream {
+  position: relative;
+  border-radius: 10px;
+}
+
+.videoStream img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  -webkit-user-drag: none;
+}
+
+.videoStream__cameraNameContainer {
+  font-size: 30px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  color: #cccccc;
+  background-color: #000000bb;
+  border-radius: 10px 10px 0 0;
+}
+
+.videoStream__cameraName {
+  padding: 5px;
+}

@@ -43,3 +43,13 @@
 .emergencyStopButton--disabled > button:hover {
   cursor: not-allowed;
 }
+
+.emergencyStopButton--operational > button:active {
+  cursor: pointer;
+  background-color: #cb2023;
+}
+
+.emergencyStopButton--stopped > button:active {
+  cursor: pointer;
+  background-color: #2d8f63;
+}

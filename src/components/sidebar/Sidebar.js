@@ -1,4 +1,4 @@
-import NavBar from "./NavBar";
+import NavBar from "./Navbar";
 import EmergencyStopButton from "./EmergencyStopButton";
 import InputInfo from "./InputInfo";
 import ConnectionInfo from "./ConnectionInfo";
