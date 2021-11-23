@@ -12,7 +12,7 @@ function EmergencyStopButton({ roverConnected, stopEngaged, setStopEngaged }) {
   if (roverConnected) {
     if (stopEngaged) {
       className += " emergencyStopButton--stopped";
-      text = "Resume"
+      text = "Disengage Stop"
     } else {
       className += " emergencyStopButton--operational";
       text = "Emergency Stop"

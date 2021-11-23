@@ -17,8 +17,8 @@
   width: 100%;
   text-align: center;
   color: #cccccc;
-  background-color: #000000bb;
   border-radius: 10px 10px 0 0;
+  background-color: #000000aa;
 }
 
 .videoStream__cameraName {

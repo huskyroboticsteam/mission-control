@@ -6,15 +6,11 @@ import PanelContainer from "./panelContainer/PanelContainer";
 import "./App.css";
 
 const initialUserInput = {
-  driveX: 0,
-  driveY: 0,
+  driveStraight: 0,
+  driveSteer: 0,
   armBase: 0,
   shoulder: 0,
-  elbow: 0,
-  forearm: 0,
-  diffLeft: 0,
-  diffRight: 0,
-  hand: 0
+  elbow: 0
 };
 
 function App() {
@@ -23,7 +19,7 @@ function App() {
   const [driveGamepadConnected, setDriveGamepadConnected] = useState(false);
   const [armGamepadConnected, setArmGamepadConnected] = useState(false);
   const [userInput, setUserInput] = useState(initialUserInput);
-  const [webcamFrameBytes, setWebcamFrameBytes] = useState(null);
+  const [cameraStreamFrameData, setCameraStreamFrameData] = useState(null);
 
   const handleRoverConnect = () => {
     setRoverConnected(true);
@@ -34,13 +30,12 @@ function App() {
     // The rover will likely be reset when the socket is closed, so disable the
     // emergency stop.
     setStopEngaged(false);
-    setWebcamFrameBytes(null);
+    setCameraStreamFrameData(null);
   };
 
   const handleRoverMessage = (message) => {
-    setWebcamFrameBytes(message.bytes);
+    setCameraStreamFrameData(message.data);
   };
-
 
   return (
     <div className="app">
@@ -67,7 +62,9 @@ function App() {
         armGamepadConnected={armGamepadConnected}
       />
 
-      <PanelContainer />
+      <PanelContainer
+        cameraStreamFrameData={cameraStreamFrameData}
+      />
     </div >
   );
 }

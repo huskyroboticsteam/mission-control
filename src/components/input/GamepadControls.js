@@ -17,14 +17,14 @@ function DriveGamepad({ setConnected, userInput, setUserInput }) {
       case "LeftStickY":
         newUserInput = {
           ...userInput,
-          driveY: value
+          driveStraight: value
         }
         setUserInput(newUserInput);
         break;
       case "RightStickX":
         newUserInput = {
           ...userInput,
-          driveX: -value,
+          driveSteer: value,
         }
         setUserInput(newUserInput);
         break;
@@ -61,13 +61,6 @@ function ArmGamepad({ setConnected, userInput, setUserInput }) {
         newUserInput = {
           ...userInput,
           shoulder: value
-        }
-        setUserInput(newUserInput);
-        break;
-      case "RightStickX":
-        newUserInput = {
-          ...userInput,
-          forearm: value,
         }
         setUserInput(newUserInput);
         break;

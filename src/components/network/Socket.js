@@ -12,36 +12,20 @@ function Socket({ onConnect, onDisconnect, onReceiveMessage, stopEngaged, userIn
     [stopEngaged]);
 
   useEffect(() =>
-    sendDriveCommand(socketRef, userInput.driveX, userInput.driveY),
-    [userInput.driveX, userInput.driveY]);
+    sendDriveMessage(socketRef, userInput.driveStraight, userInput.driveSteer),
+    [userInput.driveStraight, userInput.driveSteer]);
 
   useEffect(() =>
-    sendMotorCommand(socketRef, "arm_base", userInput.armBase),
+    sendMotorPowerMessage(socketRef, "armBase", userInput.armBase),
     [userInput.armBase]);
 
   useEffect(() =>
-    sendMotorCommand(socketRef, "shoulder", userInput.shoulder),
+    sendMotorPowerMessage(socketRef, "shoulder", userInput.shoulder),
     [userInput.shoulder]);
 
   useEffect(() =>
-    sendMotorCommand(socketRef, "elbow", userInput.elbow),
+    sendMotorPowerMessage(socketRef, "elbow", userInput.elbow),
     [userInput.elbow]);
-
-  useEffect(() =>
-    sendMotorCommand(socketRef, "forearm", userInput.forearm),
-    [userInput.forearm]);
-
-  useEffect(() =>
-    sendMotorCommand(socketRef, "diffleft", userInput.diffLeft),
-    [userInput.diffLeft]);
-
-  useEffect(() =>
-    sendMotorCommand(socketRef, "diffright", userInput.diffRight),
-    [userInput.diffRight]);
-
-  useEffect(() =>
-    sendMotorCommand(socketRef, "hand", userInput.hand),
-    [userInput.hand]);
 
   // We don't need to render anything.
   return <Fragment />;
@@ -59,37 +43,37 @@ function connect(socketRef, onConnect, onDisconnect, onReceiveMessage) {
   socketRef.current = socket;
 }
 
-function sendCommand(socketRef, command) {
+function sendMessage(socketRef, message) {
   const socket = socketRef.current;
   if (socket !== null && socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(command));
+    socket.send(JSON.stringify(message));
   }
 }
 
-function sendStopCommand(socketRef, engageStop) {
-  const command = {
-    "type": "estop",
-    "release": !engageStop
+function sendStopCommand(socketRef, stop) {
+  const message = {
+    type: "emergencyStop",
+    stop
   };
-  sendCommand(socketRef, command);
+  sendMessage(socketRef, message);
 }
 
-function sendDriveCommand(socketRef, driveX, driveY) {
-  const command = {
-    "type": "drive",
-    "forward_backward": driveY,
-    "left_right": driveX
+function sendDriveMessage(socketRef, straight, steer) {
+  const message = {
+    type: "drive",
+    straight,
+    steer
   };
-  sendCommand(socketRef, command);
+  sendMessage(socketRef, message);
 }
 
-function sendMotorCommand(socketRef, motorName, power) {
-  const command = {
-    "type": "motor",
-    "motor": motorName,
-    "PWM target": power
+function sendMotorPowerMessage(socketRef, motor, power) {
+  const message = {
+    type: "motor",
+    motor,
+    power
   };
-  sendCommand(socketRef, command);
+  sendMessage(socketRef, message);
 }
 
 export default Socket;

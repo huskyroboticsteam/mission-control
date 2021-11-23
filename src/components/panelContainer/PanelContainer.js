@@ -3,12 +3,12 @@ import SciencePanel from "../science/SciencePanel";
 import HelpPanel from "../help/HelpPanel";
 import "./PanelContainer.css";
 
-function PanelContainer() {
+function PanelContainer({ cameraStreamFrameData }) {
   return (
     <div className="panelContainer">
       <Switch>
         <Route path="/science">
-          <SciencePanel />
+          <SciencePanel cameraStreamFrameData={cameraStreamFrameData} />
         </Route>
 
         <Route path="/delivery">
