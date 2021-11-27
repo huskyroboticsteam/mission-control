@@ -1,4 +1,4 @@
-import { useRef, useEffect, Fragment } from "react";
+import { useRef, useEffect } from "react";
 
 function KeyboardControls({ userInput, setUserInput }) {
   const pressedKeysRef = useRef([]);
@@ -6,7 +6,7 @@ function KeyboardControls({ userInput, setUserInput }) {
     [userInput, setUserInput]);
 
   // We don't need to render anything.
-  return <Fragment />;
+  return null;
 }
 
 function addKeyboardListeners(pressedKeysRef, userInput, setUserInput) {

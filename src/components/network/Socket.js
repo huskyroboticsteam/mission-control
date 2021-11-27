@@ -1,4 +1,4 @@
-import { useRef, useEffect, Fragment } from "react";
+import { useRef, useEffect } from "react";
 
 function Socket({ onConnect, onDisconnect, onReceiveMessage, stopEngaged, userInput }) {
   const socketRef = useRef(null);
@@ -28,7 +28,7 @@ function Socket({ onConnect, onDisconnect, onReceiveMessage, stopEngaged, userIn
     [userInput.elbow]);
 
   // We don't need to render anything.
-  return <Fragment />;
+  return null;
 }
 
 function connect(socketRef, onConnect, onDisconnect, onReceiveMessage) {
