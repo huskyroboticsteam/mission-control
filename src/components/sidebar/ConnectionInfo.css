@@ -1,4 +1,4 @@
-.connectionInfo--connected, .connectionInfo--disconnected {
+.connection-info {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,14 +9,14 @@
   text-align: center;
 }
 
-.connectionInfo--connected {
+.connection-info--connected {
   color: #4fb185;
 }
 
-.connectionInfo--disconnected {
+.connection-info--disconnected {
   color: #ed4245;
 }
 
-.connectionInfo--connected > p, .connectionInfo--disconnected > p {
+.connection-info > p {
   padding: 10px;
 }

@@ -7,18 +7,18 @@ function EmergencyStopButton({ roverConnected, stopEngaged, setStopEngaged }) {
     }
   };
 
-  let className = "emergencyStopButton";
+  let className = "emergency-stop-button";
   let text;
   if (roverConnected) {
     if (stopEngaged) {
-      className += " emergencyStopButton--stopped";
+      className += " emergency-stop-button--stopped";
       text = "Disengage Stop"
     } else {
-      className += " emergencyStopButton--operational";
+      className += " emergency-stop-button--operational";
       text = "Emergency Stop"
     }
   } else {
-    className += " emergencyStopButton--disabled";
+    className += " emergency-stop-button--disabled";
     text = "Emergency Stop"
   }
 

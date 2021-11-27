@@ -1,4 +1,4 @@
-.helpPanel {
+.help-panel {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -7,6 +7,6 @@
   height: 100%;
 }
 
-.helpPanel > img {
+.help-panel > img {
   border-radius: 15px;
 }

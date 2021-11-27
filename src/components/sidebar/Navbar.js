@@ -13,49 +13,49 @@ function Navbar() {
     <nav className="navbar">
       <ul>
         <li>
-          <NavLink to="/science" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/science" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <ScienceIcon fontSize="large" className="navbar__icon" />
             Science
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/delivery" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/delivery" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <DeliveryIcon fontSize="large" className="navbar__icon" />
             Delivery
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/servicing" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/servicing" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <ServicingIcon fontSize="large" className="navbar__icon" />
             Servicing
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/autonomous" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/autonomous" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <AutonomousIcon fontSize="large" className="navbar__icon" />
             Autonomous
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/telemetry" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/telemetry" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <TelemetryIcon fontSize="large" className="navbar__icon" />
             Telemetry
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/antenna" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/antenna" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <AntennaIcon fontSize="large" className="navbar__icon" />
             Antenna
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/help" className="navbar__navLink" activeClassName="navbar__navLink--active">
+          <NavLink to="/help" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
           </NavLink>

@@ -1,11 +1,11 @@
-.emergencyStopButton {
+.emergency-stop-button {
   display: flex;
   justify-content: center;
   align-items: center;
   border-top: 1px solid gray;
 }
 
-.emergencyStopButton > button {
+.emergency-stop-button > button {
   display: block;
   border: none;
   color: white;
@@ -17,39 +17,39 @@
   width: 100%;
 }
 
-.emergencyStopButton--operational > button {
+.emergency-stop-button--operational > button {
   background-color: #ed4245;
 }
 
-.emergencyStopButton--stopped > button {
+.emergency-stop-button--stopped > button {
   background-color: #4fb185;
 }
 
-.emergencyStopButton--disabled > button {
+.emergency-stop-button--disabled > button {
   color: gray;
   background-color: #3f4145;
 }
 
-.emergencyStopButton--operational > button:hover {
+.emergency-stop-button--operational > button:hover {
   cursor: pointer;
   background-color: #dc3134;
 }
 
-.emergencyStopButton--stopped > button:hover {
+.emergency-stop-button--stopped > button:hover {
   cursor: pointer;
   background-color: #3ea074;
 }
 
-.emergencyStopButton--disabled > button:hover {
+.emergency-stop-button--disabled > button:hover {
   cursor: not-allowed;
 }
 
-.emergencyStopButton--operational > button:active {
+.emergency-stop-button--operational > button:active {
   cursor: pointer;
   background-color: #cb2023;
 }
 
-.emergencyStopButton--stopped > button:active {
+.emergency-stop-button--stopped > button:active {
   cursor: pointer;
   background-color: #2d8f63;
 }

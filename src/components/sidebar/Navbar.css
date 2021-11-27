@@ -7,7 +7,7 @@
   padding: 0;
 }
 
-.navbar__navLink {
+.navbar__nav-link {
   font-size: 32px;
   font-weight: 500;
   color: gray;
@@ -21,17 +21,17 @@
   -webkit-user-drag: none;
 }
 
-.navbar__navLink--active {
+.navbar__nav-link--active {
   color: white;
   background-color: #3f4145;
 }
 
-.navbar__navLink:hover {
+.navbar__nav-link:hover {
   color: lightgray;
   background-color: #2f3135;
 }
 
-.navbar__navLink--active:hover {
+.navbar__nav-link--active:hover {
   color: white;
   background-color: #3f4145;
 }

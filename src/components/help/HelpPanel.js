@@ -3,7 +3,7 @@ import driverControls from "../../assets/controls.jpg";
 
 function HelpPanel() {
   return (
-    <div className="helpPanel">
+    <div className="help-panel">
       <img src={driverControls} alt="driver gamepad controls" />
       <img src={driverControls} alt="driver gamepad controls" />
       <img src={driverControls} alt="driver gamepad controls" />

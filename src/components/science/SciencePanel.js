@@ -3,7 +3,7 @@ import "./SciencePanel.css";
 
 function SciencePanel({ cameraStreamFrameData }) {
   return (
-    <div className="sciencePanel">
+    <div className="science-panel">
       <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
       <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
       <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />

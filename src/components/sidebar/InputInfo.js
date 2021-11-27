@@ -4,7 +4,7 @@ import "./InputInfo.css";
 
 function InputInfo({ keyboardConnected, driveGamepadConnected, armGamepadConnected }) {
   return (
-    <div className="inputInfo">
+    <div className="input-info">
       <KeyboardInfo connected={keyboardConnected} />
       <GamepadInfo label="Driver" connected={driveGamepadConnected} />
       <GamepadInfo label="Arm" connected={armGamepadConnected} />
@@ -13,9 +13,11 @@ function InputInfo({ keyboardConnected, driveGamepadConnected, armGamepadConnect
 }
 
 function KeyboardInfo({ connected }) {
-  const className = connected ?
-    "inputInfo__info--connected" :
-    "inputInfo__info--disconnected";
+  const className = "input-info__info " + (
+    connected ?
+      "input-info__info--connected" :
+      "input-info__info--disconnected"
+  );
   return (
     <div className={className}>
       <KeyboardIcon fontSize="large" className={className} />
@@ -25,9 +27,11 @@ function KeyboardInfo({ connected }) {
 }
 
 function GamepadInfo({ label, connected }) {
-  const className = connected ?
-    "inputInfo__info--connected" :
-    "inputInfo__info--disconnected";
+  const className = "input-info__info " + (
+    connected ?
+      "input-info__info--connected" :
+      "input-info__info--disconnected"
+  );
   return (
     <div className={className}>
       <GamepadIcon fontSize="large" className={className} />

@@ -3,9 +3,9 @@ import "./VideoStream.css";
 function VideoStream({ cameraName, frameData }) {
   if (frameData === null) {
     return (
-      <div className="videoStream">
-        <div className="videoStream__cameraNameContainer">
-          <div className="videoStream__cameraName">
+      <div className="video-stream">
+        <div className="video-stream__camera-name-container">
+          <div className="video-stream__camera-name">
             {cameraName}
           </div>
         </div>
@@ -13,10 +13,10 @@ function VideoStream({ cameraName, frameData }) {
     );
   } else {
     return (
-      <div className="videoStream">
+      <div className="video-stream">
         <img src={`data:image/jpg;base64,${frameData}`} alt={`${cameraName} stream`} />
-        <div className="videoStream__cameraNameContainer">
-          <div className="videoStream__cameraName">
+        <div className="video-stream__camera-name-container">
+          <div className="video-stream__camera-name">
             {cameraName}
           </div>
         </div>

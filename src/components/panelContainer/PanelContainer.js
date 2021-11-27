@@ -5,7 +5,7 @@ import "./PanelContainer.css";
 
 function PanelContainer({ cameraStreamFrameData }) {
   return (
-    <div className="panelContainer">
+    <div className="panel-container">
       <Switch>
         <Route path="/science">
           <SciencePanel cameraStreamFrameData={cameraStreamFrameData} />
