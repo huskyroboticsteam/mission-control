@@ -52,7 +52,7 @@ function sendMessage(socketRef, message) {
 
 function sendStopCommand(socketRef, stop) {
   const message = {
-    type: "emergencyStop",
+    type: "emergencyStopRequest",
     stop
   };
   sendMessage(socketRef, message);
@@ -60,7 +60,7 @@ function sendStopCommand(socketRef, stop) {
 
 function sendDriveMessage(socketRef, straight, steer) {
   const message = {
-    type: "drive",
+    type: "driveRequest",
     straight,
     steer
   };
@@ -69,7 +69,7 @@ function sendDriveMessage(socketRef, straight, steer) {
 
 function sendMotorPowerMessage(socketRef, motor, power) {
   const message = {
-    type: "motor",
+    type: "motorPowerRequest",
     motor,
     power
   };
