@@ -1,4 +1,4 @@
-import CameraStream from "../video/CameraStream";
+import CameraStream from "../camera/CameraStream";
 import "./SciencePanel.css";
 
 function SciencePanel({ cameraStreamFrameData }) {

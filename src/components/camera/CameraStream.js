@@ -1,6 +1,14 @@
+import { useEffect } from "react";
 import "./CameraStream.css";
 
 function CameraStream({ cameraName, frameData }) {
+  useEffect(() => {
+    // Open camera stream.
+    return () => {
+      // Close camera stream.
+    };
+  }, []);
+
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraName}</h2>
