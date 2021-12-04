@@ -33,7 +33,11 @@ function Socket({ onConnect, onDisconnect, onReceiveMessage, stopEngaged, userIn
 
 function connect(socketRef, onConnect, onDisconnect, onReceiveMessage) {
   const socket = new WebSocket("ws://localhost:3001/mission-control");
-  socket.onopen = () => onConnect();
+  socket.onopen = () => {
+    onConnect();
+    // Testing the camera stream. Remove this later.
+    setTimeout(() => sendCameraStreamOpenRequest(socketRef, "front", 30, 500, 250), 100);
+  }
   socket.onmessage = (ev) => onReceiveMessage(JSON.parse(ev.data));
   socket.onclose = () => {
     onDisconnect();
@@ -73,6 +77,17 @@ function sendMotorPowerMessage(socketRef, motor, power) {
     motor,
     power
   };
+  sendMessage(socketRef, message);
+}
+
+function sendCameraStreamOpenRequest(socketRef, camera, fps, width, height) {
+  const message = {
+    type: "cameraStreamOpenRequest",
+    camera,
+    fps,
+    width,
+    height
+  }
   sendMessage(socketRef, message);
 }
 

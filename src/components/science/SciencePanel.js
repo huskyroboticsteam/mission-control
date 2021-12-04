@@ -1,13 +1,13 @@
-import VideoStream from "../video/VideoStream";
+import CameraStream from "../video/CameraStream";
 import "./SciencePanel.css";
 
 function SciencePanel({ cameraStreamFrameData }) {
   return (
     <div className="science-panel">
-      <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
-      <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
-      <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
-      <VideoStream cameraName="Front" frameData={cameraStreamFrameData} />
+      <CameraStream cameraName="front" frameData={cameraStreamFrameData} />
+      <CameraStream cameraName="front" frameData={cameraStreamFrameData} />
+      <CameraStream cameraName="front" frameData={cameraStreamFrameData} />
+      <CameraStream cameraName="front" frameData={cameraStreamFrameData} />
     </div>
   );
 }
