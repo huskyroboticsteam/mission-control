@@ -1,8 +1,11 @@
-import "./ConnectionInfo.css";
+import { useSelector } from "react-redux";
 import ConnectionIcon from "@material-ui/icons/SignalCellularAlt";
+import { selectRoverIsConnected } from "../../features/roverSlice";
+import "./ConnectionInfo.css";
 
-function ConnectionInfo({ roverConnected }) {
-  if (roverConnected) {
+function ConnectionInfo() {
+  const roverIsConnected = useSelector(selectRoverIsConnected);
+  if (roverIsConnected) {
     return (
       <div className="connection-info connection-info--connected">
         <ConnectionIcon fontSize="large" />

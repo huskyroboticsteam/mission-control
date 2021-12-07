@@ -4,18 +4,14 @@ import InputInfo from "./InputInfo";
 import ConnectionInfo from "./ConnectionInfo";
 import "./Sidebar.css";
 
-function Sidebar({ roverConnected, stopEngaged, setStopEngaged, driveGamepadConnected, armGamepadConnected }) {
+function Sidebar() {
   return (
     <div className="sidebar">
       <Navbar />
-      <EmergencyStopButton roverConnected={roverConnected} stopEngaged={stopEngaged} setStopEngaged={setStopEngaged} />
+      <EmergencyStopButton />
       {/* The keyboard should always be connected. */}
-      <InputInfo
-        keyboardConnected={true}
-        driveGamepadConnected={driveGamepadConnected}
-        armGamepadConnected={armGamepadConnected}
-      />
-      < ConnectionInfo roverConnected={roverConnected} />
+      <InputInfo />
+      <ConnectionInfo />
     </div>
   );
 }

@@ -1,15 +1,22 @@
+import { useDispatch, useSelector } from "react-redux";
+import { emergencyStopRequested, selectRoverIsConnected, selectEmergencyStopEngaged } from "../../features/roverSlice";
 import "./EmergencyStopButton.css";
 
-function EmergencyStopButton({ roverConnected, stopEngaged, setStopEngaged }) {
+function EmergencyStopButton() {
+  const dispatch = useDispatch();
+  const roverIsConnected = useSelector(selectRoverIsConnected)
+  const stopEngaged = useSelector(selectEmergencyStopEngaged);
+
   const handleClick = () => {
-    if (roverConnected) {
-      setStopEngaged(!stopEngaged);
+    if (roverIsConnected) {
+      const it = emergencyStopRequested({ stop: !stopEngaged });
+      dispatch(it);
     }
   };
 
   let className = "emergency-stop-button";
   let text;
-  if (roverConnected) {
+  if (roverIsConnected) {
     if (stopEngaged) {
       className += " emergency-stop-button--stopped";
       text = "Disengage Stop"
