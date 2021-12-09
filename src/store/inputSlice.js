@@ -20,11 +20,15 @@ const initialState = {
     pressedKeys: []
   },
   computed: {
-    driveStraight: 0,
-    driveSteer: 0,
-    armBasePower: 0,
-    shoulderPower: 0,
-    elbowPower: 0
+    drive: {
+      straight: 0,
+      steer: 0
+    },
+    motorPower: {
+      armBase: 0,
+      shoulder: 0,
+      elbow: 0
+    }
   }
 }
 
@@ -49,8 +53,8 @@ const inputSlice = createSlice({
     },
 
     gamepadButtonChanged(state, action) {
-      const { gamepadName, button, down } = action.payload;
-      state[gamepadName][button] = down;
+      const { gamepadName, buttonName, pressed } = action.payload;
+      state[gamepadName][buttonName] = pressed;
       computeInput(state);
     },
 
@@ -77,13 +81,15 @@ function computeInput(state) {
   const driveGamepad = state.driveGamepad;
   const armGamepad = state.armGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
-  state.computed = {
-    driveStraight: driveGamepad.leftStickY + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP"),
-    driveSteer: driveGamepad.rightStickX + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT"),
-    armBasePower: armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "Q"),
-    shoulderPower: armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "S", "W"),
-    elbowPower: armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "D", "E")
+
+  state.computed.drive = {
+    straight: driveGamepad.leftStickY + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP"),
+    steer: driveGamepad.rightStickX + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT")
   };
+
+  state.computed.motorPower.armBase = armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "Q");
+  state.computed.motorPower.shoulder = armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "S", "W");
+  state.computed.motorPower.elbowPower = armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "D", "E");
 }
 
 function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {

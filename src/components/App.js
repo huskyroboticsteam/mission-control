@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { connectToRover, disconnectFromRover } from "../features/roverSlice";
-import { ROVER_SERVER_URL } from "../constants/network";
+import { connectToRover, disconnectFromRover } from "../store/roverSlice";
 import GamepadController from "./input/GamepadController";
 import KeyboardController from "./input/KeyboardController";
 import Sidebar from "./sidebar/Sidebar";
@@ -10,12 +9,19 @@ import "./App.css";
 
 function App() {
   const dispatch = useDispatch();
+
+  // Connect to rover.
   useEffect(() => {
-    dispatch(connectToRover({ url: ROVER_SERVER_URL }));
-    return () => {
-      dispatch(disconnectFromRover());
-    }
+    dispatch(connectToRover());
+    return () => dispatch(disconnectFromRover());
   }, [dispatch]);
+
+  // Disable context menu.
+  useEffect(() => {
+    const handleContextMenu = event => event.preventDefault();
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => document.removeEventListener("contextmenu", handleContextMenu);
+  }, []);
 
   return (
     <div className="app">

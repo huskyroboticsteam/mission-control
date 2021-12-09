@@ -1,7 +1,11 @@
-import { Fragment } from "react";
 import Gamepad from "react-gamepad";
 import { useDispatch } from "react-redux";
-import { gamepadConnected, gamepadDisconnected, gamepadAxisChanged, gamepadButtonChanged } from "../../features/inputSlice"
+import {
+  gamepadConnected,
+  gamepadDisconnected,
+  gamepadAxisChanged,
+  gamepadButtonChanged
+} from "../../store/inputSlice";
 
 function GamepadController({ gamepadName, gamepadIndex }) {
   const dispatch = useDispatch();
@@ -15,14 +19,14 @@ function GamepadController({ gamepadName, gamepadIndex }) {
         axisName,
         value
       }))}
-      onButtonChange={(buttonName, down) => dispatch(gamepadButtonChanged({
+      onButtonChange={(buttonName, pressed) => dispatch(gamepadButtonChanged({
         gamepadName,
         buttonName,
-        down
+        pressed
       }))}
     >
       {/* Due to a bug in react-gamepad, we must supply a child component. */}
-      <Fragment />
+      <></>
     </Gamepad>
   );
 }

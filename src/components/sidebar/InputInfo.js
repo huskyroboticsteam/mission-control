@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import GamepadIcon from "@material-ui/icons/SportsEsports";
-import { selectInputDeviceIsConnected } from "../../features/inputSlice";
+import { selectInputDeviceIsConnected } from "../../store/inputSlice";
 import "./InputInfo.css";
 
 function InputInfo() {

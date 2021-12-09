@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { emergencyStopRequested, selectRoverIsConnected, selectEmergencyStopEngaged } from "../../features/roverSlice";
+import { emergencyStopRequested, selectRoverIsConnected, selectEmergencyStopEngaged } from "../../store/roverSlice";
 import "./EmergencyStopButton.css";
 
 function EmergencyStopButton() {
