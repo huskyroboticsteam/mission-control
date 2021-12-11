@@ -8,6 +8,10 @@ import {
   messageReceivedFromRover
 } from "../roverSlice";
 
+/**
+ * Middleware that handles connecting to, disconnecting from, and messaging the
+ * rover when related actions are dispatched.
+ */
 const roverSocketMiddleware = () => {
   let socket = null;
 
