@@ -25,11 +25,6 @@
   background-color: #4fb185;
 }
 
-.emergency-stop-button--disabled > button {
-  color: gray;
-  background-color: #3f4145;
-}
-
 .emergency-stop-button--operational > button:hover {
   cursor: pointer;
   background-color: #dc3134;
@@ -38,10 +33,6 @@
 .emergency-stop-button--stopped > button:hover {
   cursor: pointer;
   background-color: #3ea074;
-}
-
-.emergency-stop-button--disabled > button:hover {
-  cursor: not-allowed;
 }
 
 .emergency-stop-button--operational > button:active {

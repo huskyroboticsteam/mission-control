@@ -3,6 +3,7 @@ import inputReducer from "./inputSlice";
 import roverReducer from "./roverSlice";
 import camerasReducer from './camerasSlice';
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
+import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
 import inputMiddleware from "./middleware/inputMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
 
@@ -12,5 +13,10 @@ export default configureStore({
     rover: roverReducer,
     cameras: camerasReducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([roverSocketMiddleware, inputMiddleware, camerasMiddleware])
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
+    roverSocketMiddleware,
+    emergencyStopMiddleware,
+    inputMiddleware,
+    camerasMiddleware
+  ])
 });
