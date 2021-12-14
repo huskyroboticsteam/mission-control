@@ -1,6 +1,6 @@
 import { CAMERA_STREAM_FPS, CAMERA_STREAM_WIDTH, CAMERA_STREAM_HEIGHT } from "../../constants/cameraConstants";
 import { cameraStreamOpenRequested, cameraStreamCloseRequested, cameraStreamDataReceived } from "../camerasSlice";
-import { messageReceivedFromRover, messageRover, roverConnected } from "../roverSlice";
+import { messageReceivedFromRover, messageRover, roverConnected, roverDisconnected } from "../roverSlice";
 
 /**
  * Middleware that handles requesting and receiving camera streams from the
@@ -8,9 +8,9 @@ import { messageReceivedFromRover, messageRover, roverConnected } from "../rover
  */
 const camerasMiddleware = store => next => action => {
   next(action);
-  
+
   switch (action.type) {
-    case cameraStreamOpenRequested.type:
+    case cameraStreamOpenRequested.type: {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamOpenRequest",
@@ -21,8 +21,9 @@ const camerasMiddleware = store => next => action => {
         }
       }));
       break;
+    }
 
-    case cameraStreamCloseRequested.type:
+    case cameraStreamCloseRequested.type: {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamCloseRequest",
@@ -30,13 +31,15 @@ const camerasMiddleware = store => next => action => {
         }
       }));
       break;
+    }
 
-    case roverConnected.type:
+    case roverConnected.type: {
       // Inform the rover of camera streams we would like to receive when we
       // connect.
       const cameras = store.getState().cameras;
       Object.keys(cameras).forEach(cameraName => {
-        if (cameras[cameraName].isStreaming) {
+        const camera = cameras[cameraName];
+        if (camera.isStreaming) {
           store.dispatch(messageRover({
             message: {
               type: "cameraStreamOpenRequest",
@@ -49,17 +52,32 @@ const camerasMiddleware = store => next => action => {
         }
       });
       break;
+    }
 
-    case messageReceivedFromRover.type:
+    case roverDisconnected.type: {
+      const cameras = store.getState().cameras;
+      Object.keys(cameras).forEach(cameraName => {
+        const camera = cameras[cameraName];
+        if (camera.isStreaming && camera.frameData !== null) {
+          store.dispatch(cameraStreamDataReceived({
+            cameraName,
+            frameData: null
+          }));
+        }
+      });
+      break;
+    }
+
+    case messageReceivedFromRover.type: {
       const { message } = action.payload;
       store.dispatch(cameraStreamDataReceived({
         cameraName: message.camera,
         frameData: message.data
       }));
       break;
+    }
 
-    default:
-      break;
+    default: break;
   }
 }
 

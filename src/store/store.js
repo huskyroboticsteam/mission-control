@@ -13,7 +13,7 @@ export default configureStore({
     rover: roverReducer,
     cameras: camerasReducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat([
     roverSocketMiddleware,
     emergencyStopMiddleware,
     inputMiddleware,

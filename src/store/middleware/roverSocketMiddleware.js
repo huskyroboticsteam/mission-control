@@ -15,16 +15,14 @@ import {
 const roverSocketMiddleware = () => {
   let socket = null;
 
-  const onOpen = store => () => {
-    store.dispatch(roverConnected());
-  };
+  const onOpen = store => () => store.dispatch(roverConnected());
 
   const onClose = store => () => {
+    socket = null;
     store.dispatch(roverDisconnected());
     // After the initial connection is made, we should automatically try to
     // reconnect on disconnect.
     store.dispatch(connectToRover());
-    socket = null;
   };
 
   const onMessage = store => event => {

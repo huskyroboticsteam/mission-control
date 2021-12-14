@@ -9,7 +9,7 @@ const emergencyStopMiddleware = store => next => action => {
 
   switch (action.type) {
     case emergencyStopRequested.type:
-    case roverConnected.type:
+    case roverConnected.type: {
       store.dispatch(messageRover({
         message: {
           type: "emergencyStopRequest",
@@ -17,9 +17,9 @@ const emergencyStopMiddleware = store => next => action => {
         }
       }));
       break;
+    }
 
-    default:
-      break;
+    default: break;
   }
 }
 
