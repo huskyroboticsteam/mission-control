@@ -22,7 +22,7 @@ const inputMiddleware = store => next => action => {
     }
 
     Object.keys(computedInput.motorPower).forEach(motorName => {
-      if (computedInput[motorName] !== prevComputedInput[motorName])
+      if (computedInput.motorPower[motorName] !== prevComputedInput.motorPower[motorName])
         store.dispatch(messageRover({
           message: {
             type: "motorPowerRequest",
