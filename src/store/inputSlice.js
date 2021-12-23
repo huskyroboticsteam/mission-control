@@ -88,8 +88,8 @@ function computeInput(state) {
   };
 
   state.computed.motorPower.armBase = armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "D");
-  state.computed.motorPower.shoulder = armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "W", "S");
-  state.computed.motorPower.elbow = armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "I", "K");
+  state.computed.motorPower.shoulder = armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "S", "W");
+  state.computed.motorPower.elbow = armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "K", "I");
 }
 
 function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
