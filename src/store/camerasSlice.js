@@ -22,11 +22,13 @@ const camerasSlice = createSlice({
     closeCameraStream(state, action) {
       const { cameraName } = action.payload;
       state[cameraName].isStreaming = false;
+      state[cameraName].frameData = null;
     },
 
     cameraStreamDataReportReceived(state, action) {
       const { cameraName, frameData } = action.payload;
-      state[cameraName].frameData = frameData;
+      if (state[cameraName].isStreaming)
+        state[cameraName].frameData = frameData;
     }
   }
 });
