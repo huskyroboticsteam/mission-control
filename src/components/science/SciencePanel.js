@@ -1,3 +1,4 @@
+import ArmModel from "../arm/ArmModel";
 import CameraStream from "../camera/CameraStream";
 import "./SciencePanel.css";
 
@@ -5,7 +6,7 @@ function SciencePanel() {
   return (
     <div className="science-panel">
       <CameraStream cameraName="front" />
-      <CameraStream cameraName="front" />
+      <ArmModel />
       <CameraStream cameraName="front" />
       <CameraStream cameraName="front" />
     </div>

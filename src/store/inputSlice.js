@@ -30,7 +30,7 @@ const initialState = {
       elbow: 0
     }
   }
-}
+};
 
 const inputSlice = createSlice({
   name: "input",
@@ -107,5 +107,7 @@ export const {
   keyPressed,
   keyReleased
 } = inputSlice.actions;
+
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
+
 export default inputSlice.reducer;

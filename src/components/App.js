@@ -1,6 +1,11 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { connectToRover, disconnectFromRover } from "../store/roverSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  connectToRover,
+  disconnectFromRover,
+  selectRoverIsConnected,
+  selectRoverIsConnecting
+} from "../store/roverSocketSlice";
 import GamepadController from "./input/GamepadController";
 import KeyboardController from "./input/KeyboardController";
 import Sidebar from "./sidebar/Sidebar";
@@ -9,12 +14,18 @@ import "./App.css";
 
 function App() {
   const dispatch = useDispatch();
+  const roverIsConnected = useSelector(selectRoverIsConnected);
+  const roverIsConnecting = useSelector(selectRoverIsConnecting);
 
   // Connect to rover.
   useEffect(() => {
-    dispatch(connectToRover());
-    return () => dispatch(disconnectFromRover());
-  }, [dispatch]);
+    if (!roverIsConnected && !roverIsConnecting)
+      dispatch(connectToRover());
+    return () => {
+      if (roverIsConnected)
+        dispatch(disconnectFromRover());
+    }
+  }, [dispatch, roverIsConnected, roverIsConnecting]);
 
   // Disable context menu.
   useEffect(() => {

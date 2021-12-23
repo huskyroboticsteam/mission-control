@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cameraStreamOpenRequested, cameraStreamCloseRequested, selectCameraStreamFrameData } from "../../store/camerasSlice";
+import { openCameraStream, closeCameraStream, selectCameraStreamFrameData } from "../../store/camerasSlice";
 import "./CameraStream.css";
 
 function CameraStream({ cameraName }) {
   const dispatch = useDispatch();
   useEffect(() => {
     // Open the camera stream.
-    dispatch(cameraStreamOpenRequested({ cameraName }));
+    dispatch(openCameraStream({ cameraName }));
     return () => {
       // Close the camera stream.
-      dispatch(cameraStreamCloseRequested({ cameraName }));
+      dispatch(closeCameraStream({ cameraName }));
     };
   }, [cameraName, dispatch]);
 

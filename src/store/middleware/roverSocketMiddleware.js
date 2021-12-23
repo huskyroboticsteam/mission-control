@@ -6,7 +6,7 @@ import {
   roverDisconnected,
   messageRover,
   messageReceivedFromRover
-} from "../roverSlice";
+} from "../roverSocketSlice";
 
 /**
  * Middleware that handles connecting to, disconnecting from, and messaging the
@@ -20,9 +20,6 @@ const roverSocketMiddleware = () => {
   const onClose = store => () => {
     socket = null;
     store.dispatch(roverDisconnected());
-    // After the initial connection is made, we should automatically try to
-    // reconnect on disconnect.
-    store.dispatch(connectToRover());
   };
 
   const onMessage = store => event => {
@@ -31,10 +28,10 @@ const roverSocketMiddleware = () => {
   };
 
   return store => next => action => {
-    next(action);
+    const result = next(action);
 
     switch (action.type) {
-      case connectToRover.type:
+      case connectToRover.type: {
         if (socket && socket.readyState !== WebSocket.CLOSED)
           socket.close();
         socket = new WebSocket(ROVER_SERVER_URL);
@@ -42,20 +39,24 @@ const roverSocketMiddleware = () => {
         socket.onclose = onClose(store);
         socket.onopen = onOpen(store);
         break;
+      }
 
-      case disconnectFromRover.type:
+      case disconnectFromRover.type: {
         if (socket && socket.readyState !== WebSocket.closed)
           socket.close();
         break;
+      }
 
-      case messageRover.type:
+      case messageRover.type: {
         if (socket && socket.readyState === WebSocket.OPEN)
           socket.send(JSON.stringify(action.payload.message));
         break;
+      }
 
-      default:
-        break;
+      default: break;
     }
+
+    return result;
   };
 };
 

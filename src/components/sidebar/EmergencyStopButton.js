@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { emergencyStopRequested, selectEmergencyStopEngaged } from "../../store/roverSlice";
+import { requestStop, selectIsStopped } from "../../store/emergencyStopSlice";
 import "./EmergencyStopButton.css";
 
 function EmergencyStopButton() {
   const dispatch = useDispatch();
-  const stopEngaged = useSelector(selectEmergencyStopEngaged);
+  const stopEngaged = useSelector(selectIsStopped);
 
   const handleClick = () => {
-    dispatch(emergencyStopRequested({ stop: !stopEngaged }));
+    dispatch(requestStop({ stop: !stopEngaged }));
   };
 
   let className = "emergency-stop-button emergency-stop-button--" +
