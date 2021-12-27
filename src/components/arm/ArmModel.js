@@ -2,16 +2,16 @@ import { Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useFBX } from "@react-three/drei";
-import { selectReportedMotorPosition } from "../../store/motorsSlice";
+import { selectMotorCurrentPosition } from "../../store/motorsSlice";
 import armBaseMesh from "./armBase.fbx";
 import lowerArmMesh from "./lowerArm.fbx";
 import upperArmMesh from "./upperArm.fbx";
 import "./ArmModel.css";
 
 function ArmModel() {
-  const armBasePosition = useSelector(selectReportedMotorPosition("armBase"));
-  const shoulderPosition = useSelector(selectReportedMotorPosition("shoulder"));
-  const elbowPosition = useSelector(selectReportedMotorPosition("elbow"));
+  const armBasePosition = useSelector(selectMotorCurrentPosition("armBase"));
+  const shoulderPosition = useSelector(selectMotorCurrentPosition("shoulder"));
+  const elbowPosition = useSelector(selectMotorCurrentPosition("elbow"));
 
   return (
     <Canvas className="arm-model">
