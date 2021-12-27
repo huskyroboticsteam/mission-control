@@ -1,9 +1,4 @@
-import {
-  messageReceivedFromRover,
-  messageRover,
-  roverConnected,
-  roverDisconnected
-} from "../roverSocketSlice";
+import { messageReceivedFromRover, messageRover } from "../roverSocketSlice";
 import { motorStatusReportReceived, requestMotorPower } from "../motorsSlice";
 
 /**
@@ -27,30 +22,15 @@ const motorsMiddleware = store => next => action => {
 
     case messageReceivedFromRover.type: {
       const { message } = action.payload;
-      if (message.type === "motorStatusReport")
+      if (message.type === "motorStatusReport") {
+        const { motor: motorName, power, position, velocity } = message;
         store.dispatch(motorStatusReportReceived({
-          motorName: message.motor,
-          position: message.position
+          motorName,
+          power,
+          position,
+          velocity
         }));
-      break;
-    }
-
-    case roverConnected.type: {
-      // Inform the rover of motor parameters when we connect.
-      const motors = store.getState().motors;
-      Object.keys(motors).forEach(motorName => {
-        const motor = motors[motorName];
-
-      });
-      break;
-    }
-
-    case roverDisconnected.type: {
-      const motors = store.getState().motors;
-      Object.keys(motors).forEach(motorName => {
-        const motor = motors[motorName];
-
-      });
+      }
       break;
     }
 

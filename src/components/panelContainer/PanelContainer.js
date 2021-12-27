@@ -1,5 +1,6 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 import SciencePanel from "../science/SciencePanel";
+import TelemetryPanel from "../telemetry/TelemetryPanel";
 import HelpPanel from "../help/HelpPanel";
 import "./PanelContainer.css";
 
@@ -21,6 +22,7 @@ function PanelContainer() {
         </Route>
 
         <Route path="/telemetry">
+          <TelemetryPanel />
         </Route>
 
         <Route path="/antenna">
