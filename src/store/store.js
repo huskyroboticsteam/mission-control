@@ -5,12 +5,14 @@ import inputReducer from "./inputSlice";
 import driveReducer from "./driveSlice";
 import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
+import lidarReducer from "./lidarSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
 import inputMiddleware from "./middleware/inputMiddleware";
 import driveMiddleware from "./middleware/driveMiddleware";
 import motorsMiddleware from "./middleware/motorsMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
+import lidarMiddleware from "./middleware/lidarMiddleware";
 
 export default configureStore({
   reducer: {
@@ -19,7 +21,8 @@ export default configureStore({
     input: inputReducer,
     drive: driveReducer,
     motors: motorsReducer,
-    cameras: camerasReducer
+    cameras: camerasReducer,
+    lidar: lidarReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat([
     roverSocketMiddleware,
@@ -27,6 +30,7 @@ export default configureStore({
     inputMiddleware,
     driveMiddleware,
     motorsMiddleware,
-    camerasMiddleware
+    camerasMiddleware,
+    lidarMiddleware
   ])
 });
