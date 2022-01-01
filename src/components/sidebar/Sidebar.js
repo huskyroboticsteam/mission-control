@@ -9,7 +9,6 @@ function Sidebar() {
     <div className="sidebar">
       <Navbar />
       <EmergencyStopButton />
-      {/* The keyboard should always be connected. */}
       <InputInfo />
       <ConnectionInfo />
     </div>

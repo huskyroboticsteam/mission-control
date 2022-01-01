@@ -5,11 +5,11 @@ import {
   disconnectFromRover,
   selectRoverIsConnected,
   selectRoverIsConnecting
-} from "../store/roverSocketSlice";
-import GamepadController from "./input/GamepadController";
-import KeyboardController from "./input/KeyboardController";
-import Sidebar from "./sidebar/Sidebar";
-import PanelContainer from "./panelContainer/PanelContainer";
+} from "../../store/roverSocketSlice";
+import GamepadController from "../input/GamepadController";
+import KeyboardController from "../input/KeyboardController";
+import Sidebar from "../sidebar/Sidebar";
+import PanelContainer from "../panelContainer/PanelContainer";
 import "./App.css";
 
 function App() {
