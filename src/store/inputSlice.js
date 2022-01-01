@@ -47,13 +47,17 @@ const inputSlice = createSlice({
     },
 
     gamepadAxisChanged(state, action) {
-      const { gamepadName, axisName, value } = action.payload;
+      let { gamepadName, axisName, value } = action.payload;
+      // Convert to camelCase.
+      axisName = axisName[0].toLowerCase() + axisName.substring(1);
       state[gamepadName][axisName] = value;
       computeInput(state);
     },
 
     gamepadButtonChanged(state, action) {
-      const { gamepadName, buttonName, pressed } = action.payload;
+      let { gamepadName, buttonName, pressed } = action.payload;
+      // Convert to camelCase.
+      buttonName = buttonName[0].toLowerCase() + buttonName.substring(1);
       state[gamepadName][buttonName] = pressed;
       computeInput(state);
     },
