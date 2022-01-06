@@ -1,28 +1,19 @@
 import { useRef, useState, useEffect } from "react";
-// import { useSelector } from "react-redux";
-// import { selectLidarPoints } from "../../store/lidarSlice";
+import { useSelector } from "react-redux";
+import { selectLidarPoints } from "../../store/lidarSlice";
 import "./PlanViz.css";
 
 // Pixels per meter.
 const SCALE_FACTOR = 25;
 
-const lidarPoints0 = [{ x: 1, y: 5 }]
-const plannedPath0 = [
-  { x: 0, y: 0 },
-  { x: 0, y: 5 },
-  { x: 3, y: 2 },
-  { x: 4.5, y: 3 },
-  { x: 7, y: 4 },
-  { x: 7.5, y: 7 }
-];
-const heading0 = 45;
+const plannedPath0 = [];
+const heading0 = 0;
 
 function PlanViz() {
   const canvasRef = useRef();
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  // const lidarPoints = useSelector(selectLidarPoints);
-  const lidarPoints = lidarPoints0;
+  const lidarPoints = useSelector(selectLidarPoints);
   // const plannedPath = useSelector(selectPlannedPath);
   const plannedPath = plannedPath0;
   // const heading = useSelector(selectImuHeading);
@@ -71,8 +62,10 @@ function clear(canvasContext) {
 function drawLidarPoints(canvasContext, lidarPoints) {
   canvasContext.fillStyle = "#06f";
   lidarPoints.forEach(point => {
-    canvasContext.moveTo(point.x, -point.y);
-    canvasContext.arc(point.x * SCALE_FACTOR, -point.y * SCALE_FACTOR, 3, 0, 2 * Math.PI);
+    const canvasX = -point.y * SCALE_FACTOR;
+    const canvasY = -point.x * SCALE_FACTOR;
+    canvasContext.moveTo(canvasX, canvasY);
+    canvasContext.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
     canvasContext.fill();
   });
 }
@@ -82,7 +75,9 @@ function drawPlannedPath(canvasContext, path) {
   // Start at rover in center of canvas.
   canvasContext.moveTo(canvasContext.width / 2, canvasContext.height / 2);
   path.forEach(point => {
-    canvasContext.lineTo(point.x * SCALE_FACTOR, -point.y * SCALE_FACTOR);
+    const canvasX = -point.y * SCALE_FACTOR;
+    const canvasY = -point.x * SCALE_FACTOR;
+    canvasContext.lineTo(canvasX, canvasY * SCALE_FACTOR);
   });
   canvasContext.strokeStyle = "#2f2";
   canvasContext.lineWidth = 3;
