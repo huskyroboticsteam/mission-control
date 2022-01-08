@@ -39,6 +39,7 @@ export const {
   cameraStreamDataReportReceived
 } = camerasSlice.actions;
 
+export const selectAllCameraNames = state => Object.keys(state.cameras);
 export const selectCameraIsStreamming = cameraName => state => state.cameras[cameraName].isStreaming;
 export const selectCameraStreamFrameData = cameraName => state => state.cameras[cameraName].frameData;
 

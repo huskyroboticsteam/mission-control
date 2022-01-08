@@ -43,6 +43,7 @@ const motorSlice = createSlice({
 
 export const { requestMotorPower, motorStatusReportReceived } = motorSlice.actions;
 
+export const selectAllMotorNames = state => Object.keys(state.motors);
 export const selectMotorTargetPower = motorName => state => state.motors[motorName].targetPower;
 export const selectMotorCurrentPower = motorName => state => state.motors[motorName].currentPower;
 export const selectMotorTargetPosition = motorName => state => state.motors[motorName].targetPosition;

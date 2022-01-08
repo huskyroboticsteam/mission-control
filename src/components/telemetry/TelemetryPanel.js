@@ -1,19 +1,11 @@
 import { useSelector } from "react-redux";
-import { selectMotorCurrentPosition, selectMotorCurrentPower, selectMotorCurrentVelocity } from "../../store/motorsSlice";
+import { selectAllMotorNames, selectMotorCurrentPosition, selectMotorCurrentPower, selectMotorCurrentVelocity } from "../../store/motorsSlice";
 import camelCaseToTitle from "../../util/camelCaseToTitle";
 import "./TelemetryPanel.css";
 
-const motorNames = [
-  "frontLeftWheel",
-  "frontRightWheel",
-  "rearLeftWheel",
-  "rearRightWheel",
-  "armBase",
-  "shoulder",
-  "elbow"
-];
-
 function TelemetryPanel() {
+  const motorNames = useSelector(selectAllMotorNames);
+
   return (
     <div className="telemetry-panel">
       {motorNames.map(motorName => <MotorTelemetry motorName={motorName} key={motorName} />)}
