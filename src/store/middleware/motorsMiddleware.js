@@ -1,5 +1,9 @@
 import { messageReceivedFromRover, messageRover } from "../roverSocketSlice";
-import { motorStatusReportReceived, requestMotorPower } from "../motorsSlice";
+import {
+  motorStatusReportReceived,
+  requestMotorPower,
+  requestMotorPosition
+} from "../motorsSlice";
 
 /**
  * Middleware that handles sending and receiving motor data.
@@ -15,6 +19,18 @@ const motorsMiddleware = store => next => action => {
           type: "motorPowerRequest",
           motor: motorName,
           power
+        }
+      }));
+      break;
+    }
+
+    case requestMotorPosition.type: {
+      const { motorName, position } = action.payload;
+      store.dispatch(messageRover({
+        message: {
+          type: "motorPositionRequest",
+          motor: motorName,
+          position
         }
       }));
       break;

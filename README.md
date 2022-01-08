@@ -166,13 +166,13 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 {
   type: "cameraStreamReport",
   camera: string,
-  data: string
+  data: string | null
 }
 ```
 
 ### Parameters
 - `camera` - the name of the camera
-- `data` - the frame in JPG format encoded as a base-64 string
+- `data` - the frame in JPG format encoded as a base-64 string, or null if no data is available
 
 ## Lidar Data Report
 ### Description
