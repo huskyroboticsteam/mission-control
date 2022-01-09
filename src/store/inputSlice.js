@@ -6,14 +6,18 @@ const initialState = {
     leftStickX: 0,
     leftStickY: 0,
     rightStickX: 0,
-    rightStickY: 0
+    rightStickY: 0,
+    lB: false,
+    rB: false
   },
   armGamepad: {
     isConnected: false,
     leftStickX: 0,
     leftStickY: 0,
     rightStickX: 0,
-    rightStickY: 0
+    rightStickY: 0,
+    lB: false,
+    rB: false
   },
   keyboard: {
     isConnected: true,
@@ -86,14 +90,19 @@ function computeInput(state) {
   const armGamepad = state.armGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
-  state.computed.drive = {
-    straight: driveGamepad.leftStickY + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP"),
-    steer: driveGamepad.rightStickX + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT")
-  };
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
+  state.computed.drive.straight = driveGamepad.leftStickY + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+  state.computed.drive.straight *= drivePrecisionMultiplier;
+  state.computed.drive.steer = driveGamepad.rightStickX + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+  state.computed.drive.steer *= drivePrecisionMultiplier;
 
+  const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, armGamepad);
   state.computed.motorPower.armBase = armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "D");
+  state.computed.motorPower.armBase *= armPrecisionMultiplier;
   state.computed.motorPower.shoulder = armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "S", "W");
+  state.computed.motorPower.shoulder *= armPrecisionMultiplier;
   state.computed.motorPower.elbow = armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "K", "I");
+  state.computed.motorPower.elbow *= armPrecisionMultiplier;
 }
 
 function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
@@ -101,6 +110,17 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
+}
+
+function getPrecisionMultiplier(pressedKeys, gamepad) {
+  let multiplier = 1;
+  if (pressedKeys.includes("SHIFT"))
+    multiplier *= 0.2;
+  if (gamepad.lB)
+    multiplier *= 0.3;
+  if (gamepad.rB)
+    multiplier *= 0.3;
+  return multiplier;
 }
 
 export const {
