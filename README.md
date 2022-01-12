@@ -16,6 +16,12 @@ Mission Control creates a WebSocket client to connect directly to the rover WebS
 1. Open your terminal in the `mission-control` directory.
 2. Run `npm start` to start the React server. Mission Control will open in your web browser shortly.
 
+## Controls
+The rover can be operated through Mission Control with either a keyboard or two gamepads. The first gamepad provides controls for driving the rover. The second gamepad provides controls for operating the rover's arm. The control bindings are detailed below.
+![Drive gamepad controls](/src/components/help/driveGamepadControls.png)
+![Arm gamepad controls](/src/components/help/armGamepadControls.png)
+![Keyboard controls](/src/components/help/keyboardControls.png)
+
 ## Messages
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
