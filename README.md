@@ -123,9 +123,9 @@ Sent from the rover server to inform Mission Control of a motor's status.
 
 ### Parameters
 - `motor` - the name of the motor
-- `power` - the current power of the motor, or null if unavailable
-- `position` - the current position of the motor in degrees, or null if unavailable
-- `velocity` - the current velocity of the motor in degrees per second, or null if unavailable
+- `power` - the current power of the motor, or `null` if unavailable
+- `position` - the current position of the motor in degrees, or `null` if unavailable
+- `velocity` - the current velocity of the motor in degrees per second, or `null` if unavailable
 
 ## Camera Stream Open Request
 ### Description
@@ -178,7 +178,7 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 
 ### Parameters
 - `camera` - the name of the camera
-- `data` - the frame in JPG format encoded as a base-64 string, or null if no data is available
+- `data` - the frame in JPG format encoded as a base-64 string, or `null` if no data is available
 
 ## Lidar Data Report
 ### Description
