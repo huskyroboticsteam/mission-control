@@ -7,7 +7,7 @@ Mission Control creates a WebSocket client to connect directly to the rover WebS
 ## Setup
 1. Install Node.js.
     - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for your operating system.
-    - **Linux**: Run `sudo apt install nodejs` in your terminal.
+    - **Linux**: Run `sudo apt install nodejs && sudo apt install npm` in your terminal.
 2. Run `git clone https://github.com/huskyroboticsteam/mission-control.git` in your terminal to clone the Mission Control repository to your local storage.
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
