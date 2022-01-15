@@ -38,7 +38,7 @@ function ArmBase({ armBasePosition, shoulderPosition, elbowPosition }) {
       object={mesh}
       position={[0, -2, 0]}
       rotation={[0, Math.PI / 4 - degToRad(armBasePosition), 0]}
-      scale={[1.5, 1.5, 1.5]}
+      scale={[0.05, 0.05, 0.05]}
     >
       <LowerArm
         shoulderPosition={shoulderPosition}
@@ -54,7 +54,7 @@ function LowerArm({ shoulderPosition, elbowPosition }) {
   return (
     <primitive
       object={mesh}
-      position={[0, 0.3, 0]}
+      position={[0, 12, 0]}
       rotation={[degToRad(shoulderPosition), 0, 0]}
     >
       <UpperArm elbowPosition={elbowPosition} />
@@ -68,7 +68,7 @@ function UpperArm({ elbowPosition }) {
   return (
     <primitive
       object={mesh}
-      position={[0, 1.7, 1.25]}
+      position={[0, 60, -56]}
       rotation={[degToRad(elbowPosition), 0, 0]}
     />
   );
