@@ -7,7 +7,11 @@ const motorNames = [
   "rearRightWheel",
   "armBase",
   "shoulder",
-  "elbow"
+  "elbow",
+  "forearm",
+  "differentialLeft",
+  "differentialRight",
+  "hand"
 ];
 
 const initialState = motorNames.reduce((state, motorName) => ({

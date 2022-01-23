@@ -16,6 +16,10 @@ const initialState = {
     leftStickY: 0,
     rightStickX: 0,
     rightStickY: 0,
+    leftTrigger: 0,
+    rightTrigger: 0,
+    dPadLeft: false,
+    dPadRight: false,
     lB: false,
     rB: false
   },
@@ -31,7 +35,11 @@ const initialState = {
     motorPower: {
       armBase: 0,
       shoulder: 0,
-      elbow: 0
+      elbow: 0,
+      forearm: 0,
+      differentialLeft: 0,
+      differentialRight: 0,
+      hand: 0
     }
   }
 };
@@ -90,19 +98,44 @@ function computeInput(state) {
   const armGamepad = state.armGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
-  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
   state.computed.drive.straight = driveGamepad.leftStickY + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-  state.computed.drive.straight *= drivePrecisionMultiplier;
   state.computed.drive.steer = driveGamepad.rightStickX + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-  state.computed.drive.steer *= drivePrecisionMultiplier;
 
-  const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, armGamepad);
+  // Apply precision controls and clamp.
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
+  Object.entries(state.computed.drive).forEach(
+    ([direction, value]) => state.computed.drive[direction] = clamp1(drivePrecisionMultiplier * value)
+  );
+
   state.computed.motorPower.armBase = armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "D");
-  state.computed.motorPower.armBase *= armPrecisionMultiplier;
-  state.computed.motorPower.shoulder = armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "S", "W");
-  state.computed.motorPower.shoulder *= armPrecisionMultiplier;
-  state.computed.motorPower.elbow = armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "K", "I");
-  state.computed.motorPower.elbow *= armPrecisionMultiplier;
+  state.computed.motorPower.shoulder = -armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "W", "S");
+  state.computed.motorPower.elbow = -armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "I", "K");
+  state.computed.motorPower.forearm = -armGamepad.rightStickX + getAxisFromKeys(pressedKeys, "J", "L");
+  state.computed.motorPower.hand = armGamepad.rightTrigger - armGamepad.leftTrigger + getAxisFromKeys(pressedKeys, "O", "P");
+
+  // Differential motors should either have the same power, or opposite power.
+  const differentialPitch = getAxisFromButtons(armGamepad, "dPadUp", "dPadDown") + getAxisFromKeys(pressedKeys, "T", "G");
+  const differentialRoll = getAxisFromButtons(armGamepad, "dPadLeft", "dPadRight") + getAxisFromKeys(pressedKeys, "F", "H");
+  if (Math.abs(differentialPitch) >= Math.abs(differentialRoll)) {
+    state.computed.motorPower.differentialLeft = differentialPitch;
+    state.computed.motorPower.differentialRight = differentialPitch;
+  } else {
+    state.computed.motorPower.differentialLeft = differentialRoll;
+    state.computed.motorPower.differentialRight = -differentialRoll;
+  }
+
+  // Apply precision controls and clamp.
+  const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, armGamepad);
+  Object.entries(state.computed.motorPower).forEach(
+    ([motorName, power]) => state.computed.motorPower[motorName] = clamp1(power * armPrecisionMultiplier)
+  );
+}
+
+function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
+  let axis = 0;
+  if (gamepad[negativeButton]) axis--;
+  if (gamepad[positiveButton]) axis++;
+  return axis;
 }
 
 function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
@@ -121,6 +154,12 @@ function getPrecisionMultiplier(pressedKeys, gamepad) {
   if (gamepad.rB)
     multiplier *= 0.3;
   return multiplier;
+}
+
+function clamp1(n) {
+  if (n < -1) return -1;
+  if (n > 1) return 1;
+  return n;
 }
 
 export const {
