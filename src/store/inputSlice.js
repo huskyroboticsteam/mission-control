@@ -110,7 +110,7 @@ function computeInput(state) {
   state.computed.motorPower.armBase = armGamepad.leftStickX + getAxisFromKeys(pressedKeys, "A", "D");
   state.computed.motorPower.shoulder = -armGamepad.leftStickY + getAxisFromKeys(pressedKeys, "W", "S");
   state.computed.motorPower.elbow = -armGamepad.rightStickY + getAxisFromKeys(pressedKeys, "I", "K");
-  state.computed.motorPower.forearm = -armGamepad.rightStickX + getAxisFromKeys(pressedKeys, "J", "L");
+  state.computed.motorPower.forearm = -armGamepad.rightStickX + getAxisFromKeys(pressedKeys, "L", "J");
   state.computed.motorPower.hand = armGamepad.rightTrigger - armGamepad.leftTrigger + getAxisFromKeys(pressedKeys, "O", "P");
 
   // Differential motors should either have the same power, or opposite power.
