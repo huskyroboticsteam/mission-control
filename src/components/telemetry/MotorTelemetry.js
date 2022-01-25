@@ -7,17 +7,21 @@ function MotorTelemetry() {
   const motorNames = useSelector(selectAllMotorNames);
 
   return (
-    <table className="motor-telemetry">
-      <tbody>
-        <tr>
-          <th>Motor</th>
-          <th>Power</th>
-          <th>Position (°)</th>
-          <th>Velocity (°/s)</th>
-        </tr>
-        {motorNames.map(motorName => <MotorData motorName={motorName} key={motorName} />)}
-      </tbody>
-    </table>
+    <div className="motor-telemetry">
+      <table>
+        <thead>
+          <tr>
+              <th>Motor</th>
+              <th>Power</th>
+              <th>Position (°)</th>
+              <th>Velocity (°/s)</th>
+            </tr>
+          </thead>
+        <tbody>
+          {motorNames.map(motorName => <MotorData motorName={motorName} key={motorName} />)}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
