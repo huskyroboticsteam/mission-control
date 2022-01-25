@@ -1,0 +1,15 @@
+.motor-telemetry, .motor-telemetry th, .motor-telemetry td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+.motor-telemetry {
+  width: 100%;
+}
+
+.motor-telemetry td {
+  width: 25%;
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
