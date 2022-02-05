@@ -14,7 +14,6 @@ function MotorTelemetry() {
               <th>Motor</th>
               <th>Power</th>
               <th>Position (°)</th>
-              <th>Velocity (°/s)</th>
             </tr>
           </thead>
         <tbody>
@@ -43,8 +42,7 @@ function MotorData({ motorName }) {
     <tr className="motor-telemetry__motor-data">
       <td>{motorTitle}</td>
       <td style={textColor}>{power ? power : "N/A"}</td>
-      <td>{position ? Math.round(position) : "N/A"}</td>
-      <td>{velocity ? Math.round(velocity) : "N/A"}</td>
+      <td>{position != null ? Math.round(position) : "N/A"}</td>
     </tr>
   );
 }
