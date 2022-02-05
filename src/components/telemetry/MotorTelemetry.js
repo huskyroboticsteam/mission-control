@@ -34,7 +34,7 @@ function MotorData({ motorName }) {
     const red = (1 - power) * 255;
     const green = power * 255;
     const blue = 0;
-    textColor.color = `rgb(${red}, ${green}, ${blue})`
+    textColor.color = `rgb(${red}, ${green}, ${blue})`;
   }
 
   return (
