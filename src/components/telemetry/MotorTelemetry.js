@@ -27,7 +27,6 @@ function MotorTelemetry() {
 function MotorData({ motorName }) {
   const power = useSelector(selectMotorCurrentPower(motorName));
   const position = useSelector(selectMotorCurrentPosition(motorName));
-  const velocity = useSelector(selectMotorCurrentVelocity(motorName));
   const motorTitle = camelCaseToTitle(motorName);
 
   const textColor = {};
@@ -41,7 +40,7 @@ function MotorData({ motorName }) {
   return (
     <tr className="motor-telemetry__motor-data">
       <td>{motorTitle}</td>
-      <td style={textColor}>{power ? power : "N/A"}</td>
+      <td style={textColor}>{power != null ? power : "N/A"}</td>
       <td>{position != null ? Math.round(position) : "N/A"}</td>
     </tr>
   );
