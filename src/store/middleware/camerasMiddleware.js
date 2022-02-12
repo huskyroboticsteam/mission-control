@@ -1,9 +1,4 @@
 import {
-  CAMERA_STREAM_FPS,
-  CAMERA_STREAM_WIDTH,
-  CAMERA_STREAM_HEIGHT
-} from "../../constants/cameraConstants";
-import {
   openCameraStream,
   closeCameraStream,
   cameraStreamDataReportReceived,
@@ -27,10 +22,7 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamOpenRequest",
-          camera: action.payload.cameraName,
-          fps: CAMERA_STREAM_FPS,
-          width: CAMERA_STREAM_WIDTH,
-          height: CAMERA_STREAM_HEIGHT
+          camera: action.payload.cameraName
         }
       }));
       break;
@@ -56,10 +48,7 @@ const camerasMiddleware = store => next => action => {
           store.dispatch(messageRover({
             message: {
               type: "cameraStreamOpenRequest",
-              camera: cameraName,
-              fps: CAMERA_STREAM_FPS,
-              width: CAMERA_STREAM_WIDTH,
-              height: CAMERA_STREAM_HEIGHT
+              camera: cameraName
             }
           }));
         }
