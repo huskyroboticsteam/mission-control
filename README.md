@@ -135,18 +135,12 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 {
   type: "cameraStreamOpenRequest",
-  camera: string,
-  fps: number,
-  width: number,
-  height: number
+  camera: string
 }
 ```
 
 ### Parameters
 - `camera` - the name of the camera
-- `fps` - the frames per second of the stream
-- `width` - the width of the stream in pixels
-- `height` - the height of the stream in pixels
 
 ## Camera Stream Close Request
 ### Description
