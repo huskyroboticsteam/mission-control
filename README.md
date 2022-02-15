@@ -211,7 +211,7 @@ Sent from the rover server to inform Mission Control of the currently planned au
 ```
 {
   type: "autonomousPlannedPathReport",
-  points: { x: number, y: number }[]
+  points: { x: number, y: number, heading: number }[]
 }
 ```
 
@@ -219,6 +219,7 @@ Sent from the rover server to inform Mission Control of the currently planned au
 - `points` - an array of points in cartesian coordinates that make up the planned path, where points with adjacent indices are connected by an edge
 - `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
 - `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
+- `heading` - the planned heading of the rover at a point, measured in radians counterclockwise from the rover's x-axis
 
 ## Lazy Susan Position Request
 ## Description
