@@ -120,6 +120,23 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 - `joint` - the name of the joint
 - `position` - the requested position in degrees
 
+## Joint Position Report
+### Description
+Sent from the rover server to inform Mission Control of a joint's current position.
+
+### Syntax
+```
+{
+  type: "jointPositionReport",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm",
+  position: number
+}
+```
+
+### Parameters
+- `joint` - the name of the joint
+- `position` - the current position in degrees
+
 ## Motor Status Report
 ### Description
 Sent from the rover server to inform Mission Control of a motor's status.
