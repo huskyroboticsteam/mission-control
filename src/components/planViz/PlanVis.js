@@ -1,20 +1,23 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectPlannedPath, selectLidarPoints } from "../../store/planVizSlice";
+import {
+  selectPlannedPath,
+  selectPoseConfidenceEllipse,
+  selectLidarPoints
+} from "../../store/planVizSlice";
 import "./PlanViz.css";
 
 // Pixels per meter.
-const SCALE_FACTOR = 25;
+const SCALE_FACTOR = 10;
 
 /**
  * Component providing autonomous plan visuzliation.
  */
 function PlanViz() {
   const canvasRef = useRef();
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const lidarPoints = useSelector(selectLidarPoints);
   const plannedPath = useSelector(selectPlannedPath);
+  const poseConfidenceEllipse = useSelector(selectPoseConfidenceEllipse);
+  const lidarPoints = useSelector(selectLidarPoints);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -22,32 +25,16 @@ function PlanViz() {
     clear(context);
     context.translate(context.canvas.width / 2, context.canvas.height / 2);
     drawLidarPoints(context, lidarPoints);
+    drawPoseConfidenceEllipse(context, poseConfidenceEllipse);
     drawPlannedPath(context, plannedPath);
     drawRover(context);
     context.translate(-context.canvas.width / 2, -context.canvas.height / 2);
     drawCaption(context);
-  }, [width, height, plannedPath, lidarPoints]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const resizeObserver = new ResizeObserver(entries => {
-      entries.forEach(entry => {
-        setWidth(Math.floor(entry.contentRect.width));
-        setHeight(Math.floor(entry.contentRect.height));
-      })
-    });
-    resizeObserver.observe(canvas);
-    return () => resizeObserver.unobserve(canvas);
-  }, []);
+  }, [plannedPath, poseConfidenceEllipse, lidarPoints]);
 
   return (
-    <canvas ref={canvasRef} className="plan-viz" width={width} height={height} />
+    <canvas ref={canvasRef} className="plan-viz" width={600} height={300} />
   );
-}
-
-function drawCaption(canvasContext) {
-  canvasContext.font = '20px sans-serif';
-  canvasContext.fillText("PlanViz", 5, 20);
 }
 
 function clear(canvasContext) {
@@ -60,15 +47,31 @@ function drawLidarPoints(canvasContext, lidarPoints) {
     const canvasX = -point.y * SCALE_FACTOR;
     const canvasY = -point.x * SCALE_FACTOR;
     canvasContext.moveTo(canvasX, canvasY);
+    canvasContext.beginPath();
     canvasContext.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
     canvasContext.fill();
   });
 }
 
+function drawPoseConfidenceEllipse(canvasContext, ellipse) {
+  canvasContext.moveTo(ellipse.radiusY * SCALE_FACTOR, 0);
+  canvasContext.beginPath();
+  canvasContext.ellipse(
+    0,
+    0,
+    ellipse.radiusY * SCALE_FACTOR,
+    ellipse.radiusX * SCALE_FACTOR,
+    -ellipse.rotation,
+    0, 2 * Math.PI
+  );
+  canvasContext.fillStyle = "#aaaaff33";
+  canvasContext.fill();
+}
+
 function drawPlannedPath(canvasContext, path) {
   canvasContext.beginPath();
-  // Start at rover in center of canvas.
-  canvasContext.moveTo(canvasContext.width / 2, canvasContext.height / 2);
+  canvasContext.moveTo(0, 0);
+
   path.forEach(point => {
     const canvasX = -point.y * SCALE_FACTOR;
     const canvasY = -point.x * SCALE_FACTOR;
@@ -89,6 +92,7 @@ function drawPlannedPath(canvasContext, path) {
     );
     canvasContext.moveTo(canvasX, canvasY);
   });
+
   canvasContext.strokeStyle = "#2f2";
   canvasContext.lineWidth = 3;
   canvasContext.stroke();
@@ -103,6 +107,11 @@ function drawRover(canvasContext) {
   canvasContext.lineTo(5, 0);
   canvasContext.fillStyle = "white";
   canvasContext.fill();
+}
+
+function drawCaption(canvasContext) {
+  canvasContext.font = '20px sans-serif';
+  canvasContext.fillText("PlanViz", 5, 20);
 }
 
 export default PlanViz;

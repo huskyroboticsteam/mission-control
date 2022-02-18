@@ -1,5 +1,9 @@
 import { messageReceivedFromRover } from "../roverSocketSlice";
-import { plannedPathReportReceived, lidarReportReceived } from "../planVizSlice";
+import {
+  plannedPathReportReceived,
+  poseConfidenceReportReceived,
+  lidarReportReceived
+} from "../planVizSlice";
 
 /**
  * Middleware that handles receiving data for the Plan Viz.
@@ -10,18 +14,28 @@ const planVizMiddleware = store => next => action => {
   if (action.type === messageReceivedFromRover.type) {
     const { message } = action.payload;
     switch (message.type) {
-      case "lidarReport": {
-        const { points } = message;
-        store.dispatch(lidarReportReceived({
-          points
-        }));
-        break;
-      }
-
       case "autonomousPlannedPathReport": {
         const { path } = message;
         store.dispatch(plannedPathReportReceived({
           path
+        }));
+        break;
+      }
+
+      case "poseConfidenceReport": {
+        const { radiusX, radiusY, rotation } = message;
+        store.dispatch(poseConfidenceReportReceived({
+          radiusX,
+          radiusY,
+          rotation
+        }));
+        break;
+      }
+
+      case "lidarReport": {
+        const { points } = message;
+        store.dispatch(lidarReportReceived({
+          points
         }));
         break;
       }
