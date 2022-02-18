@@ -1,15 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  plannedPath: [
-    { x: 0, y: 0, heading: 0 },
-    { x: 1, y: 1, heading: Math.PI / 4 },
-    { x: 2, y: 3, heading: Math.PI / 2 },
-    { x: 5, y: 4, heading: Math.PI }
-  ],
-  lidarPoints: [
-    { x: 3, y: 1 }
-  ]
+  plannedPath: [],
+  lidarPoints: []
 };
 
 const planVizSlice = createSlice({
@@ -17,7 +10,7 @@ const planVizSlice = createSlice({
   initialState,
   reducers: {
     plannedPathReportReceived(state, action) {
-      state.plannedPath = action.payload.points
+      state.plannedPath = action.payload.path
     },
 
     lidarReportReceived(state, action) {
@@ -27,8 +20,8 @@ const planVizSlice = createSlice({
 });
 
 export const {
-  lidarReportReceived,
-  plannedPathReportReceived
+  plannedPathReportReceived,
+  lidarReportReceived
 } = planVizSlice.actions;
 
 export const selectPlannedPath = state => state.planViz.plannedPath;

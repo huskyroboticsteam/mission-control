@@ -15,13 +15,18 @@ const planVizMiddleware = store => next => action => {
         store.dispatch(lidarReportReceived({
           points
         }));
+        break;
       }
+
       case "autonomousPlannedPathReport": {
         const { path } = message;
         store.dispatch(plannedPathReportReceived({
           path
         }));
+        break;
       }
+
+      default: break;
     }
   }
 

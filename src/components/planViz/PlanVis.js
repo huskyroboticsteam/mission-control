@@ -26,7 +26,7 @@ function PlanViz() {
     drawRover(context);
     context.translate(-context.canvas.width / 2, -context.canvas.height / 2);
     drawCaption(context);
-  }, [width, height, lidarPoints, plannedPath]);
+  }, [width, height, plannedPath, lidarPoints]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -72,7 +72,22 @@ function drawPlannedPath(canvasContext, path) {
   path.forEach(point => {
     const canvasX = -point.y * SCALE_FACTOR;
     const canvasY = -point.x * SCALE_FACTOR;
+
+    // Draw edge.
     canvasContext.lineTo(canvasX, canvasY);
+
+    // Draw arrow to indicate heading.
+    const arrowLength = 10;
+    canvasContext.lineTo(
+      canvasX + arrowLength * Math.cos(3 * Math.PI / 4 - point.heading),
+      canvasY + arrowLength * Math.sin(3 * Math.PI / 4 - point.heading)
+    );
+    canvasContext.moveTo(canvasX, canvasY);
+    canvasContext.lineTo(
+      canvasX + arrowLength * Math.cos(1 * Math.PI / 4 - point.heading),
+      canvasY + arrowLength * Math.sin(1 * Math.PI / 4 - point.heading)
+    );
+    canvasContext.moveTo(canvasX, canvasY);
   });
   canvasContext.strokeStyle = "#2f2";
   canvasContext.lineWidth = 3;
