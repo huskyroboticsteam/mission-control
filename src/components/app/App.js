@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="app">
       <GamepadController gamepadName="driveGamepad" gamepadIndex={0} />
-      <GamepadController gamepadName="armGamepad" gamepadIndex={1} />
+      <GamepadController gamepadName="peripheralGamepad" gamepadIndex={1} />
       <KeyboardController />
       <Sidebar />
       <PanelContainer />

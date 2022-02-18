@@ -122,7 +122,7 @@ function computePeripheralInput(state) {
 }
 
 function computeArmInput(state) {
-  const peripheralGamepad = state.driveGamepad;
+  const peripheralGamepad = state.peripheralGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
   const armInput = state.computed.arm;
