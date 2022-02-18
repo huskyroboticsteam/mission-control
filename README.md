@@ -203,23 +203,6 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 - `camera` - the name of the camera
 - `data` - the frame in JPG format encoded as a base-64 string, or `null` if no data is available
 
-## Lidar Data Report
-### Description
-Sent from the rover server to inform Mission Control of data provided by the rover's lidar sensor.
-
-### Syntax
-```
-{
-  type: "lidarReport",
-  points: { x: number, y: number }[]
-}
-```
-
-### Parameters
-- `points` - an array of points in cartesian coordinates read by the lidar sensor
-- `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
-- `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
-
 ## Autonomous Planned Path Report
 ### Description
 Sent from the rover server to inform Mission Control of the currently planned autonomous path for plan visualization.
@@ -238,8 +221,44 @@ Sent from the rover server to inform Mission Control of the currently planned au
 - `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
 - `heading` - the planned heading of the rover at a point, measured in radians counterclockwise from the rover's x-axis
 
+## Pose Confidence Report
+### Description
+Sent from the rover server to inform Mission Control of an ellipse representing the 95% confidence interval for the rover's true position. This ellipse will be displayed in the Plan Viz.
+
+### Syntax
+```
+{
+  type: "poseConfidenceReport",
+  radiusX: number,
+  radiusY: number,
+  rotation: number
+}
+```
+
+### Parameters
+- `radiusX` - the radius of the ellipse along the rover's x-axis before the rotation is applied
+- `radiusY` - the radius of the ellipse along the rover's y-axis before the rotation is applied
+- `rotation` - how many radians counterclockwise the ellipse is rotated
+
+## Lidar Data Report
+### Description
+Sent from the rover server to inform Mission Control of data provided by the rover's lidar sensor.
+
+### Syntax
+```
+{
+  type: "lidarReport",
+  points: { x: number, y: number }[]
+}
+```
+
+### Parameters
+- `points` - an array of points in cartesian coordinates read by the lidar sensor
+- `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
+- `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
+
 ## Lazy Susan Position Request
-## Description
+### Description
 Sent from Mission Control to instruct the rover server to rotate the lazy Susan to a specified position.
 
 ### Syntax
@@ -254,7 +273,7 @@ Sent from Mission Control to instruct the rover server to rotate the lazy Susan 
 - `position` - the requested integer position in [0, 5]
 
 ## Lazy Susan Lid Close Request
-## Description
+### Description
 Sent from Mission Control to instruct the rover server to open or close the lids on the lazy Susan.
 
 ### Syntax
