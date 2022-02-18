@@ -1,37 +1,32 @@
 import { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectLidarPoints } from "../../store/lidarSlice";
+import { selectPlannedPath, selectLidarPoints } from "../../store/planVizSlice";
 import "./PlanViz.css";
 
 // Pixels per meter.
 const SCALE_FACTOR = 25;
 
-const plannedPath0 = [];
-const heading0 = 0;
-
+/**
+ * Component providing autonomous plan visuzliation.
+ */
 function PlanViz() {
   const canvasRef = useRef();
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const lidarPoints = useSelector(selectLidarPoints);
-  // const plannedPath = useSelector(selectPlannedPath);
-  const plannedPath = plannedPath0;
-  // const heading = useSelector(selectImuHeading);
-  const heading = heading0;
+  const plannedPath = useSelector(selectPlannedPath);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     clear(context);
     context.translate(context.canvas.width / 2, context.canvas.height / 2);
-    context.rotate(heading * Math.PI / 180);
     drawLidarPoints(context, lidarPoints);
     drawPlannedPath(context, plannedPath);
-    drawRover(context, heading);
-    context.rotate(-heading * Math.PI / 180);
+    drawRover(context);
     context.translate(-context.canvas.width / 2, -context.canvas.height / 2);
     drawCaption(context);
-  }, [width, height, lidarPoints, plannedPath, heading]);
+  }, [width, height, lidarPoints, plannedPath]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -77,14 +72,14 @@ function drawPlannedPath(canvasContext, path) {
   path.forEach(point => {
     const canvasX = -point.y * SCALE_FACTOR;
     const canvasY = -point.x * SCALE_FACTOR;
-    canvasContext.lineTo(canvasX, canvasY * SCALE_FACTOR);
+    canvasContext.lineTo(canvasX, canvasY);
   });
   canvasContext.strokeStyle = "#2f2";
   canvasContext.lineWidth = 3;
   canvasContext.stroke();
 }
 
-function drawRover(canvasContext, heading) {
+function drawRover(canvasContext) {
   canvasContext.beginPath();
   canvasContext.moveTo(0, -10);
   canvasContext.lineTo(-5, 0);

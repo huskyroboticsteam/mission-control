@@ -6,14 +6,14 @@ import "./InputInfo.css";
 
 function InputInfo() {
   const driveGamepadIsConnected = useSelector(selectInputDeviceIsConnected("driveGamepad"));
-  const armGamepadIsConnected = useSelector(selectInputDeviceIsConnected("armGamepad"));
+  const peripheralGamepadIsConnected = useSelector(selectInputDeviceIsConnected("peripheralGamepad"));
   const keyboardIsConnected = useSelector(selectInputDeviceIsConnected("keyboard"));
 
   return (
     <div className="input-info">
       <KeyboardInfo connected={keyboardIsConnected} />
       <GamepadInfo label="Driver" connected={driveGamepadIsConnected} />
-      <GamepadInfo label="Arm" connected={armGamepadIsConnected} />
+      <GamepadInfo label="Peripheral" connected={peripheralGamepadIsConnected} />
     </div>
   );
 }

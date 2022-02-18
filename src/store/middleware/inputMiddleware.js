@@ -1,5 +1,6 @@
+import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive } from "../driveSlice";
-import { requestMotorPower } from "../motorsSlice";
+import { requestJointPower } from "../jointsSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -7,30 +8,87 @@ import { requestMotorPower } from "../motorsSlice";
 const inputMiddleware = store => next => action => {
   if (action.type.startsWith("input/")) {
     const prevComputedInput = store.getState().input.computed;
+    const prevMountedPeripheral = selectMountedPeripheral(store.getState());
     const result = next(action);
     const computedInput = store.getState().input.computed;
+    const mountedPeripheral = selectMountedPeripheral(store.getState());
 
-    const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
-    const { straight, steer } = computedInput.drive;
-    if (straight !== prevStraight || steer !== prevSteer) {
-      store.dispatch(requestDrive({
-        straight,
-        steer
-      }));
-    }
-
-    Object.keys(computedInput.motorPower).forEach(motorName => {
-      if (computedInput.motorPower[motorName] !== prevComputedInput.motorPower[motorName])
-        store.dispatch(requestMotorPower({
-          motorName,
-          power: computedInput.motorPower[motorName]
-        }));
-    });
+    updateDrive(prevComputedInput, computedInput, store.dispatch);
+    updatePeripherals(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      store.dispatch
+    );
 
     return result;
   } else {
     return next(action);
   }
+}
+
+function updateDrive(prevComputedInput, computedInput, dispatch) {
+  const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
+  const { straight, steer } = computedInput.drive;
+  if (straight !== prevStraight || steer !== prevSteer) {
+    dispatch(requestDrive({
+      straight,
+      steer
+    }));
+  }
+}
+
+function updatePeripherals(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  if (mountedPeripheral === "scienceStation")
+    updateScienceStation(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    );
+  else if (mountedPeripheral === "arm")
+    updateArm(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    );
+}
+
+function updateScienceStation(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  // TODO
+}
+
+function updateArm(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  Object.keys(computedInput.arm).forEach(jointName => {
+    if (computedInput.arm[jointName] !== prevComputedInput.arm[jointName]
+      || mountedPeripheral !== prevMountedPeripheral)
+      dispatch(requestJointPower({
+        jointName,
+        power: computedInput.arm[jointName]
+      }));
+  });
 }
 
 export default inputMiddleware;
