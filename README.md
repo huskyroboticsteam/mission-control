@@ -26,7 +26,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
-Sent from the rover server to inform Mission Control of the peripheral currently mounted on the rover.
+Sent from the rover server to inform Mission Control of the peripheral currently mounted on the rover. This should be sent any time the rover server connects with Mission Control.
 
 ### Syntax
 ```
@@ -228,12 +228,12 @@ Sent from the rover server to inform Mission Control of the currently planned au
 ```
 {
   type: "autonomousPlannedPathReport",
-  points: { x: number, y: number, heading: number }[]
+  path: { x: number, y: number, heading: number }[]
 }
 ```
 
 ### Parameters
-- `points` - an array of points in cartesian coordinates that make up the planned path, where points with adjacent indices are connected by an edge
+- `path` - an array of points in cartesian coordinates that make up the planned path, where points with adjacent indices are connected by an edge
 - `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
 - `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
 - `heading` - the planned heading of the rover at a point, measured in radians counterclockwise from the rover's x-axis
