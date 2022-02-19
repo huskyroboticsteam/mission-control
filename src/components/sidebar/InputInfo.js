@@ -2,18 +2,28 @@ import { useSelector } from "react-redux";
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import GamepadIcon from "@material-ui/icons/SportsEsports";
 import { selectInputDeviceIsConnected } from "../../store/inputSlice";
+import { selectMountedPeripheral } from '../../store/peripheralsSlice';
 import "./InputInfo.css";
 
 function InputInfo() {
+  const keyboardIsConnected = useSelector(selectInputDeviceIsConnected("keyboard"));
   const driveGamepadIsConnected = useSelector(selectInputDeviceIsConnected("driveGamepad"));
   const peripheralGamepadIsConnected = useSelector(selectInputDeviceIsConnected("peripheralGamepad"));
-  const keyboardIsConnected = useSelector(selectInputDeviceIsConnected("keyboard"));
+
+  const mountedPeripheral = useSelector(selectMountedPeripheral);
+  let peripheralGamepadLabel;
+  if (mountedPeripheral === "arm")
+    peripheralGamepadLabel = "Arm";
+  else if (mountedPeripheral === "scienceStation")
+    peripheralGamepadLabel = "Science";
+  else
+    peripheralGamepadLabel = "Peripheral";
 
   return (
     <div className="input-info">
       <KeyboardInfo connected={keyboardIsConnected} />
       <GamepadInfo label="Driver" connected={driveGamepadIsConnected} />
-      <GamepadInfo label="Peripheral" connected={peripheralGamepadIsConnected} />
+      <GamepadInfo label={peripheralGamepadLabel} connected={peripheralGamepadIsConnected} />
     </div>
   );
 }
