@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   connectToRover,
-  disconnectFromRover,
   selectRoverIsConnected,
   selectRoverIsConnecting
 } from "../../store/roverSocketSlice";
@@ -21,10 +20,6 @@ function App() {
   useEffect(() => {
     if (!roverIsConnected && !roverIsConnecting)
       dispatch(connectToRover());
-    return () => {
-      if (roverIsConnected)
-        dispatch(disconnectFromRover());
-    }
   }, [dispatch, roverIsConnected, roverIsConnecting]);
 
   // Disable context menu.
