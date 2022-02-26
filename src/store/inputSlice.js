@@ -126,13 +126,28 @@ function computeArmInput(state) {
   const pressedKeys = state.keyboard.pressedKeys;
 
   const armInput = state.computed.arm;
-  armInput.armBase = peripheralGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "A", "D");
-  armInput.shoulder = -peripheralGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "W", "S");
-  armInput.elbow = -peripheralGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "I", "K");
-  armInput.forearm = -peripheralGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "L", "J");
-  armInput.hand = peripheralGamepad["RightTrigger"] - peripheralGamepad["LeftTrigger"] + getAxisFromKeys(pressedKeys, "O", "P");
-  armInput.differentialPitch = getAxisFromButtons(peripheralGamepad, "dPadUp", "dPadDown") + getAxisFromKeys(pressedKeys, "T", "G");
-  armInput.differentialRoll = getAxisFromButtons(peripheralGamepad, "dPadLeft", "dPadRight") + getAxisFromKeys(pressedKeys, "F", "H");
+  armInput.armBase =
+    peripheralGamepad["LeftStickX"] +
+    getAxisFromKeys(pressedKeys, "A", "D");
+  armInput.shoulder =
+    peripheralGamepad["LeftStickY"] +
+    getAxisFromKeys(pressedKeys, "S", "W");
+  armInput.elbow =
+    peripheralGamepad["RightStickY"] +
+    getAxisFromKeys(pressedKeys, "K", "I");
+  armInput.forearm =
+    peripheralGamepad["RightStickX"] +
+    getAxisFromKeys(pressedKeys, "J", "L");
+  armInput.hand =
+    peripheralGamepad["LeftTrigger"] -
+    peripheralGamepad["RightTrigger"] +
+    getAxisFromKeys(pressedKeys, "P", "O");
+  armInput.differentialPitch =
+    getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
+    getAxisFromKeys(pressedKeys, "G", "T");
+  armInput.differentialRoll =
+    getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
+    getAxisFromKeys(pressedKeys, "F", "H");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
