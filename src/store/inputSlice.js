@@ -88,9 +88,8 @@ const inputSlice = createSlice({
     keyReleased(state, action) {
       const key = action.payload.key.toUpperCase();
       const index = state.keyboard.pressedKeys.indexOf(key);
-      if (index !== -1) {
+      if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
-      }
       computeInput(state);
     }
   }
