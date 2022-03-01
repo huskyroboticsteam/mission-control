@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useFBX } from "@react-three/drei";
-import { selectMotorCurrentPosition } from "../../store/motorsSlice";
+import { selectJointCurrentPosition } from "../../store/jointsSlice";
 import armBaseMesh from "./armBase.fbx";
 import lowerArmMesh from "./lowerArm.fbx";
 import upperArmMesh from "./upperArm.fbx";
@@ -16,13 +16,13 @@ import "./ArmModel.css";
 function ArmModel() {
   // Selectors don't work in child components with React Three Fiber, so we
   // must prop drill unfortunately.
-  const armBasePosition = useSelector(selectMotorCurrentPosition("armBase"));
-  const shoulderPosition = useSelector(selectMotorCurrentPosition("shoulder"));
-  const elbowPosition = useSelector(selectMotorCurrentPosition("elbow"));
-  const forearmPosition = useSelector(selectMotorCurrentPosition("forearm"));
-  const differentialLeftPosition = useSelector(selectMotorCurrentPosition("differentialLeft"));
-  const differentialRightPosition = useSelector(selectMotorCurrentPosition("differentialRight"));
-  const handPosition = useSelector(selectMotorCurrentPosition("hand"));
+  const armBasePosition = useSelector(selectJointCurrentPosition("armBase"));
+  const shoulderPosition = useSelector(selectJointCurrentPosition("shoulder"));
+  const elbowPosition = useSelector(selectJointCurrentPosition("elbow"));
+  const forearmPosition = useSelector(selectJointCurrentPosition("forearm"));
+  const differentialRoll = useSelector(selectJointCurrentPosition("differentialRoll"));
+  const differentialPitch = useSelector(selectJointCurrentPosition("differentialPitch"));
+  const handPosition = useSelector(selectJointCurrentPosition("hand"));
 
   return (
     <Canvas className="arm-model">
@@ -36,8 +36,8 @@ function ArmModel() {
           shoulderPosition={shoulderPosition}
           elbowPosition={elbowPosition}
           forearmPosition={forearmPosition}
-          differentialLeftPosition={differentialLeftPosition}
-          differentialRightPosition={differentialRightPosition}
+          differentialRoll={differentialRoll}
+          differentialPitch={differentialPitch}
           handPosition={handPosition}
         />
       </Suspense>
@@ -50,8 +50,8 @@ function ArmBase({
   shoulderPosition,
   elbowPosition,
   forearmPosition,
-  differentialLeftPosition,
-  differentialRightPosition,
+  differentialRoll,
+  differentialPitch,
   handPosition
 }) {
   const mesh = useFBX(armBaseMesh);
@@ -67,8 +67,8 @@ function ArmBase({
         shoulderPosition={shoulderPosition}
         elbowPosition={elbowPosition}
         forearmPosition={forearmPosition}
-        differentialLeftPosition={differentialLeftPosition}
-        differentialRightPosition={differentialRightPosition}
+        differentialRoll={differentialRoll}
+        differentialPitch={differentialPitch}
         handPosition={handPosition}
       />
     </primitive>
@@ -79,8 +79,8 @@ function LowerArm({
   shoulderPosition,
   elbowPosition,
   forearmPosition,
-  differentialLeftPosition,
-  differentialRightPosition,
+  differentialRoll,
+  differentialPitch,
   handPosition
 }) {
   const mesh = useFBX(lowerArmMesh);
@@ -89,13 +89,13 @@ function LowerArm({
     <primitive
       object={mesh}
       position={[0, 12, 0]}
-      rotation={[degToRad(shoulderPosition), 0, 0]}
+      rotation={[-degToRad(shoulderPosition), 0, 0]}
     >
       <UpperArm
         elbowPosition={elbowPosition}
         forearmPosition={forearmPosition}
-        differentialLeftPosition={differentialLeftPosition}
-        differentialRightPosition={differentialRightPosition}
+        differentialRoll={differentialRoll}
+        differentialPitch={differentialPitch}
         handPosition={handPosition}
       />
     </primitive>
@@ -105,8 +105,8 @@ function LowerArm({
 function UpperArm({
   elbowPosition,
   forearmPosition,
-  differentialLeftPosition,
-  differentialRightPosition,
+  differentialRoll,
+  differentialPitch,
   handPosition
 }) {
   const mesh = useFBX(upperArmMesh);
@@ -115,12 +115,12 @@ function UpperArm({
     <primitive
       object={mesh}
       position={[0, 60, -56]}
-      rotation={[degToRad(elbowPosition), 0, 0]}
+      rotation={[-degToRad(elbowPosition), 0, 0]}
     >
       <Forearm
         forearmPosition={forearmPosition}
-        differentialLeftPosition={differentialLeftPosition}
-        differentialRightPosition={differentialRightPosition}
+        differentialRoll={differentialRoll}
+        differentialPitch={differentialPitch}
         handPosition={handPosition}
       />
     </primitive>
@@ -129,8 +129,8 @@ function UpperArm({
 
 function Forearm({
   forearmPosition,
-  differentialLeftPosition,
-  differentialRightPosition,
+  differentialRoll,
+  differentialPitch,
   handPosition
 }) {
   const mesh = useFBX(forearmMesh);
@@ -142,8 +142,8 @@ function Forearm({
       rotation={[0, 0, -degToRad(forearmPosition)]}
     >
       <Differential
-        differentialLeftPosition={differentialLeftPosition}
-        differentialRightPosition={differentialRightPosition}
+        differentialRoll={differentialRoll}
+        differentialPitch={differentialPitch}
         handPosition={handPosition}
       />
     </primitive>
@@ -151,19 +151,17 @@ function Forearm({
 }
 
 function Differential({
-  differentialLeftPosition,
-  differentialRightPosition,
+  differentialRoll,
+  differentialPitch,
   handPosition
 }) {
   const mesh = useFBX(differentialMesh);
-  const pitch = (differentialRightPosition + differentialLeftPosition) / 2;
-  const roll = differentialLeftPosition - differentialRightPosition;
 
   return (
     <primitive
       object={mesh}
       position={[0, 0, 12.5]}
-      rotation={[degToRad(pitch), 0, degToRad(roll)]}
+      rotation={[degToRad(differentialPitch), 0, degToRad(differentialRoll)]}
     >
       <Hand
         handPosition={handPosition}
