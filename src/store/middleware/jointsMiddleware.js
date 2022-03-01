@@ -6,9 +6,9 @@ import {
 } from "../jointsSlice";
 
 /**
- * Middleware that handles receiving motor telemetry.
+ * Middleware that handles sending and receiving joint data.
  */
-const motorsMiddleware = store => next => action => {
+const jointsMiddleware = store => next => action => {
   const result = next(action);
 
   switch (action.type) {
@@ -54,4 +54,4 @@ const motorsMiddleware = store => next => action => {
   return result;
 }
 
-export default motorsMiddleware;
+export default jointsMiddleware;
