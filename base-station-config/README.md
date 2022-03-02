@@ -8,9 +8,9 @@ repository (which contains config files for the Jetson).
 
 Some of the files include:
 
-## Logitech F710 Gamepad Setup
 - `50-logitech-f710.rules`
 - `setup-f710.sh`
+## Logitech F710 Gamepad Setup
 
 We're currently using the Logitech F710 wireless gamepad on the actual
 base station; however there's some weirdness with Linux and some of
