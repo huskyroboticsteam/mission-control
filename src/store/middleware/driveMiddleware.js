@@ -1,4 +1,4 @@
-import { requestDrive } from "../driveSlice";
+import { requestDrive, requestTankDrive } from "../driveSlice";
 import { messageRover } from "../roverSocketSlice";
 
 /**
@@ -7,15 +7,32 @@ import { messageRover } from "../roverSocketSlice";
 const driveMiddleware = store => next => action => {
   const result = next(action);
 
-  if (action.type === requestDrive.type) {
-    const { straight, steer } = action.payload;
-    store.dispatch(messageRover({
-      message: {
-        type: "driveRequest",
-        straight,
-        steer
-      }
-    }));
+  switch (action.type) {
+    case requestDrive.type: {
+      const { straight, steer } = action.payload;
+      store.dispatch(messageRover({
+        message: {
+          type: "driveRequest",
+          straight,
+          steer
+        }
+      }));
+      break;
+    }
+
+    case requestTankDrive.type: {
+      const { left, right } = action.payload;
+      store.dispatch(messageRover({
+        message: {
+          type: "tankDriveRequest",
+          left,
+          right
+        }
+      }));
+      break;
+    }
+
+    default: break;
   }
 
   return result;

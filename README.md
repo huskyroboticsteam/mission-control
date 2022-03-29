@@ -86,6 +86,23 @@ Sent from Mission Control to instruct the rover to drive with a specified straig
 - `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
 - `steer` - steer component in [-1.0, 1.0], where positive means steer right and negative means steer left
 
+## Tank Drive Request
+### Description
+Sent from Mission Control to instruct the rover to drive like a tank with a specified left and right value.
+
+### Syntax
+```
+{
+  type: "tankDriveRequest",
+  left: number,
+  right: number
+}
+```
+
+### Parameters
+- `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
+- `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
+
 ## Joint Power Request
 ### Description
 Sent from Mission Control to instruct the rover server to make a joint move with a specified power.

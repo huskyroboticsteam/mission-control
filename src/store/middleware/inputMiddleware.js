@@ -1,5 +1,5 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
-import { requestDrive } from "../driveSlice";
+import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestJointPower } from "../jointsSlice";
 
 /**
@@ -29,13 +29,17 @@ const inputMiddleware = store => next => action => {
 }
 
 function updateDrive(prevComputedInput, computedInput, dispatch) {
-  const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
-  const { straight, steer } = computedInput.drive;
-  if (straight !== prevStraight || steer !== prevSteer) {
-    dispatch(requestDrive({
-      straight,
-      steer
-    }));
+  if (computedInput.drive.tank) {
+    const { tankLeft: prevTankLeft, tankRight: prevTankRight } = prevComputedInput.drive;
+    const { tankLeft, tankRight } = computedInput.drive;
+    if (tankLeft !== prevTankLeft || tankRight !== prevTankRight)
+      dispatch(requestTankDrive({ left: tankLeft, right: tankRight }));
+  } else {
+    const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
+    const { straight, steer } = computedInput.drive;
+    if (straight !== prevStraight || steer !== prevSteer) {
+      dispatch(requestDrive({ straight, steer }));
+    }
   }
 }
 

@@ -2,8 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   straight: 0,
-  steer: 0
-}
+  steer: 0,
+  tankLeft: 0,
+  tankRight: 0
+};
 
 const driveSlice = createSlice({
   name: "drive",
@@ -13,10 +15,16 @@ const driveSlice = createSlice({
       const { straight, steer } = action.payload;
       state.straight = straight;
       state.steer = steer;
+    },
+
+    requestTankDrive(state, action) {
+      const { tankLeft, tankRight } = action.payload;
+      state.tankLeft = tankLeft;
+      state.tankRight = tankRight;
     }
   }
 });
 
-export const { requestDrive } = driveSlice.actions;
+export const { requestDrive, requestTankDrive } = driveSlice.actions;
 
 export default driveSlice.reducer;

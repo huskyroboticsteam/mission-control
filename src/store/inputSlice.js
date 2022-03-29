@@ -31,8 +31,11 @@ const initialState = {
   },
   computed: {
     drive: {
+      tank: false,
       straight: 0,
-      steer: 0
+      steer: 0,
+      tankLeft: 0,
+      tankRight: 0
     },
     arm: {
       armBase: 0,
@@ -66,7 +69,7 @@ const inputSlice = createSlice({
     gamepadAxisChanged(state, action) {
       const { gamepadName, axisName, value } = action.payload;
       state[gamepadName][axisName] = value;
-      computeInput(state);
+      computeInput(state, action);
     },
 
     gamepadButtonChanged(state, action) {
@@ -75,6 +78,7 @@ const inputSlice = createSlice({
         // Treat triggers as axes, not buttons.  
         return;
       state[gamepadName][buttonName] = pressed;
+      computeInput(state, action);
     },
 
     keyPressed(state, action) {
@@ -82,7 +86,7 @@ const inputSlice = createSlice({
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key);
       }
-      computeInput(state);
+      computeInput(state, action);
     },
 
     keyReleased(state, action) {
@@ -90,28 +94,43 @@ const inputSlice = createSlice({
       const index = state.keyboard.pressedKeys.indexOf(key);
       if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
-      computeInput(state);
+      computeInput(state, action);
     }
   }
 });
 
-function computeInput(state) {
-  computeDriveInput(state);
+function computeInput(state, action) {
+  computeDriveInput(state, action);
   computePeripheralInput(state);
 }
 
-function computeDriveInput(state) {
+function computeDriveInput(state, action) {
   const driveGamepad = state.driveGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
   const driveInput = state.computed.drive;
+
+  // Spacebar or the Y button toggles tank drive.
+  if (action.type === keyPressed.type && action.payload.key === " ") {
+    driveInput.tank = !driveInput.tank;
+  } else if (
+    action.type === gamepadButtonChanged.type &&
+    action.payload.gamepadName === "driveGamepad" &&
+    action.payload.buttonName === "Y" &&
+    action.payload.pressed
+  ) {
+    driveInput.tank = !driveInput.tank;
+  }
+
   driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+  driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
+  driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
-  Object.entries(driveInput).forEach(
-    ([direction, value]) => driveInput[direction] = clamp1(drivePrecisionMultiplier * value)
+  ["straight", "steer", "tankLeft", "tankRight"].forEach(
+    axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
   );
 }
 
