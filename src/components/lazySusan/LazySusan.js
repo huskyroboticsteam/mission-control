@@ -2,7 +2,6 @@ import { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import "./LazySusan.css";
 
-
 function LazySusan() {
     const canvasRef = useRef();
 
@@ -11,7 +10,14 @@ function LazySusan() {
         const context = canvas.getContext("2d");
         clear(context);
         context.beginPath();
-        context.arc(100, 75, 50, 0, 2 * Math.PI);
+        context.ellipse(
+          300,
+          165,
+          50 * 5,
+          25 * 5,
+          0,
+          0, 2 * Math.PI
+        );
         context.strokeStyle = 'white';
         context.stroke();
       });
