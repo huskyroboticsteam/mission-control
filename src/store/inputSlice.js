@@ -47,7 +47,7 @@ const initialState = {
       hand: 0,
     },
     science: {
-      drillArm: 0
+      lazySusanPosition: 0
     }
   }
 };
@@ -101,7 +101,7 @@ const inputSlice = createSlice({
 
 function computeInput(state, action) {
   computeDriveInput(state, action);
-  computePeripheralInput(state);
+  computePeripheralInput(state, action);
 }
 
 function computeDriveInput(state, action) {
@@ -134,9 +134,9 @@ function computeDriveInput(state, action) {
   );
 }
 
-function computePeripheralInput(state) {
+function computePeripheralInput(state, action) {
   computeArmInput(state);
-  computeScienceInput(state);
+  computeScienceInput(state, action);
 }
 
 function computeArmInput(state) {
@@ -174,8 +174,14 @@ function computeArmInput(state) {
   );
 }
 
-function computeScienceInput(state) {
-  // TODO
+function computeScienceInput(state, action) {
+  const peripheralGamepad = state.peripheralGamepad;
+  const pressedKeys = state.keyboard.pressedKeys;
+  
+  const scienceInput = state.computed.science;
+  const lazySusanAxis = getAxisFromKeys(pressedKeys, "A", "D");
+  scienceInput.lazySusanPosition += lazySusanAxis;
+  scienceInput.lazySusanPosition %= 6;
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
