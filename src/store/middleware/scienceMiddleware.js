@@ -3,7 +3,8 @@ import {
   requestLazySusanPosition
 } from "../scienceSlice";
 import {
-  messageRover
+  messageRover,
+  messageReceivedFromRover
 } from "../roverSocketSlice";
 
 /**
@@ -15,24 +16,28 @@ const scienceMiddleware = store => next => action => {
   switch (action.type) {
     case requestLidPosition.type: {
       store.dispatch(messageRover({
-        type: "lazySusanLidCloseRequest",
-        close: action.payload.closed
+        message: {
+          type: "lazySusanLidCloseRequest",
+          close: action.payload.closed
+        }
       }));
       break;
     }
 
     case requestLazySusanPosition.type: {
       store.dispatch(messageRover({
-            type: "lazySusanPositionRequest",
-            position: action.payload.position
+        message: {
+          type: "lazySusanPositionRequest",
+          position: action.payload.position
+        }
       }));
       break;
     }
 
-    //case messageReceivedFromRover.type: {
-
-      //break;
-    //}
+    case messageReceivedFromRover.type: {
+      // TODO: Handle science station messages.
+      break;
+    }
 
     default: break;
   }
