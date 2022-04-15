@@ -1,5 +1,6 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
+import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 
 /**
@@ -75,7 +76,12 @@ function updateScienceStation(
   mountedPeripheral,
   dispatch
 ) {
-  // TODO
+  const scienceInput = computedInput.science;
+  const prevScienceInput = prevComputedInput.science;
+  if (scienceInput.lazySusanPosition !== prevScienceInput.lazySusanPosition || true)
+    dispatch(requestLazySusanPosition({
+      position: computedInput.science.lazySusanPosition
+    }));
 }
 
 function updateArm(

@@ -67,41 +67,45 @@ const inputSlice = createSlice({
     },
 
     gamepadAxisChanged(state, action) {
+      const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, axisName, value } = action.payload;
       state[gamepadName][axisName] = value;
-      computeInput(state, action);
+      computeInput(prevState, state, action);
     },
 
     gamepadButtonChanged(state, action) {
+      const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, buttonName, pressed } = action.payload;
       if (buttonName === "LT" || buttonName === "RT")
         // Treat triggers as axes, not buttons.  
         return;
       state[gamepadName][buttonName] = pressed;
-      computeInput(state, action);
+      computeInput(prevState, state, action);
     },
 
     keyPressed(state, action) {
+      const prevState = JSON.parse(JSON.stringify(state));
       const key = action.payload.key.toUpperCase();
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key);
       }
-      computeInput(state, action);
+      computeInput(prevState, state, action);
     },
 
     keyReleased(state, action) {
+      const prevState = JSON.parse(JSON.stringify(state));
       const key = action.payload.key.toUpperCase();
       const index = state.keyboard.pressedKeys.indexOf(key);
       if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
-      computeInput(state, action);
+      computeInput(prevState, state, action);
     }
   }
 });
 
-function computeInput(state, action) {
+function computeInput(prevState, state, action) {
   computeDriveInput(state, action);
-  computePeripheralInput(state, action);
+  computePeripheralInput(prevState, state, action);
 }
 
 function computeDriveInput(state, action) {
@@ -134,9 +138,9 @@ function computeDriveInput(state, action) {
   );
 }
 
-function computePeripheralInput(state, action) {
+function computePeripheralInput(prevState, state, action) {
   computeArmInput(state);
-  computeScienceInput(state, action);
+  computeScienceInput(prevState, state, action);
 }
 
 function computeArmInput(state) {
@@ -174,14 +178,21 @@ function computeArmInput(state) {
   );
 }
 
-function computeScienceInput(state, action) {
+function computeScienceInput(prevState, state, action) {
+  const prevPeripheralGamepad = prevState.peripheralGamepad;
   const peripheralGamepad = state.peripheralGamepad;
+  const prevPressedKeys = prevState.keyboard.pressedKeys;
   const pressedKeys = state.keyboard.pressedKeys;
-  
   const scienceInput = state.computed.science;
-  const lazySusanAxis = getAxisFromKeys(pressedKeys, "A", "D");
-  scienceInput.lazySusanPosition += lazySusanAxis;
-  scienceInput.lazySusanPosition %= 6;
+  const prevLazySusanAxis =
+    getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
+    getAxisFromKeys(prevPressedKeys, "A", "D");
+  const lazySusanAxis =
+    getAxisFromButtons(peripheralGamepad, "LB", "RB") +
+    getAxisFromKeys(pressedKeys, "A", "D");
+  if (lazySusanAxis !== prevLazySusanAxis)
+    scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
+      lazySusanAxis) % 6) + 6) % 6;
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -225,5 +236,4 @@ export const {
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
-
 export default inputSlice.reducer;
