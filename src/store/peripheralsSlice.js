@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  mountedPeripheral: null
+  mountedPeripheral: "scienceStation"
 };
 
 const peripheralsSlice = createSlice({
