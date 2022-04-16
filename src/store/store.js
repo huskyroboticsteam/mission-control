@@ -9,6 +9,7 @@ import jointsReducer from "./jointsSlice";
 import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
 import planVizReducer from "./planVizSlice";
+import scienceReducer from "./scienceSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import peripheralsMiddleware from "./middleware/peripheralsMiddleware";
 import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
@@ -19,6 +20,7 @@ import jointsMiddleware from "./middleware/jointsMiddleware";
 import motorsMiddleware from "./middleware/motorsMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
 import planVizMiddleware from "./middleware/planVizMiddleware";
+import scienceMiddleware from "./middleware/scienceMiddleware";
 
 export default configureStore({
   reducer: {
@@ -31,7 +33,8 @@ export default configureStore({
     joints: jointsReducer,
     motors: motorsReducer,
     cameras: camerasReducer,
-    planViz: planVizReducer
+    planViz: planVizReducer,
+    science: scienceReducer
   },
 
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat([
@@ -44,6 +47,7 @@ export default configureStore({
     jointsMiddleware,
     motorsMiddleware,
     camerasMiddleware,
-    planVizMiddleware
+    planVizMiddleware,
+    scienceMiddleware
   ])
 });
