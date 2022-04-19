@@ -8,6 +8,11 @@ function Syringe () {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     clear(context);
+    
+    // creates filling 
+    context.beginPath();
+    context.fillStyle = '#F06292';
+    context.fillRect(100, 100, 400, 50);
 
     // creates rectangle
     context.beginPath();

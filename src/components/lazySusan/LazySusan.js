@@ -38,7 +38,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 1) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
 
@@ -53,7 +53,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 2) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
 
@@ -68,7 +68,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 3) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
 
@@ -83,7 +83,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 4) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
 
@@ -98,7 +98,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 5) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
 
@@ -113,7 +113,7 @@ function LazySusan() {
     );
     context.fillStyle = 'grey';
     if (position == 0) {
-      context.fillStyle = 'pink';
+      context.fillStyle = '#F06292';
     }
     context.fill();
   });
