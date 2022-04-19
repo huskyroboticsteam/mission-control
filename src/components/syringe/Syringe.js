@@ -10,9 +10,10 @@ function Syringe () {
     clear(context);
     
     // creates filling 
+    const filling = 10;
     context.beginPath();
     context.fillStyle = '#F06292';
-    context.fillRect(100, 100, 400, 50);
+    context.fillRect(100, 100, filling*400/10, 50);
 
     // creates rectangle
     context.beginPath();
