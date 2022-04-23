@@ -9,133 +9,146 @@ function Syringe () {
     const context = canvas.getContext("2d");
     clear(context);
     
+    // sryinge point 
+    context.beginPath();
+    context.strokeStyle = 'white';
+    context.moveTo(100, 125);
+    context.lineTo(150, 120);
+    context.stroke();
+
+    context.beginPath();
+    context.strokeStyle = 'white';
+    context.moveTo(100, 125);
+    context.lineTo(150, 130);
+    context.stroke();
+
     // creates filling 
-    const filling = 10;
+    const filling = .4;
     context.beginPath();
     context.fillStyle = '#F06292';
-    context.fillRect(100, 100, filling*400/10, 50);
+    context.fillRect(150, 100, filling*400, 50);
 
     // creates rectangle
     context.beginPath();
     context.strokeStyle = 'white';
-    context.strokeRect(100, 100, 400, 50);
+    context.strokeRect(150, 100, 400, 50);
 
     // creates half measurement mark
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(300, 130);
-    context.lineTo(300, 150);
+    context.moveTo(350, 130);
+    context.lineTo(350, 150);
     context.stroke();
 
     // measurement marks in first half
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(140, 135);
-    context.lineTo(140, 150);
+    context.moveTo(190, 135);
+    context.lineTo(190, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(180, 135);
-    context.lineTo(180, 150);
+    context.moveTo(230, 135);
+    context.lineTo(230, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(220, 135);
-    context.lineTo(220, 150);
+    context.moveTo(270, 135);
+    context.lineTo(270, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(260, 135);
-    context.lineTo(260, 150);
+    context.moveTo(310, 135);
+    context.lineTo(310, 150);
     context.stroke();
 
     // measurement marks in second half
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(340, 135);
-    context.lineTo(340, 150);
+    context.moveTo(390, 135);
+    context.lineTo(390, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(380, 135);
-    context.lineTo(380, 150);
+    context.moveTo(430, 135);
+    context.lineTo(430, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(420, 135);
-    context.lineTo(420, 150);
+    context.moveTo(470, 135);
+    context.lineTo(470, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(460, 135);
-    context.lineTo(460, 150);
+    context.moveTo(510, 135);
+    context.lineTo(510, 150);
     context.stroke();
 
     // inbetween lines
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(120, 140);
-    context.lineTo(120, 150);
+    context.moveTo(170, 140);
+    context.lineTo(170, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(160, 140);
-    context.lineTo(160, 150);
+    context.moveTo(210, 140);
+    context.lineTo(210, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(200, 140);
-    context.lineTo(200, 150);
+    context.moveTo(250, 140);
+    context.lineTo(250, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(240, 140);
-    context.lineTo(240, 150);
+    context.moveTo(290, 140);
+    context.lineTo(290, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(280, 140);
-    context.lineTo(280, 150);
+    context.moveTo(330, 140);
+    context.lineTo(330, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(320, 140);
-    context.lineTo(320, 150);
+    context.moveTo(370, 140);
+    context.lineTo(370, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(360, 140);
-    context.lineTo(360, 150);
+    context.moveTo(410, 140);
+    context.lineTo(410, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(400, 140);
-    context.lineTo(400, 150);
+    context.moveTo(450, 140);
+    context.lineTo(450, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(440, 140);
-    context.lineTo(440, 150);
+    context.moveTo(490, 140);
+    context.lineTo(490, 150);
     context.stroke();
 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.moveTo(480, 140);
-    context.lineTo(480, 150);
+    context.moveTo(530, 140);
+    context.lineTo(530, 150);
     context.stroke();
     });
 
