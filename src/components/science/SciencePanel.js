@@ -11,7 +11,7 @@ function SciencePanel() {
       <CameraStream cameraName="rear" />
       <CameraStream cameraName="upperArm" />
       <LazySusan/>
-      <ArmModel />
+      <CameraStream cameraName="upperArm"/>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
-import { requestLazySusanPosition } from "../scienceSlice";
+import { requestLazySusanPosition, requestLidPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 
 /**
@@ -82,6 +82,11 @@ function updateScienceStation(
     dispatch(requestLazySusanPosition({
       position: computedInput.science.lazySusanPosition
     }));
+  if(scienceInput.lidClosed !== prevScienceInput.lidClosed || true)
+    dispatch(requestLidPosition({
+      closed: computedInput.science.lidClosed
+  }));
+    
 }
 
 function updateArm(

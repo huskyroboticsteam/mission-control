@@ -11,7 +11,8 @@ const scienceSlice = createSlice({
   initialState,
   reducers: {
     requestLidPosition(state, action) {
-      state.lidClosed = action.payload.closed;
+      const { closed } = action.payload;
+      state.lidClosed = closed;
     },
 
     requestLazySusanPosition(state, action) {
@@ -27,5 +28,6 @@ export const {
 } = scienceSlice.actions;
 
 export const selectLazySusanPosition = state => state.science.lazySusanPosition;
+export const selectLidPosition = state => state.science.lidClosed;
 
 export default scienceSlice.reducer;
