@@ -28,10 +28,10 @@ function Syringe () {
     context.stroke();
 
     // creates filling 
-    const filling = .3;
+    const filling = 3; // can be from 6 to 0 
     context.beginPath();
     context.fillStyle = '#F06292';
-    context.fillRect(rect_left, 100, filling*rect_width, 50);
+    context.fillRect(rect_left, 100, filling/6*rect_width, 50);
 
     // creates rectangle
     context.beginPath();
