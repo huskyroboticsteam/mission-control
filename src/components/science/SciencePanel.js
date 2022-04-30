@@ -8,11 +8,11 @@ function SciencePanel() {
   return (
     <div className="science-panel">
       <Syringe/>
-      <CameraStream cameraName="rear" />
-      <CameraStream cameraName="upperArm" />
       <LazySusan/>
-      <ArmModel/>   
-      <CameraStream cameraName="upperArm"/>
+      <LazySusan/>
+      <LazySusan/>
+      <Syringe/>  
+      <Syringe/>
     </div>
   );
 }
