@@ -214,8 +214,10 @@ function LazySusan() {
     const canvas = canvasRef.current;
     const resizeObserver = new ResizeObserver(entries => {
       entries.forEach(entry => {
+        resizeObserver.disconnect();
         setWidth(Math.floor(entry.contentRect.width));
         setHeight(Math.floor(entry.contentRect.height));
+        resizeObserver.observe(canvas);
       })
     });
     resizeObserver.observe(canvas);
