@@ -1,6 +1,6 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
-import { requestLazySusanPosition, requestLidPosition } from "../scienceSlice";
+import { requestLazySusanPosition, requestLidPosition, requestSyringePosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 
 /**
@@ -85,6 +85,10 @@ function updateScienceStation(
   if(scienceInput.lidClosed !== prevScienceInput.lidClosed || true)
     dispatch(requestLidPosition({
       closed: computedInput.science.lidClosed
+  }));
+  if(scienceInput.syringeDepth !== prevScienceInput.syringeDepth || true) 
+    dispatch(requestSyringePosition({
+      depth: computedInput.science.syringeDepth
   }));
     
 }

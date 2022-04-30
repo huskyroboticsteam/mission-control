@@ -43,7 +43,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 0) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.fill();
     context.stroke();
@@ -58,7 +58,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 1) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -71,7 +71,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 2) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -85,7 +85,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 3) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -98,7 +98,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 5) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -111,7 +111,7 @@ function LazySusan() {
       context.strokeStyle = 'grey';
     }
     else if (closed == true && position == 4) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -128,7 +128,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 0) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -143,7 +143,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 1) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -158,7 +158,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 2) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -173,7 +173,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 3) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -188,7 +188,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 4) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 
@@ -203,7 +203,7 @@ function LazySusan() {
     );
     context.strokeStyle = 'grey';
     if (position == 5) {
-      context.strokeStyle = 'pink';
+      context.strokeStyle = '#f472a1';
     }
     context.stroke();
 

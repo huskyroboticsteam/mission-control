@@ -1,6 +1,7 @@
 import {
   requestLidPosition,
-  requestLazySusanPosition
+  requestLazySusanPosition,
+  requestSyringePosition
 } from "../scienceSlice";
 import {
   messageRover,
@@ -29,6 +30,16 @@ const scienceMiddleware = store => next => action => {
         message: {
           type: "lazySusanPositionRequest",
           position: action.payload.position
+        }
+      }));
+      break;
+    }
+
+    case requestSyringePosition.type: {
+      store.dispatch(messageRover({
+        message: {
+          type: "syringeDepthRequest",
+          depth: action.payload.depth
         }
       }));
       break;

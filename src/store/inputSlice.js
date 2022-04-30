@@ -10,7 +10,7 @@ const gamepadTemplate = {
   "RightTrigger": 0,
   "A": false,
   "B": false,
-  "O": false,
+  "S": false,
   "X": false,
   "Y": false,
   "Start": false,
@@ -49,7 +49,8 @@ const initialState = {
     },
     science: {
       lazySusanPosition: 0,
-      lidClosed: true
+      lidClosed: true,
+      syringeDepth: 1
     }
   }
 };
@@ -196,15 +197,21 @@ function computeScienceInput(prevState, state, action) {
     getAxisFromKeys(prevPressedKeys, "O");
   const lidAxis = 
     getAxisFromKeys(pressedKeys, "O");
+  const prevSyringeAxis = 
+    getAxisFromKeys(prevPressedKeys, "S");
+  const syringeAxis = 
+    getAxisFromKeys(pressedKeys, "S");
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  if(lidAxis !== prevLidAxis && lidAxis != 0) {
+  if(lidAxis !== prevLidAxis && lidAxis != 0) 
     scienceInput.lidClosed = !scienceInput.lidClosed;
-    console.log("Lid:", scienceInput.lidClosed);
+  if(syringeAxis !== prevSyringeAxis && syringeAxis != 0) {
+    if(scienceInput.syringeDepth >= 1/6 ) {
+      scienceInput.syringeDepth -= 1/6;
+    }
+    }
   }
-  
-}
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
   let axis = 0;

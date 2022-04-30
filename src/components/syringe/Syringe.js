@@ -1,12 +1,16 @@
-import "./Syringe.css";
 import { useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectSyringePosition} from "../../store/scienceSlice";
+import "./Syringe.css";
 
 function Syringe () {
     const canvasRef = useRef();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+
+    const filling = useSelector(selectSyringePosition);
+
     useEffect(() => {
-    
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     clear(context);
@@ -27,11 +31,11 @@ function Syringe () {
     context.lineTo(rect_left, 130);
     context.stroke();
 
-    // creates filling 
-    const filling = 0; // can be from 0 to 1, we increment by sixths
+    // creates filling #F06292
     context.beginPath();
-    context.fillStyle = '#F06292';
+    context.fillStyle = '#F36397';
     context.fillRect(rect_left, 100, filling*rect_width, 50);
+    console.log(filling);
 
     // creates rectangle
     context.beginPath();
