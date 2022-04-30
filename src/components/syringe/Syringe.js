@@ -39,7 +39,7 @@ function Syringe () {
     context.strokeRect(rect_left, 100, rect_width, 50);
 
     // longer marks
-    for(let i = rect_left + rect_width/10; i < rect_left + rect_width; i += rect_width/10) {
+    for(let i = rect_left + rect_width/6; i < rect_left + rect_width; i += rect_width/6) {
       context.beginPath();
       context.strokeStyle = 'white';
       if(i == rect_width/2 + rect_left) {
@@ -53,14 +53,6 @@ function Syringe () {
       context.stroke();
     }
 
-    // in-between lines
-    for(let i = rect_left + rect_width/20; i < rect_left + rect_width; i+=rect_width/10) {
-      context.beginPath();
-      context.strokeStyle = 'white';
-      context.moveTo(i, 140);
-      context.lineTo(i, 150);
-      context.stroke();
-    }
   });
 
   useEffect(() => {
