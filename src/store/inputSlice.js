@@ -198,9 +198,9 @@ function computeScienceInput(prevState, state, action) {
   const lidAxis = 
     getAxisFromKeys(pressedKeys, "O");
   const prevSyringeAxis = 
-    getAxisFromKeys(prevPressedKeys, "S");
+    getAxisFromKeys(prevPressedKeys, "B");
   const syringeAxis = 
-    getAxisFromKeys(pressedKeys, "S");
+    getAxisFromKeys(pressedKeys, "B");
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
