@@ -209,6 +209,7 @@ function computeScienceInput(prevState, state, action) {
   if(syringeAxis !== prevSyringeAxis && syringeAxis != 0) {
     if(scienceInput.syringeDepth >= 1/6 ) {
       scienceInput.syringeDepth -= 1/6;
+      console.log("INCREMENTING SYRINGE - input slice", scienceInput.syringeDepth);
     }
     }
   }

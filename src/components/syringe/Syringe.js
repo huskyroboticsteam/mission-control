@@ -9,6 +9,7 @@ function Syringe () {
     const [height, setHeight] = useState(0);
 
     const filling = useSelector(selectSyringePosition);
+    console.log("INCREMENTING SYRINGE - js 1", filling);
 
     useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,7 +36,7 @@ function Syringe () {
     context.beginPath();
     context.fillStyle = '#F36397';
     context.fillRect(rect_left, 100, filling*rect_width, 50);
-    console.log(filling);
+    console.log("INCREMENTING SYRINGE - js 2", filling);
 
     // creates rectangle
     context.beginPath();
