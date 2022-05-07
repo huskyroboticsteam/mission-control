@@ -8,9 +8,9 @@ function SciencePanel() {
   return (
     <div className="science-panel">
       <Syringe/>
-      <LazySusan/>
-      <LazySusan/>
-      <LazySusan/>
+      <Syringe/>  
+      <Syringe/>
+      <Syringe/>
       <Syringe/>  
       <Syringe/>
     </div>

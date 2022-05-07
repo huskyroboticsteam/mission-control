@@ -1,0 +1,18 @@
+.panoramicCamera {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border-radius: 10px;
+    min-width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+
+.panoramicCamera__panoramicCamera-name {
+    font-size: 30px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #cccccc;
+    background-color: #00000066;
+  }
