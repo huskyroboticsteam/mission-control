@@ -7,11 +7,11 @@ import "./SciencePanel.css";
 function SciencePanel() {
   return (
     <div className="science-panel">
-      <Syringe/>
+      <Syringe/> 
+      <CameraStream cameraName="panoramic"/>
       <Syringe/>  
-      <Syringe/>
-      <Syringe/>
-      <Syringe/>  
+      <LazySusan/>
+      <CameraStream cameraName="microscope" />
       <Syringe/>
     </div>
   );
