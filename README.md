@@ -22,7 +22,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Arm gamepad controls](/src/components/help/armGamepadControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2022.0.0`)
+## Messages (`v2022.0.1`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -219,6 +219,25 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ### Parameters
 - `camera` - the name of the camera
 - `data` - the frame in JPG format encoded as a base-64 string, or `null` if no data is available
+
+## Autonomous Waypoint Navigation Request
+### Description
+Sent from Mission Control to instruct the rover to navigate to the next waypoint. This message will only be sent if the rover is in autonomous mode.
+
+### Syntax
+```
+{
+  type: "waypointNavRequest",
+  latitude: number,
+  longitude: number,
+  waypointIndex: number
+}
+```
+
+### Parameters
+- `latitude` - the latitude of the waypoint in degrees
+- `longitude` - the longitude of the waypoint in degrees
+- `waypointIndex` - the index of the waypoint, an integer
 
 ## Autonomous Planned Path Report
 ### Description
