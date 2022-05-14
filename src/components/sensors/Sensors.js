@@ -40,15 +40,15 @@ function Sensors () {
         <div className="sensors">
           <h2 className="sensors-name">Sensors</h2>
           <div className="container">
-            <div className="reading">Sensor 1</div> 
+            <div className="reading">soil humidity</div> 
             <div className="reading">reading</div> 
-            <div className="reading">Sensor 2</div> 
+            <div className="reading">thermocouple</div> 
             <div className="reading">reading</div> 
-            <div className="reading">Sensor 3</div> 
+            <div className="reading">UV</div> 
             <div className="reading">reading</div> 
-            <div className="reading">Sensor 4</div> 
+            <div className="reading">gas/air quality</div>
             <div className="reading">reading</div> 
-            <div className="reading">Sensor 5</div> 
+            <div className="reading">weather</div> 
             <div className="reading">reading</div> 
           </div>
           <canvas ref={canvasRef} className="syringe" width={width} height={height} />
