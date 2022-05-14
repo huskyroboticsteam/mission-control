@@ -35,21 +35,21 @@ function Sensors () {
     return () => resizeObserver.unobserve(canvas);
   }, []);
 
-
+    const readingClassName = "science-sensors__reading";
     return (
-        <div className="sensors">
-          <h2 className="sensors-name">Sensors</h2>
-          <div className="container">
-            <div className="reading">soil humidity</div> 
-            <div className="reading">reading</div> 
-            <div className="reading">thermocouple</div> 
-            <div className="reading">reading</div> 
-            <div className="reading">UV</div> 
-            <div className="reading">reading</div> 
-            <div className="reading">gas/air quality</div>
-            <div className="reading">reading</div> 
-            <div className="reading">weather</div> 
-            <div className="reading">reading</div> 
+        <div className="science-sensors">
+          <h2 className="science-sensors-name">Sensors</h2>
+          <div className="science-sensors__container">
+            <div className={readingClassName}>soil humidity</div> 
+            <div className={readingClassName}>reading</div> 
+            <div className={readingClassName}>thermocouple</div> 
+            <div className={readingClassName}>reading</div> 
+            <div className={readingClassName}>UV</div> 
+            <div className={readingClassName}>reading</div> 
+            <div className={readingClassName}>gas/air quality</div>
+            <div className={readingClassName}>reading</div> 
+            <div className={readingClassName}>weather</div> 
+            <div className={readingClassName}>reading</div> 
           </div>
           <canvas ref={canvasRef} className="syringe" width={width} height={height} />
         </div>

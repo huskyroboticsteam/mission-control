@@ -1,4 +1,4 @@
-.sensors {
+.science-sensors {
     justify-content: center;
     position: relative;
     grid-row: 1/2;
@@ -11,7 +11,7 @@
     box-sizing: border-box;
   }
 
-.container {
+.science-sensors__container {
   display: grid;
   justify-content: center;
   margin-top: 35px;
@@ -23,7 +23,7 @@
   box-sizing: border-box;
 }
 
-.reading {
+.science-sensors__reading {
   justify-content: center;
   box-sizing: border-box;
   border-radius: 0px;
@@ -31,7 +31,7 @@
   border-color: white;
 } 
 
-.sensors-name {
+.science-sensors-name {
     font-size: 30px;
     position: absolute;
     width: 100%;

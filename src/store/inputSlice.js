@@ -204,9 +204,9 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  if(lidAxis !== prevLidAxis && lidAxis != 0) 
+  if(lidAxis !== prevLidAxis && lidAxis !== 0) 
     scienceInput.lidClosed = !scienceInput.lidClosed;
-  if(syringeAxis !== prevSyringeAxis && syringeAxis != 0) {
+  if(syringeAxis !== prevSyringeAxis && syringeAxis !== 0) {
     if(scienceInput.syringeDepth >= 1/6 ) {
       scienceInput.syringeDepth -= 1/6;
       console.log("INCREMENTING SYRINGE - input slice", scienceInput.syringeDepth);

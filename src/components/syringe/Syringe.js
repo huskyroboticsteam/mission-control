@@ -47,7 +47,7 @@ function Syringe () {
     for(let i = rect_left + rect_width/6; i < rect_left + rect_width; i += rect_width/6) {
       context.beginPath();
       context.strokeStyle = 'white';
-      if(i == rect_width/2 + rect_left) {
+      if(i === rect_width/2 + rect_left) {
         // middle mark
         context.moveTo(i, 130);
       }

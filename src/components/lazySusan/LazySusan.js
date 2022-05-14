@@ -39,10 +39,10 @@ function LazySusan() {
     context.lineTo((0.5 * r) + center_x + 0.7*width/10, -0.866 * r + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 0) {
+    if (closed === true && position !== 0) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 0) {
+    else if (closed === true && position === 0) {
       context.strokeStyle = '#f472a1';
     }
     context.fill();
@@ -54,10 +54,10 @@ function LazySusan() {
     context.lineTo((r) + center_x + 0.7*width/10, 0 + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 1) {
+    if (closed === true && position !== 1) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 1) {
+    else if (closed === true && position === 1) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -67,10 +67,10 @@ function LazySusan() {
     context.lineTo((0.5 * r) + center_x + 0.7*width/10, 0.866 * r + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 2) {
+    if (closed === true && position !== 2) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 2) {
+    else if (closed === true && position === 2) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -81,10 +81,10 @@ function LazySusan() {
     context.lineTo((-0.5 * r) + center_x + 0.7*width/10, 0.866 * r + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 3) {
+    if (closed === true && position !== 3) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 3) {
+    else if (closed === true && position === 3) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -94,10 +94,10 @@ function LazySusan() {
     context.lineTo((-0.5 * r) + center_x + 0.7*width/10, -0.866 * r + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 5) {
+    if (closed === true && position !== 5) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 5) {
+    else if (closed === true && position === 5) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -107,10 +107,10 @@ function LazySusan() {
     context.lineTo((-1 * r) + center_x + 0.7*width/10, -0 + center_y + 0.7*width/10);
     context.lineWidth = line_width;
     context.strokeStyle = 'white';
-    if (closed == true && position != 4) {
+    if (closed === true && position !== 4) {
       context.strokeStyle = 'grey';
     }
-    else if (closed == true && position == 4) {
+    else if (closed === true && position === 4) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -127,7 +127,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 0) {
+    if (position === 0) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -142,7 +142,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 1) {
+    if (position === 1) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -157,7 +157,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 2) {
+    if (position === 2) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -172,7 +172,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 3) {
+    if (position === 3) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -187,7 +187,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 4) {
+    if (position === 4) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
@@ -202,7 +202,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.strokeStyle = 'grey';
-    if (position == 5) {
+    if (position === 5) {
       context.strokeStyle = '#f472a1';
     }
     context.stroke();
