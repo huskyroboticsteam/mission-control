@@ -333,3 +333,16 @@ Sent from Mission Control to instruct the rover server to dispense fluid from th
 
 ### Parameters
 - `amount` - the amount of fluid to dispense in [0.0, 1.0], where 0.0 corresponds to no fluid dispensed, and 1.0 corresponds to all of the fluid dispensed
+
+## Science Station Sensors Request
+### Description 
+Sent from Mission Control to instruct the rover server to display sensor readings.
+
+### Syntax
+```
+{
+  type: “sensorStatusReport",
+  sensor: string,
+  reading: number | null,
+}
+```
