@@ -26,6 +26,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
+### Description
 Sent from the rover server to inform Mission Control of the peripheral currently mounted on the rover. This should be sent any time the rover server connects with Mission Control.
 
 ### Syntax
