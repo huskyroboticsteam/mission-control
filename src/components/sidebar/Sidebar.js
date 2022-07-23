@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
 import EmergencyStopButton from "./EmergencyStopButton";
+import EnableMotorsButton from "./EnableMotorsButton";
 import InputInfo from "./InputInfo";
 import ConnectionInfo from "./ConnectionInfo";
 import "./Sidebar.css";
@@ -9,6 +10,7 @@ function Sidebar() {
     <div className="sidebar">
       <Navbar />
       <EmergencyStopButton />
+      <EnableMotorsButton />
       <InputInfo />
       <ConnectionInfo />
     </div>
