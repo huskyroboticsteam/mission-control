@@ -37,7 +37,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 1) {
+    if (position === 1) {
       context.fillStyle = 'pink';
     }
     context.fill();
@@ -52,7 +52,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 2) {
+    if (position === 2) {
       context.fillStyle = 'pink';
     }
     context.fill();
@@ -67,7 +67,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 3) {
+    if (position === 3) {
       context.fillStyle = 'pink';
     }
     context.fill();
@@ -82,7 +82,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 4) {
+    if (position === 4) {
       context.fillStyle = 'pink';
     }
     context.fill();
@@ -97,7 +97,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 5) {
+    if (position === 5) {
       context.fillStyle = 'pink';
     }
     context.fill();
@@ -112,7 +112,7 @@ function LazySusan() {
       0, 2 * Math.PI
     );
     context.fillStyle = 'grey';
-    if (position == 0) {
+    if (position === 0) {
       context.fillStyle = 'pink';
     }
     context.fill();
