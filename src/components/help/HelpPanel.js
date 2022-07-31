@@ -1,14 +1,14 @@
 import "./HelpPanel.css";
-import driveGamepadControls from "./driveGamepadControls.png";
-import armGamepadControls from "./driveGamepadControls.png";
-import keyboardControls from "./driveGamepadControls.png";
+import standardDriveControls from "./standardDriveControls.png";
+import tankDriveControls from "./tankDriveControls.png";
+import armControls from "./armControls.png";
 
 function HelpPanel() {
   return (
     <div className="help-panel">
-      <img src={driveGamepadControls} alt="drive gamepad controls" />
-      <img src={armGamepadControls} alt="arm gamepad controls" />
-      <img src={keyboardControls} alt="keyboard controls" />
+      <img src={standardDriveControls} alt="standard drive controls" />
+      <img src={tankDriveControls} alt="tank drive controls" />
+      <img src={armControls} alt="arm controls" />
     </div>
   );
 }
