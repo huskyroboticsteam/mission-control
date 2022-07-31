@@ -236,4 +236,6 @@ export const {
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
+export const selectDriveGamepad = state => state.input.driveGamepad;
+export const selectPeripheralGamepad = state => state.input.peripheralGamepad;
 export default inputSlice.reducer;
