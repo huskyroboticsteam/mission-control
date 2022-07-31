@@ -8,6 +8,8 @@ const gamepadTemplate = {
   "RightStickY": 0,
   "LeftTrigger": 0,
   "RightTrigger": 0,
+  "LS": false,
+  "RS": false,
   "A": false,
   "B": false,
   "X": false,
