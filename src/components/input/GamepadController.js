@@ -7,7 +7,7 @@ import {
   gamepadButtonChanged
 } from "../../store/inputSlice";
 
-const CrossPlatformLayout = {
+const crossPlatformLayout = {
   buttons: [
     "A",
     "B",
@@ -52,7 +52,7 @@ function GamepadController({ gamepadName, gamepadIndex }) {
   const dispatch = useDispatch();
   return (
     <Gamepad
-      layout={CrossPlatformLayout}
+      layout={crossPlatformLayout}
       gamepadIndex={gamepadIndex}
       onConnect={() => dispatch(gamepadConnected({ gamepadName }))}
       onDisconnect={() => dispatch(gamepadDisconnected({ gamepadName }))}
