@@ -54,6 +54,10 @@ const initialState = {
   }
 };
 
+function isLinux() {
+  return navigator.platform.toLowerCase().includes("linux");
+}
+
 const inputSlice = createSlice({
   name: "input",
   initialState,
@@ -71,7 +75,19 @@ const inputSlice = createSlice({
     gamepadAxisChanged(state, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, axisName, value } = action.payload;
-      state[gamepadName][axisName] = value;
+      // linux maps dpad to axes, so map them to buttons
+      // also rescale triggers from [-1,1] -> [0,1], if necessary
+      if (axisName === "DPadX") {
+        state[gamepadName]["DPadLeft"] = value < 0;
+        state[gamepadName]["DPadRight"] = value > 0;
+      } else if (axisName === "DPadY") {
+        state[gamepadName]["DPadDown"] = value < 0;
+        state[gamepadName]["DPadUp"] = value > 0;
+      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")){
+        state[gamepadName][axisName] = (value + 1) / 2.0;
+      } else {
+        state[gamepadName][axisName] = value;
+      }
       computeInput(prevState, state, action);
     },
 
@@ -79,7 +95,7 @@ const inputSlice = createSlice({
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, buttonName, pressed } = action.payload;
       if (buttonName === "LT" || buttonName === "RT")
-        // Treat triggers as axes, not buttons.  
+        // Treat triggers as axes, not buttons.
         return;
       state[gamepadName][buttonName] = pressed;
       computeInput(prevState, state, action);
