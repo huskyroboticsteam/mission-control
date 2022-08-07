@@ -32,7 +32,7 @@ const CrossPlatformLayout = {
     "RightStickX",
     "-RightStickY",
     "DPadX",
-    "DPadY",
+    "-DPadY",
     "LeftTrigger",
     "RightTrigger",
   ],
