@@ -20,7 +20,9 @@ const initialState = motorNames.reduce((state, motorName) => ({
     currentPower: null,
     currentPosition: null
   }
-}), {});
+}), {
+  motorsEnabled: false
+});
 
 const motorSlice = createSlice({
   name: "motors",
@@ -31,13 +33,19 @@ const motorSlice = createSlice({
       const motor = state[motorName];
       motor.currentPower = power;
       motor.currentPosition = position;
+    },
+
+    enableMotors(state, action) {
+      const { enabled } = action.payload;
+      state.motorsEnabled = enabled;
     }
   }
 });
 
-export const { motorStatusReportReceived } = motorSlice.actions;
+export const { motorStatusReportReceived, enableMotors } = motorSlice.actions;
 
 export const selectAllMotorNames = state => Object.keys(state.motors);
+export const selectMotorsAreEnabled = state => state.motors.motorsEnabled;
 export const selectMotorCurrentPower = motorName => state => state.motors[motorName].currentPower;
 export const selectMotorCurrentPosition = motorName => state => state.motors[motorName].currentPosition;
 

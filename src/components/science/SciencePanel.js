@@ -1,4 +1,3 @@
-import ArmModel from "../armModel/ArmModel";
 import CameraStream from "../camera/CameraStream";
 import LazySusan from "../lazySusan/LazySusan";
 import Syringe from "../syringe/Syringe";

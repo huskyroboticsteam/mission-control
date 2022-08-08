@@ -15,7 +15,7 @@
 }
 
 .navbar__nav-link {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 500;
   color: gray;
   text-decoration: none;
@@ -44,5 +44,5 @@
 }
 
 .navbar__icon {
-  margin-right: 20px;
+  margin-right: 16px;
 }

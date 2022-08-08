@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { requestStop, selectIsStopped } from "../../store/emergencyStopSlice";
+import { selectIsStopped, requestStop } from "../../store/emergencyStopSlice";
 import "./EmergencyStopButton.css";
 
 function EmergencyStopButton() {
@@ -10,7 +10,7 @@ function EmergencyStopButton() {
     dispatch(requestStop({ stop: !stopEngaged }));
   };
 
-  let className = "emergency-stop-button emergency-stop-button--" +
+  const className = "emergency-stop-button emergency-stop-button--" +
     (stopEngaged ? "stopped" : "operational");
   const text = stopEngaged ? "Disgengage Stop" : "Emergency Stop";
 

@@ -1,9 +1,10 @@
-import { messageRover, messageReceivedFromRover } from "../roverSocketSlice";
 import {
   requestJointPower,
   requestJointPosition,
   jointPositionReportReceived
 } from "../jointsSlice";
+import { selectMotorsAreEnabled } from "../motorsSlice";
+import { messageRover, messageReceivedFromRover } from "../roverSocketSlice";
 
 /**
  * Middleware that handles sending and receiving joint data.
@@ -13,26 +14,30 @@ const jointsMiddleware = store => next => action => {
 
   switch (action.type) {
     case requestJointPower.type: {
-      const { jointName, power } = action.payload;
-      store.dispatch(messageRover({
-        message: {
-          type: "jointPowerRequest",
-          joint: jointName,
-          power
-        }
-      }));
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { jointName, power } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "jointPowerRequest",
+            joint: jointName,
+            power
+          }
+        }));
+      }
       break;
     }
 
     case requestJointPosition.type: {
-      const { jointName, position } = action.payload;
-      store.dispatch(messageRover({
-        message: {
-          type: "jointPositionRequest",
-          joint: jointName,
-          position
-        }
-      }));
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { jointName, position } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "jointPositionRequest",
+            joint: jointName,
+            position
+          }
+        }));
+      }
       break;
     }
 

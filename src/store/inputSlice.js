@@ -8,6 +8,8 @@ const gamepadTemplate = {
   "RightStickY": 0,
   "LeftTrigger": 0,
   "RightTrigger": 0,
+  "LS": false,
+  "RS": false,
   "A": false,
   "B": false,
   "S": false,
@@ -73,7 +75,7 @@ const inputSlice = createSlice({
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, axisName, value } = action.payload;
       state[gamepadName][axisName] = value;
-      computeInput(prevState, state, action);
+      computeInput(prevState, prevState, state, action);
     },
 
     gamepadButtonChanged(state, action) {
@@ -83,7 +85,7 @@ const inputSlice = createSlice({
         // Treat triggers as axes, not buttons.  
         return;
       state[gamepadName][buttonName] = pressed;
-      computeInput(prevState, state, action);
+      computeInput(prevState, prevState, state, action);
     },
 
     keyPressed(state, action) {
@@ -92,7 +94,7 @@ const inputSlice = createSlice({
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key);
       }
-      computeInput(prevState, state, action);
+      computeInput(prevState, prevState, state, action);
     },
 
     keyReleased(state, action) {
@@ -101,14 +103,14 @@ const inputSlice = createSlice({
       const index = state.keyboard.pressedKeys.indexOf(key);
       if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
-      computeInput(prevState, state, action);
+      computeInput(prevState, prevState, state, action);
     }
   }
 });
 
 function computeInput(prevState, state, action) {
   computeDriveInput(state, action);
-  computePeripheralInput(prevState, state, action);
+  computePeripheralInput(prevState, prevState, state, action, action);
 }
 
 function computeDriveInput(state, action) {
@@ -143,7 +145,7 @@ function computeDriveInput(state, action) {
 
 function computePeripheralInput(prevState, state, action) {
   computeArmInput(state);
-  computeScienceInput(prevState, state, action);
+  computeScienceInput(prevState, state, action, action);
 }
 
 function computeArmInput(state) {
@@ -255,4 +257,6 @@ export const {
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
+export const selectDriveGamepad = state => state.input.driveGamepad;
+export const selectPeripheralGamepad = state => state.input.peripheralGamepad;
 export default inputSlice.reducer;

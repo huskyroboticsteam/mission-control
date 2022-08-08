@@ -1,4 +1,6 @@
 .help-panel {
+  box-sizing: border-box;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -8,7 +10,7 @@
 }
 
 .help-panel > img {
-  width: 500px;
+  width: 600px;
   height: auto;
   max-width: 50%;
   max-height: 50%;
