@@ -1,15 +1,15 @@
 .science-sensors {
-    justify-content: center;
-    position: relative;
-    grid-row: 1/2;
-    background-color: #F36397;
-    border-radius: 10px;
-    width: 100%;
-    height: 100%;
-    min-width: 100%;
-    min-height: 100%;
-    box-sizing: border-box;
-  }
+  justify-content: center;
+  position: relative;
+  grid-row: 1/2;
+  background-color: #F36397;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
 
 .science-sensors__container {
   display: grid;
@@ -29,13 +29,13 @@
   border-radius: 0px;
   border-style: solid;
   border-color: white;
-} 
+}
 
 .science-sensors-name {
-    font-size: 30px;
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    color: #cccccc;
-    background-color: #00000066;
-  }
+  font-size: 30px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: #cccccc;
+  background-color: #00000066;
+}

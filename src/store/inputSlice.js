@@ -12,7 +12,6 @@ const gamepadTemplate = {
   "RS": false,
   "A": false,
   "B": false,
-  "S": false,
   "X": false,
   "Y": false,
   "Start": false,
@@ -195,26 +194,25 @@ function computeScienceInput(prevState, state, action) {
   const lazySusanAxis =
     getAxisFromButtons(peripheralGamepad, "LB", "RB") +
     getAxisFromKeys(pressedKeys, "A", "D");
-  const prevLidAxis = 
+  const prevLidAxis =
     getAxisFromKeys(prevPressedKeys, "O");
-  const lidAxis = 
+  const lidAxis =
     getAxisFromKeys(pressedKeys, "O");
-  const prevSyringeAxis = 
+  const prevSyringeAxis =
     getAxisFromKeys(prevPressedKeys, "B");
-  const syringeAxis = 
+  const syringeAxis =
     getAxisFromKeys(pressedKeys, "B");
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  if(lidAxis !== prevLidAxis && lidAxis !== 0) 
+  if (lidAxis !== prevLidAxis && lidAxis !== 0)
     scienceInput.lidClosed = !scienceInput.lidClosed;
-  if(syringeAxis !== prevSyringeAxis && syringeAxis !== 0) {
-    if(scienceInput.syringeDepth >= 1/6 ) {
-      scienceInput.syringeDepth -= 1/6;
-      console.log("INCREMENTING SYRINGE - input slice", scienceInput.syringeDepth);
-    }
+  if (syringeAxis !== prevSyringeAxis && syringeAxis !== 0) {
+    if (scienceInput.syringeDepth >= 1 / 6) {
+      scienceInput.syringeDepth -= 1 / 6;
     }
   }
+}
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
   let axis = 0;
@@ -259,4 +257,5 @@ export const {
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
 export const selectDriveGamepad = state => state.input.driveGamepad;
 export const selectPeripheralGamepad = state => state.input.peripheralGamepad;
+
 export default inputSlice.reducer;

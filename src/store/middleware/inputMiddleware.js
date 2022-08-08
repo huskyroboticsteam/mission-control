@@ -82,15 +82,15 @@ function updateScienceStation(
     dispatch(requestLazySusanPosition({
       position: computedInput.science.lazySusanPosition
     }));
-  if(scienceInput.lidClosed !== prevScienceInput.lidClosed || true)
+  if (scienceInput.lidClosed !== prevScienceInput.lidClosed || true)
     dispatch(requestLidPosition({
       closed: computedInput.science.lidClosed
-  }));
-  if(scienceInput.syringeDepth !== prevScienceInput.syringeDepth || true) 
+    }));
+  if (scienceInput.syringeDepth !== prevScienceInput.syringeDepth || true)
     dispatch(requestSyringePosition({
       depth: computedInput.science.syringeDepth
-  }));
-    
+    }));
+
 }
 
 function updateArm(

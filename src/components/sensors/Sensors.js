@@ -1,24 +1,20 @@
 import { useRef, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import "./Sensors.css";
 
-function Sensors () {
-    const canvasRef = useRef();
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-    const soil_humidity = 0;
-    const thermocouple = 0;
-    const uv = 0;
-    const air_quality = 0;
-    const weather = 0;
+function Sensors() {
+  const canvasRef = useRef();
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const soilHumidity = 0;
+  const thermocouple = 0;
+  const uv = 0;
+  const airQuality = 0;
+  const weather = 0;
 
-    useEffect(() => {
+  useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     clear(context);
-    
-    
-
   });
 
   useEffect(() => {
@@ -35,30 +31,30 @@ function Sensors () {
     return () => resizeObserver.unobserve(canvas);
   }, []);
 
-    const readingClassName = "science-sensors__reading";
-    return (
-        <div className="science-sensors">
-          <h2 className="science-sensors-name">Sensors</h2>
-          <div className="science-sensors__container">
-            <div className={readingClassName}>soil humidity</div> 
-            <div className={readingClassName}>{soil_humidity}</div> 
-            <div className={readingClassName}>thermocouple</div> 
-            <div className={readingClassName}>{thermocouple}</div> 
-            <div className={readingClassName}>UV</div> 
-            <div className={readingClassName}>{uv}</div> 
-            <div className={readingClassName}>gas/air quality</div>
-            <div className={readingClassName}>{air_quality}</div> 
-            <div className={readingClassName}>weather</div> 
-            <div className={readingClassName}>{weather}</div> 
-          </div>
-          <canvas ref={canvasRef} className="syringe" width={width} height={height} />
-        </div>
-    
-      );
-    } 
+  const readingClassName = "science-sensors__reading";
+  return (
+    <div className="science-sensors">
+      <h2 className="science-sensors-name">Sensors</h2>
+      <div className="science-sensors__container">
+        <div className={readingClassName}>soil humidity</div>
+        <div className={readingClassName}>{soilHumidity}</div>
+        <div className={readingClassName}>thermocouple</div>
+        <div className={readingClassName}>{thermocouple}</div>
+        <div className={readingClassName}>UV</div>
+        <div className={readingClassName}>{uv}</div>
+        <div className={readingClassName}>gas/air quality</div>
+        <div className={readingClassName}>{airQuality}</div>
+        <div className={readingClassName}>weather</div>
+        <div className={readingClassName}>{weather}</div>
+      </div>
+      <canvas ref={canvasRef} className="syringe" width={width} height={height} />
+    </div>
+
+  );
+}
 
 function clear(canvasContext) {
-    canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
+  canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
 }
 
 export default Sensors;
