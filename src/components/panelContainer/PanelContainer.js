@@ -5,6 +5,7 @@ import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
 import TelemetryPanel from "../telemetry/TelemetryPanel";
 import HelpPanel from "../help/HelpPanel";
+import LoggingPanel from "../logs/LogsPanel";
 import "./PanelContainer.css";
 
 function PanelContainer() {
@@ -36,6 +37,10 @@ function PanelContainer() {
 
         <Route path="/help">
           <HelpPanel />
+        </Route>
+
+        <Route path="/logging">
+          <LoggingPanel />
         </Route>
 
         <Redirect to="/science" />

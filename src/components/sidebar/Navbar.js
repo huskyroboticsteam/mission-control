@@ -6,6 +6,7 @@ import AutonomousIcon from "@material-ui/icons/Code";
 import TelemetryIcon from "@material-ui/icons/Info";
 import AntennaIcon from "@material-ui/icons/SettingsInputAntenna";
 import HelpIcon from "@material-ui/icons/Help";
+import LoggingIcon from "@material-ui/icons/Computer"
 import "./Navbar.css";
 
 function Navbar() {
@@ -58,6 +59,13 @@ function Navbar() {
           <NavLink to="/help" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink to="/logging" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+            <LoggingIcon fontSize="large" className="navbar__icon" />
+            Logging
           </NavLink>
         </li>
       </ul>

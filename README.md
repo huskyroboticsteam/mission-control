@@ -335,3 +335,22 @@ Sent from Mission Control to instruct the rover server to dispense fluid from th
 
 ### Parameters
 - `amount` - the amount of fluid to dispense in [0.0, 1.0], where 0.0 corresponds to no fluid dispensed, and 1.0 corresponds to all of the fluid dispensed
+
+## Log Entry Report
+### Description
+Sent from the rover server to inform Mission Control of a log entry to display in the logging panel.
+
+### Syntax
+```
+{
+  type: "logEntryReport",
+  logLevel: "trace" | "debug" | "info" | "warn" | "error",
+  message: string,
+  timestamp: number
+}
+```
+
+### Parameters
+- `logLevel` - the log level of the entry
+- `message` - the message contained in the entry
+- `timestamp` - the epoch timestamp of the entry in milliseconds
