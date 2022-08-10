@@ -78,9 +78,15 @@ function updateScienceStation(
 ) {
   const scienceInput = computedInput.science;
   const prevScienceInput = prevComputedInput.science;
-  if (scienceInput.lazySusanPosition !== prevScienceInput.lazySusanPosition || true)
+  if (scienceInput.lazySusanPosition !== prevScienceInput.lazySusanPosition)
     dispatch(requestLazySusanPosition({
       position: computedInput.science.lazySusanPosition
+    }));
+
+  if (scienceInput.cameraSpeed !== prevScienceInput.cameraSpeed)
+    dispatch(requestJointPower({
+      jointName: "scienceStationCamera",
+      power: scienceInput.cameraSpeed
     }));
 }
 

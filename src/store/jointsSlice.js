@@ -8,7 +8,8 @@ const jointNames = [
   "differentialRoll",
   "differentialPitch",
   "hand",
-  "drillArm"
+  "drillArm",
+  "scienceStationCamera"
 ];
 
 const initialState = jointNames.reduce((state, jointName) => ({

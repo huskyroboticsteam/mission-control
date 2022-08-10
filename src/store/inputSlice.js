@@ -49,7 +49,8 @@ const initialState = {
       hand: 0,
     },
     science: {
-      lazySusanPosition: 0
+      lazySusanPosition: 0,
+      cameraSpeed: 0
     }
   }
 };
@@ -83,7 +84,7 @@ const inputSlice = createSlice({
       } else if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
-      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")){
+      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")) {
         state[gamepadName][axisName] = (value + 1) / 2.0;
       } else {
         state[gamepadName][axisName] = value;
@@ -202,6 +203,7 @@ function computeScienceInput(prevState, state, action) {
   const prevPressedKeys = prevState.keyboard.pressedKeys;
   const pressedKeys = state.keyboard.pressedKeys;
   const scienceInput = state.computed.science;
+
   const prevLazySusanAxis =
     getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
     getAxisFromKeys(prevPressedKeys, "A", "D");
@@ -209,8 +211,13 @@ function computeScienceInput(prevState, state, action) {
     getAxisFromButtons(peripheralGamepad, "LB", "RB") +
     getAxisFromKeys(pressedKeys, "A", "D");
   if (lazySusanAxis !== prevLazySusanAxis)
-    scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
-      lazySusanAxis) % 6) + 6) % 6;
+    scienceInput.lazySusanPosition =
+      (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6;
+
+  scienceInput.cameraSpeed = clamp1(
+    peripheralGamepad.RightStickX +
+    getAxisFromKeys(pressedKeys, "J", "L")
+  );
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {

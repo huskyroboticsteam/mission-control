@@ -113,7 +113,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm" | "scienceStationCamera",
   power: number
 }
 ```
