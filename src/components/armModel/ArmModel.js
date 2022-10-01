@@ -139,7 +139,7 @@ function Forearm({
     <primitive
       object={mesh}
       position={[0, 4, 95]}
-      rotation={[0, 0, -degToRad(forearmPosition)]}
+      rotation={[0, 0, degToRad(forearmPosition)]}
     >
       <Differential
         differentialRoll={differentialRoll}

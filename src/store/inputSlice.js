@@ -83,7 +83,7 @@ const inputSlice = createSlice({
       } else if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
-      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")){
+      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")) {
         state[gamepadName][axisName] = (value + 1) / 2.0;
       } else {
         state[gamepadName][axisName] = value;
