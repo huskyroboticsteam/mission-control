@@ -1,4 +1,4 @@
-import ArmModel from "../armModel/ArmModel";
+import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
 import "./DeliveryPanel.css";
 
@@ -8,7 +8,7 @@ function DeliveryPanel() {
       <CameraStream cameraName="front" />
       <CameraStream cameraName="rear" />
       <CameraStream cameraName="upperArm" />
-      <ArmModel />
+      <RoverModel />
     </div>
   );
 }

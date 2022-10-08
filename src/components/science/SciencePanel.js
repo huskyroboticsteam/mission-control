@@ -1,4 +1,4 @@
-import ArmModel from "../armModel/ArmModel";
+import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
 import LazySusan from "../lazySusan/LazySusan";
 import "./SciencePanel.css";
@@ -10,7 +10,7 @@ function SciencePanel() {
       <CameraStream cameraName="rear" />
       <CameraStream cameraName="upperArm" />
       <LazySusan/>
-      <ArmModel />
+      <RoverModel />
     </div>
   );
 }
