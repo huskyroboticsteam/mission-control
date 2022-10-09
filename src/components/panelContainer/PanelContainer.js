@@ -5,7 +5,7 @@ import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
 import TelemetryPanel from "../telemetry/TelemetryPanel";
 import HelpPanel from "../help/HelpPanel";
-import LoggingPanel from "../logs/LogsPanel";
+import LoggingPanel from "../logging/LoggingPannel";
 import "./PanelContainer.css";
 
 function PanelContainer() {
