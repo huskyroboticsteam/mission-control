@@ -10,6 +10,7 @@
   font-size: 20px;
   padding: 5px;
   border-radius: 5px;
+  text-align: center;
 }
 
 .op-mode-select__op-mode {
