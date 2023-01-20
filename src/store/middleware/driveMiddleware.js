@@ -1,4 +1,5 @@
-import { requestDrive, requestTankDrive } from "../driveSlice";
+import { Effects } from "@react-three/drei";
+import { requestDrive, requestTankDrive, requestHolonomicDrive } from "../driveSlice";
 import { selectMotorsAreEnabled } from "../motorsSlice";
 import { messageRover } from "../roverSocketSlice";
 
@@ -35,6 +36,20 @@ const driveMiddleware = store => next => action => {
         }));
       }
       break;
+    }
+
+    case requestHolonomicDrive.type: {
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { straight, left, turnccw } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "holonomicDriveRequest",
+            straight,
+            left,
+            turnccw
+          }
+        }));
+      }
     }
 
     default: break;

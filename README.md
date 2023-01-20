@@ -112,7 +112,7 @@ Sent from Mission Control to instruct the rover to have holonomic drive capabili
 ### Syntax
 ```
 {
-  type: "holoDriveRequest",
+  type: "holonomicDriveRequest",
   straight: number,
   left: number,
   turnccw: number
