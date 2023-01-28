@@ -26,10 +26,10 @@ const driveSlice = createSlice({
     },
 
     requestHolonomicDrive(state, action) {
-      const { straight, holoLeft, holoTurnccw } = action.payload;
-      state.straight = straight;
+      const { holoStraight, holoLeft, holoTurnCCW } = action.payload;
+      state.holoStraight = holoStraight;
       state.holoLeft = holoLeft;
-      state.holoTurnccw = holoTurnccw;
+      state.holoTurnCCW = holoTurnCCW;
     }
   }
 });

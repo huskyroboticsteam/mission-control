@@ -105,7 +105,7 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
-## Holonomic Drive Request
+## Holonomic Drive Request ver 2023.0.0
 ### Description
 Sent from Mission Control to instruct the rover to have holonomic drive capabilities, such that it can rotate independently without requiring translational motion.
 
@@ -115,13 +115,13 @@ Sent from Mission Control to instruct the rover to have holonomic drive capabili
   type: "holonomicDriveRequest",
   straight: number,
   left: number,
-  turnccw: number
+  turnCCW: number
 }
 ```
 ### Parameters
 - `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
-- `turnccw` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
+- `turnCCW` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
 
 ## Joint Power Request
 ### Description

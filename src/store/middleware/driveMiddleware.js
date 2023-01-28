@@ -40,13 +40,13 @@ const driveMiddleware = store => next => action => {
 
     case requestHolonomicDrive.type: {
       if (selectMotorsAreEnabled(store.getState())) {
-        const { straight, left, turnccw } = action.payload;
+        const { straight, left, turnCCW } = action.payload;
         store.dispatch(messageRover({
           message: {
             type: "holonomicDriveRequest",
             straight,
             left,
-            turnccw
+            turnCCW
           }
         }));
       }
