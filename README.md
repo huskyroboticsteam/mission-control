@@ -23,7 +23,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2022.0.0`)
+## Messages (`v2023.0.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -105,7 +105,7 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
-## Holonomic Drive Request ver 2023.0.0
+## Holonomic Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to have holonomic drive capabilities, such that it can rotate independently without requiring translational motion.
 

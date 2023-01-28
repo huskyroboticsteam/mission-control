@@ -6,6 +6,7 @@ const initialState = {
   tankLeft: 0,
   tankRight: 0,
   holoLeft: 0,
+  holoStraight: 0,
   holoTurnccw: 0
 };
 
