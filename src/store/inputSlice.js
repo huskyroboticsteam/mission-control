@@ -44,8 +44,7 @@ const initialState = {
       shoulder: 0,
       elbow: 0,
       forearm: 0,
-      differentialRoll: 0,
-      differentialPitch: 0,
+      wrist: 0,
       hand: 0,
     },
     science: {
@@ -182,12 +181,9 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "P", "O");
-  armInput.differentialPitch =
+  armInput.wrist =
     getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
     getAxisFromKeys(pressedKeys, "G", "T");
-  armInput.differentialRoll =
-    getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
-    getAxisFromKeys(pressedKeys, "F", "H");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
