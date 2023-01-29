@@ -113,7 +113,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm",
   power: number
 }
 ```
@@ -130,7 +130,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm",
   position: number
 }
 ```
@@ -147,7 +147,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "differentialRoll" | "differentialPitch" | "hand" | "drillArm",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm",
   position: number
 }
 ```
