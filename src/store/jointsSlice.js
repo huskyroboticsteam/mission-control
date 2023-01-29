@@ -37,7 +37,6 @@ const jointsSlice = createSlice({
 
     jointPositionReportReceived(state, action) {
       const { jointName, position } = action.payload;
-      console.log(jointName);
       const joint = state[jointName];
       joint.currentPosition = position;
     }
