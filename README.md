@@ -107,7 +107,8 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 
 ## Holonomic Drive Request
 ### Description
-Sent from Mission Control to instruct the rover to have holonomic drive capabilities, such that it can rotate independently without requiring translational motion.
+Sent from Mission Control to instruct the rover to drive with holonomic capabilities 
+(i.e., it can rotate independently without requiring translational motion).
 
 ### Syntax
 ```
@@ -120,7 +121,7 @@ Sent from Mission Control to instruct the rover to have holonomic drive capabili
 ```
 ### Parameters
 - `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
-- `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
+- `left` - left component in [-1.0, 1.0], where positive means drive left and negative means drive right
 - `turnCCW` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
 
 ## Joint Power Request
