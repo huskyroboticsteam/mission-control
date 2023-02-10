@@ -4,7 +4,10 @@ const initialState = {
   straight: 0,
   steer: 0,
   tankLeft: 0,
-  tankRight: 0
+  tankRight: 0,
+  holoLeft: 0,
+  holoStraight: 0,
+  holoTurnccw: 0
 };
 
 const driveSlice = createSlice({
@@ -21,10 +24,17 @@ const driveSlice = createSlice({
       const { tankLeft, tankRight } = action.payload;
       state.tankLeft = tankLeft;
       state.tankRight = tankRight;
+    },
+
+    requestHolonomicDrive(state, action) {
+      const { holoStraight, holoLeft, holoTurnCCW } = action.payload;
+      state.holoStraight = holoStraight;
+      state.holoLeft = holoLeft;
+      state.holoTurnCCW = holoTurnCCW;
     }
   }
 });
 
-export const { requestDrive, requestTankDrive } = driveSlice.actions;
+export const { requestDrive, requestTankDrive, requestHolonomicDrive } = driveSlice.actions;
 
 export default driveSlice.reducer;

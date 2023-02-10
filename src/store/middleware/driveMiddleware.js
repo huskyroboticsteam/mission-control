@@ -1,4 +1,4 @@
-import { requestDrive, requestTankDrive } from "../driveSlice";
+import { requestDrive, requestTankDrive, requestHolonomicDrive } from "../driveSlice";
 import { selectMotorsAreEnabled } from "../motorsSlice";
 import { messageRover } from "../roverSocketSlice";
 
@@ -35,6 +35,20 @@ const driveMiddleware = store => next => action => {
         }));
       }
       break;
+    }
+
+    case requestHolonomicDrive.type: {
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { straight, left, turnCCW } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "holonomicDriveRequest",
+            straight,
+            left,
+            turnCCW
+          }
+        }));
+      }
     }
 
     default: break;
