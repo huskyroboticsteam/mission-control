@@ -208,7 +208,8 @@ Sent from the rover to inform Mission Control of the rover's current position in
   orientZ: number,
   posX: number,
   posY: number,
-  posZ: number
+  posZ: number,
+  recency: number
 }
 ```
 ### Parameters
@@ -219,6 +220,7 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `posX` - refers to the X position of the rover in world reference frame
 - `posY` - refers to the Y position of the rover in world reference frame
 - `posZ` - refers to the Z position of the rover in world reference frame 
+- `recency` - refers to the difference in time between when the message was sent and received
 
 ## Camera Stream Open Request
 ### Description

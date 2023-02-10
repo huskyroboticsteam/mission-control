@@ -8,10 +8,10 @@ const initialState = {
     posX: null,
     posY: null,
     posZ: null,
-    timestamp: null
+    recency: null
 }
 
-const teleSlice = createSlice({
+const telemetrySlice = createSlice({
     name: "telemetry",
     initialState,
     reducers: {
@@ -24,10 +24,12 @@ const teleSlice = createSlice({
             state.posX = posX;
             state.posY = posY;
             state.posZ = posZ;
-            state.timestamp = timestamp;
+            state.recency = recency;
         }
     }
 });
 
 export const { updatePosition } = teleSlice.actions;
-export const selectRoverCurrentPosition = state => { state.orientW, state.orientX, state.orientY, state.orientZ, state.posX, state.posY, state.posZ, state.timestamp };
+export const selectRoverCurrentPosition = state => { state.orientW, state.orientX, state.orientY, state.orientZ, state.posX, state.posY, state.posZ, state.recency };
+
+export default telemetrySlice.reducer;

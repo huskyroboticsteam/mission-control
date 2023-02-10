@@ -1,6 +1,6 @@
 import{
     roverPositionReportReceived
-  } from "../teleSlice";
+  } from "../telemetrySlice";
   import { messageReceivedFromRover } from "../roverSocketSlice";
 
   const telemetryMiddleware = store => next => action => {
@@ -17,7 +17,7 @@ import{
             posX,
             posY,
             posZ,
-            timestamp
+            recency
           }
         }));
       }
