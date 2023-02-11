@@ -220,7 +220,7 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `posX` - refers to the X position of the rover in world reference frame
 - `posY` - refers to the Y position of the rover in world reference frame
 - `posZ` - refers to the Z position of the rover in world reference frame 
-- `recency` - refers to the difference in time between when the message was sent and received
+- `recency` - refers to the difference in time between when the measurement was taken and sent
 
 ## Camera Stream Open Request
 ### Description
