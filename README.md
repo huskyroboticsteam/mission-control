@@ -217,10 +217,10 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `orientX` - refers to the orientation quaternion X component
 - `orientY` - refers to the orientation quaternion Y component
 - `orientZ` - refers to the orientation quaternion Z component
-- `posX` - refers to the X position of the rover in world reference frame
-- `posY` - refers to the Y position of the rover in world reference frame
-- `posZ` - refers to the Z position of the rover in world reference frame 
-- `recency` - refers to the difference in time between when the measurement was taken and sent
+- `posX` - refers to the X position of the rover in world reference frame in meters
+- `posY` - refers to the Y position of the rover in world reference frame in meters
+- `posZ` - refers to the Z position of the rover in world reference frame in meters
+- `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request
 ### Description
