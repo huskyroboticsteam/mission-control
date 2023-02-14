@@ -1,29 +1,26 @@
-import{
-    roverPositionReportReceived
-  } from "../telemetrySlice";
-  import { messageReceivedFromRover } from "../roverSocketSlice";
+import { roverPositionReportReceived } from "../telemetrySlice";
+import { messageReceivedFromRover } from "../roverSocketSlice";
 
-  const telemetryMiddleware = store => next => action => {
-    const result = next(action);
-    if (action.type === messageReceivedFromRover.type) {
-      if (action.payload.message.type === "poseReport") {
-        const { orientW, orientX, orientY, orientZ, posX, posY, posZ, timestamp } = action.payload.message;
-        store.dispatch(roverPositionReportReceived({
-          poseReport: {
-            orientW,
-            orientX,
-            orientY,
-            orientZ,
-            posX,
-            posY,
-            posZ,
-            recency
-          }
-        }));
-      }
+const telemetryMiddleware = store => next => action => {
+  const result = next(action);
+  if (action.type === messageReceivedFromRover.type) {
+    const { message } = action.payload;
+    if (message.type === "roverPositionReport") {
+      const { orientW, orientX, orientY, orientZ, posX, posY, posZ, recency } = message;
+      store.dispatch(roverPositionReportReceived({
+        orientW,
+        orientX,
+        orientY,
+        orientZ,
+        posX,
+        posY,
+        posZ,
+        recency
+      }));
     }
-  
-    return result;
   }
-  
-  export default telemetryMiddleware;
+
+  return result;
+}
+
+export default telemetryMiddleware;

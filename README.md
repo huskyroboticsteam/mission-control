@@ -201,7 +201,7 @@ Sent from the rover to inform Mission Control of the rover's current position in
 ### Syntax
 ```
 {
-  type: "roverPoseReport",
+  type: "roverPositionReport",
   orientW: number,
   orientX: number,
   orientY: number,

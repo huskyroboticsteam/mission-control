@@ -10,7 +10,7 @@ import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
 import planVizReducer from "./planVizSlice";
 import scienceReducer from "./scienceSlice";
-import loggingSlice from "./loggingSlice";
+import loggingReducer from "./loggingSlice";
 import telemetryReducer from "./telemetrySlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import peripheralsMiddleware from "./middleware/peripheralsMiddleware";
@@ -39,7 +39,7 @@ export default configureStore({
     cameras: camerasReducer,
     planViz: planVizReducer,
     science: scienceReducer,
-    logging: loggingSlice,
+    logging: loggingReducer,
     telemetry: telemetryReducer
   },
 

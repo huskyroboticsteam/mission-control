@@ -15,8 +15,8 @@ const telemetrySlice = createSlice({
     name: "telemetry",
     initialState,
     reducers: {
-        roverPositionReportReceived(state, action){
-            const { orientW, orientX, orientY, orientZ, posX, posY, posZ, timestamp } = action.payload;
+        roverPositionReportReceived(state, action) {
+            const { orientW, orientX, orientY, orientZ, posX, posY, posZ, recency } = action.payload;
             state.orientW = orientW;
             state.orientX = orientX;
             state.orientY = orientY;
@@ -29,7 +29,7 @@ const telemetrySlice = createSlice({
     }
 });
 
-export const { updatePosition } = teleSlice.actions;
-export const selectRoverCurrentPosition = state => { state.orientW, state.orientX, state.orientY, state.orientZ, state.posX, state.posY, state.posZ, state.recency };
+export const { roverPositionReportReceived } = telemetrySlice.actions;
+export const selectRoverPosition = state => state.telemetry;
 
 export default telemetrySlice.reducer;

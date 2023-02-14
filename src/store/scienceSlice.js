@@ -17,7 +17,7 @@ const scienceSlice = createSlice({
     requestLazySusanPosition(state, action) {
       const { position } = action.payload;
       state.lazySusanPosition = position;
-     }
+    }
   }
 });
 
