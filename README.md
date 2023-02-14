@@ -194,6 +194,34 @@ Sent from the rover server to inform Mission Control of a motor's status.
 - `power` - the current power of the motor, or `null` if unavailable
 - `position` - the current position of the motor in degrees, or `null` if unavailable
 
+## Rover Position Report
+### Description
+Sent from the rover to inform Mission Control of the rover's current position in the world reference frame
+
+### Syntax
+```
+{
+  type: "roverPoseReport",
+  orientW: number,
+  orientX: number,
+  orientY: number,
+  orientZ: number,
+  posX: number,
+  posY: number,
+  posZ: number,
+  recency: number
+}
+```
+### Parameters
+- `orientW` - refers to the orientation quaternion W component
+- `orientX` - refers to the orientation quaternion X component
+- `orientY` - refers to the orientation quaternion Y component
+- `orientZ` - refers to the orientation quaternion Z component
+- `posX` - refers to the X position of the rover in world reference frame in meters
+- `posY` - refers to the Y position of the rover in world reference frame in meters
+- `posZ` - refers to the Z position of the rover in world reference frame in meters
+- `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
+
 ## Camera Stream Open Request
 ### Description
 Sent from Mission Control to instruct the rover server to begin providing a camera stream.
