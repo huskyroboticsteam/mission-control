@@ -23,7 +23,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2022.0.0`)
+## Messages (`v2023.0.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -105,6 +105,25 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
+## Holonomic Drive Request
+### Description
+Sent from Mission Control to instruct the rover to drive with holonomic capabilities 
+(i.e., it can rotate independently without requiring translational motion).
+
+### Syntax
+```
+{
+  type: "holonomicDriveRequest",
+  straight: number,
+  left: number,
+  turnCCW: number
+}
+```
+### Parameters
+- `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
+- `left` - left component in [-1.0, 1.0], where positive means drive left and negative means drive right
+- `turnCCW` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
+
 ## Joint Power Request
 ### Description
 Sent from Mission Control to instruct the rover server to make a joint move with a specified power.
@@ -174,6 +193,34 @@ Sent from the rover server to inform Mission Control of a motor's status.
 - `motor` - the name of the motor
 - `power` - the current power of the motor, or `null` if unavailable
 - `position` - the current position of the motor in degrees, or `null` if unavailable
+
+## Rover Position Report
+### Description
+Sent from the rover to inform Mission Control of the rover's current position in the world reference frame
+
+### Syntax
+```
+{
+  type: "roverPositionReport",
+  orientW: number,
+  orientX: number,
+  orientY: number,
+  orientZ: number,
+  posX: number,
+  posY: number,
+  posZ: number,
+  recency: number
+}
+```
+### Parameters
+- `orientW` - refers to the orientation quaternion W component
+- `orientX` - refers to the orientation quaternion X component
+- `orientY` - refers to the orientation quaternion Y component
+- `orientZ` - refers to the orientation quaternion Z component
+- `posX` - refers to the X position of the rover in world reference frame in meters
+- `posY` - refers to the Y position of the rover in world reference frame in meters
+- `posZ` - refers to the Z position of the rover in world reference frame in meters
+- `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request
 ### Description
