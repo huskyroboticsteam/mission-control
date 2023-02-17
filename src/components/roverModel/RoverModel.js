@@ -189,7 +189,7 @@ function Wrist() {
     <primitive
       object={mesh}
       position={[0, 0, 12.5]}
-      rotation={[degToRad(position), 0, 0]}
+      rotation={[degToRad(-position), 0, 0]}
     >
       <Hand />
     </primitive>
