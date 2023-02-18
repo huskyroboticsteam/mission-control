@@ -12,7 +12,13 @@ Mission Control creates a WebSocket client to connect directly to the rover WebS
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
 
-## Running Mission Control
+## Running Mission Control (For Real Robot)
+1. Open your terminal in the `mission-control` directory.
+2. Run `npm run build`
+3. Run `serve -s build` (if it says no such command, run `npm install -g serve` and retry)
+4. Ctrl+click on the url it prints in the box
+
+## Running Mission Control (For Simulator)
 1. Open your terminal in the `mission-control` directory.
 2. Run `npm start` to start the React server. Mission Control will open in your web browser shortly.
 
