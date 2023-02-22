@@ -5,8 +5,7 @@ const jointNames = [
   "shoulder",
   "elbow",
   "forearm",
-  "differentialRoll",
-  "differentialPitch",
+  "wrist",
   "hand",
   "drillArm"
 ];
