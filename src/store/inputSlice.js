@@ -77,7 +77,10 @@ const inputSlice = createSlice({
       if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
-      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")) {
+      } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger") && value !== 0.0) {
+        // bug in linux, trigger values keep jumping to 0.
+        // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
+        // TODO: fix this? Why is this happening? Bug in react-gamepad??
         state[gamepadName][axisName] = (value + 1) / 2.0;
       } else {
         state[gamepadName][axisName] = value;
