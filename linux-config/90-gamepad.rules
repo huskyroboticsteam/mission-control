@@ -1,0 +1,1 @@
+ATTRS{idVendor}=="20d6", ATTRS{idProduct}=="2019", RUN+="/usr/local/bin/map_gamepad.sh"
