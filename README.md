@@ -12,6 +12,14 @@ Mission Control creates a WebSocket client to connect directly to the rover WebS
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
 
+### Linux Users
+Linux users must set up a udev rule to ensure that the gamepad mappings are correct:
+```bash
+./linux-config/setup.sh
+```
+If you are not using the purple Xbox controllers, you may have to change the udev rule or
+configure the mappings yourself with `jstest-gtk` or `jscal`.
+
 ## Running Mission Control (For Real Robot)
 1. Open your terminal in the `mission-control` directory.
 2. Run `npm run build`
@@ -23,14 +31,6 @@ Mission Control creates a WebSocket client to connect directly to the rover WebS
 2. Run `npm start` to start the React server. Mission Control will open in your web browser shortly.
 
 ## Controls
-
-> **Warning**
-> ON LINUX SYSTEMS: Make sure gamepads are mapped correctly!
->
-> Use the telemetry panel to ensure that the gamepad inputs are what you expect them to be. (axes/buttons are correct, etc.)
-> If they are incorrect, run `jstest-gtk` (installing with `sudo apt` if necessary), and configure each of the joysticks (click "properties" and then "mapping")
-> such that their mapping looks like this:
-> ![Gamepad Mapping](assets/gamepad_mappings.png)
 
 The rover can be operated through Mission Control with either a keyboard or two gamepads. The first gamepad provides controls for driving the rover. The second gamepad provides controls for operating the rover's arm. The control bindings are detailed below.
 ![Standard drive controls](/src/components/help/standardDriveControls.png)
