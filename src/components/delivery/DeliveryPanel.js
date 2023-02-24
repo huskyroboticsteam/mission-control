@@ -10,7 +10,7 @@ function DeliveryPanel() {
       <CameraStream cameraName="rear" />
       <CameraStream cameraName="upperArm" />
       <RoverModel />
-      <Compass orientW="100" orientX="0" orientY="200" orientZ="200" />
+      <Compass />
     </div>
   );
 }
