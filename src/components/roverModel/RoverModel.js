@@ -14,7 +14,7 @@ import armBaseMesh from "./mesh/armBase.fbx";
 import lowerArmMesh from "./mesh/lowerArm.fbx";
 import upperArmMesh from "./mesh/upperArm.fbx";
 import forearmMesh from "./mesh/forearm.fbx";
-import differentialMesh from "./mesh/differential.fbx";
+import wristMesh from "./mesh/wrist.fbx";
 import handBaseMesh from "./mesh/handBase.fbx";
 import handLeftFingerMesh from "./mesh/handLeftFinger.fbx";
 import handRightFingerMesh from "./mesh/handRightFinger.fbx";
@@ -176,21 +176,20 @@ function Forearm() {
       position={[0, 4, 95]}
       rotation={[0, 0, degToRad(position)]}
     >
-      <Differential />
+      <Wrist />
     </primitive>
   );
 }
 
-function Differential() {
-  const mesh = useFBX(differentialMesh);
-  const differentialPitch = useSelector(selectJointCurrentPosition("differentialPitch"));
-  const differentialRoll = useSelector(selectJointCurrentPosition("differentialRoll"));
+function Wrist() {
+  const mesh = useFBX(wristMesh);
+  const position = useSelector(selectJointCurrentPosition("wrist"));
 
   return (
     <primitive
       object={mesh}
       position={[0, 0, 12.5]}
-      rotation={[degToRad(differentialPitch), 0, degToRad(differentialRoll)]}
+      rotation={[degToRad(-position), 0, 0]}
     >
       <Hand />
     </primitive>

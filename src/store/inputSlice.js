@@ -19,9 +19,7 @@ const gamepadTemplate = {
   "LB": false,
   "RB": false,
   "DPadUp": false,
-  "DPadDown": false,
-  "DPadLeft": false,
-  "DPadRight": false
+  "DPadDown": false
 };
 
 const initialState = {
@@ -44,8 +42,7 @@ const initialState = {
       shoulder: 0,
       elbow: 0,
       forearm: 0,
-      differentialRoll: 0,
-      differentialPitch: 0,
+      wrist: 0,
       hand: 0,
     },
     science: {
@@ -77,10 +74,7 @@ const inputSlice = createSlice({
       const { gamepadName, axisName, value } = action.payload;
       // linux maps dpad to axes, so map them to buttons
       // also rescale triggers from [-1,1] -> [0,1], if necessary
-      if (axisName === "DPadX") {
-        state[gamepadName]["DPadLeft"] = value < 0;
-        state[gamepadName]["DPadRight"] = value > 0;
-      } else if (axisName === "DPadY") {
+      if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
       } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger")) {
@@ -174,20 +168,17 @@ function computeArmInput(state) {
     getAxisFromKeys(pressedKeys, "S", "W");
   armInput.elbow =
     peripheralGamepad["RightStickY"] +
-    getAxisFromKeys(pressedKeys, "K", "I");
+    getAxisFromKeys(pressedKeys, "G", "T");
   armInput.forearm =
     peripheralGamepad["RightStickX"] +
-    getAxisFromKeys(pressedKeys, "J", "L");
+    getAxisFromKeys(pressedKeys, "F", "H");
+  armInput.wrist =
+    getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
+    getAxisFromKeys(pressedKeys, "K", "I");
   armInput.hand =
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
-    getAxisFromKeys(pressedKeys, "P", "O");
-  armInput.differentialPitch =
-    getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
-    getAxisFromKeys(pressedKeys, "G", "T");
-  armInput.differentialRoll =
-    getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
-    getAxisFromKeys(pressedKeys, "F", "H");
+    getAxisFromKeys(pressedKeys, "J", "L");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
