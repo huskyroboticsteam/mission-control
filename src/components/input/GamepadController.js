@@ -54,6 +54,7 @@ function GamepadController({ gamepadName, gamepadIndex }) {
     <Gamepad
       layout={crossPlatformLayout}
       gamepadIndex={gamepadIndex}
+      deadZone={0.0}
       onConnect={() => dispatch(gamepadConnected({ gamepadName }))}
       onDisconnect={() => dispatch(gamepadDisconnected({ gamepadName }))}
       onAxisChange={(axisName, value) => dispatch(gamepadAxisChanged({
