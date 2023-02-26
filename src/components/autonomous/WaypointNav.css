@@ -1,0 +1,30 @@
+.waypoint-select {
+  display: flex;
+  align-items: center;
+}
+
+.waypoint-select__params {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  flex: 0.5;
+  flex: 0.5;
+  height: 50%;
+}
+
+.waypoint-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: left;
+  flex: 0.5;
+  flex: 0.5;
+  height: 50%;
+  color: white;
+}
+
+.waypoint-select > button {
+  flex: 0.5;
+  height: 25%;
+}
