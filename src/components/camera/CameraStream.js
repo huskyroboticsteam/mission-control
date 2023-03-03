@@ -40,10 +40,10 @@ function CameraStream({ cameraName }) {
         fps: 60,
         // readFpsFromTrack: true,
         onError: function(data) {
-          console.log('Buffer error encountered', data);
+          console.warn('Buffer error encountered', data);
         },
         onMissingVideoFrames: function (data) {
-          console.log('Video frames missing', data);
+          console.warn('Video frames missing', data);
         },
         debug: true
       });
