@@ -285,7 +285,7 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 
 ### Parameters
 - `camera` - the name of the camera
-- `data` - the frame in JPG format encoded as a base-64 string, or `null` if no data is available
+- `data` - the raw h264 frame data, or `null` if no data is available
 
 ## Autonomous Planned Path Report
 ### Description
