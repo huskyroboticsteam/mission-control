@@ -57,6 +57,7 @@ const Compass = () => {
         className={`compass__needle compass__needle--${needleColor}`}
         style={{ transform: `rotate(${direction}deg)` }}
       ></div>
+      <div className="compass__outer-ring" style={{ backgroundColor: `var(--compass-needle-${needleColor})` }}></div>
       <div className="compass__label compass__label--north">N</div>
       <div className="compass__label compass__label--south">S</div>
       <div className="compass__label compass__label--west">W</div>
