@@ -83,7 +83,7 @@ const inputSlice = createSlice({
         // TODO: fix this? Why is this happening? Bug in react-gamepad??
         state[gamepadName][axisName] = (value + 1) / 2.0;
       } else {
-        value *= value; 
+        value *= Math.abs(value); 
         state[gamepadName][axisName] = value;
       }
       computeInput(prevState, state, action);
