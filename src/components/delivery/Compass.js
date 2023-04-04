@@ -52,18 +52,25 @@ const Compass = () => {
   }
 
   return (
-    <div className="compass">
-      <div
-        className={`compass__needle compass__needle--${needleColor}`}
-        style={{ transform: `rotate(${direction}deg)` }}
-      ></div>
-      <div className="compass__outer-ring" style={{ backgroundColor: `var(--compass-needle-${needleColor})` }}></div>
-      <div className="compass__label compass__label--north">N</div>
-      <div className="compass__label compass__label--south">S</div>
-      <div className="compass__label compass__label--west">W</div>
-      <div className="compass__label compass__label--east">E</div>
+    <div className="compass-container">
+      <div className="compass">
+        <div
+          className={`compass__needle compass__needle--${needleColor}`}
+          style={{ transform: `rotate(${direction}deg)` }}
+        ></div>
+        <div className="compass__outer-ring" style={{ backgroundColor: `var(--compass-needle-${needleColor})` }}></div>
+        <div className="compass__label compass__label--north">N</div>
+        <div className="compass__label compass__label--south">S</div>
+        <div className="compass__label compass__label--west">W</div>
+        <div className="compass__label compass__label--east">E</div>
+      </div>
+      <div className="pitch-roll"> 
+        <div className="roll">roll: {roll}</div>
+        <div className="pitch">pitch: {pitch}</div>
+      </div>
     </div>
   );
+  
 };
 
 export default Compass;

@@ -79,4 +79,21 @@
   border-color: green;
 }
 
+.pitch-roll {
+  position: absolute;
+  top: 115px;
+  right: 20px;
+  color: white;
+  font-size: 10px;
+  text-align: right;
+}
+
+.pitch {
+  margin-bottom: 5px;
+}
+
+.roll {
+  margin-bottom: 5px;
+}
+
 
