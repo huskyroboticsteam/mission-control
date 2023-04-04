@@ -24,12 +24,10 @@ const Compass = () => {
   );
 
   const pitch = Math.round(
-    2 *
-      (Math.atan2(
-        Math.sqrt(1 + 2 * (orientW * orientY - orientX * orientZ)),
-        Math.sqrt(1 - 2 * (orientW * orientY - orientX * orientZ))
-      ) -
-        Math.PI / 2)
+    2 * Math.atan2(
+      Math.sqrt(orientX * orientX + orientY * orientY + orientZ * orientZ),
+      orientW
+    ) * (180 / Math.PI)
   );
 
   // angle = 2 * acos(c1c2c3 + s1s2s3)
