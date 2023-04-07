@@ -76,7 +76,18 @@
   border: 5px solid #333;
   border-radius: 50%;
   box-sizing: border-box;
+}
+
+.compass__outer-ring.green {
   border-color: green;
+}
+
+.compass__outer-ring.yellow {
+  border-color: yellow;
+}
+
+.compass__outer-ring.red {
+  border-color: red;
 }
 
 .pitch-roll {
