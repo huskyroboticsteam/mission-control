@@ -24,37 +24,32 @@ function CameraStream({ cameraName }) {
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
 
-  // player must be an object in order to reference it in the JMuxer constructor
-  const player = useMemo(() => {
-    return <video id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
-  }, [cameraTitle, cameraName]);
-
   const jmuxer = useMemo(() => {
-    if (player && hasRendered) {
+    if (hasRendered && cameraTitle && cameraName) {
       return new JMuxer({
-        node: player.props.id,
+        node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
         maxDelay: 0,
         clearBuffer: true,
-        fps: 60,
+        fps: 40,
         // readFpsFromTrack: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
         },
         onMissingVideoFrames: function (data) {
           console.warn('Video frames missing', data);
-        },
-        debug: true
+        }
+        // , debug: true
       });
     }
     return null;
-  }, [player, hasRendered]);
+  }, [cameraTitle, cameraName, hasRendered]);
 
   useEffect(() => {
-    if (frameData) {
+    if (frameData && jmuxer) {
       jmuxer.feed({
-        video: new Uint8Array(JSON.parse(frameData))
+        video: new Uint8Array(frameData)
       });
     }
   }, [frameData, jmuxer]);
@@ -67,17 +62,8 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      <div style={{"display": "none"}}>
-        {
-        // this div needs to be here so that jmuxer will always have
-        // a video tag to refer to regardless of frameData
-        player
-        }
-      </div>
-      {frameData
-        ? player
-        : <h3>No Stream Available</h3>
-      }
+      <video style={{"display": frameData ? "block" : "none"}}id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>
+      { !frameData && <h3>No Stream Available</h3> }
     </div>
   );
 }
