@@ -67,9 +67,9 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      <div className='camera-stream-fps'>{currentFps ? Math.round(currentFps) : 'N/A'}</div>
       <video style={{"display": frameData ? "block" : "none"}}id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>
       { !frameData && <h3>No Stream Available</h3> }
+      <div className='camera-stream-fps'>{currentFps ? Math.round(currentFps) : 'N/A'}</div>
     </div>
   );
 }
