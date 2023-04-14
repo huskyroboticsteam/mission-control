@@ -23,6 +23,8 @@ function CameraStream({ cameraName }) {
   const frameData = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
+  const [lastFrameTime, setLastFrameTime] = useState(0.0);
+  const [currentFps, setCurrentFps] = useState(0.0);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraTitle && cameraName) {
@@ -32,11 +34,12 @@ function CameraStream({ cameraName }) {
         flushingTime: 0,
         maxDelay: 0,
         clearBuffer: true,
-        fps: 40,
+        // fps: 40,
         // readFpsFromTrack: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
         },
+        
         onMissingVideoFrames: function (data) {
           console.warn('Video frames missing', data);
         }
@@ -51,6 +54,8 @@ function CameraStream({ cameraName }) {
       jmuxer.feed({
         video: new Uint8Array(frameData)
       });
+      setCurrentFps(1000 * (1.0 / (Date.now() - lastFrameTime)));
+      setLastFrameTime(Date.now());
     }
   }, [frameData, jmuxer]);
 
@@ -62,6 +67,7 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
+      <div className='camera-stream-fps'>{currentFps ? Math.round(currentFps) : 'N/A'}</div>
       <video style={{"display": frameData ? "block" : "none"}}id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>
       { !frameData && <h3>No Stream Available</h3> }
     </div>

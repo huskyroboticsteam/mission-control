@@ -17,6 +17,13 @@
   background-color: #00000066;
 }
 
+.camera-stream-fps {
+  color: red;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
 .camera-stream > img {
   width: 100%;
   height: 100%;
