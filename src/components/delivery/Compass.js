@@ -4,7 +4,7 @@ import { selectRoverPosition } from "../../store/telemetrySlice";
 import "./Compass.css";
 
 const Compass = () => {
-  const { orientW, orientX, orientY, orientZ } = useSelector(
+  const { orientW, orientX, orientY, orientZ, posX, posY, posZ } = useSelector(
     selectRoverPosition
   );
 
@@ -15,19 +15,26 @@ const Compass = () => {
       1 - 2 * (orientY * orientY + orientZ * orientZ)
     ) * 180) / Math.PI
   );
-  const roll = Math.round(
+
+  let roll = Math.round(
     (Math.atan2(
       2 * (orientW * orientX + orientY * orientZ),
       1 - 2 * (orientX * orientX + orientY * orientY)
-    ) * 180) / Math.PI
+    ))
   );
+
 
   const pitch = Math.round(
     2 * Math.atan2(
       2 * (orientY * orientW - orientX * orientZ),
       1 - 2 * (orientY * orientY + orientZ * orientZ)
-    ) * (180 / Math.PI)
+    )
   );
+
+  const latitude = posX;
+  const longitude = posY;
+  const altitude = posZ;
+  
 
   // angle = 2 * acos(c1c2c3 + s1s2s3)
   // c1 = 1 in all cases, since yaw = 0
@@ -37,7 +44,9 @@ const Compass = () => {
   const c2 = Math.cos(pitch / 2);
   const c3 = Math.cos(roll / 2);
 
-  const angle = 2 * Math.acos(c2 * c3);
+  const angle = (2 * Math.acos(c2 * c3) * 180)/Math.PI;
+
+  roll = Math.round(roll*180/Math.PI);
 
   let needleColor;
   if (Math.abs(angle) < 20) {
@@ -61,9 +70,13 @@ const Compass = () => {
         <div className="compass__label compass__label--west">W</div>
         <div className="compass__label compass__label--east">E</div>
       </div>
-      <div className="pitch-roll"> 
-        <div className="roll">roll: {roll}</div>
-        <div className="pitch">pitch: {pitch}</div>
+      <div className="info"> 
+        <div>roll: {roll}</div>
+        <div>pitch: {pitch}</div>
+        <div>latitude: {latitude}</div>
+        <div>longitude: {longitude}</div>   
+        <div>altitude: {altitude ? altitude : "N/A"}</div>
+
       </div>
     </div>
   );
