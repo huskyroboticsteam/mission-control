@@ -23,8 +23,9 @@ function CameraStream({ cameraName }) {
   const frameData = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
+
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
-  const [currentFps, setCurrentFps] = useState(0.0);
+  const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraTitle && cameraName) {
@@ -54,10 +55,17 @@ function CameraStream({ cameraName }) {
       jmuxer.feed({
         video: new Uint8Array(frameData)
       });
-      setCurrentFps(1000 * (1.0 / (Date.now() - lastFrameTime)));
       setLastFrameTime(Date.now());
     }
-  }, [frameData, jmuxer]);
+  }, [setLastFrameTime, frameData, jmuxer]);
+
+  useEffect(() => {
+    if (frameData) {
+      setCurrentFpsAvg((oldFps) => {
+        return (oldFps + 1 / (1000 * (lastFrameTime - Date.now()))) / 2;
+      });
+    }
+  }, [setCurrentFpsAvg, lastFrameTime, frameData]);
 
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
@@ -69,7 +77,7 @@ function CameraStream({ cameraName }) {
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
       <video style={{"display": frameData ? "block" : "none"}}id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>
       { !frameData && <h3>No Stream Available</h3> }
-      <div className='camera-stream-fps'>{currentFps ? Math.round(currentFps) : 'N/A'}</div>
+      <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameData ? Math.round(currentFpsAvg) : 'N/A'}</div>
     </div>
   );
 }
