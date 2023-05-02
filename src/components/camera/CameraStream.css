@@ -39,3 +39,8 @@
   text-align: center;
   padding: 20px;
 }
+
+.video-tag {
+  max-width: 100%; 
+  max-height: 100%;
+}

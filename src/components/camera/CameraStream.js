@@ -20,23 +20,23 @@ function CameraStream({ cameraName }) {
     };
   }, [cameraName, dispatch]);
 
-  const frameData = useSelector(selectCameraStreamFrameData(cameraName));
+  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
+  const vidTag = <video id={`${cameraName}-player`} class='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+  // style={{"display": frameDataArray ? "block" : "none"}}
 
   const jmuxer = useMemo(() => {
-    if (hasRendered && cameraTitle && cameraName) {
+    if (hasRendered && cameraName) {
       return new JMuxer({
         node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
         maxDelay: 0,
         clearBuffer: true,
-        // fps: 40,
-        // readFpsFromTrack: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
         },
@@ -44,40 +44,41 @@ function CameraStream({ cameraName }) {
         onMissingVideoFrames: function (data) {
           console.warn('Video frames missing', data);
         }
-        // , debug: true
       });
     }
     return null;
-  }, [cameraTitle, cameraName, hasRendered]);
+  }, [cameraName, hasRendered]);
 
   useEffect(() => {
-    if (frameData && jmuxer) {
-      jmuxer.feed({
-        video: new Uint8Array(frameData)
-      });
-      setLastFrameTime(Date.now());
+    if (frameDataArray && vidTag && jmuxer) {
+      for (let i = 0; i < frameDataArray.length; i++) {
+        jmuxer.feed({
+          video: new Uint8Array(frameDataArray[i])
+        });
+      }
+      let time = document.getElementById(vidTag.props.id).currentTime;
+      setLastFrameTime(document.getElementById(vidTag.props.id).currentTime);
+      if (time !== lastFrameTime) {
+        setCurrentFpsAvg((oldFps) => {
+          return (oldFps + (1 / ((time - lastFrameTime)))) / 2;
+        });
+        console.log(time - lastFrameTime);
+      }
     }
-  }, [setLastFrameTime, frameData, jmuxer]);
-
-  useEffect(() => {
-    if (frameData) {
-      setCurrentFpsAvg((oldFps) => {
-        return (oldFps + 1 / (1000 * (lastFrameTime - Date.now()))) / 2;
-      });
-    }
-  }, [setCurrentFpsAvg, lastFrameTime, frameData]);
-
+    // eslint-disable-next-line
+  }, [frameDataArray]);
+  
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
     setHasRendered(true);
   }, []);
-
+  
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      <video style={{"display": frameData ? "block" : "none"}}id={`${cameraName}-player`} muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>
-      { !frameData && <h3>No Stream Available</h3> }
-      <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameData ? Math.round(currentFpsAvg) : 'N/A'}</div>
+      { vidTag }
+      { !frameDataArray && <h3>No Stream Available</h3> }
+      <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
     </div>
   );
 }
