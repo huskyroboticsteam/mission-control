@@ -15,12 +15,14 @@
     "@types/node": "^18.7.23",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "jmuxer": "^2.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gamepad": "SBRK/react-gamepad",
     "react-redux": "^8.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
+    "stream": "0.0.2",
     "three": "^0.145.0"
   },
   "scripts": {
