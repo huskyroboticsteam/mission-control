@@ -27,7 +27,6 @@ function CameraStream({ cameraName }) {
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
   const vidTag = <video id={`${cameraName}-player`} class='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
-  // style={{"display": frameDataArray ? "block" : "none"}}
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -62,7 +61,6 @@ function CameraStream({ cameraName }) {
         setCurrentFpsAvg((oldFps) => {
           return (oldFps + (1 / ((time - lastFrameTime)))) / 2;
         });
-        console.log(time - lastFrameTime);
       }
     }
     // eslint-disable-next-line
