@@ -26,7 +26,7 @@ function CameraStream({ cameraName }) {
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
-  const vidTag = <video id={`${cameraName}-player`} class='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+  const vidTag = <video id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
