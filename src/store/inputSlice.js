@@ -183,6 +183,12 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "J", "L");
+  armInput.ikForward = 
+    peripheralGamepad["RightStickY"] +
+    getAxisFromKeys(pressedKeys, "G", "T");
+  armInput.ikUp = 
+    peripheralGamepad["LeftStickY"] +
+    getAxisFromKeys(pressedKeys, "S", "W");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
