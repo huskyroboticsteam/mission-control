@@ -21,7 +21,7 @@
   flex: 0.5;
   flex: 0.5;
   height: 50%;
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .waypoint-select > button {
