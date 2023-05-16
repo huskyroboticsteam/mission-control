@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import roverSocketReducer from "./roverSocketSlice";
 import peripheralsReducer from "./peripheralsSlice";
 import emergencyStopReducer from "./emergencyStopSlice";
-import inverseKinematicsReducer from "./inverseKinematicsSlice";
 import opModeReducer from "./opModeSlice";
 import inputReducer from "./inputSlice";
 import driveReducer from "./driveSlice";
@@ -32,7 +31,6 @@ export default configureStore({
     roverSocket: roverSocketReducer,
     peripherals: peripheralsReducer,
     emergencyStop: emergencyStopReducer,
-    inverseKinematics: inverseKinematicsReducer,
     opMode: opModeReducer,
     input: inputReducer,
     drive: driveReducer,

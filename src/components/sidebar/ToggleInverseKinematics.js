@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectInverseKinematicsEnabled, enableIK } from "../../store/inverseKinematicsSlice";
+import { selectInverseKinematicsEnabled, enableIK } from "../../store/inputSlice";
 import "./ToggleInverseKinematics.css";
 
 function ToggleInverseKinematics() {
     const dispatch = useDispatch();
-    const IKEnabled = useSelector(selectInverseKinematicsEnabled);  // change select
+    const IKEnabled = useSelector(selectInverseKinematicsEnabled);
 
     const handleClick = () => {
         dispatch(enableIK({ enable: !IKEnabled && window.confirm("Turning on inverse kinematics requires that the motors are calibrated.  You must be sure the motors are calibrated or the robot will break.") })); // change dispatch

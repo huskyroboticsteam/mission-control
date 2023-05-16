@@ -2,7 +2,6 @@ import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
-import { selectInverseKinematicsEnabled } from "../inverseKinematicsSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -94,25 +93,11 @@ function updateArm(
 ) {
   Object.keys(computedInput.arm).forEach(jointName => {
     if (computedInput.arm[jointName] !== prevComputedInput.arm[jointName]
-      || mountedPeripheral !== prevMountedPeripheral) {
-        if (selectInverseKinematicsEnabled) {
-          // if inverse kinematics is enabled, don't send elbow or shoulder requests
-          if (jointName !== "elbow" && jointName !== "shoulder") {
-            dispatch(requestJointPower({
-              jointName,
-              power: computedInput.arm[jointName]
-            }));
-          }
-        } else {
-          // if inverse kinematics is disabled, don't send inverse kinematic requests
-          if (jointName !== "ikForward" && jointName !== "ikUp") {
-            dispatch(requestJointPower({
-              jointName,
-              power: computedInput.arm[jointName]
-            }));
-          }
-        }
-      }
+      || mountedPeripheral !== prevMountedPeripheral)
+      dispatch(requestJointPower({
+        jointName,
+        power: computedInput.arm[jointName]
+      }));
   });
 }
 

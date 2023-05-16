@@ -48,6 +48,9 @@ const initialState = {
     science: {
       lazySusanPosition: 0
     }
+  },
+  inverseKinematics: {
+    enabled: false
   }
 };
 
@@ -115,6 +118,11 @@ const inputSlice = createSlice({
       if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
       computeInput(prevState, state, action);
+    },
+
+    enableIK(state, action) {
+      const { enable } = action.payload;
+      state.inverseKinematics.enabled = enable;
     }
   }
 });
@@ -183,10 +191,10 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "J", "L");
-  armInput.ikForward = 
+  armInput.ikForward =
     peripheralGamepad["RightStickY"] +
     getAxisFromKeys(pressedKeys, "G", "T");
-  armInput.ikUp = 
+  armInput.ikUp =
     peripheralGamepad["LeftStickY"] +
     getAxisFromKeys(pressedKeys, "S", "W");
 
@@ -251,10 +259,12 @@ export const {
   gamepadAxisChanged,
   gamepadButtonChanged,
   keyPressed,
-  keyReleased
+  keyReleased,
+  enableIK
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
 export const selectDriveGamepad = state => state.input.driveGamepad;
 export const selectPeripheralGamepad = state => state.input.peripheralGamepad;
+export const selectInverseKinematicsEnabled = state => state.input.inverseKinematics.enabled;
 export default inputSlice.reducer;
