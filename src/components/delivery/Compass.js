@@ -8,28 +8,17 @@ const Compass = () => {
     selectRoverPosition
   );
 
-  // Calculate the direction based on the quaternion values
+  //Calculate the direction based on the quaternion values
   const direction = Math.round(
     (Math.atan2(
       2 * (orientW * orientZ + orientX * orientY),
       1 - 2 * (orientY * orientY + orientZ * orientZ)
     ) * 180) / Math.PI
   );
-
-  let roll = Math.round(
-    (Math.atan2(
-      2 * (orientW * orientX + orientY * orientZ),
-      1 - 2 * (orientX * orientX + orientY * orientY)
-    ))
-  );
-
-
-  const pitch = Math.round(
-    2 * Math.atan2(
-      2 * (orientY * orientW - orientX * orientZ),
-      1 - 2 * (orientY * orientY + orientZ * orientZ)
-    )
-  );
+  
+  let roll = Math.atan2(2.0*(orientX*orientY + orientW*orientZ), orientW*orientW + orientX*orientX - orientY*orientY - orientZ*orientZ);
+  
+  let pitch = Math.asin(-2.0*(orientZ*orientZ - orientW*orientY));
 
   const latitude = posX;
   const longitude = posY;
@@ -47,6 +36,7 @@ const Compass = () => {
   const angle = (2 * Math.acos(c2 * c3) * 180)/Math.PI;
 
   roll = Math.round(roll*180/Math.PI);
+  pitch = Math.round(pitch*180/Math.PI);
 
   let needleColor;
   if (Math.abs(angle) < 20) {
