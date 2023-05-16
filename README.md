@@ -190,6 +190,21 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 - `joint` - the name of the joint
 - `position` - the current position in degrees
 
+## Set Inverse Kinematics
+### Description
+Sent from Mission Control to enable or disable inverse kinematics controls on the rover.
+
+### Syntax
+```
+{
+  type: "setInverseKinematics",
+  enabled: boolean
+}
+```
+
+### Parameters
+- `enabled` - whether or not inverse kinematics should be enabled or disabled.
+
 ## Motor Status Report
 ### Description
 Sent from the rover server to inform Mission Control of a motor's status.

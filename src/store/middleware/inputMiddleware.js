@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
-
+import { enableIK, selectInverseKinematicsEnabled } from "../inputSlice";
+import { messageRover } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
  */
@@ -24,6 +26,13 @@ const inputMiddleware = store => next => action => {
     );
 
     return result;
+  } else if (action.type === enableIK.type) {
+    store.dispatch(messageRover({
+      message: {
+        type: "enableInverseKinematics",
+        enabled: useSelector(selectInverseKinematicsEnabled)
+      }
+    }));
   } else {
     return next(action);
   }
