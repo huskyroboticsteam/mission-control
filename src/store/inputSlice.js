@@ -125,13 +125,6 @@ const inputSlice = createSlice({
     enableIK(state, action) {
       const { enable } = action.payload;
       state.inverseKinematics.enabled = enable;
-      if (enable) {
-        state.computed.arm.elbow = 0;
-        state.computed.arm.shoulder = 0;
-      } else {
-        state.computed.arm.ikForward = 0;
-        state.computed.arm.ikUp = 0;
-      }
     }
   }
 });
