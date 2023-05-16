@@ -7,7 +7,9 @@ const jointNames = [
   "forearm",
   "wrist",
   "hand",
-  "drillArm"
+  "drillArm",
+  "ikUp",
+  "ikForward"
 ];
 
 const initialState = jointNames.reduce((state, jointName) => ({

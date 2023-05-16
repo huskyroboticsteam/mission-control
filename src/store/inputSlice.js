@@ -44,6 +44,8 @@ const initialState = {
       forearm: 0,
       wrist: 0,
       hand: 0,
+      ikUp: 0,
+      ikForward: 0,
     },
     science: {
       lazySusanPosition: 0
@@ -123,6 +125,13 @@ const inputSlice = createSlice({
     enableIK(state, action) {
       const { enable } = action.payload;
       state.inverseKinematics.enabled = enable;
+      if (enable) {
+        state.computed.arm.elbow = 0;
+        state.computed.arm.shoulder = 0;
+      } else {
+        state.computed.arm.ikForward = 0;
+        state.computed.arm.ikUp = 0;
+      }
     }
   }
 });
@@ -175,12 +184,25 @@ function computeArmInput(state) {
   armInput.armBase =
     peripheralGamepad["LeftStickX"] +
     getAxisFromKeys(pressedKeys, "A", "D");
-  armInput.shoulder =
-    peripheralGamepad["LeftStickY"] +
-    getAxisFromKeys(pressedKeys, "S", "W");
-  armInput.elbow =
-    peripheralGamepad["RightStickY"] +
-    getAxisFromKeys(pressedKeys, "G", "T");
+  if (state.inverseKinematics.enabled) {
+    armInput.ikForward =
+      peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "G", "T");
+    armInput.ikUp =
+      peripheralGamepad["LeftStickY"] +
+      getAxisFromKeys(pressedKeys, "S", "W");
+    armInput.shoulder = 0;
+    armInput.elbow = 0;
+  } else {
+    armInput.shoulder =
+      peripheralGamepad["LeftStickY"] +
+      getAxisFromKeys(pressedKeys, "S", "W");
+    armInput.elbow =
+      peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "G", "T");
+      armInput.ikUp = 0;
+      armInput.ikForward = 0;
+  }
   armInput.forearm =
     peripheralGamepad["RightStickX"] +
     getAxisFromKeys(pressedKeys, "F", "H");
@@ -191,12 +213,6 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "J", "L");
-  armInput.ikForward =
-    peripheralGamepad["RightStickY"] +
-    getAxisFromKeys(pressedKeys, "G", "T");
-  armInput.ikUp =
-    peripheralGamepad["LeftStickY"] +
-    getAxisFromKeys(pressedKeys, "S", "W");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
