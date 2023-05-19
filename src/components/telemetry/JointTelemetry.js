@@ -1,27 +1,26 @@
 import { useSelector } from "react-redux";
 import {
-  selectAllMotorNames,
-  selectMotorCurrentPosition,
-  selectMotorCurrentPower
-} from "../../store/motorsSlice";
-import camelCaseToTitle from "../../util/camelCaseToTitle";
-import "./MotorTelemetry.css";
+  selectJointCurrentPosition,
+  selectAllJointNames,
+} from "../../store/jointsSlice";
 
-function MotorTelemetry() {
-  const motorNames = useSelector(selectAllMotorNames);
+import camelCaseToTitle from "../../util/camelCaseToTitle";
+import "./JointTelemetry.css";
+
+function JointTelemetry() {
+  const jointNames = useSelector(selectAllJointNames);
 
   return (
     <div className="motor-telemetry">
       <table>
         <thead>
           <tr>
-            <th>Motor</th>
-            <th>Power</th>
+            <th>Joint</th>
             <th>Position</th>
           </tr>
         </thead>
         <tbody>
-          {motorNames.map(motorName => <MotorData motorName={motorName} key={motorName} />)}
+          {jointNames.map(motorName => <MotorData motorName={motorName} key={motorName} />)}
         </tbody>
       </table>
     </div>
@@ -29,17 +28,15 @@ function MotorTelemetry() {
 }
 
 function MotorData({ motorName }) {
-  const power = useSelector(selectMotorCurrentPower(motorName));
-  const position = useSelector(selectMotorCurrentPosition(motorName));
+  const position = useSelector(selectJointCurrentPosition(motorName));
   const motorTitle = camelCaseToTitle(motorName);
 
   return (
     <tr className="motor-telemetry__motor-data">
       <td>{motorTitle}</td>
-      <td>{power != null ? power : "N/A"}</td>
       <td>{position != null ? `${Math.round(position)}°` : "N/A"}</td>
     </tr>
   );
 }
 
-export default MotorTelemetry;
+export default JointTelemetry;
