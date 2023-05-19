@@ -4,7 +4,7 @@ import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, selectInverseKinematicsEnabled } from "../inputSlice";
-import { messageRover } from "../roverSocketSlice";
+import { messageRover, roverDisconnected } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
  */
@@ -26,14 +26,25 @@ const inputMiddleware = store => next => action => {
     );
 
     return result;
-  } else if (action.type === enableIK.type) {
-    store.dispatch(messageRover({
-      message: {
-        type: "enableInverseKinematics",
-        enabled: useSelector(selectInverseKinematicsEnabled)
-      }
-    }));
   } else {
+    switch (action.type) {
+      case enableIK.type: {
+        store.dispatch(messageRover({
+          message: {
+            type: "enableInverseKinematics",
+            enabled: useSelector(selectInverseKinematicsEnabled)
+          }
+        }));
+        break;
+      }
+
+      case roverDisconnected.type: {
+        store.dispatch(enableIK({ enable: false }));
+        break;
+      }
+
+      default: break;
+    }
     return next(action);
   }
 }
