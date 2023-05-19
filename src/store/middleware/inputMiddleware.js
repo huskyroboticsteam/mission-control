@@ -4,7 +4,7 @@ import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, selectInverseKinematicsEnabled } from "../inputSlice";
-import { messageRover, roverDisconnected } from "../roverSocketSlice";
+import { messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
  */
@@ -38,7 +38,7 @@ const inputMiddleware = store => next => action => {
         break;
       }
 
-      case roverDisconnected.type: {
+      case (roverDisconnected.type || roverConnected.type): {
         store.dispatch(enableIK({ enable: false }));
         break;
       }
