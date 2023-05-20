@@ -38,7 +38,7 @@ const inputMiddleware = store => next => action => {
         break;
       }
 
-      case (roverDisconnected.type || roverConnected.type): {
+      case roverDisconnected.type: case roverConnected.type: {
         store.dispatch(enableIK({ enable: false }));
         break;
       }
