@@ -9,20 +9,7 @@ import { messageRover, roverDisconnected, roverConnected } from "../roverSocketS
  */
 const inputMiddleware = store => next => action => {
   if (action.type.startsWith("input/")) {
-    const prevComputedInput = store.getState().input.computed;
-    const prevMountedPeripheral = selectMountedPeripheral(store.getState());
     const result = next(action);
-    const computedInput = store.getState().input.computed;
-    const mountedPeripheral = selectMountedPeripheral(store.getState());
-
-    updateDrive(prevComputedInput, computedInput, store.dispatch);
-    updatePeripherals(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      store.dispatch
-    );
     if (action.type === enableIK.type) {
       store.dispatch(messageRover({
         message: {
@@ -30,6 +17,20 @@ const inputMiddleware = store => next => action => {
           enabled: store.getState().input.inverseKinematics.enabled
         }
       }));
+    } else {
+      const prevComputedInput = store.getState().input.computed;
+      const prevMountedPeripheral = selectMountedPeripheral(store.getState());
+      const computedInput = store.getState().input.computed;
+      const mountedPeripheral = selectMountedPeripheral(store.getState());
+
+      updateDrive(prevComputedInput, computedInput, store.dispatch);
+      updatePeripherals(
+        prevComputedInput,
+        computedInput,
+        prevMountedPeripheral,
+        mountedPeripheral,
+        store.dispatch
+      );
     }
     return result;
   } else {
