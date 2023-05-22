@@ -1,4 +1,4 @@
-import MotorTelemetry from "./MotorTelemetry";
+import JointTelemetry from "./JointTelemetry";
 import InputTelemetry from "./InputTelemetry";
 import "./TelemetryPanel.css";
 
@@ -6,7 +6,7 @@ function TelemetryPanel() {
   return (
     <div className="telemetry-panel">
       <InputTelemetry />
-      <MotorTelemetry />
+      <JointTelemetry />
     </div>
   );
 }

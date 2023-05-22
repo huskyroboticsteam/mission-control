@@ -39,6 +39,7 @@ const jointsSlice = createSlice({
       const { jointName, position } = action.payload;
       const joint = state[jointName];
       joint.currentPosition = position;
+      return state;
     }
   }
 });
