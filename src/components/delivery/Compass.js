@@ -8,22 +8,16 @@ const Compass = () => {
     selectRoverPosition
   );
 
-  //Calculate the direction based on the quaternion values
-  const direction = Math.round(
-    (Math.atan2(
-      2 * (orientW * orientZ + orientX * orientY),
-      1 - 2 * (orientY * orientY + orientZ * orientZ)
-    ) * 180) / Math.PI
-  );
+  let needleColor;
+  let pitch;
+  let roll;
   
-  let roll = Math.atan2(2.0*(orientX*orientY + orientW*orientZ), orientW*orientW + orientX*orientX - orientY*orientY - orientZ*orientZ);
-  
-  let pitch = Math.asin(-2.0*(orientZ*orientZ - orientW*orientY));
+  if(pitch == null && roll == null) {
+    needleColor = "gray";
+  } else {
 
-  const latitude = posX;
-  const longitude = posY;
-  const altitude = posZ;
-  
+  roll = Math.atan2(2.0*(orientX*orientY + orientW*orientZ), orientW*orientW + orientX*orientX - orientY*orientY - orientZ*orientZ);
+  pitch = Math.asin(-2.0*(orientZ*orientZ - orientW*orientY));
 
   // angle = 2 * acos(c1c2c3 + s1s2s3)
   // c1 = 1 in all cases, since yaw = 0
@@ -38,7 +32,6 @@ const Compass = () => {
   roll = Math.round(roll*180/Math.PI);
   pitch = Math.round(pitch*180/Math.PI);
 
-  let needleColor;
   if (Math.abs(angle) < 20) {
     needleColor = "green";
   } else if (Math.abs(angle) < 45) {
@@ -46,6 +39,17 @@ const Compass = () => {
   } else {
     needleColor = "red";
   }
+}
+
+  const direction = Math.round(
+    (Math.atan2(
+      2 * (orientW * orientZ + orientX * orientY),
+      1 - 2 * (orientY * orientY + orientZ * orientZ)
+    ) * 180) / Math.PI
+  );
+  const latitude = posX;
+  const longitude = posY;
+  const altitude = posZ;
 
   return (
     <div className="compass-container">
@@ -61,10 +65,10 @@ const Compass = () => {
         <div className="compass__label compass__label--east">E</div>
       </div>
       <div className="info"> 
-        <div>roll: {roll}</div>
-        <div>pitch: {pitch}</div>
-        <div>latitude: {latitude}</div>
-        <div>longitude: {longitude}</div>   
+        <div>roll: {roll ? roll : "N/A"}</div>
+        <div>pitch: {pitch ? pitch : "N/A"}</div>
+        <div>latitude: {latitude ? latitude : "N/A"}</div>
+        <div>longitude: {longitude ? longitude : "N/A"}</div>   
         <div>altitude: {altitude ? altitude : "N/A"}</div>
 
       </div>
