@@ -4,42 +4,37 @@ import { selectRoverPosition } from "../../store/telemetrySlice";
 import "./Compass.css";
 
 const Compass = () => {
-  const { orientW, orientX, orientY, orientZ, posX, posY, posZ } = useSelector(
-    selectRoverPosition
-  );
+  const {orientW, orientX, orientY, orientZ, posX, posY, posZ} = useSelector(selectRoverPosition);
 
-  let needleColor;
-  let pitch;
   let roll;
-  
-  if(pitch == null && roll == null) {
+  let pitch;
+  let needleColor;
+
+  if (orientW == null || orientX == null || orientY == null || orientZ == null) {
     needleColor = "gray";
   } else {
+    roll = Math.atan2(2.0 * (orientX * orientY + orientW * orientZ), orientW * orientW + orientX * orientX - orientY * orientY - orientZ * orientZ);
+    pitch = Math.asin(-2.0 * (orientZ * orientZ - orientW * orientY));
+    const c2 = Math.cos(pitch / 2);
+    const c3 = Math.cos(roll / 2);
 
-  roll = Math.atan2(2.0*(orientX*orientY + orientW*orientZ), orientW*orientW + orientX*orientX - orientY*orientY - orientZ*orientZ);
-  pitch = Math.asin(-2.0*(orientZ*orientZ - orientW*orientY));
+    // angle = 2 * acos(c1c2c3 + s1s2s3)
+    // c1 = 1 in all cases, since yaw = 0
+    // s1s2s3 = 0 in all cases, since yaw = 0
+    // math comes from here: https://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToAngle/index.htm
+    const angle = (2 * Math.acos(c2 * c3) * 180) / Math.PI;
 
-  // angle = 2 * acos(c1c2c3 + s1s2s3)
-  // c1 = 1 in all cases, since yaw = 0
-  // s1s2s3 = 0 in all cases, since yaw = 0
-  // math comes from here: https://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToAngle/index.htm
+    roll = Math.round(roll * 180 / Math.PI);
+    pitch = Math.round(pitch * 180 / Math.PI);
 
-  const c2 = Math.cos(pitch / 2);
-  const c3 = Math.cos(roll / 2);
-
-  const angle = (2 * Math.acos(c2 * c3) * 180)/Math.PI;
-
-  roll = Math.round(roll*180/Math.PI);
-  pitch = Math.round(pitch*180/Math.PI);
-
-  if (Math.abs(angle) < 20) {
-    needleColor = "green";
-  } else if (Math.abs(angle) < 45) {
-    needleColor = "yellow";
-  } else {
-    needleColor = "red";
+    if (Math.abs(angle) < 20) {
+      needleColor = "green";
+    } else if (Math.abs(angle) < 45) {
+      needleColor = "yellow";
+    } else {
+      needleColor = "red";
+    }
   }
-}
 
   const direction = Math.round(
     (Math.atan2(
@@ -47,6 +42,7 @@ const Compass = () => {
       1 - 2 * (orientY * orientY + orientZ * orientZ)
     ) * 180) / Math.PI
   );
+
   const latitude = posX;
   const longitude = posY;
   const altitude = posZ;
@@ -64,17 +60,15 @@ const Compass = () => {
         <div className="compass__label compass__label--west">W</div>
         <div className="compass__label compass__label--east">E</div>
       </div>
-      <div className="info"> 
-        <div>roll: {roll ? roll : "N/A"}</div>
-        <div>pitch: {pitch ? pitch : "N/A"}</div>
-        <div>latitude: {latitude ? latitude : "N/A"}</div>
-        <div>longitude: {longitude ? longitude : "N/A"}</div>   
-        <div>altitude: {altitude ? altitude : "N/A"}</div>
-
+      <div className="info">
+        <div>roll: {roll ?? "N/A"}</div>
+        <div>pitch: {pitch ?? "N/A"}</div>
+        <div>latitude: {latitude ?? "N/A"}</div>
+        <div>longitude: {longitude ?? "N/A"}</div>
+        <div>altitude: {altitude ?? "N/A"}</div>
       </div>
     </div>
   );
-  
 };
 
 export default Compass;
