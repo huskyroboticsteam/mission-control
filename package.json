@@ -15,6 +15,7 @@
     "@types/node": "^18.7.23",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "@math.gl/core": "^3.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gamepad": "SBRK/react-gamepad",
