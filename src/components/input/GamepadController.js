@@ -28,9 +28,9 @@ const crossPlatformLayout = {
   ],
   axis: [
     "LeftStickX",
-    "-LeftStickY",
+    "LeftStickY",
     "RightStickX",
-    "-RightStickY",
+    "RightStickY",
     "DPadX",
     "-DPadY",
     "LeftTrigger",

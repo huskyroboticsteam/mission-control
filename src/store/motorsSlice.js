@@ -11,7 +11,7 @@ const motorNames = [
   "forearm",
   "differentialLeft",
   "differentialRight",
-  "hand"
+  "hand",
 ];
 
 const initialState = motorNames.reduce((state, motorName) => ({
@@ -33,6 +33,7 @@ const motorSlice = createSlice({
       const motor = state[motorName];
       motor.currentPower = power;
       motor.currentPosition = position;
+      return state;
     },
 
     enableMotors(state, action) {
