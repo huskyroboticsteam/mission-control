@@ -1,16 +1,25 @@
 .waypoint-select {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  margin-top: 70px;
 }
 
 .waypoint-select__params {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  flex: 0.5;
-  flex: 0.5;
   height: 50%;
+}
+
+.waypoint-select__params input[type="text"] {
+  width: 40%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .waypoint-checkbox {
@@ -18,13 +27,19 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: left;
-  flex: 0.5;
-  flex: 0.5;
   height: 50%;
-  color: rgb(255, 255, 255);
+  color: rgb(242, 242, 242);
 }
 
 .waypoint-select > button {
-  flex: 0.5;
-  height: 25%;
+  background-color: #4fb185;
+  border: none;
+  color: white;
+  margin: 14px;
+  padding: 20px;
+  display: block;
+  font-size: 35px;
+  font-weight: 600;
+  border-radius: 5px;
+  width: 50%;
 }

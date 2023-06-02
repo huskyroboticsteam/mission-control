@@ -52,19 +52,21 @@ function WaypointNav() {
   } else {
     button = <button disabled>Go</button>
   }
-
+// move longitude down, move checkboxes togethers
   return (<form className="waypoint-select">
     <div className="waypoint-select__params">
-      <input type="number" id="latitude" placeholder="latitude" />
-      <input type="number" id="longitude" placeholder="longitude" />
+      <label for="latitude">Latitude</label>
+      <input type="number" id="latitude" placeholder="Latitude" />
+      <label for="longitude">Longitude</label>
+      <input type="number" id="longitude" placeholder="Longitude" />
       <div className="waypoint-checkbox">
         <div>
           <input type="checkbox" id="isApproximate" />
-          <label for="isApproximate">isApproximate</label>
+          <label for="isApproximate"> Approximate</label>
         </div>
         <div>
           <input type="checkbox" id="isGate" />
-          <label for="isGate">isGate</label>
+          <label for="isGate"> Is Gate</label>
         </div>
       </div>
     </div>
