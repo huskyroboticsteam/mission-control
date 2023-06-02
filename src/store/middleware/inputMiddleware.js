@@ -9,7 +9,6 @@ import { messageRover, roverDisconnected, roverConnected } from "../roverSocketS
  */
 const inputMiddleware = store => next => action => {
   if (action.type.startsWith("input/")) {
-    const result = next(action);
     if (action.type === enableIK.type) {
       store.dispatch(messageRover({
         message: {
@@ -17,9 +16,11 @@ const inputMiddleware = store => next => action => {
           enabled: store.getState().input.inverseKinematics.enabled
         }
       }));
+      return next(action);
     } else {
       const prevComputedInput = store.getState().input.computed;
       const prevMountedPeripheral = selectMountedPeripheral(store.getState());
+      const result = next(action);
       const computedInput = store.getState().input.computed;
       const mountedPeripheral = selectMountedPeripheral(store.getState());
 
@@ -31,8 +32,8 @@ const inputMiddleware = store => next => action => {
         mountedPeripheral,
         store.dispatch
       );
+      return result;
     }
-    return result;
   } else {
     switch (action.type) {
       case roverDisconnected.type: case roverConnected.type: {
