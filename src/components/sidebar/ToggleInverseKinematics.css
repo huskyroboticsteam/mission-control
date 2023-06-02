@@ -45,6 +45,16 @@
     align-self: flex-end;
 }
 
+.switch-handle-disconnected {
+    height: 28px;
+    width: 28px;
+    border-radius: 28px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: darkgray;
+    border: 1px solid white;
+}
+
 .switch-handle {
     height: 28px;
     width: 28px;
