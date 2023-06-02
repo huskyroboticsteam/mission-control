@@ -35,7 +35,8 @@ const initialState = {
       straight: 0,
       steer: 0,
       tankLeft: 0,
-      tankRight: 0
+      tankRight: 0,
+      activeSuspension: 0
     },
     arm: {
       armBase: 0,
@@ -156,6 +157,7 @@ function computeDriveInput(state, action) {
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
   driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+  driveInput.activeSuspension = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWRIGHT");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
