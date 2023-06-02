@@ -12,8 +12,8 @@ const inputMiddleware = store => next => action => {
     if (action.type === enableIK.type) {
       store.dispatch(messageRover({
         message: {
-          type: "enableInverseKinematics",
-          enabled: store.getState().input.inverseKinematics.enabled
+          type: "setArmIKEnabled",
+          enabled: action.payload.enable
         }
       }));
       return next(action);
