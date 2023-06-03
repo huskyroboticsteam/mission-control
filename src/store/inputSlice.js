@@ -179,11 +179,11 @@ function computeArmInput(state) {
     getAxisFromKeys(pressedKeys, "A", "D");
   if (state.inverseKinematics.enabled) {
     armInput.ikForward =
-      peripheralGamepad["RightStickY"] +
-      getAxisFromKeys(pressedKeys, "G", "T");
-    armInput.ikUp =
       peripheralGamepad["LeftStickY"] +
       getAxisFromKeys(pressedKeys, "S", "W");
+    armInput.ikUp =
+      peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "G", "T");
     armInput.shoulder = 0;
     armInput.elbow = 0;
   } else {
