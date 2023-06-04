@@ -2,29 +2,47 @@ import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
-
+import { enableIK } from "../inputSlice";
+import { messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
  */
 const inputMiddleware = store => next => action => {
   if (action.type.startsWith("input/")) {
-    const prevComputedInput = store.getState().input.computed;
-    const prevMountedPeripheral = selectMountedPeripheral(store.getState());
-    const result = next(action);
-    const computedInput = store.getState().input.computed;
-    const mountedPeripheral = selectMountedPeripheral(store.getState());
+    if (action.type === enableIK.type) {
+      store.dispatch(messageRover({
+        message: {
+          type: "setArmIKEnabled",
+          enabled: action.payload.enable
+        }
+      }));
+      return next(action);
+    } else {
+      const prevComputedInput = store.getState().input.computed;
+      const prevMountedPeripheral = selectMountedPeripheral(store.getState());
+      const result = next(action);
+      const computedInput = store.getState().input.computed;
+      const mountedPeripheral = selectMountedPeripheral(store.getState());
 
-    updateDrive(prevComputedInput, computedInput, store.dispatch);
-    updatePeripherals(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      store.dispatch
-    );
-
-    return result;
+      updateDrive(prevComputedInput, computedInput, store.dispatch);
+      updatePeripherals(
+        prevComputedInput,
+        computedInput,
+        prevMountedPeripheral,
+        mountedPeripheral,
+        store.dispatch
+      );
+      return result;
+    }
   } else {
+    switch (action.type) {
+      case roverDisconnected.type: case roverConnected.type: {
+        store.dispatch(enableIK({ enable: false }));
+        break;
+      }
+
+      default: break;
+    }
     return next(action);
   }
 }
