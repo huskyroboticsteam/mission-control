@@ -157,7 +157,7 @@ function computeDriveInput(state, action) {
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
   driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
-  driveInput.activeSuspension = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWRIGHT");
+  driveInput.activeSuspension = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);

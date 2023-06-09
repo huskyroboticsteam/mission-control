@@ -60,6 +60,14 @@ function updateDrive(prevComputedInput, computedInput, dispatch) {
       dispatch(requestDrive({ straight, steer }));
     }
   }
+  if (computedInput.drive.activeSuspension) {
+    const { activeSuspension: prevActiveSuspension } = prevComputedInput.drive;
+    const { activeSuspension } = computedInput.drive;
+    if (activeSuspension != prevActiveSuspension) {
+      dispatch(requestJointPower({ activeSuspension,
+        power: computedInput.drive.activeSuspension }));
+    }
+  }
 }
 
 function updatePeripherals(
