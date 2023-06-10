@@ -221,10 +221,12 @@ function Hand() {
 
 function ArmSegment({length}) {
   return <>
-    <Box args={[6, 6, length]}
+    <Box
+      args={[6, 6, length]}
       position={[0, 0, length/2]}
       material-color="#6C6C76" />
-    <Cylinder args={[5, 5, 5, 20]}
+    <Cylinder
+      args={[5, 5, 5, 20]}
       position={[0, 0, length]}
       rotation={[0, 0, Math.PI / 2]}
       material-color="#6C6C76" />
