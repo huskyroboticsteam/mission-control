@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useFBX } from "@react-three/drei";
+import { OrbitControls, useFBX, Cylinder, Box } from "@react-three/drei";
 import { selectJointCurrentPosition } from "../../store/jointsSlice";
 import chassisMesh from "./mesh/chassis.fbx";
 import leftSuspensionMesh from "./mesh/leftSuspension.fbx";
@@ -11,8 +11,6 @@ import rearLeftWheelMesh from "./mesh/rearLeftWheel.fbx";
 import frontRightWheelMesh from "./mesh/frontRightWheel.fbx";
 import rearRightWheelMesh from "./mesh/rearRightWheel.fbx";
 import armBaseMesh from "./mesh/armBase.fbx";
-import lowerArmMesh from "./mesh/lowerArm.fbx";
-import upperArmMesh from "./mesh/upperArm.fbx";
 import forearmMesh from "./mesh/forearm.fbx";
 import wristMesh from "./mesh/wrist.fbx";
 import handBaseMesh from "./mesh/handBase.fbx";
@@ -129,52 +127,52 @@ function ArmBase() {
     <primitive
       object={mesh}
       position={[0, 15, 30]}
-      rotation={[0, -degToRad(position), 0]}
+      rotation={[0, degToRad(position), 0]}
     >
-      <LowerArm />
+      <LowerArm position={[0, 10, 0]} />
     </primitive>
   );
 }
 
-function LowerArm() {
-  const mesh = useFBX(lowerArmMesh);
-  const position = useSelector(selectJointCurrentPosition("shoulder"));
+function LowerArm({position}) {
+  const jointPos = useSelector(selectJointCurrentPosition("shoulder"));
+  const length = 39;
 
   return (
-    <primitive
-      object={mesh}
-      position={[0, 12, 0]}
-      rotation={[-degToRad(position), 0, 0]}
+    <group
+      position={position}
+      rotation={[-degToRad(jointPos), 0, 0]}
     >
-      <UpperArm />
-    </primitive>
+      <ArmSegment length={length} />
+      <UpperArm position={[0, 0, length]} />
+    </group>
   );
 }
 
-function UpperArm() {
-  const mesh = useFBX(upperArmMesh);
-  const position = useSelector(selectJointCurrentPosition("elbow"));
+function UpperArm({position}) {
+  const jointPos = useSelector(selectJointCurrentPosition("elbow"));
+  const length = 43;
 
   return (
-    <primitive
-      object={mesh}
-      position={[0, 60, -56]}
-      rotation={[-degToRad(position), 0, 0]}
+    <group
+      position={position}
+      rotation={[-degToRad(jointPos), 0, 0]}
     >
-      <Forearm />
-    </primitive>
+      <ArmSegment length={length} />
+      <Forearm position={[0, 0, length]} />
+    </group>
   );
 }
 
-function Forearm() {
+function Forearm({position}) {
   const mesh = useFBX(forearmMesh);
-  const position = useSelector(selectJointCurrentPosition("forearm"));
+  const jointPos = useSelector(selectJointCurrentPosition("forearm"));
 
   return (
     <primitive
       object={mesh}
-      position={[0, 4, 95]}
-      rotation={[0, 0, degToRad(position)]}
+      position={position}
+      rotation={[0, 0, degToRad(jointPos)]}
     >
       <Wrist />
     </primitive>
@@ -219,6 +217,18 @@ function Hand() {
       />
     </primitive>
   );
+}
+
+function ArmSegment({length}) {
+  return <>
+    <Box args={[6, 6, length]}
+      position={[0, 0, length/2]}
+      material-color="#6C6C76" />
+    <Cylinder args={[5, 5, 5, 20]}
+      position={[0, 0, length]}
+      rotation={[0, 0, Math.PI / 2]}
+      material-color="#6C6C76" />
+  </>;
 }
 
 function degToRad(deg) {
