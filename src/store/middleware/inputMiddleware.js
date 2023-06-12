@@ -61,11 +61,11 @@ function updateDrive(prevComputedInput, computedInput, dispatch) {
     }
   }
   const prevActiveSuspension = prevComputedInput.drive.activeSuspension;
-  const activeSuspension = computedInput.drive.aciveSuspension;
+  const activeSuspension = computedInput.drive.activeSuspension;
   if (activeSuspension !== prevActiveSuspension) {
     dispatch(requestJointPower({
       "jointName": "aciveSuspension",
-      power: computedInput.drive.activeSuspension
+      power: activeSuspension
     }));
   }
 }
