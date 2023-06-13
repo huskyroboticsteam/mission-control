@@ -8,6 +8,7 @@ const jointNames = [
   "wrist",
   "hand",
   "drillArm",
+  "activeSuspension",
   "ikUp",
   "ikForward"
 ];
