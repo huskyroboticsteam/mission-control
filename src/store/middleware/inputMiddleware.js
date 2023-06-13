@@ -64,7 +64,7 @@ function updateDrive(prevComputedInput, computedInput, dispatch) {
   const activeSuspension = computedInput.drive.activeSuspension;
   if (activeSuspension !== prevActiveSuspension) {
     dispatch(requestJointPower({
-      "jointName": "aciveSuspension",
+      "jointName": "activeSuspension",
       power: activeSuspension
     }));
   }
