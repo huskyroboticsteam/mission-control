@@ -203,20 +203,35 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 - `joint` - the name of the joint
 - `position` - the current position in degrees
 
-## Set Arm IK Enabled
+## Request Arm IK Enabled
 ### Description
-Sent from Mission Control to enable or disable inverse kinematics controls on the rover.
+Sent from Mission Control to instruct Rover to enable or disable inverse kinematics.
 
 ### Syntax
 ```
 {
-  type: "setArmIKEnabled",
+  type: "requestArmIKEnabled",
   enabled: boolean
 }
 ```
 
 ### Parameters
 - `enabled` - whether or not inverse kinematics for the arm should be enabled or disabled.
+
+## Report Arm IK Enabled
+### Description
+Sent from Rover to inform Mission Control whether or not the Rover has enabled or disabled inverse kinematics.
+
+### Syntax
+```
+{
+  type: "reportArmIKEnabled",
+  enabled: boolean
+}
+```
+
+### Parameters
+- `enabled` - whether or not inverse kinematics for the arm is enabled
 
 ## Motor Status Report
 ### Description
