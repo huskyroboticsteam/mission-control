@@ -2,7 +2,7 @@ import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
-import { enableIK } from "../inputSlice";
+import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
@@ -47,7 +47,7 @@ const inputMiddleware = store => next => action => {
           if (message.enabled == store.getState().input.inverseKinematics.enabled) {
             alert("Arm IK was unable to be " + (!message.enabled ? "enabled." : "disabled."));
           }
-          store.dispatch(enableIK(message.enabled));
+          store.dispatch(visuallyEnableIK(message.enabled));
         }
         break;
       }
