@@ -14,7 +14,7 @@ function ToggleInverseKinematics() {
         if (roverIsConnected && motorsEnabled) {
             dispatch(enableIK({ enable: !IKEnabled && window.confirm("Turning on inverse kinematics requires that the motors are calibrated.  You must be sure the motors are calibrated or the robot will break.") })); // change dispatch
         }
-    };
+    };D
 
     return (
         <div id='enable-ik-toggle'>
