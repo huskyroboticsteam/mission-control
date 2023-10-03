@@ -21,9 +21,9 @@ function ToggleInverseKinematics() {
             <div id={motorsEnabled ? 'enable-ik-title' : 'enable-ik-title-disabled'}>
                 Enable IK
             </div>
-            <div id={roverIsConnected && motorsEnabled ? 'switch-wrapper' : 'switch-wrapper-disabled'} onClick={handleClick}>
-                <div id={ IKEnabled ? 'disable-ik' : 'enable-ik'} className='ik-switch'>
-                    <div id={IKEnabled ? 'disable-ik-handle' : 'enable-ik-handle'} className={roverIsConnected && motorsEnabled ? 'switch-handle' : ' switch-handle-disconnected'}>
+            <div id='switch-wrapper' onClick={handleClick}>
+                <div id={IKEnabled ? 'disable-ik' : 'enable-ik'} className='ik-switch'>
+                    <div id={IKEnabled ? 'disable-ik-handle' : 'enable-ik-handle'} className={roverIsConnected ? 'switch-handle' : ' switch-handle-disconnected'}>
                     </div>
                 </div>
             </div>
