@@ -12,7 +12,7 @@ const inputMiddleware = store => next => action => {
     if (action.type === enableIK.type) {
       store.dispatch(messageRover({
         message: {
-          type: "setArmIKEnabled",
+          type: "requestArmIKEnabled",
           enabled: action.payload.enable
         }
       }));

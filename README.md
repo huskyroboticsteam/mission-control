@@ -218,14 +218,14 @@ Sent from Mission Control to instruct Rover to enable or disable inverse kinemat
 ### Parameters
 - `enabled` - whether or not inverse kinematics for the arm should be enabled or disabled.
 
-## Report Arm IK Enabled
+## Arm IK Enabled Report
 ### Description
 Sent from Rover to inform Mission Control whether or not the Rover has enabled or disabled inverse kinematics.
 
 ### Syntax
 ```
 {
-  type: "reportArmIKEnabled",
+  type: "armIKEnabledReport",
   enabled: boolean
 }
 ```
