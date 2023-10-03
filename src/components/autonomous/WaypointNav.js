@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectLatitude, selectLongitude, selectIsApproximate, selectIsGated, requestWaypointNav } from "../../store/waypointNavSlice";
 import { selectOpMode } from "../../store/opModeSlice";
 import "./WaypointNav.css";
+import { useEffect } from "react";
 
 function WaypointNav() {
   const dispatch = useDispatch();
@@ -10,9 +11,10 @@ function WaypointNav() {
   var longitudeGiven = useSelector(selectLongitude);
   var isApproximate = useSelector(selectIsApproximate);
   var isGated = useSelector(selectIsGated);
-  const opMode = useSelector(selectOpMode);
+  var opMode = useSelector(selectOpMode);
 
   const handleClick = () => {
+    console.log("hey");
     updateLatitude();
     updateLongitude();
     updateIsApproximate();
@@ -26,7 +28,6 @@ function WaypointNav() {
                                       gated: isGated}));
     }
 
-    return false;
   };
 
   const updateLatitude = () => {
@@ -45,13 +46,7 @@ function WaypointNav() {
   const updateIsGate = () => {
     isGated = document.getElementById('isGate').checked;
   };
-
-  let button;
-  if (opMode === "autonomous") {
-    button = <button type="button" onClick={handleClick}>Go</button>
-  } else {
-    button = <button disabled>Go</button>
-  }
+  
 // move longitude down, move checkboxes togethers
   return (<form className="waypoint-select">
     <div className="waypoint-select__params">
@@ -70,7 +65,7 @@ function WaypointNav() {
         </div>
       </div>
     </div>
-    {button}
+    {opMode === "teleoperation" ? <button onClick={handleClick}>Go</button> : <button disabled>Auto</button>}
   </form>
   );
 }
