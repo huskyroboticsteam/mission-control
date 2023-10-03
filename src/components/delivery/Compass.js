@@ -41,8 +41,14 @@ const Compass = () => {
     }
   }
 
-  const longitude = Math.round(posX);
-  const latitude = Math.round(posY);
+
+  let longitude;
+  let latitude;
+  if(longitude != null && latitude != null) {
+    longitude = posX.toFixed(6);
+    latitude = posY.toFixed(6);
+  }
+
   const altitude = posZ;
   const heading = yaw ? -yaw : undefined; // yaw is CCW, heading is CW
 
