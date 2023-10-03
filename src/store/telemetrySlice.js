@@ -5,9 +5,8 @@ const initialState = {
     orientX: null,
     orientY: null,
     orientZ: null,
-    posX: null,
-    posY: null,
-    posZ: null,
+    lon: null,
+    lat: null,
     recency: null
 }
 
@@ -16,14 +15,13 @@ const telemetrySlice = createSlice({
     initialState,
     reducers: {
         roverPositionReportReceived(state, action) {
-            const { orientW, orientX, orientY, orientZ, posX, posY, posZ, recency } = action.payload;
+            const { orientW, orientX, orientY, orientZ, lon, lat, recency } = action.payload;
             state.orientW = orientW;
             state.orientX = orientX;
             state.orientY = orientY;
             state.orientZ = orientZ;
-            state.posX = posX;
-            state.posY = posY;
-            state.posZ = posZ;
+            state.lon = lon;
+            state.lat = lat;
             state.recency = recency;
         }
     }
