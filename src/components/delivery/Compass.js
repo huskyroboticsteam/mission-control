@@ -14,7 +14,7 @@ function getAttitude(roll, pitch) {
 }
 
 const Compass = () => {
-  const {orientW, orientX, orientY, orientZ, posX, posY, posZ} = useSelector(selectRoverPosition);
+  const {orientW, orientX, orientY, orientZ, lon, lat} = useSelector(selectRoverPosition);
 
   let roll;
   let pitch;
@@ -41,9 +41,8 @@ const Compass = () => {
     }
   }
 
-  const longitude = posX;
-  const latitude = posY;
-  const altitude = posZ;
+  const longitude = lon;
+  const latitude = lat;
   const heading = yaw ? -yaw : undefined; // yaw is CCW, heading is CW
 
   return (
