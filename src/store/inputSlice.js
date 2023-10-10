@@ -35,7 +35,8 @@ const initialState = {
       straight: 0,
       steer: 0,
       tankLeft: 0,
-      tankRight: 0
+      tankRight: 0,
+      activeSuspension: 0
     },
     arm: {
       armBase: 0,
@@ -44,10 +45,15 @@ const initialState = {
       forearm: 0,
       wrist: 0,
       hand: 0,
+      ikUp: 0,
+      ikForward: 0,
     },
     science: {
       lazySusanPosition: 0
     }
+  },
+  inverseKinematics: {
+    enabled: false
   }
 };
 
@@ -83,7 +89,8 @@ const inputSlice = createSlice({
         // TODO: fix this? Why is this happening? Bug in react-gamepad??
         state[gamepadName][axisName] = (value + 1) / 2.0;
       } else {
-        state[gamepadName][axisName] = value;
+        let scaledValue = value * Math.abs(value);
+        state[gamepadName][axisName] = scaledValue;
       }
       computeInput(prevState, state, action);
     },
@@ -114,6 +121,11 @@ const inputSlice = createSlice({
       if (index !== -1)
         state.keyboard.pressedKeys.splice(index, 1);
       computeInput(prevState, state, action);
+    },
+
+    enableIK(state, action) {
+      const { enable } = action.payload;
+      state.inverseKinematics.enabled = enable;
     }
   }
 });
@@ -145,6 +157,7 @@ function computeDriveInput(state, action) {
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
   driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+  driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
@@ -166,12 +179,25 @@ function computeArmInput(state) {
   armInput.armBase =
     peripheralGamepad["LeftStickX"] +
     getAxisFromKeys(pressedKeys, "A", "D");
-  armInput.shoulder =
-    peripheralGamepad["LeftStickY"] +
-    getAxisFromKeys(pressedKeys, "S", "W");
-  armInput.elbow =
-    peripheralGamepad["RightStickY"] +
-    getAxisFromKeys(pressedKeys, "G", "T");
+  if (state.inverseKinematics.enabled) {
+    armInput.ikForward =
+      -peripheralGamepad["LeftStickY"] +
+      getAxisFromKeys(pressedKeys, "S", "W");
+    armInput.ikUp =
+      peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "G", "T");
+    armInput.shoulder = 0;
+    armInput.elbow = 0;
+  } else {
+    armInput.shoulder =
+      peripheralGamepad["LeftStickY"] +
+      getAxisFromKeys(pressedKeys, "S", "W");
+    armInput.elbow =
+      peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "G", "T");
+    armInput.ikUp = 0;
+    armInput.ikForward = 0;
+  }
   armInput.forearm =
     peripheralGamepad["RightStickX"] +
     getAxisFromKeys(pressedKeys, "F", "H");
@@ -244,10 +270,12 @@ export const {
   gamepadAxisChanged,
   gamepadButtonChanged,
   keyPressed,
-  keyReleased
+  keyReleased,
+  enableIK
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
 export const selectDriveGamepad = state => state.input.driveGamepad;
 export const selectPeripheralGamepad = state => state.input.peripheralGamepad;
+export const selectInverseKinematicsEnabled = state => state.input.inverseKinematics.enabled;
 export default inputSlice.reducer;

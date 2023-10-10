@@ -7,7 +7,10 @@ const jointNames = [
   "forearm",
   "wrist",
   "hand",
-  "drillArm"
+  "drillArm",
+  "activeSuspension",
+  "ikUp",
+  "ikForward"
 ];
 
 const initialState = jointNames.reduce((state, jointName) => ({
@@ -39,6 +42,7 @@ const jointsSlice = createSlice({
       const { jointName, position } = action.payload;
       const joint = state[jointName];
       joint.currentPosition = position;
+      return state;
     }
   }
 });

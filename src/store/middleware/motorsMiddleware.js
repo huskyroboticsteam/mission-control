@@ -2,6 +2,7 @@ import { motorStatusReportReceived, enableMotors } from "../motorsSlice";
 import { messageReceivedFromRover } from "../roverSocketSlice";
 import { requestDrive } from "../driveSlice";
 import { requestJointPower, selectAllJointNames } from "../jointsSlice";
+import { enableIK } from "../inputSlice";
 
 /**
  * Middleware that handles receiving motor telemetry.
@@ -24,6 +25,8 @@ const motorsMiddleware = store => next => action => {
 
     case enableMotors.type: {
       const { enabled } = action.payload;
+      // send ik packet with false
+      store.dispatch(enableIK({ enable: false }));
       if (!enabled) {
         store.dispatch(requestDrive({
           straight: 0,

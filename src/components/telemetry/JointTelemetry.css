@@ -1,0 +1,41 @@
+.motor-telemetry {
+  width: 100%;
+  height: 100%;
+  color: #eee;
+  flex: 0.5;
+}
+
+.motor-telemetry table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+}
+
+.motor-telemetry tr {
+  padding: 0;
+}
+
+.motor-telemetry tr:nth-child(odd) {
+  background-color: #444;
+}
+
+.motor-telemetry tr:nth-child(even) {
+  background-color: #252525;
+}
+
+.motor-telemetry th {
+  background-color: #252525;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.motor-telemetry td {
+  width: calc(100% / 3);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.motor-telemetry td:nth-child(2), .motor-telemetry th:nth-child(2) {
+  border-left: 2px solid #666;
+  border-right: 2px solid #666;
+}
