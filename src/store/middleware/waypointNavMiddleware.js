@@ -1,4 +1,4 @@
-import { roverConnected, messageRover } from "../roverSocketSlice";
+import { messageRover } from "../roverSocketSlice";
 import { requestWaypointNav } from "../waypointNavSlice";
 
 const waypointNavMiddleware = store => next => action => {
@@ -6,7 +6,6 @@ const waypointNavMiddleware = store => next => action => {
 
   switch (action.type) {
     case requestWaypointNav.type:
-    case roverConnected.type: {
       store.dispatch(messageRover({
         message: {
           type: "waypointNavRequest",
@@ -17,7 +16,6 @@ const waypointNavMiddleware = store => next => action => {
         }
       }));
       break;
-    }
 
     default: break;
   }

@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectLatitude, selectLongitude, selectIsApproximate, selectIsGated, requestWaypointNav } from "../../store/waypointNavSlice";
 import { selectOpMode } from "../../store/opModeSlice";
 import "./WaypointNav.css";
-import { useEffect } from "react";
 
 function WaypointNav() {
   const dispatch = useDispatch();
