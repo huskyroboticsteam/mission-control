@@ -5,66 +5,40 @@ import "./WaypointNav.css";
 
 function WaypointNav() {
   const dispatch = useDispatch();
-
-  var latitudeGiven = useSelector(selectLatitude);
-  var longitudeGiven = useSelector(selectLongitude);
-  var isApproximate = useSelector(selectIsApproximate);
-  var isGated = useSelector(selectIsGated);
   var opMode = useSelector(selectOpMode);
 
-  const handleClick = () => {
+  function handleSubmit (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
     console.log("hey");
-    updateLatitude();
-    updateLongitude();
-    updateIsApproximate();
-    updateIsGate();
 
     // Only send the event in autonomous mode
     if (opMode === "autonomous") {
-        dispatch(requestWaypointNav({ latitude: latitudeGiven,
-                                      longitude: longitudeGiven,
-                                      approximate: isApproximate,
-                                      gated: isGated}));
+        console.log(formJson);
+        dispatch(requestWaypointNav(formJson));
     }
-
-  };
-
-  const updateLatitude = () => {
-    latitudeGiven = document.getElementById('latitude').value;
-  };
-
-  const updateLongitude = () => {
-    longitudeGiven = document.getElementById('longitude').value;
-  };
-
-  const updateIsApproximate = () => {
-    isApproximate = document.getElementById('isApproximate').checked;
-  };
-
-
-  const updateIsGate = () => {
-    isGated = document.getElementById('isGate').checked;
   };
   
 // move longitude down, move checkboxes togethers
-  return (<form className="waypoint-select">
+  return (
+  <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
       <label for="latitude">Latitude</label>
-      <input type="number" id="latitude" placeholder="Latitude" />
+      <input type="number" name="latitude" placeholder="Latitude" />
       <label for="longitude">Longitude</label>
-      <input type="number" id="longitude" placeholder="Longitude" />
+      <input type="number" name="longitude" placeholder="Longitude" />
       <div className="waypoint-checkbox">
         <div>
-          <input type="checkbox" id="isApproximate" />
-          <label for="isApproximate"> Approximate</label>
+          <label> <input type="checkbox" name="isApproximate" /> Approximate</label>
         </div>
         <div>
-          <input type="checkbox" id="isGate" />
-          <label for="isGate"> Is Gate</label>
+          <label> <input type="checkbox" name="isGate" /> Is Gate</label>
         </div>
       </div>
     </div>
-    {opMode === "teleoperation" ? <button onClick={handleClick}>Go</button> : <button disabled>Auto</button>}
+    {opMode === "autonomous" ? <button type="submit">Go</button> : <button disabled>TeleOp</button>}
   </form>
   );
 }
