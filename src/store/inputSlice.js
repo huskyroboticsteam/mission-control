@@ -128,7 +128,7 @@ const inputSlice = createSlice({
     },
 
     visuallyEnableIK(state, action) {
-      const { enable } = action.payload;
+      const enable = action.payload;
       state.inverseKinematics.enabled = enable;
     }
   }
