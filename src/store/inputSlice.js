@@ -53,7 +53,8 @@ const initialState = {
     }
   },
   inverseKinematics: {
-    enabled: false
+    enabled: false,
+    lastSentArmIKState: false
   }
 };
 
@@ -124,7 +125,7 @@ const inputSlice = createSlice({
     },
 
     enableIK(state, action) {
-
+      state.inverseKinematics.lastSentArmIKState = action.payload.enable;
     },
 
     visuallyEnableIK(state, action) {

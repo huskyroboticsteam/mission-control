@@ -44,7 +44,8 @@ const inputMiddleware = store => next => action => {
       case messageReceivedFromRover.type: {
         const { message } = action.payload;
         if (message.type === "armIKEnabledReport") {
-          if (message.enabled === store.getState().input.inverseKinematics.enabled) {
+          console.log(store.getState().input.inverseKinematics.lastSentArmIKState);
+          if (store.getState().input.inverseKinematics.lastSentArmIKState !== message.enabled) {
             alert("Arm IK was unable to be " + (!message.enabled ? "enabled." : "disabled."));
           }
           store.dispatch(visuallyEnableIK(message.enabled));
