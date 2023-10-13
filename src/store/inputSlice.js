@@ -54,7 +54,7 @@ const initialState = {
   },
   inverseKinematics: {
     enabled: false,
-    lastSentArmIKState: false
+    lastSentArmIKState: null
   }
 };
 
