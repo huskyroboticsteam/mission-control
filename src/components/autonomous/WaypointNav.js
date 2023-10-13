@@ -12,7 +12,6 @@ function WaypointNav() {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    console.log("hey");
 
     // Only send the event in autonomous mode
     if (opMode === "autonomous") {
