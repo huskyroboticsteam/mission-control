@@ -38,7 +38,7 @@ function WaypointNav() {
         </div>
       </div>
     </div>
-    {opMode === "autonomous" ? <button type="submit">Go</button> : <buttonDisabled disabled>TeleOp</buttonDisabled>}
+    {opMode === "autonomous" ? <button type="submit">Go</button> : <buttonDisabled disabled>Go</buttonDisabled>}
   </form>
   );
 }
