@@ -12,6 +12,7 @@ import planVizReducer from "./planVizSlice";
 import scienceReducer from "./scienceSlice";
 import loggingReducer from "./loggingSlice";
 import telemetryReducer from "./telemetrySlice";
+import waypointNavReducer from "./waypointNavSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import peripheralsMiddleware from "./middleware/peripheralsMiddleware";
 import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
@@ -25,6 +26,7 @@ import planVizMiddleware from "./middleware/planVizMiddleware";
 import scienceMiddleware from "./middleware/scienceMiddleware";
 import loggingMiddleware from "./middleware/loggingMiddleware";
 import telemetryMiddleware from "./middleware/telemetryMiddleware";
+import waypointNavMiddleware from "./middleware/waypointNavMiddleware";
 
 export default configureStore({
   reducer: {
@@ -40,7 +42,8 @@ export default configureStore({
     planViz: planVizReducer,
     science: scienceReducer,
     logging: loggingReducer,
-    telemetry: telemetryReducer
+    telemetry: telemetryReducer,
+    waypointNav: waypointNavReducer
   },
 
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat([
@@ -56,6 +59,7 @@ export default configureStore({
     planVizMiddleware,
     scienceMiddleware,
     loggingMiddleware,
-    telemetryMiddleware
+    telemetryMiddleware,
+    waypointNavMiddleware
   ])
 });
