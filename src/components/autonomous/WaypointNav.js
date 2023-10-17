@@ -24,16 +24,16 @@ function WaypointNav() {
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
-      <label for="latitude">Latitude</label>
-      <input type="number" name="latitude" placeholder="Latitude" />
+    <label for="latitude">Latitude</label>
+    {opMode === "autonomous" ? <input disabled type="number" name="latitude" placeholder="Latitude" /> : <input type="number" name="latitude" placeholder="Latitude" />}
       <label for="longitude">Longitude</label>
-      <input type="number" name="longitude" placeholder="Longitude" />
+      {opMode === "autonomous" ? <input disabled type="number" name="longitude" placeholder="Longitude" /> : <input type="number" name="longitude" placeholder="Longitude" />}
       <div className="waypoint-checkbox">
         <div>
-          <label> <input type="checkbox" name="isApproximate" /> Approximate</label>
+          <label>{opMode === "autonomous" ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
         </div>
         <div>
-          <label> <input type="checkbox" name="isGate" /> Is Gate</label>
+          <label>{opMode === "autonomous" ? <input disabled type="checkbox" name="isGate" />: <input type="checkbox" name="isGate" />} Is Gate</label>
         </div>
       </div>
     </div>
