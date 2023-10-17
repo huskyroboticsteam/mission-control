@@ -31,6 +31,7 @@
   color: rgb(242, 242, 242);
 }
 
+/* Enabled Buttons */
 .waypoint-select > button {
   background-color: #4fb185;
   border: none;
@@ -44,7 +45,8 @@
   width: 50%;
 }
 
-.waypoint-select > buttonDisabled {
+/* Disabled Buttons */
+.waypoint-select > button:disabled {
   background-color: #343836;
   border: none;
   color: white;
@@ -56,6 +58,7 @@
   border-radius: 5px;
   width: 50%;
 }
+
 .waypoint-select > button:hover {
   cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
