@@ -18,8 +18,6 @@ const emergencyStopMiddleware = store => next => action => {
           stop: store.getState().emergencyStop.stopped
         }
       }));
-      // send ik packet with false
-      store.dispatch(enableIK({ enable: false }));
       break;
     }
 
