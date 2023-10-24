@@ -1,6 +1,5 @@
 import { roverConnected, messageRover } from "../roverSocketSlice";
 import { requestStop } from "../emergencyStopSlice";
-import { enableIK } from "../inputSlice";
 
 /**
  * Middleware that handles sending messages to the rover to request emergency

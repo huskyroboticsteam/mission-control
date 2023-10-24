@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import JMuxer from "jmuxer";
 import {
@@ -26,7 +26,26 @@ function CameraStream({ cameraName }) {
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
+  const [popoutWindow, setPopOutWindow] = useState(null);
   const vidTag = <video id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+
+  const handlePopOut = useCallback(() => {
+    if (popoutWindow) {
+      // if the window popout exists
+      popoutWindow.close();
+      setPopOutWindow(null);
+    } else {
+      // if the window popout doesn't exist
+      let newWindow = window.open("", "", "width=500,height=500");
+      newWindow.document.title = cameraTitle + " Stream";
+      // newWindow.document.body.innerHTML = `<div>HEADER</div><div>${JSON.stringify(vidTag)}</div>`;
+      
+      setPopOutWindow(newWindow);
+      newWindow.addEventListener("beforeunload", () => {
+        setPopOutWindow(null);
+      });
+    }
+  }, [popoutWindow, cameraTitle, vidTag]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -70,13 +89,16 @@ function CameraStream({ cameraName }) {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
     setHasRendered(true);
   }, []);
-  
+
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      { vidTag }
+      { !popoutWindow && vidTag }
       { !frameDataArray && <h3>No Stream Available</h3> }
       <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
+      <div className='camera-stream-pop-header'>
+        <span className='camera-stream-pop-button' title={`Open "${cameraTitle}" camera stream in a new window.`} onClick={ handlePopOut }>{ popoutWindow ? 'Close Window' : 'Pop Out' }</span>
+      </div>
     </div>
   );
 }
