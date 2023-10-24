@@ -64,7 +64,6 @@ const Compass = () => {
         <div>heading: {heading ?? "N/A"}</div>
         <div>latitude: {latitude ?? "N/A"}</div>
         <div>longitude: {longitude ?? "N/A"}</div>
-        <div>altitude: {altitude ?? "N/A"}</div>
       </div>
     </div>
   );
