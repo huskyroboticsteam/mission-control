@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
-import ScienceIcon from "@material-ui/icons/Eco";
-import DeliveryIcon from "@material-ui/icons/Terrain";
-import ServicingIcon from "@material-ui/icons/Build";
-import AutonomousIcon from "@material-ui/icons/Code";
-import TelemetryIcon from "@material-ui/icons/Info";
-import AntennaIcon from "@material-ui/icons/SettingsInputAntenna";
-import HelpIcon from "@material-ui/icons/Help";
-import LoggingIcon from "@material-ui/icons/Computer"
+import ScienceIcon from "@mui/icons-material/Eco";
+import DeliveryIcon from "@mui/icons-material/Terrain";
+import ServicingIcon from "@mui/icons-material/Build";
+import AutonomousIcon from "@mui/icons-material/Code";
+import TelemetryIcon from "@mui/icons-material/Info";
+import AntennaIcon from "@mui/icons-material/SettingsInputAntenna";
+import HelpIcon from "@mui/icons-material/Help";
+import LoggingIcon from "@mui/icons-material/Computer"
 import "./Navbar.css";
 
 function Navbar() {
