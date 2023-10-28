@@ -236,9 +236,8 @@ Sent from the rover to inform Mission Control of the rover's current position in
   orientX: number,
   orientY: number,
   orientZ: number,
-  posX: number,
-  posY: number,
-  posZ: number,
+  lon: number,
+  lat: number,
   recency: number
 }
 ```
@@ -247,9 +246,8 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `orientX` - refers to the orientation quaternion X component
 - `orientY` - refers to the orientation quaternion Y component
 - `orientZ` - refers to the orientation quaternion Z component
-- `posX` - refers to the X position of the rover in world reference frame in meters
-- `posY` - refers to the Y position of the rover in world reference frame in meters
-- `posZ` - refers to the Z position of the rover in world reference frame in meters
+- `lon` - refers to the longitude of the rover in world reference frame in degrees in floating point values
+- `lat` - refers to the latitude of the rover in world reference frame in degrees in floating point values
 - `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request
