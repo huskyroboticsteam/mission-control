@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SciencePanel from "../science/SciencePanel";
 import DeliveryPanel from "../delivery/DeliveryPanel";
 import ServicingPanel from "../servicing/ServicingPanel";
@@ -11,7 +11,7 @@ import "./PanelContainer.css";
 function PanelContainer() {
   return (
     <div className="panel-container">
-      <Switch>
+      <Routes>
         <Route path="/science">
           <SciencePanel />
         </Route>
@@ -43,8 +43,8 @@ function PanelContainer() {
           <LoggingPanel />
         </Route>
 
-        <Redirect to="/science" />
-      </Switch>
+        <Navigate to="/science" />
+      </Routes>
     </div>
   );
 }
