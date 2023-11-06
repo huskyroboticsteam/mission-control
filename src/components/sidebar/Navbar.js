@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import ScienceIcon from "@mui/icons-material/Eco";
+import ScienceIcon from "@mui/icons-material/Science";
 import DeliveryIcon from "@mui/icons-material/Terrain";
 import ServicingIcon from "@mui/icons-material/Build";
 import AutonomousIcon from "@mui/icons-material/Code";
