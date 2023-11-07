@@ -22,10 +22,10 @@ function PanelContainer() {
 
         <Route path="/telemetry" element={<TelemetryPanel/>}/>
 
+        <Route path="/antenna"/>
 
-        <Route path="/antenna">
-        </Route>
-
+        <Route path="/logging" element={<LoggingPanel/>}/>
+        
         <Route path="/help" element={<HelpPanel/>}/>
 
         <Route path="/telemetry" element={<HelpPanel/>}/>
