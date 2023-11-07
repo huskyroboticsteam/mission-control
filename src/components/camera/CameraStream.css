@@ -25,12 +25,6 @@
   z-index: 5;
 }
 
-.camera-stream > img {
-  width: 100%;
-  height: 100%;
-  -webkit-user-drag: none;
-}
-
 .camera-stream > h3 {
   position: absolute;
   top: 35%;

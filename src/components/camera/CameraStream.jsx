@@ -37,9 +37,23 @@ function CameraStream({ cameraName }) {
     } else {
       // if the window popout doesn't exist
       let newWindow = window.open("", "", "width=500,height=500");
+      newWindow.document.body.style.margin = "0";
       newWindow.document.title = cameraTitle + " Stream";
-      // newWindow.document.body.innerHTML = `<div>HEADER</div><div>${JSON.stringify(vidTag)}</div>`;
-      
+      newWindow.document.body.innerHTML = `
+      <div style="width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;">
+        <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
+        <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
+        <canvas id="ext-vid" style="z-index:1;border:none;"></canvas>
+      </div>`;
+
+      let canvas = newWindow.document.querySelector('#ext-vid');
+      let context = canvas.getContext('2d');
+
+      canvas.width = 500;
+      canvas.height = 499;
+      context.fillStyle = "black";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
       setPopOutWindow(newWindow);
       newWindow.addEventListener("beforeunload", () => {
         setPopOutWindow(null);
@@ -73,6 +87,15 @@ function CameraStream({ cameraName }) {
         jmuxer.feed({
           video: new Uint8Array(frameDataArray[i])
         });
+
+        if (popoutWindow) {
+          // draw it onto the popout window
+          let canvas = popoutWindow.document.querySelector('#ext-vid');
+          let context = canvas.getContext('2d');
+          canvas.width = Math.floor(popoutWindow.innerWidth);
+          canvas.height = Math.floor(popoutWindow.innerHeight);
+          context.drawImage(document.getElementById(vidTag.props.id), 0, 0, canvas.width, canvas.height);
+        }
       }
       const currentTime = Date.now();
       if (currentTime !== lastFrameTime) {
@@ -83,7 +106,7 @@ function CameraStream({ cameraName }) {
       setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line
-  }, [frameDataArray]);
+  }, [frameDataArray, popoutWindow]);
   
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
@@ -93,11 +116,15 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      { !popoutWindow && vidTag }
+      { vidTag }
       { !frameDataArray && <h3>No Stream Available</h3> }
       <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
       <div className='camera-stream-pop-header'>
-        <span className='camera-stream-pop-button' title={`Open "${cameraTitle}" camera stream in a new window.`} onClick={ handlePopOut }>{ popoutWindow ? 'Close Window' : 'Pop Out' }</span>
+        <span className='camera-stream-pop-button'
+        title={`Open "${cameraTitle}" camera stream in a new window.`}
+        onClick={ handlePopOut }>
+          { popoutWindow ? 'Merge Window' : 'Pop Out' }
+        </span>
       </div>
     </div>
   );
