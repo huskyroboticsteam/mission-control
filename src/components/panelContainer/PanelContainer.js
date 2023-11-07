@@ -31,6 +31,7 @@ function PanelContainer() {
         <Route path="/telemetry" element={<HelpPanel/>}/>
 
       </Routes>
+      <Navigate from='/' to='/science' />
     </div>
   );
 }
