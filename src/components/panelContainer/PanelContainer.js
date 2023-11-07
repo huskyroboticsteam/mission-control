@@ -1,5 +1,4 @@
 import { Switch, Route, Redirect } from "react-router-dom";
-import SciencePanel from "../science/SciencePanel";
 import DeliveryPanel from "../delivery/DeliveryPanel";
 import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
@@ -12,9 +11,6 @@ function PanelContainer() {
   return (
     <div className="panel-container">
       <Switch>
-        <Route path="/science">
-          <SciencePanel />
-        </Route>
 
         <Route path="/delivery">
           <DeliveryPanel />
@@ -32,10 +28,7 @@ function PanelContainer() {
           <TelemetryPanel />
         </Route>
 
-        <Route path="/antenna">
-        </Route>
-
-        <Route path="/help">
+        <Route path="/help">u
           <HelpPanel />
         </Route>
 
@@ -43,7 +36,7 @@ function PanelContainer() {
           <LoggingPanel />
         </Route>
 
-        <Redirect to="/science" />
+        <Redirect to="/delivery" />
       </Switch>
     </div>
   );

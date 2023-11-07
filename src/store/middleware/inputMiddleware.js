@@ -1,6 +1,5 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
-import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK } from "../inputSlice";
 import { messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
@@ -77,15 +76,7 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === "scienceStation")
-    updateScienceStation(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      dispatch
-    );
-  else if (mountedPeripheral === "arm")
+  if (mountedPeripheral === "arm")
     updateArm(
       prevComputedInput,
       computedInput,
@@ -93,21 +84,6 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
-}
-
-function updateScienceStation(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  const scienceInput = computedInput.science;
-  const prevScienceInput = prevComputedInput.science;
-  if (scienceInput.lazySusanPosition !== prevScienceInput.lazySusanPosition || true)
-    dispatch(requestLazySusanPosition({
-      position: computedInput.science.lazySusanPosition
-    }));
 }
 
 function updateArm(
