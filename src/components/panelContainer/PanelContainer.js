@@ -12,38 +12,24 @@ function PanelContainer() {
   return (
     <div className="panel-container">
       <Routes>
-        <Route path="/science">
-          <SciencePanel />
-        </Route>
+        <Route path="/science" element={<SciencePanel/>}/>
 
-        <Route path="/delivery">
-          <DeliveryPanel />
-        </Route>
+        <Route path="/delivery" element={<DeliveryPanel/>}/>
 
-        <Route path="/servicing">
-          <ServicingPanel />
-        </Route>
+        <Route path="/servicing" element={<ServicingPanel/>}/>
 
-        <Route path="/autonomous">
-          <AutonomousPanel />
-        </Route>
+        <Route path="/autonomous" element={<AutonomousPanel/>}/>
 
-        <Route path="/telemetry">
-          <TelemetryPanel />
-        </Route>
+        <Route path="/telemetry" element={<TelemetryPanel/>}/>
+
 
         <Route path="/antenna">
         </Route>
 
-        <Route path="/help">
-          <HelpPanel />
-        </Route>
+        <Route path="/help" element={<HelpPanel/>}/>
 
-        <Route path="/logging">
-          <LoggingPanel />
-        </Route>
+        <Route path="/telemetry" element={<HelpPanel/>}/>
 
-        <Navigate to="/science" />
       </Routes>
     </div>
   );
