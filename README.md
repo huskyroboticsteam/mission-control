@@ -4,8 +4,38 @@ The user interface for remotely operating the Husky Robotics rover.
 ## Overview
 Mission Control creates a WebSocket client to connect directly to the rover WebSocket server at the URL `ws://localhost:3001/mission-control`. Mission Control will automatically connect to the rover server and reconnect as needed, providing a visual indication of the connection status. Mission Control and the rover server communicate with each other by sending JSON objects termed *messages* over the WebSocket connection. Through these messages, Mission Control can request that the rover perform certain actions, such as drive with a specified velocity. Additionally, the rover server provides Mission Control with data such as camera streams and motor positions through these messages.
 
+## Versioning
+The versions of Node.js packages from NPM are as follows:
+
++ Material UI: 5.14.17
+
++ React: 18.2.0
++ React Dom: 18.2.0
++ React Router Dom: 6.17.0
++ React Redux: 8.1.3
++ React Gamepad: 1.0.3
++ React Three 
+  + drei: 9.88.7
+  + fiber: 8.15.8
++ React Scripts: 5.0.1
+
++ Math.gl Core: 4.0.0
++ glMatrix: 3.4.3
+
++ Three: 0.158.0
++ jMuxer: 2.0.5
++ Stream: 0.0.2
++ Reduxjs Toolkit": 1.9.7
+
++ Testing Library
+  + React: 14.0.0
+  + user-event: 14.5.1
+  + jest-dom: 6.1.4
+
+If any build or runtime errors appear (eg. a new major version of a package comes out), *TELL SOMEONE* so we can address it.
+
 ## Setup
-1. Install Node.js.
+1. Install Node.js. You will need version 20 (The Long-Term Support (LTS) version)
     - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for your operating system.
     - **Linux**: Run `sudo apt install nodejs && sudo apt install npm` in your terminal.
 2. Run `git clone https://github.com/huskyroboticsteam/mission-control.git` in your terminal to clone the Mission Control repository to your local storage.
