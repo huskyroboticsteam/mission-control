@@ -14,9 +14,23 @@
     margin-bottom: 5px;
 }
 
+#enable-ik-title-disabled {
+    color: gray;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
 #switch-wrapper {
     width: 100px;
     height: 30px;
+    cursor: pointer;
+}
+
+#switch-wrapper-disabled {
+    width: 100px;
+    height: 30px;
+    cursor: not-allowed;
 }
 
 #enable-ik {

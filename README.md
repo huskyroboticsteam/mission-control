@@ -38,7 +38,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2023.2.0`)
+## Messages (`v2024.0.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -122,7 +122,7 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 
 ## Holonomic Drive Request
 ### Description
-Sent from Mission Control to instruct the rover to drive with holonomic capabilities 
+Sent from Mission Control to instruct the rover to drive with holonomic capabilities
 (i.e., it can rotate independently without requiring translational motion).
 
 ### Syntax
@@ -236,9 +236,8 @@ Sent from the rover to inform Mission Control of the rover's current position in
   orientX: number,
   orientY: number,
   orientZ: number,
-  posX: number,
-  posY: number,
-  posZ: number,
+  lon: number,
+  lat: number,
   recency: number
 }
 ```
@@ -247,9 +246,8 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `orientX` - refers to the orientation quaternion X component
 - `orientY` - refers to the orientation quaternion Y component
 - `orientZ` - refers to the orientation quaternion Z component
-- `posX` - refers to the X position of the rover in world reference frame in meters
-- `posY` - refers to the Y position of the rover in world reference frame in meters
-- `posZ` - refers to the Z position of the rover in world reference frame in meters
+- `lon` - refers to the longitude of the rover in world reference frame in degrees in floating point values
+- `lat` - refers to the latitude of the rover in world reference frame in degrees in floating point values
 - `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request
@@ -301,6 +299,28 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ### Parameters
 - `camera` - the name of the camera
 - `data` - the raw h264 frame data, or `null` if no data is available
+
+
+## Autonomous Waypoint Navigation Request
+### Description
+Sent from Mission Control to instruct the rover to navigate to the next waypoint. This message will only be sent if the rover is in autonomous mode.
+
+### Syntax
+```
+{
+  type: "waypointNavRequest",
+  latitude: number,
+  longitude: number,
+  isApproximate: boolean,
+  isGate: boolean
+}
+```
+
+### Parameters
+- `latitude` - the latitude of the waypoint in degrees
+- `longitude` - the longitude of the waypoint in degrees
+- `isApproximate` - denotes whether the location is an approximate location (See section 1.e.v [URC Rules](https://urc.marssociety.org/home/requirements-guidelines))
+- `isGate` - denotes whether the location is a gate (two posts the rover must pass between)
 
 ## Autonomous Planned Path Report
 ### Description
@@ -399,7 +419,7 @@ Sent from Mission Control to instruct the rover server turn the science drill in
 ```
 
 ### Paremeters
-- `direction` - `-1` to turn in reverse, `0` to stop, `1` to turn forward 
+- `direction` - `-1` to turn in reverse, `0` to stop, `1` to turn forward
 
 ## Syringe Dispense Request
 ### Description

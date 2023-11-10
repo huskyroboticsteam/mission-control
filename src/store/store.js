@@ -10,6 +10,7 @@ import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
 import loggingReducer from "./loggingSlice";
 import telemetryReducer from "./telemetrySlice";
+import waypointNavReducer from "./waypointNavSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import peripheralsMiddleware from "./middleware/peripheralsMiddleware";
 import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
@@ -21,6 +22,7 @@ import motorsMiddleware from "./middleware/motorsMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
 import loggingMiddleware from "./middleware/loggingMiddleware";
 import telemetryMiddleware from "./middleware/telemetryMiddleware";
+import waypointNavMiddleware from "./middleware/waypointNavMiddleware";
 
 export default configureStore({
   reducer: {
@@ -34,7 +36,8 @@ export default configureStore({
     motors: motorsReducer,
     cameras: camerasReducer,
     logging: loggingReducer,
-    telemetry: telemetryReducer
+    telemetry: telemetryReducer,
+    waypointNav: waypointNavReducer
   },
 
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat([
@@ -48,6 +51,7 @@ export default configureStore({
     motorsMiddleware,
     camerasMiddleware,
     loggingMiddleware,
-    telemetryMiddleware
+    telemetryMiddleware,
+    waypointNavMiddleware
   ])
 });
