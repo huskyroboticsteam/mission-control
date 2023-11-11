@@ -27,7 +27,10 @@ function CameraStream({ cameraName }) {
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
   const [popoutWindow, setPopOutWindow] = useState(null);
-  const vidTag = <video id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+  
+  const vidTag = useMemo(() => {
+    return <video style={{display: popoutWindow ? 'none' : 'block'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+  }, [cameraName, cameraTitle, popoutWindow])
 
   const handlePopOut = useCallback(() => {
     if (popoutWindow) {
@@ -59,7 +62,7 @@ function CameraStream({ cameraName }) {
         setPopOutWindow(null);
       });
     }
-  }, [popoutWindow, cameraTitle, vidTag]);
+  }, [popoutWindow, cameraTitle]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -117,7 +120,7 @@ function CameraStream({ cameraName }) {
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
       { vidTag }
-      { !frameDataArray && <h3>No Stream Available</h3> }
+      { popoutWindow ? <h3>Stream In External Window</h3> : (!frameDataArray && <h3>No Stream Available</h3>) }
       <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
       <div className='camera-stream-pop-header'>
         <span className='camera-stream-pop-button'
