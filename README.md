@@ -5,39 +5,21 @@ The user interface for remotely operating the Husky Robotics rover.
 Mission Control creates a WebSocket client to connect directly to the rover WebSocket server at the URL `ws://localhost:3001/mission-control`. Mission Control will automatically connect to the rover server and reconnect as needed, providing a visual indication of the connection status. Mission Control and the rover server communicate with each other by sending JSON objects termed *messages* over the WebSocket connection. Through these messages, Mission Control can request that the rover perform certain actions, such as drive with a specified velocity. Additionally, the rover server provides Mission Control with data such as camera streams and motor positions through these messages.
 
 ## Versioning
-The versions of Node.js packages from NPM are as follows:
-
-+ Material UI: 5.14.17
-
-+ React: 18.2.0
-+ React Dom: 18.2.0
-+ React Router Dom: 6.17.0
-+ React Redux: 8.1.3
-+ React Gamepad: 1.0.3
-+ React Three 
-  + drei: 9.88.7
-  + fiber: 8.15.8
-+ React Scripts: 5.0.1
-
-+ Math.gl Core: 4.0.0
-+ glMatrix: 3.4.3
-
-+ Three: 0.158.0
-+ jMuxer: 2.0.5
-+ Stream: 0.0.2
-+ Reduxjs Toolkit": 1.9.7
-
-+ Testing Library
-  + React: 14.0.0
-  + user-event: 14.5.1
-  + jest-dom: 6.1.4
+The Version of Node and NPM we are using is version 20 (latest tested version is 20.9.0)
 
 If any build or runtime errors appear (eg. a new major version of a package comes out), *TELL SOMEONE* so we can address it.
 
 ## Setup
 1. Install Node.js. You will need version 20 (The Long-Term Support (LTS) version)
-    - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for your operating system.
-    - **Linux**: Run `sudo apt install nodejs && sudo apt install npm` in your terminal.
+    - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for Nod 20 on your operating system.
+    - **Linux**: Run the following commands in the terminal:
+    1. `sudo apt-get update` (updates package list)
+    2. `sudo apt-get install -y ca-certificates curl gnupg` (install neccessary packages)
+    3. `sudo mkdir -p /etc/apt/keyrings` (makes a directory for the keyring)
+    4. `curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg` (gets and imports the neccesary GPG key)
+    5. `echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list` (writes system information for the Node.js instalation)
+    6. `sudo apt-get update` (one last update)
+    7. `sudo apt-get install nodejs -y` (finally installs Node.js)
 2. Run `git clone https://github.com/huskyroboticsteam/mission-control.git` in your terminal to clone the Mission Control repository to your local storage.
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
