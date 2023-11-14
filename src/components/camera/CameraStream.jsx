@@ -27,6 +27,7 @@ function CameraStream({ cameraName }) {
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
   const [popoutWindow, setPopoutWindow] = useState(null);
+  const [aspectRatio, setAspectRatio] = useState(1);
 
   let cameraCanvas = useRef(null);
   let cameraContext = useRef(null);
@@ -46,20 +47,23 @@ function CameraStream({ cameraName }) {
       newWindow.document.body.style.margin = "0";
       newWindow.document.title = cameraTitle + " Stream";
       newWindow.document.body.innerHTML = `
-      <div style="width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;">
+      <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
         <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
         <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
-        <canvas id="ext-vid" style="z-index:1;border:none;"></canvas>
+        <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
+        </div>
       </div>`;
 
       let canvas = newWindow.document.querySelector('#ext-vid');
       let context = canvas.getContext('2d');
-
-      canvas.width = 500;
-      canvas.height = 499;
+      let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+      setAspectRatio(aspectRatio);
+      
+      canvas.width = aspectRatio * 400;
+      canvas.height = 400;
       context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
-
+      
       setPopoutWindow(newWindow);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
@@ -67,7 +71,7 @@ function CameraStream({ cameraName }) {
         setPopoutWindow(null);
       });
     }
-  }, [popoutWindow, setPopoutWindow, cameraTitle]);
+  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -99,8 +103,17 @@ function CameraStream({ cameraName }) {
 
       if (popoutWindow) {
         // draw it onto the popout window
-        cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
-        cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
+
+        // if the window is wider than the stream
+        if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
+          // set the height of the canvas to the height of the window
+          cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
+          cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
+        } else {
+          // set the width of the canvas to the height of the window
+          cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
+          cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
+        }
         cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       }
       const currentTime = Date.now();
