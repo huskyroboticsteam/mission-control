@@ -26,19 +26,20 @@ function CameraStream({ cameraName }) {
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
-  const [popoutWindow, setPopOutWindow] = useState(null);
+  const [popoutWindow, setPopoutWindow] = useState(null);
+
   let cameraCanvas = useRef(null);
   let cameraContext = useRef(null);
   
   const vidTag = useMemo(() => {
-    return <video style={{display: popoutWindow ? 'none' : 'block'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+    return <video style={{visibility: popoutWindow ? 'hidden' : 'visible'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow])
 
   const handlePopOut = useCallback(() => {
     if (popoutWindow) {
       // if the window popout exists
       popoutWindow.close();
-      setPopOutWindow(null);
+      setPopoutWindow(null);
     } else {
       // if the window popout doesn't exist
       let newWindow = window.open("", "", "width=500,height=500");
@@ -59,14 +60,14 @@ function CameraStream({ cameraName }) {
       context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      setPopOutWindow(newWindow);
+      setPopoutWindow(newWindow);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
       newWindow.addEventListener("beforeunload", () => {
-        setPopOutWindow(null);
+        setPopoutWindow(null);
       });
     }
-  }, [popoutWindow, cameraTitle]);
+  }, [popoutWindow, setPopoutWindow, cameraTitle]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
