@@ -126,6 +126,14 @@ function CameraStream({ cameraName }) {
     }
     // eslint-disable-next-line
   }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
+
+  useEffect(() => {
+    return () => {
+      if (popoutWindow) {
+        popoutWindow.close();
+      }
+    };
+  }, [popoutWindow]);
   
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
