@@ -12,6 +12,8 @@ function PanelContainer() {
   return (
     <div className="panel-container">
       <Routes>
+        <Route path="" element={<Navigate to="/science"/>}/> 
+
         <Route path="/science" element={<SciencePanel/>}/>
 
         <Route path="/delivery" element={<DeliveryPanel/>}/>
@@ -29,9 +31,8 @@ function PanelContainer() {
         <Route path="/help" element={<HelpPanel/>}/>
 
         <Route path="/telemetry" element={<HelpPanel/>}/>
-
+      
       </Routes>
-      <Navigate from='/' to='/science' />
     </div>
   );
 }
