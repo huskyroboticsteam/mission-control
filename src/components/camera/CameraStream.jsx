@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import JMuxer from "jmuxer";
 import {
@@ -27,6 +27,8 @@ function CameraStream({ cameraName }) {
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
   const [popoutWindow, setPopOutWindow] = useState(null);
+  let cameraCanvas = useRef(null);
+  let cameraContext = useRef(null);
   
   const vidTag = useMemo(() => {
     return <video style={{display: popoutWindow ? 'none' : 'block'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
@@ -58,6 +60,8 @@ function CameraStream({ cameraName }) {
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       setPopOutWindow(newWindow);
+      cameraCanvas.current = canvas;
+      cameraContext.current = context;
       newWindow.addEventListener("beforeunload", () => {
         setPopOutWindow(null);
       });
@@ -91,14 +95,13 @@ function CameraStream({ cameraName }) {
           video: new Uint8Array(frameDataArray[i])
         });
 
-        if (popoutWindow) {
-          // draw it onto the popout window
-          let canvas = popoutWindow.document.querySelector('#ext-vid');
-          let context = canvas.getContext('2d');
-          canvas.width = Math.floor(popoutWindow.innerWidth);
-          canvas.height = Math.floor(popoutWindow.innerHeight);
-          context.drawImage(document.getElementById(vidTag.props.id), 0, 0, canvas.width, canvas.height);
-        }
+      }
+
+      if (popoutWindow) {
+        // draw it onto the popout window
+        cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
+        cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
+        cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       }
       const currentTime = Date.now();
       if (currentTime !== lastFrameTime) {
@@ -109,7 +112,7 @@ function CameraStream({ cameraName }) {
       setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line
-  }, [frameDataArray, popoutWindow]);
+  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
   
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
