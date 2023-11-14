@@ -32,7 +32,7 @@ function CameraStream({ cameraName }) {
   let cameraContext = useRef(null);
   
   const vidTag = useMemo(() => {
-    return <video style={{visibility: popoutWindow ? 'hidden' : 'visible'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+    return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow])
 
   const handlePopOut = useCallback(() => {
@@ -95,7 +95,6 @@ function CameraStream({ cameraName }) {
         jmuxer.feed({
           video: new Uint8Array(frameDataArray[i])
         });
-
       }
 
       if (popoutWindow) {
