@@ -11,7 +11,7 @@ If any build or runtime errors appear (eg. a new major version of a package come
 
 ## Setup
 1. Install Node.js. You will need version 20 (The Long-Term Support (LTS) version)
-    - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for Nod 20 on your operating system.
+    - **Windows and macOS**: Download and run [the installer](https://nodejs.org/en/download/) for Node.js v20.x.x on your operating system and your specific processor (ARM vs x64).
     - **Linux**: Run the following commands in the terminal:
     1. `sudo apt-get update` (updates package list)
     2. `sudo apt-get install -y ca-certificates curl gnupg` (install neccessary packages)
