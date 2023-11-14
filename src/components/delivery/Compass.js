@@ -40,9 +40,11 @@ const Compass = () => {
       needleColor = "red";
     }
   }
-
-  const longitude = posX?.toFixed(6);
-  const latitude = posY?.toFixed(6);
+  //if non-negative, add space
+  let longitude = posX?.toFixed(6);
+  let latitude = posY?.toFixed(6);
+  longitude = (posX < 0) ? " "  + longitude : longitude;
+  latitude = (posY < 0) ? " " + latitude : latitude;
   const altitude = posZ;
   const heading = yaw ? -yaw : undefined; // yaw is CCW, heading is CW
 
