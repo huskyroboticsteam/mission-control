@@ -38,7 +38,11 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
+<<<<<<< HEAD
 ## Messages (`v2024.0.01`)
+=======
+## Messages (`v2024.0.0`)
+>>>>>>> 0e7d273fc1b5c1c89648b9c9e88e5b4654b07094
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -122,7 +126,7 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 
 ## Holonomic Drive Request
 ### Description
-Sent from Mission Control to instruct the rover to drive with holonomic capabilities 
+Sent from Mission Control to instruct the rover to drive with holonomic capabilities
 (i.e., it can rotate independently without requiring translational motion).
 
 ### Syntax
@@ -300,6 +304,28 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 - `camera` - the name of the camera
 - `data` - the raw h264 frame data, or `null` if no data is available
 
+
+## Autonomous Waypoint Navigation Request
+### Description
+Sent from Mission Control to instruct the rover to navigate to the next waypoint. This message will only be sent if the rover is in autonomous mode.
+
+### Syntax
+```
+{
+  type: "waypointNavRequest",
+  latitude: number,
+  longitude: number,
+  isApproximate: boolean,
+  isGate: boolean
+}
+```
+
+### Parameters
+- `latitude` - the latitude of the waypoint in degrees
+- `longitude` - the longitude of the waypoint in degrees
+- `isApproximate` - denotes whether the location is an approximate location (See section 1.e.v [URC Rules](https://urc.marssociety.org/home/requirements-guidelines))
+- `isGate` - denotes whether the location is a gate (two posts the rover must pass between)
+
 ## Autonomous Planned Path Report
 ### Description
 Sent from the rover server to inform Mission Control of the currently planned autonomous path for plan visualization.
@@ -354,6 +380,69 @@ Sent from the rover server to inform Mission Control of data provided by the rov
 - `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
 - `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
 
+<<<<<<< HEAD
+=======
+## Lazy Susan Position Request
+### Description
+Sent from Mission Control to instruct the rover server to rotate the lazy Susan to a specified position.
+
+### Syntax
+```
+{
+  type: "lazySusanPositionRequest",
+  position: number
+}
+```
+
+### Paremeters
+- `position` - the requested integer position in [0, 5]
+
+## Lazy Susan Lid Close Request
+### Description
+Sent from Mission Control to instruct the rover server to open or close the lids on the lazy Susan.
+
+### Syntax
+```
+{
+  type: "lazySusanLidCloseRequest",
+  close: boolean
+}
+```
+
+### Paremeters
+- `close` - `true` to close the lids, `false` to open the lids
+
+## Drill Request
+### Description
+Sent from Mission Control to instruct the rover server turn the science drill in a specified direction.
+
+### Syntax
+```
+{
+  type: "drillRequest",
+  direction: -1 | 0 | 1
+}
+```
+
+### Paremeters
+- `direction` - `-1` to turn in reverse, `0` to stop, `1` to turn forward
+
+## Syringe Dispense Request
+### Description
+Sent from Mission Control to instruct the rover server to dispense fluid from the science syringes.
+
+### Syntax
+```
+{
+  type: "syringeDispenseRequest",
+  amount: number
+}
+```
+
+### Parameters
+- `amount` - the amount of fluid to dispense in [0.0, 1.0], where 0.0 corresponds to no fluid dispensed, and 1.0 corresponds to all of the fluid dispensed
+
+>>>>>>> 0e7d273fc1b5c1c89648b9c9e88e5b4654b07094
 ## Log Entry Report
 ### Description
 Sent from the rover server to inform Mission Control of a log entry to display in the logging panel.

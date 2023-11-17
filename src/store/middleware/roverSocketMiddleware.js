@@ -14,11 +14,16 @@ import {
  */
 const roverSocketMiddleware = () => {
   let socket = null;
+  let isConnecting = false;
 
-  const onOpen = store => () => store.dispatch(roverConnected());
+  const onOpen = store => () => {
+    isConnecting = false;
+    store.dispatch(roverConnected());
+  }
 
   const onClose = store => () => {
     socket = null;
+    isConnecting = false;
     store.dispatch(roverDisconnected());
   };
 
@@ -32,12 +37,16 @@ const roverSocketMiddleware = () => {
 
     switch (action.type) {
       case connectToRover.type: {
-        if (socket && socket.readyState !== WebSocket.CLOSED)
-          socket.close();
-        socket = new WebSocket(ROVER_SERVER_URL);
-        socket.onmessage = onMessage(store);
-        socket.onclose = onClose(store);
-        socket.onopen = onOpen(store);
+        if (!isConnecting) {
+          if (socket && socket.readyState !== WebSocket.CLOSED) {
+            socket.close();
+          }
+          isConnecting = true;
+          socket = new WebSocket(ROVER_SERVER_URL);
+          socket.onmessage = onMessage(store);
+          socket.onclose = onClose(store);
+          socket.onopen = onOpen(store);
+        }
         break;
       }
 
