@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import ConnectionIcon from "@material-ui/icons/SignalCellularAlt";
+import ConnectionIcon from "@mui/icons-material/SignalCellularAlt";
 import { selectRoverIsConnected } from "../../store/roverSocketSlice";
 import "./ConnectionInfo.css";
 
