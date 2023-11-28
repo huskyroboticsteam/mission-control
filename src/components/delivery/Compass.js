@@ -14,7 +14,7 @@ function getAttitude(roll, pitch) {
 }
 
 const Compass = () => {
-  const {orientW, orientX, orientY, orientZ, posX, posY, posZ} = useSelector(selectRoverPosition);
+  const {orientW, orientX, orientY, orientZ, lon, lat} = useSelector(selectRoverPosition);
 
   let roll;
   let pitch;
@@ -41,8 +41,8 @@ const Compass = () => {
     }
   }
   //if non-negative, add space
-  let longitude = posX?.toFixed(6);
-  let latitude = posY?.toFixed(6);
+  let longitude = lon?.toFixed(6);
+  let latitude = lat?.toFixed(6);
   longitude = (posX < 0) ? " "  + longitude : longitude;
   latitude = (posY < 0) ? " " + latitude : latitude;
   const altitude = posZ;
@@ -67,7 +67,6 @@ const Compass = () => {
         <div>heading: {heading ?? "N/A"}</div>
         <div>latitude: {latitude ?? "N/A"}</div>
         <div>longitude: {longitude ?? "N/A"}</div>
-        <div>altitude: {altitude ?? "N/A"}</div>
       </div>
     </div>
   );
