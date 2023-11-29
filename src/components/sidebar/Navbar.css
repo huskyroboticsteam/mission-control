@@ -14,10 +14,6 @@
   padding: 0;
 }
 
-.navbar__icon {
-  margin-right: 16px;
-}
-
 a {
   font-size: 30px;
   font-weight: 500;
@@ -37,7 +33,15 @@ a.active {
   background-color: #3f4145;
 }
 
-a:hover {
-  color: white;
+a.inactive:hover { 
+  color: lightgray;
   background-color: #2f3135;
+}
+
+a.active:hover {
+  background-color: #2f3135;
+}
+
+.navbar__icon {
+  margin-right: 16px;
 }
