@@ -14,7 +14,11 @@
   padding: 0;
 }
 
-.navbar__nav-link {
+.navbar__icon {
+  margin-right: 16px;
+}
+
+a {
   font-size: 30px;
   font-weight: 500;
   color: gray;
@@ -28,21 +32,12 @@
   -webkit-user-drag: none;
 }
 
-.navbar__nav-link--active {
+a.active {
   color: white;
   background-color: #3f4145;
 }
 
-.navbar__nav-link:hover {
-  color: lightgray;
+a:hover {
+  color: white;
   background-color: #2f3135;
-}
-
-.navbar__nav-link--active:hover {
-  color: white;
-  background-color: #3f4145;
-}
-
-.navbar__icon {
-  margin-right: 16px;
 }

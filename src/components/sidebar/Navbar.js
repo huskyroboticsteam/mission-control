@@ -14,56 +14,80 @@ function Navbar() {
     <nav className="navbar">
       <ul>
         <li>
-          <NavLink to="/science" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+          <NavLink 
+            to="/science" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <ScienceIcon fontSize="large" className="navbar__icon" />
             Science
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/delivery" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/delivery" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <DeliveryIcon fontSize="large" className="navbar__icon" />
             Delivery
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/servicing" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/servicing" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <ServicingIcon fontSize="large" className="navbar__icon" />
             Servicing
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/autonomous" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/autonomous" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <AutonomousIcon fontSize="large" className="navbar__icon" />
             Autonomous
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/telemetry" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/telemetry" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <TelemetryIcon fontSize="large" className="navbar__icon" />
             Telemetry
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/antenna" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/antenna" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <AntennaIcon fontSize="large" className="navbar__icon" />
             Antenna
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/help" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/help" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/logging" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/logging" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <LoggingIcon fontSize="large" className="navbar__icon" />
             Logging
           </NavLink>
