@@ -11,6 +11,8 @@
 .camera-stream__camera-name {
   font-size: 30px;
   position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   text-align: center;
   color: #cccccc;
@@ -43,6 +45,8 @@
   font-weight: bold;
   z-index: 5;
   position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   text-align: right;
   margin-top: 10px;
