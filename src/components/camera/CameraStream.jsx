@@ -65,13 +65,18 @@ function CameraStream({ cameraName }) {
       context.fillRect(0, 0, canvas.width, canvas.height);
       
       setPopoutWindow(newWindow);
+      window.onunload = function() {
+        if (newWindow && !newWindow.closed) {
+            newWindow.close();
+        }
+      };
       cameraCanvas.current = canvas;
       cameraContext.current = context;
       newWindow.addEventListener("beforeunload", () => {
         setPopoutWindow(null);
       });
     }
-  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle]);
+  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -79,7 +84,7 @@ function CameraStream({ cameraName }) {
         node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
-        maxDelay: 0,
+        maxDelay: 50,
         clearBuffer: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
@@ -95,6 +100,7 @@ function CameraStream({ cameraName }) {
 
   useEffect(() => {
     if (frameDataArray && vidTag && jmuxer) {
+      console.log("Feeding data to muxer");
       for (let i = 0; i < frameDataArray.length; i++) {
         jmuxer.feed({
           video: new Uint8Array(frameDataArray[i])
@@ -124,7 +130,6 @@ function CameraStream({ cameraName }) {
       }
       setLastFrameTime(currentTime); // current time in ms
     }
-    // eslint-disable-next-line
   }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
 
   useEffect(() => {
