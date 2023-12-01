@@ -130,6 +130,7 @@ function CameraStream({ cameraName }) {
       }
       setLastFrameTime(currentTime); // current time in ms
     }
+    // eslint-disable-next-line 
   }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
 
   useEffect(() => {
