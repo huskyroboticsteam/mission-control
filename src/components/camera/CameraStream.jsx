@@ -78,13 +78,31 @@ function CameraStream({ cameraName }) {
     }
   }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName]);
 
+  const drawFrameOnExt = useCallback(() => {
+    if (vidTag && popoutWindow && cameraCanvas && cameraContext) {
+      // draw it onto the popout window
+
+      // if the window is wider than the stream
+      if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
+        // set the height of the canvas to the height of the window
+        cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
+        cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
+      } else {
+        // set the width of the canvas to the height of the window
+        cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
+        cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
+      }
+      cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+    }
+  }, [vidTag, popoutWindow, cameraCanvas, cameraContext]);
+
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
       return new JMuxer({
         node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
-        maxDelay: 50,
+        maxDelay: 0,
         clearBuffer: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
@@ -100,7 +118,9 @@ function CameraStream({ cameraName }) {
 
   useEffect(() => {
     if (frameDataArray && vidTag && jmuxer) {
-      console.log("Feeding data to muxer");
+      if (popoutWindow) {
+        popoutWindow.requestAnimationFrame(drawFrameOnExt);
+      }
       for (let i = 0; i < frameDataArray.length; i++) {
         jmuxer.feed({
           video: new Uint8Array(frameDataArray[i])
@@ -131,7 +151,7 @@ function CameraStream({ cameraName }) {
       setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line 
-  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
+  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext, drawFrameOnExt]);
 
   useEffect(() => {
     return () => {
