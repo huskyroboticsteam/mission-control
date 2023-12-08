@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import SciencePanel from "../science/SciencePanel";
 import DeliveryPanel from "../delivery/DeliveryPanel";
 import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
+import TelemetryPanel from "../telemetry/TelemetryPanel";
 import HelpPanel from "../help/HelpPanel";
 import LoggingPanel from "../logging/LoggingPannel";
 import "./PanelContainer.css";
@@ -12,8 +12,6 @@ function PanelContainer() {
     <div className="panel-container">
       <Routes>
         <Route path="" element={<Navigate to="/science"/>}/> 
-
-        <Route path="/science" element={<SciencePanel/>}/>
 
         <Route path="/delivery" element={<DeliveryPanel/>}/>
 
