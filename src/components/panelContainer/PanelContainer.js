@@ -11,7 +11,7 @@ function PanelContainer() {
   return (
     <div className="panel-container">
       <Routes>
-        <Route path="" element={<Navigate to="/science"/>}/> 
+        <Route path="" element={<Navigate to="/delivery"/>}/> 
 
         <Route path="/delivery" element={<DeliveryPanel/>}/>
 
