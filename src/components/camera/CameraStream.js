@@ -55,13 +55,13 @@ function CameraStream({ cameraName }) {
           video: new Uint8Array(frameDataArray[i])
         });
       }
-      
-      if (Date.now() !== lastFrameTime) {
+      const currentTime = Date.now();
+      if (currentTime !== lastFrameTime) {
         setCurrentFpsAvg((oldFps) => {
-          return (oldFps + 1 / ((Date.now() - lastFrameTime) / 1000)) / 2;
+          return (oldFps + 1 / ((currentTime - lastFrameTime) / 1000)) / 2;
         });
       }
-      setLastFrameTime(Date.now()); // current time in ms
+      setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line
   }, [frameDataArray]);
