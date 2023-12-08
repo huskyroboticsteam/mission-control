@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
-import DeliveryIcon from "@material-ui/icons/Terrain";
-import ServicingIcon from "@material-ui/icons/Build";
-import AutonomousIcon from "@material-ui/icons/Code";
-import TelemetryIcon from "@material-ui/icons/Info";
-import HelpIcon from "@material-ui/icons/Help";
-import LoggingIcon from "@material-ui/icons/Computer"
+import DeliveryIcon from "@mui/icons-material/Terrain";
+import ServicingIcon from "@mui/icons-material/Build";
+import AutonomousIcon from "@mui/icons-material/Code";
+import TelemetryIcon from "@mui/icons-material/Info";
+import HelpIcon from "@mui/icons-material/Help";
+import LoggingIcon from "@mui/icons-material/Computer"
 import "./Navbar.css";
 
 function Navbar() {
@@ -12,42 +12,60 @@ function Navbar() {
     <nav className="navbar">
       <ul>
         <li>
-          <NavLink to="/delivery" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/delivery" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <DeliveryIcon fontSize="large" className="navbar__icon" />
             Delivery
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/servicing" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/servicing" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <ServicingIcon fontSize="large" className="navbar__icon" />
             Servicing
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/autonomous" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/autonomous" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <AutonomousIcon fontSize="large" className="navbar__icon" />
             Autonomous
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/telemetry" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/telemetry" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <TelemetryIcon fontSize="large" className="navbar__icon" />
             Telemetry
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/help" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/help" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/logging" className="navbar__nav-link" activeClassName="navbar__nav-link--active">
+        <NavLink 
+            to="/logging" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
             <LoggingIcon fontSize="large" className="navbar__icon" />
             Logging
           </NavLink>

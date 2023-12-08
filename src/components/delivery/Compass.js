@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectRoverPosition } from "../../store/telemetrySlice";
 import "./Compass.css";
-import {Quaternion, Euler, Vector3} from '@math.gl/core';
+import { Quaternion, Euler, Vector3 } from '@math.gl/core';
 import * as Quat from 'gl-matrix/quat';
 
 function getAttitude(roll, pitch) {
@@ -13,8 +13,27 @@ function getAttitude(roll, pitch) {
   return attitude;
 }
 
+/**
+ * Sanitize telemetry for display.
+ * @param {*} num Nullable. The number to sanitize.
+ * @param {*} decimals Optional. If specified, number of decimal places to round.
+ * @returns The sanitized string.
+ */
+function sanitize(num, decimals) {
+  if (num == null) {
+    return "N/A";
+  }
+
+  let ret = num.toString();
+  if (decimals !== undefined) {
+    ret = num.toFixed(decimals);
+  }
+
+  return num >= 0 ? " " + ret : ret;
+}
+
 const Compass = () => {
-  const {orientW, orientX, orientY, orientZ, lon, lat} = useSelector(selectRoverPosition);
+  const { orientW, orientX, orientY, orientZ, lon, lat } = useSelector(selectRoverPosition);
 
   let roll;
   let pitch;
@@ -27,7 +46,7 @@ const Compass = () => {
     let quat = new Quaternion(orientX, orientY, orientZ, orientW);
     let rpy = new Euler().fromQuaternion(quat, Euler.ZYX);
     let attitude = getAttitude(rpy.roll, rpy.pitch);
-  
+
     roll = Math.round(rpy.roll * 180 / Math.PI);
     pitch = Math.round(rpy.pitch * 180 / Math.PI);
     yaw = Math.round(rpy.yaw * 180 / Math.PI);
@@ -40,10 +59,7 @@ const Compass = () => {
       needleColor = "red";
     }
   }
-
-  const longitude = lon;
-  const latitude = lat;
-  const heading = yaw ? -yaw : undefined; // yaw is CCW, heading is CW
+  const heading = yaw != null ? -yaw : undefined; // yaw is CCW, heading is CW
 
   return (
     <div className="compass-container">
@@ -59,11 +75,30 @@ const Compass = () => {
         <div className="compass__label compass__label--east">E</div>
       </div>
       <div className="info">
-        <div>roll: {roll ?? "N/A"}</div>
-        <div>pitch: {pitch ?? "N/A"}</div>
-        <div>heading: {heading ?? "N/A"}</div>
-        <div>latitude: {latitude ?? "N/A"}</div>
-        <div>longitude: {longitude ?? "N/A"}</div>
+        <table>
+          <tbody>
+            <tr>
+              <td>roll:</td>
+              <td>{sanitize(roll)}</td>
+            </tr>
+            <tr>
+              <td>pitch:</td>
+              <td>{sanitize(pitch)}</td>
+            </tr>
+            <tr>
+              <td>heading:</td>
+              <td>{sanitize(heading)}</td>
+            </tr>
+            <tr>
+              <td>latitude:</td>
+              <td>{sanitize(lon, 6)}</td>
+            </tr>
+            <tr>
+              <td>longitude:</td>
+              <td>{sanitize(lat, 6)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

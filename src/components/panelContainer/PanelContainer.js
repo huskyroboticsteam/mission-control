@@ -1,8 +1,8 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import SciencePanel from "../science/SciencePanel";
 import DeliveryPanel from "../delivery/DeliveryPanel";
 import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
-import TelemetryPanel from "../telemetry/TelemetryPanel";
 import HelpPanel from "../help/HelpPanel";
 import LoggingPanel from "../logging/LoggingPannel";
 import "./PanelContainer.css";
@@ -10,34 +10,25 @@ import "./PanelContainer.css";
 function PanelContainer() {
   return (
     <div className="panel-container">
-      <Switch>
+      <Routes>
+        <Route path="" element={<Navigate to="/science"/>}/> 
 
-        <Route path="/delivery">
-          <DeliveryPanel />
-        </Route>
+        <Route path="/science" element={<SciencePanel/>}/>
 
-        <Route path="/servicing">
-          <ServicingPanel />
-        </Route>
+        <Route path="/delivery" element={<DeliveryPanel/>}/>
 
-        <Route path="/autonomous">
-          <AutonomousPanel />
-        </Route>
+        <Route path="/servicing" element={<ServicingPanel/>}/>
 
-        <Route path="/telemetry">
-          <TelemetryPanel />
-        </Route>
+        <Route path="/autonomous" element={<AutonomousPanel/>}/>
 
-        <Route path="/help">u
-          <HelpPanel />
-        </Route>
+        <Route path="/telemetry" element={<TelemetryPanel/>}/>
 
-        <Route path="/logging">
-          <LoggingPanel />
-        </Route>
+        <Route path="/antenna"/>
 
-        <Redirect to="/delivery" />
-      </Switch>
+        <Route path="/logging" element={<LoggingPanel/>}/>
+        
+        <Route path="/help" element={<HelpPanel/>}/>
+      </Routes>
     </div>
   );
 }

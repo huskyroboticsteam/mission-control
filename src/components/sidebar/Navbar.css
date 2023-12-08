@@ -14,7 +14,7 @@
   padding: 0;
 }
 
-.navbar__nav-link {
+a {
   font-size: 30px;
   font-weight: 500;
   color: gray;
@@ -28,19 +28,18 @@
   -webkit-user-drag: none;
 }
 
-.navbar__nav-link--active {
+a.active {
   color: white;
   background-color: #3f4145;
 }
 
-.navbar__nav-link:hover {
+a.inactive:hover { 
   color: lightgray;
   background-color: #2f3135;
 }
 
-.navbar__nav-link--active:hover {
-  color: white;
-  background-color: #3f4145;
+a.active:hover {
+  background-color: #515458;
 }
 
 .navbar__icon {
