@@ -20,7 +20,7 @@ function ToggleInverseKinematics() {
 
     return (
         <div id='enable-ik-toggle'>
-            <div id={motorsEnabled && !roverIsStopped ? 'enable-ik-title' : 'enable-ik-title-disabled'}>
+            <div id={motorsEnabled && !roverIsStopped && roverIsConnected ? 'enable-ik-title' : 'enable-ik-title-disabled'}>
                 Enable IK
             </div>
             <div id='switch-wrapper' onClick={handleClick}>
