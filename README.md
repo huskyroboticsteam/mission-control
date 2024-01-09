@@ -51,7 +51,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.0.0`)
+## Messages (`v2024.1.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -203,20 +203,35 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 - `joint` - the name of the joint
 - `position` - the current position in degrees
 
-## Set Arm IK Enabled
+## Request Arm IK Enabled
 ### Description
-Sent from Mission Control to enable or disable inverse kinematics controls on the rover.
+Sent from Mission Control to instruct the rover to enable or disable inverse kinematics.  This packet is not guaranteed to enable/disable IK. An `armIKEnabledReport` packet will be sent immediately after the `requestArmIKEnabled` is processed by the rover, and this can be used to know if IK was successfully enabled/disabled. 
 
 ### Syntax
 ```
 {
-  type: "setArmIKEnabled",
+  type: "requestArmIKEnabled",
   enabled: boolean
 }
 ```
 
 ### Parameters
 - `enabled` - whether or not inverse kinematics for the arm should be enabled or disabled.
+
+## Arm IK Enabled Report
+### Description
+Sent from the rover to inform Mission Control whether or not the Rover has enabled or disabled inverse kinematics.
+
+### Syntax
+```
+{
+  type: "armIKEnabledReport",
+  enabled: boolean
+}
+```
+
+### Parameters
+- `enabled` - whether or not inverse kinematics for the arm is enabled
 
 ## Motor Status Report
 ### Description
