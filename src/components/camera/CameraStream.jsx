@@ -102,7 +102,7 @@ function CameraStream({ cameraName }) {
         node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
-        maxDelay: 0,
+        maxDelay: 50,
         clearBuffer: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
@@ -145,7 +145,11 @@ function CameraStream({ cameraName }) {
       const currentTime = Date.now();
       if (currentTime !== lastFrameTime) {
         setCurrentFpsAvg((oldFps) => {
-          return (oldFps + 1 / ((currentTime - lastFrameTime) / 1000)) / 2;
+          let fps = (oldFps + 1 / ((currentTime - lastFrameTime) / 1000)) / 2;
+          if (popoutWindow) {
+            popoutWindow.document.querySelector('#ext-fps').innerText = `FPS: ${Math.round(fps)}`;
+          }
+          return fps;
         });
       }
       setLastFrameTime(currentTime); // current time in ms
