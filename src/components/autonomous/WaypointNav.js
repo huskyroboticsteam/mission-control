@@ -7,6 +7,8 @@ import "./WaypointNav.css";
 function WaypointNav() {
   const dispatch = useDispatch();
   const [submitted, setSubmitted] = useState(false);
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
   var opMode = useSelector(selectOpMode);
 
   function handleSubmit (e) {
@@ -18,6 +20,17 @@ function WaypointNav() {
     dispatch(requestWaypointNav(formJson));
   };
 
+  function grabFromClipboard () {
+    navigator.clipboard.readText().then(text => {
+      if(text.match("-?\\d{1,}\\.?\\d{0,}, -?\\d{1,}\\.?\\d{0,}")) {
+        setLat(text.split(", ")[0]);
+        setLon(text.split(", ")[1]);
+      }
+    }).catch(err => {
+      console.error("Failed to read clipboard contents: ", err);
+    })
+  }
+
   useEffect(() => {
     if (opMode === "teleoperation") {
       setSubmitted(false);
@@ -27,18 +40,15 @@ function WaypointNav() {
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
-    <label for="latitude">Latitude</label>
-    {submitted ? <input disabled type="number" name="latitude" placeholder="Latitude" /> : <input type="number" name="latitude" placeholder="Latitude" />}
-      <label for="longitude">Longitude</label>
-      {submitted ? <input disabled type="number" name="longitude" placeholder="Longitude" /> : <input type="number" name="longitude" placeholder="Longitude" />}
-      <div className="waypoint-checkbox">
-        <div>
-          <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
-        </div>
-        <div>
-          <label>{submitted ? <input disabled type="checkbox" name="isGate" />: <input type="checkbox" name="isGate" />} Is Gate</label>
-        </div>
-      </div>
+      <label htmlFor="latitude">Latitude</label>
+      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" name="lat" value={lat} onChange={e => setLat(e.target.value)}/>}
+      <label htmlFor="longitude">Longitude</label>
+      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" name="lon" value={lon} onChange={e => setLon(e.target.value)}/>}
+      {submitted ? <button disabled>Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Clipboard</button>}
+    </div>
+    <div className="waypoint-checkbox">
+      <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
+      <label>{submitted ? <input disabled type="checkbox" name="isGate" />: <input type="checkbox" name="isGate" />} Is Gate</label>
     </div>
     {opMode === "autonomous" && !submitted ? <button type="submit">Go</button> : <button disabled>Go</button>}
   </form>
