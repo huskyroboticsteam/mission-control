@@ -205,7 +205,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 
 ## Request Arm IK Enabled
 ### Description
-Sent from Mission Control to instruct Rover to enable or disable inverse kinematics.  This packet is not garunteed to enable/disable IK. An `armIKEnabledReport` packet will be sent immediately after the `requestArmIKEnabled` is processed by Rover, and this can be used to know if IK was successfully enabled/disabled. 
+Sent from Mission Control to instruct Rover to enable or disable inverse kinematics.  This packet is not guaranteed to enable/disable IK. An `armIKEnabledReport` packet will be sent immediately after the `requestArmIKEnabled` is processed by the rover, and this can be used to know if IK was successfully enabled/disabled. 
 
 ### Syntax
 ```
@@ -220,7 +220,7 @@ Sent from Mission Control to instruct Rover to enable or disable inverse kinemat
 
 ## Arm IK Enabled Report
 ### Description
-Sent from Rover to inform Mission Control whether or not the Rover has enabled or disabled inverse kinematics.
+Sent from the rover to inform Mission Control whether or not the Rover has enabled or disabled inverse kinematics.
 
 ### Syntax
 ```
