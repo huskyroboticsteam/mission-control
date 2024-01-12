@@ -4,7 +4,6 @@ import ServicingIcon from "@mui/icons-material/Build";
 import AutonomousIcon from "@mui/icons-material/Code";
 import TelemetryIcon from "@mui/icons-material/Info";
 import HelpIcon from "@mui/icons-material/Help";
-import LoggingIcon from "@mui/icons-material/Computer"
 import "./Navbar.css";
 
 function Navbar() {
@@ -58,16 +57,6 @@ function Navbar() {
           >
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
-          </NavLink>
-        </li>
-
-        <li>
-        <NavLink 
-            to="/logging" 
-            className={({ isActive}) => isActive ? "active" : "inactive"}
-          >
-            <LoggingIcon fontSize="large" className="navbar__icon" />
-            Logging
           </NavLink>
         </li>
       </ul>

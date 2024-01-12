@@ -8,7 +8,6 @@ import driveReducer from "./driveSlice";
 import jointsReducer from "./jointsSlice";
 import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
-import loggingReducer from "./loggingSlice";
 import telemetryReducer from "./telemetrySlice";
 import waypointNavReducer from "./waypointNavSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
@@ -20,7 +19,6 @@ import driveMiddleware from "./middleware/driveMiddleware";
 import jointsMiddleware from "./middleware/jointsMiddleware";
 import motorsMiddleware from "./middleware/motorsMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
-import loggingMiddleware from "./middleware/loggingMiddleware";
 import telemetryMiddleware from "./middleware/telemetryMiddleware";
 import waypointNavMiddleware from "./middleware/waypointNavMiddleware";
 
@@ -35,7 +33,6 @@ export default configureStore({
     joints: jointsReducer,
     motors: motorsReducer,
     cameras: camerasReducer,
-    logging: loggingReducer,
     telemetry: telemetryReducer,
     waypointNav: waypointNavReducer
   },
@@ -50,7 +47,6 @@ export default configureStore({
     jointsMiddleware,
     motorsMiddleware,
     camerasMiddleware,
-    loggingMiddleware,
     telemetryMiddleware,
     waypointNavMiddleware
   ])
