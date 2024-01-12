@@ -51,7 +51,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.1.0`)
+## Messages (`v2024.1.1`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -62,7 +62,7 @@ Sent from the rover server to inform Mission Control of the peripheral currently
 ```
 {
   type: "mountedPeripheralReport",
-  peripheral: "scienceStation" | "arm" | null
+  peripheral: "arm" | null
 }
 ```
 
@@ -403,82 +403,3 @@ Sent from the rover server to inform Mission Control of data provided by the rov
 - `points` - an array of points in cartesian coordinates read by the lidar sensor
 - `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
 - `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
-
-## Lazy Susan Position Request
-### Description
-Sent from Mission Control to instruct the rover server to rotate the lazy Susan to a specified position.
-
-### Syntax
-```
-{
-  type: "lazySusanPositionRequest",
-  position: number
-}
-```
-
-### Paremeters
-- `position` - the requested integer position in [0, 5]
-
-## Lazy Susan Lid Close Request
-### Description
-Sent from Mission Control to instruct the rover server to open or close the lids on the lazy Susan.
-
-### Syntax
-```
-{
-  type: "lazySusanLidCloseRequest",
-  close: boolean
-}
-```
-
-### Paremeters
-- `close` - `true` to close the lids, `false` to open the lids
-
-## Drill Request
-### Description
-Sent from Mission Control to instruct the rover server turn the science drill in a specified direction.
-
-### Syntax
-```
-{
-  type: "drillRequest",
-  direction: -1 | 0 | 1
-}
-```
-
-### Paremeters
-- `direction` - `-1` to turn in reverse, `0` to stop, `1` to turn forward
-
-## Syringe Dispense Request
-### Description
-Sent from Mission Control to instruct the rover server to dispense fluid from the science syringes.
-
-### Syntax
-```
-{
-  type: "syringeDispenseRequest",
-  amount: number
-}
-```
-
-### Parameters
-- `amount` - the amount of fluid to dispense in [0.0, 1.0], where 0.0 corresponds to no fluid dispensed, and 1.0 corresponds to all of the fluid dispensed
-
-## Log Entry Report
-### Description
-Sent from the rover server to inform Mission Control of a log entry to display in the logging panel.
-
-### Syntax
-```
-{
-  type: "logEntryReport",
-  logLevel: "trace" | "debug" | "info" | "warn" | "error",
-  message: string,
-  timestamp: number
-}
-```
-
-### Parameters
-- `logLevel` - the log level of the entry
-- `message` - the message contained in the entry
-- `timestamp` - the epoch timestamp of the entry in milliseconds
