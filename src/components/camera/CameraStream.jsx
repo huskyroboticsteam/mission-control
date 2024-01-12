@@ -94,7 +94,7 @@ function CameraStream({ cameraName }) {
       }
       cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
     }
-  }, [vidTag, popoutWindow, cameraCanvas, cameraContext]);
+  }, [vidTag, popoutWindow, cameraCanvas, cameraContext, aspectRatio]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -127,21 +127,21 @@ function CameraStream({ cameraName }) {
         });
       }
 
-      if (popoutWindow) {
-        // draw it onto the popout window
+      // if (popoutWindow) {
+      //   // draw it onto the popout window
 
-        // if the window is wider than the stream
-        if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
-          // set the height of the canvas to the height of the window
-          cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
-          cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
-        } else {
-          // set the width of the canvas to the height of the window
-          cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
-          cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
-        }
-        cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
-      }
+      //   // if the window is wider than the stream
+      //   if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
+      //     // set the height of the canvas to the height of the window
+      //     cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
+      //     cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
+      //   } else {
+      //     // set the width of the canvas to the height of the window
+      //     cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
+      //     cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
+      //   }
+      //   cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+      // }
       const currentTime = Date.now();
       if (currentTime !== lastFrameTime) {
         setCurrentFpsAvg((oldFps) => {
