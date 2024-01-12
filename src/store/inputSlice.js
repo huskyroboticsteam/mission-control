@@ -53,7 +53,8 @@ const initialState = {
     }
   },
   inverseKinematics: {
-    enabled: false
+    enabled: false,
+    lastSentArmIKState: null
   }
 };
 
@@ -124,7 +125,11 @@ const inputSlice = createSlice({
     },
 
     enableIK(state, action) {
-      const { enable } = action.payload;
+      state.inverseKinematics.lastSentArmIKState = action.payload.enable;
+    },
+
+    visuallyEnableIK(state, action) {
+      const enable = action.payload;
       state.inverseKinematics.enabled = enable;
     }
   }
@@ -271,7 +276,8 @@ export const {
   gamepadButtonChanged,
   keyPressed,
   keyReleased,
-  enableIK
+  enableIK,
+  visuallyEnableIK
 } = inputSlice.actions;
 
 export const selectInputDeviceIsConnected = deviceName => state => state.input[deviceName].isConnected;
