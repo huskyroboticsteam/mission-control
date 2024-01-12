@@ -21,8 +21,6 @@ function PanelContainer() {
 
         <Route path="/telemetry" element={<TelemetryPanel/>}/>
 
-        <Route path="/antenna"/>
-
         <Route path="/logging" element={<LoggingPanel/>}/>
         
         <Route path="/help" element={<HelpPanel/>}/>
