@@ -34,7 +34,7 @@ function CameraStream({ cameraName }) {
         node: `${cameraName}-player`,
         mode: 'video',
         flushingTime: 0,
-        maxDelay: 0,
+        maxDelay: 100,
         clearBuffer: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);

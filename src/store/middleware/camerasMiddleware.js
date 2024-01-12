@@ -23,7 +23,7 @@ const camerasMiddleware = store => next => action => {
         message: {
           type: "cameraStreamOpenRequest",
           camera: action.payload.cameraName,
-          fps: 20,  // default to 20
+          fps: 30,  // default to 30
         }
       }));
       break;
@@ -50,7 +50,7 @@ const camerasMiddleware = store => next => action => {
             message: {
               type: "cameraStreamOpenRequest",
               camera: cameraName,
-              fps: 20, // default to 20
+              fps: 30, // default to 30
             }
           }));
         }
