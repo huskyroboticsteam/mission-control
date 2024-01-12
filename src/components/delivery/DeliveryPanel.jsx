@@ -1,6 +1,6 @@
 import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
-import Compass from "../delivery/Compass";
+import Compass from "./Compass";
 import "./DeliveryPanel.css";
 
 function DeliveryPanel() {
