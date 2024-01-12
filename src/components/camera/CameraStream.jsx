@@ -9,6 +9,50 @@ import {
 import camelCaseToTitle from "../../util/camelCaseToTitle";
 import "./CameraStream.css";
 
+/**
+ * Takes:
+ *    cameraTitle: the camera title,
+ *    cameraName: the camera name,
+ *    unloadCallback, a callback that is ran before the window is fully unloaded
+ * Returns a JSON object with keys: window, canvas, context, aspectRatio
+ */
+function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
+  let newWindow = window.open("", "", "width=500,height=500");
+  newWindow.document.body.style.margin = "0";
+  newWindow.document.title = cameraTitle + " Stream";
+  newWindow.document.body.innerHTML = `
+    <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
+      <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
+      <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
+      <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
+      </div>
+    </div>`;
+  let canvas = newWindow.document.querySelector('#ext-vid');
+  let context = canvas.getContext('2d');
+  let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+
+  canvas.width = aspectRatio * 400;
+  canvas.height = 400;
+  context.fillStyle = "black";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  window.onunload = () => {
+    if (newWindow && !newWindow.closed) {
+        newWindow.close();
+    }
+  };
+
+  newWindow.onbeforeunload = unloadCallback;
+
+  let output = {
+    popout: newWindow,
+    canvas: canvas,
+    context: context,
+    aspectRatio: aspectRatio
+  }; 
+  return output;
+}
+
 function CameraStream({ cameraName }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -43,38 +87,11 @@ function CameraStream({ cameraName }) {
       setPopoutWindow(null);
     } else {
       // if the window popout doesn't exist
-      let newWindow = window.open("", "", "width=500,height=500");
-      newWindow.document.body.style.margin = "0";
-      newWindow.document.title = cameraTitle + " Stream";
-      newWindow.document.body.innerHTML = `
-      <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
-        <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
-        <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
-        <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
-        </div>
-      </div>`;
-
-      let canvas = newWindow.document.querySelector('#ext-vid');
-      let context = canvas.getContext('2d');
-      let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+      let { popout, context, canvas, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
+      setPopoutWindow(popout);
       setAspectRatio(aspectRatio);
-      
-      canvas.width = aspectRatio * 400;
-      canvas.height = 400;
-      context.fillStyle = "black";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      
-      setPopoutWindow(newWindow);
-      window.onunload = function() {
-        if (newWindow && !newWindow.closed) {
-            newWindow.close();
-        }
-      };
       cameraCanvas.current = canvas;
       cameraContext.current = context;
-      newWindow.addEventListener("beforeunload", () => {
-        setPopoutWindow(null);
-      });
     }
   }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName]);
 
