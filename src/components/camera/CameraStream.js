@@ -36,6 +36,7 @@ function CameraStream({ cameraName }) {
         flushingTime: 0,
         maxDelay: 100,
         clearBuffer: true,
+        readFpsFromTrack: true,
         onError: function(data) {
           console.warn('Buffer error encountered', data);
         },
