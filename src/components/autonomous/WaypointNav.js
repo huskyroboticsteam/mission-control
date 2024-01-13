@@ -29,7 +29,7 @@ function WaypointNav() {
         setLat(lat);
         setLon(lon);
       } else {
-        alert("Clipboard contents do not match regex!");
+        alert("Clipboard contents do not match expected format lat, lon!");
       }
     }).catch(err => {
       console.error("Failed to read clipboard contents: ", err);
