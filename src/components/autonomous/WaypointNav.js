@@ -22,12 +22,18 @@ function WaypointNav() {
 
   function grabFromClipboard () {
     navigator.clipboard.readText().then(text => {
-      if(text.match("-?\\d{1,}\\.?\\d{0,}, -?\\d{1,}\\.?\\d{0,}")) {
-        setLat(text.split(", ")[0]);
-        setLon(text.split(", ")[1]);
+      // Matches coordinates in the form of (-)*(.*), (-)*(.*)
+      // where * are numbers and () are optional, e.g. -0.2, 0
+      if(text.match("-?\\d+\\.?\\d*, -?\\d+\\.?\\d*")) {
+        const [lat, lon] = text.split(", ", 2);
+        setLat(lat);
+        setLon(lon);
+      } else {
+        alert("Clipboard contents do not match regex!");
       }
     }).catch(err => {
       console.error("Failed to read clipboard contents: ", err);
+      alert("Failed to read clipboard contents! (Make sure to allow us to read your clipboard contents)")
     })
   }
 
@@ -41,10 +47,10 @@ function WaypointNav() {
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
       <label htmlFor="latitude">Latitude</label>
-      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" name="lat" value={lat} onChange={e => setLat(e.target.value)}/>}
+      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
       <label htmlFor="longitude">Longitude</label>
-      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" name="lon" value={lon} onChange={e => setLon(e.target.value)}/>}
-      {submitted ? <button disabled>Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Clipboard</button>}
+      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
+      {submitted ? <button disabled>Copy from Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>}
     </div>
     <div className="waypoint-checkbox">
       <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
