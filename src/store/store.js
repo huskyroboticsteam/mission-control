@@ -8,9 +8,6 @@ import driveReducer from "./driveSlice";
 import jointsReducer from "./jointsSlice";
 import motorsReducer from "./motorsSlice";
 import camerasReducer from './camerasSlice';
-import planVizReducer from "./planVizSlice";
-import scienceReducer from "./scienceSlice";
-import loggingReducer from "./loggingSlice";
 import telemetryReducer from "./telemetrySlice";
 import waypointNavReducer from "./waypointNavSlice";
 import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
@@ -22,9 +19,6 @@ import driveMiddleware from "./middleware/driveMiddleware";
 import jointsMiddleware from "./middleware/jointsMiddleware";
 import motorsMiddleware from "./middleware/motorsMiddleware";
 import camerasMiddleware from "./middleware/camerasMiddleware";
-import planVizMiddleware from "./middleware/planVizMiddleware";
-import scienceMiddleware from "./middleware/scienceMiddleware";
-import loggingMiddleware from "./middleware/loggingMiddleware";
 import telemetryMiddleware from "./middleware/telemetryMiddleware";
 import waypointNavMiddleware from "./middleware/waypointNavMiddleware";
 
@@ -39,9 +33,6 @@ export default configureStore({
     joints: jointsReducer,
     motors: motorsReducer,
     cameras: camerasReducer,
-    planViz: planVizReducer,
-    science: scienceReducer,
-    logging: loggingReducer,
     telemetry: telemetryReducer,
     waypointNav: waypointNavReducer
   },
@@ -56,9 +47,6 @@ export default configureStore({
     jointsMiddleware,
     motorsMiddleware,
     camerasMiddleware,
-    planVizMiddleware,
-    scienceMiddleware,
-    loggingMiddleware,
     telemetryMiddleware,
     waypointNavMiddleware
   ])
