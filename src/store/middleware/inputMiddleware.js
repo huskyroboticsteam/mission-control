@@ -1,9 +1,8 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
-import { requestLazySusanPosition } from "../scienceSlice";
 import { requestJointPower } from "../jointsSlice";
-import { enableIK } from "../inputSlice";
-import { messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
+import { enableIK, visuallyEnableIK } from "../inputSlice";
+import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 /**
  * Middleware that messages the rover in response to user input.
  */
@@ -12,7 +11,7 @@ const inputMiddleware = store => next => action => {
     if (action.type === enableIK.type) {
       store.dispatch(messageRover({
         message: {
-          type: "setArmIKEnabled",
+          type: "requestArmIKEnabled",
           enabled: action.payload.enable
         }
       }));
@@ -41,6 +40,17 @@ const inputMiddleware = store => next => action => {
         break;
       }
 
+      case messageReceivedFromRover.type: {
+        const { message } = action.payload;
+        if (message.type === "armIKEnabledReport") {
+          let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState;
+          if (lastArmIKState !== null && lastArmIKState !== message.enabled) {
+            alert("Arm IK was unable to be " + (!message.enabled ? "enabled." : "disabled."));
+          }
+          store.dispatch(visuallyEnableIK(message.enabled));
+        }
+        break;
+      }
       default: break;
     }
     return next(action);
@@ -77,15 +87,7 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === "scienceStation")
-    updateScienceStation(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      dispatch
-    );
-  else if (mountedPeripheral === "arm")
+  if (mountedPeripheral === "arm")
     updateArm(
       prevComputedInput,
       computedInput,
@@ -93,21 +95,6 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
-}
-
-function updateScienceStation(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  const scienceInput = computedInput.science;
-  const prevScienceInput = prevComputedInput.science;
-  if (scienceInput.lazySusanPosition !== prevScienceInput.lazySusanPosition || true)
-    dispatch(requestLazySusanPosition({
-      position: computedInput.science.lazySusanPosition
-    }));
 }
 
 function updateArm(

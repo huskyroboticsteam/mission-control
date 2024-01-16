@@ -1,18 +1,17 @@
 import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
-import LazySusan from "../lazySusan/LazySusan";
-import "./SciencePanel.css";
+import Compass from "./Compass";
+import "./DeliveryPanel.css";
 
-function SciencePanel() {
+function DeliveryPanel() {
   return (
-    <div className="science-panel">
+    <div className="delivery-panel">
       <CameraStream cameraName="front" />
-      <CameraStream cameraName="rear" />
+      <Compass />
       <CameraStream cameraName="upperArm" />
-      <LazySusan/>
       <RoverModel />
     </div>
   );
 }
 
-export default SciencePanel;
+export default DeliveryPanel;

@@ -3,21 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   latitude: 0,
   longitude: 0,
-  approximate: false,
-  gated: false,
+  isApproximate: false,
+  isGate: false,
 };
 
 const waypointNavSlice = createSlice({
   name: "waypointNav",
   initialState,
   reducers: {
-      requestWaypointNav(state, action) {
-          const { latitude, longitude, approximate, gated } = action.payload;
-          state.latitude = latitude;
-          state.longitude = longitude;
-          state.approximate = approximate;
-          state.gated = gated;
-      }
+    requestWaypointNav(state, action) {
+      const { latitude, longitude, isApproximate, isGate } = action.payload;
+      state.latitude = typeof latitude == "string" ? Number.parseFloat(latitude) : latitude;
+      state.longitude = typeof longitude == "string" ? Number.parseFloat(longitude) : longitude;
+      state.isApproximate = !!isApproximate;
+      state.isGate = !!isGate;
+    }
   }
 });
 
