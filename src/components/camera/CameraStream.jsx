@@ -79,6 +79,25 @@ function CameraStream({ cameraName }) {
   const vidTag = useMemo(() => {
     return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow])
+  
+  const drawFrameOnExt = useCallback((window) => {
+    if (vidTag && window && cameraCanvas && cameraContext) {
+      // draw it onto the popout window
+
+      // if the window is wider than the stream
+      if (window.innerHeight / window.innerWidth > aspectRatio) {
+        // set the height of the canvas to the height of the window
+        cameraCanvas.current.width = Math.floor(window.innerWidth);
+        cameraCanvas.current.height = Math.floor(window.innerWidth * aspectRatio);
+      } else {
+        // set the width of the canvas to the height of the window
+        cameraCanvas.current.width = Math.floor(window.innerHeight / aspectRatio);
+        cameraCanvas.current.height = Math.floor(window.innerHeight);
+      }
+      cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+      window.requestAnimationFrame(() => { drawFrameOnExt(window); });
+    }
+  }, [vidTag, cameraCanvas, cameraContext, aspectRatio]);
 
   const handlePopOut = useCallback(() => {
     if (popoutWindow) {
@@ -92,26 +111,9 @@ function CameraStream({ cameraName }) {
       setAspectRatio(aspectRatio);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
+      popout.requestAnimationFrame(() => { drawFrameOnExt(popout); });
     }
-  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName]);
-
-  const drawFrameOnExt = useCallback(() => {
-    if (vidTag && popoutWindow && cameraCanvas && cameraContext) {
-      // draw it onto the popout window
-
-      // if the window is wider than the stream
-      if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
-        // set the height of the canvas to the height of the window
-        cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
-        cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
-      } else {
-        // set the width of the canvas to the height of the window
-        cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
-        cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
-      }
-      cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
-    }
-  }, [vidTag, popoutWindow, cameraCanvas, cameraContext, aspectRatio]);
+  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName, drawFrameOnExt]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -135,9 +137,6 @@ function CameraStream({ cameraName }) {
 
   useEffect(() => {
     if (frameDataArray && vidTag && jmuxer) {
-      if (popoutWindow) {
-        popoutWindow.requestAnimationFrame(drawFrameOnExt);
-      }
       for (let i = 0; i < frameDataArray.length; i++) {
         jmuxer.feed({
           video: new Uint8Array(frameDataArray[i])
@@ -172,7 +171,7 @@ function CameraStream({ cameraName }) {
       setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line 
-  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext, drawFrameOnExt]);
+  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
 
   useEffect(() => {
     return () => {
