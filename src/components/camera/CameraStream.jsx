@@ -53,6 +53,30 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
   return output;
 }
 
+function getLatestFrameFromVideo(video) {
+  if (!video || !(video.videoWidth && video.videoHeight)) return null;
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext('2d');
+  canvas.width = video.videoHeight;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  return context.getImageData(0, 0, canvas.width, canvas.height);
+}
+
+function isImageBlack(image) {
+  for (let i = image.data.length / 2; i < image.data.length; i += 4) {
+    if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
+      return false;
+    }
+  }
+  for (let i = image.data.length / 2; i >= 0; i -= 4) {
+    if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function CameraStream({ cameraName }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -94,10 +118,15 @@ function CameraStream({ cameraName }) {
         cameraCanvas.current.width = Math.floor(window.innerHeight / aspectRatio);
         cameraCanvas.current.height = Math.floor(window.innerHeight);
       }
-      cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+
+      let video = document.querySelector(`#${vidTag.props.id}`);
+      let image = getLatestFrameFromVideo(video);
+      if (!isImageBlack(image)) {
+        cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+      }
       window.requestAnimationFrame(() => { drawFrameOnExt(window); });
     }
-  }, [vidTag, cameraCanvas, cameraContext, aspectRatio]);
+  }, [vidTag, aspectRatio]);
 
   const handlePopOut = useCallback(() => {
     if (popoutWindow) {
@@ -107,13 +136,13 @@ function CameraStream({ cameraName }) {
     } else {
       // if the window popout doesn't exist
       let { popout, context, canvas, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
-      setPopoutWindow(popout);
       setAspectRatio(aspectRatio);
+      setPopoutWindow(popout);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
       popout.requestAnimationFrame(() => { drawFrameOnExt(popout); });
     }
-  }, [popoutWindow, setPopoutWindow, setAspectRatio, cameraTitle, cameraName, drawFrameOnExt]);
+  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -142,22 +171,6 @@ function CameraStream({ cameraName }) {
           video: new Uint8Array(frameDataArray[i])
         });
       }
-
-      // if (popoutWindow) {
-      //   // draw it onto the popout window
-
-      //   // if the window is wider than the stream
-      //   if (popoutWindow.innerHeight / popoutWindow.innerWidth > aspectRatio) {
-      //     // set the height of the canvas to the height of the window
-      //     cameraCanvas.current.width = Math.floor(popoutWindow.innerWidth);
-      //     cameraCanvas.current.height = Math.floor(popoutWindow.innerWidth * aspectRatio);
-      //   } else {
-      //     // set the width of the canvas to the height of the window
-      //     cameraCanvas.current.width = Math.floor(popoutWindow.innerHeight / aspectRatio);
-      //     cameraCanvas.current.height = Math.floor(popoutWindow.innerHeight);
-      //   }
-      //   cameraContext.current.drawImage(document.getElementById(vidTag.props.id), 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
-      // }
       const currentTime = Date.now();
       if (currentTime !== lastFrameTime) {
         setCurrentFpsAvg((oldFps) => {
@@ -168,6 +181,7 @@ function CameraStream({ cameraName }) {
           return fps;
         });
       }
+      setAspectRatio(document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth);
       setLastFrameTime(currentTime); // current time in ms
     }
     // eslint-disable-next-line 
