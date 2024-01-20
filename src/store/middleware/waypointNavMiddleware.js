@@ -11,8 +11,8 @@ const waypointNavMiddleware = store => next => action => {
           type: "waypointNavRequest",
           latitude: store.getState().waypointNav.latitude,
           longitude: store.getState().waypointNav.longitude,
-          approximate: store.getState().waypointNav.approximate,
-          gated: store.getState().waypointNav.gated,
+          isApproximate: store.getState().waypointNav.isApproximate,
+          isGate: store.getState().waypointNav.isGate,
         }
       }));
       break;

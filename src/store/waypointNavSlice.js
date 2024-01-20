@@ -25,7 +25,7 @@ export const { requestWaypointNav } = waypointNavSlice.actions;
 
 export const selectLatitude = state => state.latitude;
 export const selectLongitude = state => state.longitude;
-export const selectIsApproximate = state => state.approximate;
-export const selectIsGated = state => state.gated;
+export const selectIsApproximate = state => state.isApproximate;
+export const selectIsGate = state => state.isGate;
 
 export default waypointNavSlice.reducer;
