@@ -53,6 +53,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
   return output;
 }
 
+// returns an imagedata object
 function getLatestFrameFromVideo(video) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
   let canvas = document.createElement('canvas');
@@ -63,6 +64,7 @@ function getLatestFrameFromVideo(video) {
   return context.getImageData(0, 0, canvas.width, canvas.height);
 }
 
+// takes an ImageData object
 function isImageBlack(image) {
   for (let i = image.data.length / 2; i < image.data.length; i += 4) {
     if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
@@ -97,15 +99,14 @@ function CameraStream({ cameraName }) {
   const [popoutWindow, setPopoutWindow] = useState(null);
   const [aspectRatio, setAspectRatio] = useState(1);
 
-  let cameraCanvas = useRef(null);
-  let cameraContext = useRef(null);
+  let cameraCanvas = useRef(null);  // used for popout window
   
   const vidTag = useMemo(() => {
     return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow])
   
   const drawFrameOnExt = useCallback((window) => {
-    if (vidTag && window && cameraCanvas && cameraContext) {
+    if (vidTag && window && cameraCanvas) {
       // draw it onto the popout window
 
       // if the window is wider than the stream
@@ -122,7 +123,7 @@ function CameraStream({ cameraName }) {
       let video = document.querySelector(`#${vidTag.props.id}`);
       let image = getLatestFrameFromVideo(video);
       if (!isImageBlack(image)) {
-        cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+        cameraCanvas.current.getContext('2d').drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       }
       window.requestAnimationFrame(() => { drawFrameOnExt(window); });
     }
@@ -135,11 +136,10 @@ function CameraStream({ cameraName }) {
       setPopoutWindow(null);
     } else {
       // if the window popout doesn't exist
-      let { popout, context, canvas, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
+      let { popout, canvas, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;
-      cameraContext.current = context;
       popout.requestAnimationFrame(() => { drawFrameOnExt(popout); });
     }
   }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt]);
@@ -184,8 +184,7 @@ function CameraStream({ cameraName }) {
       setAspectRatio(document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth);
       setLastFrameTime(currentTime); // current time in ms
     }
-    // eslint-disable-next-line 
-  }, [frameDataArray, popoutWindow, cameraCanvas, cameraContext]);
+  }, [cameraName, frameDataArray, popoutWindow]);
 
   useEffect(() => {
     return () => {
