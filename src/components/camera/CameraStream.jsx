@@ -66,6 +66,8 @@ function getLatestFrameFromVideo(video) {
 
 // takes an ImageData object
 function isImageBlack(image) {
+  if (!(image?.data?.length > 0)) return true;
+
   for (let i = image.data.length / 2; i < image.data.length; i += 4) {
     if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
       return false;
