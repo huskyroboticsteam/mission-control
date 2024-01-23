@@ -53,7 +53,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
   return output;
 }
 
-// returns an imagedata object
+// returns an ImageData object
 function getLatestFrameFromVideo(video) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
   let canvas = document.createElement('canvas');
@@ -65,6 +65,7 @@ function getLatestFrameFromVideo(video) {
 }
 
 // takes an ImageData object
+// returns if it is black or not
 function isImageBlack(image) {
   if (!(image?.data?.length > 0)) return true;
 
@@ -79,6 +80,22 @@ function isImageBlack(image) {
     }
   }
   return true;
+}
+
+// takes an ImageData object
+// returns an image
+async function convertDataToImage(imageData) {
+  if (!(imageData?.data?.length > 0)) return null;
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext('2d');
+  canvas.width = imageData.width;
+  canvas.height = imageData.height;
+  context.putImageData(imageData, 0, 0);
+
+  let image = new Image();
+  image.src = canvas.toDataURL();
+  await image.decode()
+  return image;
 }
 
 function CameraStream({ cameraName }) {
@@ -123,8 +140,13 @@ function CameraStream({ cameraName }) {
       }
 
       let video = document.querySelector(`#${vidTag.props.id}`);
-      let image = getLatestFrameFromVideo(video);
-      if (!isImageBlack(image)) {
+      let imageData = getLatestFrameFromVideo(video);
+      if (!isImageBlack(imageData)) {
+        // convertDataToImage(imageData).then((i) => {
+        //   cameraCanvas.current.getContext('2d').drawImage(i, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+        // }).catch((e) => {
+        //   console.log("Image couldn't be converted: ", e);
+        // });
         cameraCanvas.current.getContext('2d').drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       }
       window.requestAnimationFrame(() => { drawFrameOnExt(window); });
@@ -167,6 +189,7 @@ function CameraStream({ cameraName }) {
   }, [cameraName, hasRendered]);
 
   useEffect(() => {
+    console.log(frameDataArray?.length);
     if (frameDataArray && vidTag && jmuxer) {
       for (let i = 0; i < frameDataArray.length; i++) {
         jmuxer.feed({
