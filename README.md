@@ -51,7 +51,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.1.2`)
+## Messages (`v2024.1.1`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report

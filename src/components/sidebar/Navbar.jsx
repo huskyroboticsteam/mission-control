@@ -26,7 +26,7 @@ function Navbar() {
             className={({ isActive}) => isActive ? "active" : "inactive"}
           >
             <ArmDexterityIcon fontSize="large" className="navbar__icon" />
-            ArmDexterity
+            Arm Dexterity
           </NavLink>
         </li>
 
