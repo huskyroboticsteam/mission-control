@@ -33,7 +33,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
 
   canvas.width = aspectRatio * 400;
   canvas.height = 400;
-  context.fillStyle = "black";
+  context.fillStyle = "blue";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   window.onunload = () => {
@@ -51,51 +51,6 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
     aspectRatio: aspectRatio
   }; 
   return output;
-}
-
-// returns an ImageData object
-function getLatestFrameFromVideo(video) {
-  if (!video || !(video.videoWidth && video.videoHeight)) return null;
-  let canvas = document.createElement('canvas');
-  let context = canvas.getContext('2d');
-  canvas.width = video.videoHeight;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  return context.getImageData(0, 0, canvas.width, canvas.height);
-}
-
-// takes an ImageData object
-// returns if it is black or not
-function isImageBlack(image) {
-  if (!(image?.data?.length > 0)) return true;
-
-  for (let i = image.data.length / 2; i < image.data.length; i += 4) {
-    if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
-      return false;
-    }
-  }
-  for (let i = image.data.length / 2; i >= 0; i -= 4) {
-    if (image.data[i + 0] + image.data[i + 1] + image.data[i + 2] != 0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-// takes an ImageData object
-// returns an image
-async function convertDataToImage(imageData) {
-  if (!(imageData?.data?.length > 0)) return null;
-  let canvas = document.createElement('canvas');
-  let context = canvas.getContext('2d');
-  canvas.width = imageData.width;
-  canvas.height = imageData.height;
-  context.putImageData(imageData, 0, 0);
-
-  let image = new Image();
-  image.src = canvas.toDataURL();
-  await image.decode()
-  return image;
 }
 
 function CameraStream({ cameraName }) {
@@ -118,38 +73,37 @@ function CameraStream({ cameraName }) {
   const [popoutWindow, setPopoutWindow] = useState(null);
   const [aspectRatio, setAspectRatio] = useState(1);
 
-  let cameraCanvas = useRef(null);  // used for popout window
+  const cameraCanvas = useRef(null);  // used for popout window
+  const cameraContext = useRef(null);  // used for popout window
   
   const vidTag = useMemo(() => {
     return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow])
   
-  const drawFrameOnExt = useCallback((window) => {
+  const drawFrameOnExt = useCallback((window, last_ww, last_wh) => {
     if (vidTag && window && cameraCanvas) {
       // draw it onto the popout window
 
-      // if the window is wider than the stream
-      if (window.innerHeight / window.innerWidth > aspectRatio) {
-        // set the height of the canvas to the height of the window
-        cameraCanvas.current.width = Math.floor(window.innerWidth);
-        cameraCanvas.current.height = Math.floor(window.innerWidth * aspectRatio);
-      } else {
-        // set the width of the canvas to the height of the window
-        cameraCanvas.current.width = Math.floor(window.innerHeight / aspectRatio);
-        cameraCanvas.current.height = Math.floor(window.innerHeight);
+      console.log(last_ww, last_wh);
+      if (window.innerWidth !== last_ww || window.innerHeight !== last_wh) {
+        console.log("RESIZING!!!");
+        // if the window is wider than the stream
+        if (window.innerHeight / window.innerWidth > aspectRatio) {
+          // set the height of the canvas to the height of the window
+          cameraCanvas.current.width = Math.floor(window.innerWidth);
+          cameraCanvas.current.height = Math.floor(window.innerWidth * aspectRatio);
+        } else {
+          // set the width of the canvas to the height of the window
+          cameraCanvas.current.width = Math.floor(window.innerHeight / aspectRatio);
+          cameraCanvas.current.height = Math.floor(window.innerHeight);
+        }
       }
-
+      
       let video = document.querySelector(`#${vidTag.props.id}`);
-      let imageData = getLatestFrameFromVideo(video);
-      if (!isImageBlack(imageData)) {
-        // convertDataToImage(imageData).then((i) => {
-        //   cameraCanvas.current.getContext('2d').drawImage(i, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
-        // }).catch((e) => {
-        //   console.log("Image couldn't be converted: ", e);
-        // });
-        cameraCanvas.current.getContext('2d').drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
-      }
-      window.requestAnimationFrame(() => { drawFrameOnExt(window); });
+      cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
+      last_ww = window.innerWidth;
+      last_wh = window.innerHeight;
+      window.requestAnimationFrame(() => { drawFrameOnExt(window, last_ww, last_wh); });
     }
   }, [vidTag, aspectRatio]);
 
@@ -160,11 +114,12 @@ function CameraStream({ cameraName }) {
       setPopoutWindow(null);
     } else {
       // if the window popout doesn't exist
-      let { popout, canvas, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
+      let { popout, canvas, context, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;
-      popout.requestAnimationFrame(() => { drawFrameOnExt(popout); });
+      cameraContext.current = context;
+      popout.requestAnimationFrame(() => { drawFrameOnExt(popout, 0, 0); });
     }
   }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt]);
 
@@ -189,7 +144,6 @@ function CameraStream({ cameraName }) {
   }, [cameraName, hasRendered]);
 
   useEffect(() => {
-    console.log(frameDataArray?.length);
     if (frameDataArray && vidTag && jmuxer) {
       for (let i = 0; i < frameDataArray.length; i++) {
         jmuxer.feed({
