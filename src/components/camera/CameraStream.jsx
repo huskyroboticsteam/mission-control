@@ -83,10 +83,8 @@ function CameraStream({ cameraName }) {
   const drawFrameOnExt = useCallback((window, last_ww, last_wh) => {
     if (vidTag && window && cameraCanvas) {
       // draw it onto the popout window
-
-      console.log(last_ww, last_wh);
+      
       if (window.innerWidth !== last_ww || window.innerHeight !== last_wh) {
-        console.log("RESIZING!!!");
         // if the window is wider than the stream
         if (window.innerHeight / window.innerWidth > aspectRatio) {
           // set the height of the canvas to the height of the window
