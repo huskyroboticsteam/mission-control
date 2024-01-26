@@ -30,8 +30,8 @@ function ToggleInverseKinematics() {
                 Enable IK
             </div>
             <div id={canBeEnabled ? 'switch-wrapper' : 'switch-wrapper-disabled'} onClick={handleClick}>
-                <div id={IKEnabled ? 'disable-ik' : 'enable-ik'} className='ik-switch'>
-                    <div id={IKEnabled ? 'disable-ik-handle' : 'enable-ik-handle'} className={roverIsConnected && !roverIsStopped ? 'switch-handle' : ' switch-handle-disconnected'}>
+                <div id={IKEnabled ? 'disable-ik' : 'enable-ik'} className={`ik-switch ${!canBeEnabled && 'ik-switch-disconnected'}`}>
+                    <div id={IKEnabled ? 'disable-ik-handle' : 'enable-ik-handle'} className={canBeEnabled ? 'switch-handle' : ' switch-handle-disconnected'}>
                     </div>
                 </div>
             </div>
