@@ -1,6 +1,5 @@
 import { roverConnected, messageRover } from "../roverSocketSlice";
 import { requestStop } from "../emergencyStopSlice";
-import { enableIK } from "../inputSlice";
 
 /**
  * Middleware that handles sending messages to the rover to request emergency
@@ -18,8 +17,6 @@ const emergencyStopMiddleware = store => next => action => {
           stop: store.getState().emergencyStop.stopped
         }
       }));
-      // send ik packet with false
-      store.dispatch(enableIK({ enable: false }));
       break;
     }
 
