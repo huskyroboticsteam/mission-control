@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-
+import { Cartesian3 } from "cesium";
 const initialState = {
     orientW: null,
     orientX: null,
@@ -29,5 +29,7 @@ const telemetrySlice = createSlice({
 
 export const { roverPositionReportReceived } = telemetrySlice.actions;
 export const selectRoverPosition = state => state.telemetry;
+export const selectRoverLatitude = state => state.telemetry.lat == null ? 0 : state.telemetry.lat;
+export const selectRoverLongitude = state => state.telemetry.lon == null ? 0 : state.telemetry.lon;
 
 export default telemetrySlice.reducer;
