@@ -47,9 +47,9 @@ function WaypointNav() {
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
       <label htmlFor="latitude">Latitude</label>
-      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
+      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
       <label htmlFor="longitude">Longitude</label>
-      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
+      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
       {submitted ? <button disabled>Copy from Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>}
     </div>
     <div className="waypoint-checkbox">
