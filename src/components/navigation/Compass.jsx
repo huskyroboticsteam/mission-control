@@ -63,17 +63,6 @@ const Compass = () => {
 
   return (
     <div className="compass-container">
-      <div className="compass">
-        <div
-          className={`compass__needle compass__needle--${needleColor}`}
-          style={{ transform: `rotate(${heading ?? 0}deg)` }}
-        ></div>
-        <div className={`compass__outer-ring ${needleColor}`}></div>
-        <div className="compass__label compass__label--north">N</div>
-        <div className="compass__label compass__label--south">S</div>
-        <div className="compass__label compass__label--west">W</div>
-        <div className="compass__label compass__label--east">E</div>
-      </div>
       <div className="info">
         <table>
           <tbody>
@@ -99,6 +88,19 @@ const Compass = () => {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className="compass">
+        <div className="compass-parts">
+          <div
+            className={`compass__needle compass__needle--${needleColor}`}
+            style={{ transform: `rotate(${heading ?? 0}deg)` }}
+          ></div>
+          <div className={`compass__outer-ring ${needleColor}`}></div>
+          <div className="compass__label compass__label--north">N</div>
+          <div className="compass__label compass__label--south">S</div>
+          <div className="compass__label compass__label--west">W</div>
+          <div className="compass__label compass__label--east">E</div>
+        </div>
       </div>
     </div>
   );
