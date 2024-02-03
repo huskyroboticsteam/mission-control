@@ -14,7 +14,7 @@ import "./CameraStream.css";
  *    cameraTitle: the camera title,
  *    cameraName: the camera name,
  *    unloadCallback, a callback that is ran before the window is fully unloaded
- * Returns a JSON object with keys: window, canvas, context, aspectRatio
+ * Returns an object with keys: window, canvas, context, aspectRatio
  */
 function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
   let newWindow = window.open("", "", "width=500,height=500");
@@ -24,6 +24,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
     <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
       <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
       <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
+      <div id="ext-download" style="z-index: 101;position:absolute;bottom:5px;right:5px;font-size:15px;font-weight:bold;color:white;" onclick="downloadCurrentFrame(, ${cameraTitle})">Download</div>
       <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
       </div>
     </div>`;
@@ -51,6 +52,43 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
     aspectRatio: aspectRatio
   }; 
   return output;
+}
+
+/**
+ * 
+ * video: HTMLVideoElement representing the video tag which should be processed.
+ * cameraTitle: name of the camera, used for the filename.
+ */
+
+function downloadCurrentFrame(video, cameraTitle) {
+  if (!video || !(video.videoWidth && video.videoHeight)) return null;
+  let timestamp = Math.floor(Date.now() / 1000);  // UNIX epoch in seconds
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext('2d');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  let link = document.createElement("a");
+  link.href = canvas.toDataURL();
+  link.download = `${timestamp}-${cameraTitle}.jpg`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/**
+ * canvas: canvas to be downloaded
+ * cameraTitle: name of camera, used for the filename.
+ */
+function downloadCurrentCanvas(canvas, cameraTitle) {
+  let timestamp = Math.floor(Date.now() / 1000);  // UNIX epoch in seconds
+  let link = document.createElement("a");
+  link.href = canvas.toDataURL();
+  link.download = `${timestamp}-${cameraTitle}.jpg`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function CameraStream({ cameraName }) {
@@ -191,7 +229,8 @@ function CameraStream({ cameraName }) {
       </div>
       <div className='camera-stream-download-header'>
         <span className='camera-stream-download-button'
-        title={`Download "${cameraTitle}" camera stream current frame`}>
+        title={`Download "${cameraTitle}" camera stream current frame`}
+        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)}>
           Download
         </span>
       </div>
