@@ -13,18 +13,28 @@ import "./CameraStream.css";
  * Takes:
  *    cameraTitle: the camera title,
  *    cameraName: the camera name,
- *    unloadCallback, a callback that is ran before the window is fully unloaded
+ *    unloadCallback: a callback that is ran before the window is fully unloaded
+ *    video_width: the stream width
+ *    video_height: the stream height
  * Returns an object with keys: window, canvas, context, aspectRatio
  */
-function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
+function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
   let newWindow = window.open("", "", "width=500,height=500");
   let script = document.createElement('script');
   script.innerHTML = `
     function download() {
+      let canvas = document.getElementById("ext-vid");
       let timestamp = Math.floor(Date.now() / 1000);  // UNIX epoch in seconds
       let link = document.createElement("a");
-      let canvas = document.getElementById("ext-vid");
-      link.href = canvas.toDataURL();
+      
+      let tempCanvas = document.createElement('canvas');
+      tempCanvas.width = ${video_width} // video.videoWidth;
+      tempCanvas.height = ${video_height} // video.videoHeight;
+
+      let tempContext = tempCanvas.getContext('2d');
+      tempContext.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
+
+      link.href = tempCanvas.toDataURL();
       link.download = timestamp + "-${cameraTitle}.jpg";
       document.body.appendChild(link);
       link.click();
@@ -149,16 +159,17 @@ function CameraStream({ cameraName }) {
       // if the window popout exists
       popoutWindow.close();
       setPopoutWindow(null);
-    } else {
+    } else if (vidTag ){
       // if the window popout doesn't exist
-      let { popout, canvas, context, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
+      let video = document.getElementById(vidTag.props.id);
+      let { popout, canvas, context, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
       popout.requestAnimationFrame(() => { drawFrameOnExt(popout, 0, 0); });
     }
-  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt]);
+  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt, vidTag]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
