@@ -189,8 +189,15 @@ function CameraStream({ cameraName }) {
           { popoutWindow ? 'Merge Window' : 'Pop Out' }
         </span>
       </div>
+      <div className='camera-stream-download-header'>
+        <span className='camera-stream-download-button'
+        title={`Download "${cameraTitle}" camera stream current frame`}>
+          Download
+        </span>
+      </div>
     </div>
   );
 }
+// format of download file: {cameraName}-{timestamp}.jpg (or png if needed)
 
 export default CameraStream;
