@@ -20,7 +20,7 @@ import "./CameraStream.css";
  */
 function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
   let newWindow = window.open("", "", "width=500,height=500");
-  let script = document.createElement('script');
+  let script = newWindow.document.createElement('script');
   script.innerHTML = `
     function download() {
       let canvas = document.getElementById("ext-vid");
