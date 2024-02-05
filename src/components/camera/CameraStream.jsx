@@ -35,7 +35,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
       tempContext.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
 
       link.href = tempCanvas.toDataURL();
-      link.download = timestamp + "-${cameraTitle}.jpg";
+      link.download = "${cameraTitle}-" + timestamp + ".jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -96,7 +96,7 @@ function downloadCurrentFrame(video, cameraTitle) {
 
   let link = document.createElement("a");
   link.href = canvas.toDataURL();
-  link.download = `${timestamp}-${cameraTitle}.jpg`;
+  link.download = `${cameraTitle}-${timestamp}.jpg`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -249,6 +249,5 @@ function CameraStream({ cameraName }) {
     </div>
   );
 }
-// format of download file: {cameraName}-{timestamp}.jpg (or png if needed)
 
 export default CameraStream;
