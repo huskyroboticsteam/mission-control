@@ -20,6 +20,55 @@ import "./CameraStream.css";
  */
 function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
   let newWindow = window.open("", "", "width=500,height=500");
+  let style = newWindow.document.createElement('style');
+  style.innerHTML = `
+    #wrapper {
+      background-color: black;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    #title {
+      z-index: 100;
+      position: absolute;
+      width: 100%;
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      color: white;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background-color: #00000066;
+    }
+
+    #ext-fps {
+      z-index: 101;
+      position: absolute;
+      top: 5;
+      left: 5;
+      font-size: 15px;
+      font-weight: bold;
+      color: red;
+    }
+
+    #ext-download-wrapper {
+      z-index: 101;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
+
+    #ext-vid {
+      z-index: 1;
+      border: none;
+      display: block;
+      margin: auto 0;
+    }
+  `;
+  newWindow.document.head.appendChild(style);
   let script = newWindow.document.createElement('script');
   script.innerHTML = `
     function download() {
@@ -50,12 +99,11 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
   newWindow.document.body.style.margin = "0";
   newWindow.document.title = cameraTitle + " Stream";
   newWindow.document.body.innerHTML = `
-    <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
-      <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
-      <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
-      <div id="ext-download" style="z-index: 101;position:absolute;bottom:5px;right:5px;"><a style="font-size:15px;font-weight:bold;color:white;text-decoration:none;" href="javascript:download()">Download</a></div>
-      <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
-      </div>
+    <div id="wrapper">
+      <div id="title">${cameraTitle}</div>
+      <div id="ext-fps">FPS: N/A</div>
+      <div id="ext-download-wrapper"><button id="download-button" onclick="download()">Download</button></div>
+      <canvas id="ext-vid"></canvas>
     </div>`;
   let canvas = newWindow.document.querySelector('#ext-vid');
   let context = canvas.getContext('2d');
@@ -91,7 +139,6 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
 
 function downloadCurrentFrame(video, cameraTitle) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
-  let timestamp = Math.floor(Date.now() / 1000);  // UNIX epoch in seconds
   let canvas = document.createElement('canvas');
   let context = canvas.getContext('2d');
   canvas.width = video.videoWidth;
@@ -125,6 +172,7 @@ function CameraStream({ cameraName }) {
   const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
+  const [hasFrame, setHasFrame] = useState(false);
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
@@ -217,6 +265,7 @@ function CameraStream({ cameraName }) {
           return fps;
         });
       }
+      setHasFrame(true);
       setAspectRatio(document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth);
       setLastFrameTime(currentTime); // current time in ms
     }
@@ -249,11 +298,11 @@ function CameraStream({ cameraName }) {
         </span>
       </div>
       <div className='camera-stream-download-header'>
-        <span className='camera-stream-download-button'
+        <button className='camera-stream-download-button'
         title={`Download "${cameraTitle}" camera stream current frame`}
-        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)}>
+        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)} disabled={!hasFrame}>
           Download
-        </span>
+        </button>
       </div>
     </div>
   );

@@ -81,3 +81,7 @@
   margin-right: 5px;
   cursor: pointer;
 }
+
+.camera-stream-download-button:disabled {
+  cursor: not-allowed;
+}
