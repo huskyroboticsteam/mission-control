@@ -22,7 +22,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
   let newWindow = window.open("", "", "width=500,height=500");
   let style = newWindow.document.createElement('style');
   style.innerHTML = `
-    #wrapper {
+    #ext-wrapper {
       background-color: black;
       width: 100%;
       height: 100%;
@@ -31,7 +31,7 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
       justify-content: center;
     }
 
-    #title {
+    #ext-title {
       z-index: 100;
       position: absolute;
       width: 100%;
@@ -59,6 +59,14 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
       position: absolute;
       bottom: 5px;
       right: 5px;
+    }
+
+    #ext-download-button {
+      cursor: pointer;
+    }
+
+    #ext-download-button:disabled {
+      cursor: not-allowed;
     }
 
     #ext-vid {
@@ -99,16 +107,17 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
   newWindow.document.body.style.margin = "0";
   newWindow.document.title = cameraTitle + " Stream";
   newWindow.document.body.innerHTML = `
-    <div id="wrapper">
-      <div id="title">${cameraTitle}</div>
+    <div id="ext-wrapper">
+      <div id="ext-title">${cameraTitle}</div>
       <div id="ext-fps">FPS: N/A</div>
-      <div id="ext-download-wrapper"><button id="download-button" onclick="download()">Download</button></div>
+      <div id="ext-download-wrapper">
+        <button id="ext-download-button" onclick="download()" disabled>Download</button>
+      </div>
       <canvas id="ext-vid"></canvas>
     </div>`;
   let canvas = newWindow.document.querySelector('#ext-vid');
   let context = canvas.getContext('2d');
   let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
-
   canvas.width = aspectRatio * 400;
   canvas.height = 400;
   context.fillStyle = "blue";
@@ -202,14 +211,19 @@ function CameraStream({ cameraName }) {
           cameraCanvas.current.height = Math.floor(window.innerHeight);
         }
       }
-      
+
+      if (hasFrame) {
+        let button = window.document.querySelector("#ext-download-button");
+        button.removeAttribute('disabled');
+      }
+
       let video = document.querySelector(`#${vidTag.props.id}`);
       cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       last_ww = window.innerWidth;
       last_wh = window.innerHeight;
       window.requestAnimationFrame(() => { drawFrameOnExt(window, last_ww, last_wh); });
     }
-  }, [vidTag, aspectRatio]);
+  }, [vidTag, aspectRatio, hasFrame]);
 
   const handlePopOut = useCallback(() => {
     if (popoutWindow) {
