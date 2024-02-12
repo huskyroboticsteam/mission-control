@@ -179,7 +179,7 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      { vidTag }
+      <div className="video-container">{ vidTag }</div>
       { popoutWindow ? <h3>Stream In External Window</h3> : (!frameDataArray && <h3>No Stream Available</h3>) }
       <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
       <div className='camera-stream-pop-header'>

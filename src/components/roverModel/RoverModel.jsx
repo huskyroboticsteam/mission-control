@@ -3,13 +3,10 @@ import { useSelector } from "react-redux";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useFBX, Cylinder, Box } from "@react-three/drei";
 import { selectJointCurrentPosition } from "../../store/jointsSlice";
+
 import chassisMesh from "./mesh/chassis.fbx";
-import leftSuspensionMesh from "./mesh/leftSuspension.fbx";
-import rightSuspensionMesh from "./mesh/rightSuspension.fbx";
-import frontLeftWheelMesh from "./mesh/frontLeftWheel.fbx";
-import rearLeftWheelMesh from "./mesh/rearLeftWheel.fbx";
-import frontRightWheelMesh from "./mesh/frontRightWheel.fbx";
-import rearRightWheelMesh from "./mesh/rearRightWheel.fbx";
+import suspensionMesh from "./mesh/suspension.fbx";
+import wheelMesh from "./mesh/wheel.fbx";
 import armBaseMesh from "./mesh/armBase.fbx";
 import forearmMesh from "./mesh/forearm.fbx";
 import wristMesh from "./mesh/wrist.fbx";
@@ -54,7 +51,7 @@ function Rover() {
 }
 
 function LeftSuspension() {
-  const mesh = useFBX(leftSuspensionMesh);
+  const mesh = useFBX(suspensionMesh).clone();
 
   return (
     <primitive
@@ -65,7 +62,7 @@ function LeftSuspension() {
 }
 
 function RightSuspension() {
-  const mesh = useFBX(rightSuspensionMesh);
+  const mesh = useFBX(suspensionMesh).clone();
 
   return (
     <primitive
@@ -76,7 +73,7 @@ function RightSuspension() {
 }
 
 function FrontLeftWheel() {
-  const mesh = useFBX(frontLeftWheelMesh);
+  const mesh = useFBX(wheelMesh).clone();
 
   return (
     <primitive
@@ -87,7 +84,7 @@ function FrontLeftWheel() {
 }
 
 function RearLeftWheel() {
-  const mesh = useFBX(rearLeftWheelMesh);
+  const mesh = useFBX(wheelMesh).clone();
 
   return (
     <primitive
@@ -98,7 +95,7 @@ function RearLeftWheel() {
 }
 
 function FrontRightWheel() {
-  const mesh = useFBX(frontRightWheelMesh);
+  const mesh = useFBX(wheelMesh).clone();
 
   return (
     <primitive
@@ -109,7 +106,7 @@ function FrontRightWheel() {
 }
 
 function RearRightWheel() {
-  const mesh = useFBX(rearRightWheelMesh);
+  const mesh = useFBX(wheelMesh).clone();
 
   return (
     <primitive

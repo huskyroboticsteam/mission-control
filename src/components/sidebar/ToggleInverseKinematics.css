@@ -51,6 +51,10 @@
     justify-content: center;
 }
 
+.ik-switch-disconnected {
+    outline: 2px solid rgb(68, 68, 68);
+}
+
 #enable-ik-handle {
     align-self: flex-start;
 }
@@ -65,8 +69,9 @@
     border-radius: 28px;
     margin-left: 2px;
     margin-right: 2px;
-    background-color: darkgray;
-    border: 1px solid white;
+    background-color: rgb(68, 68, 68);
+    border: 3px solid rgb(39, 39, 39);
+    box-sizing: border-box;
 }
 
 .switch-handle {

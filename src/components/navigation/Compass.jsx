@@ -80,11 +80,11 @@ const Compass = () => {
             </tr>
             <tr>
               <td>latitude:</td>
-              <td>{sanitize(lon, 6)}</td>
+              <td>{sanitize(lat, 6)}</td>
             </tr>
             <tr>
               <td>longitude:</td>
-              <td>{sanitize(lat, 6)}</td>
+              <td>{sanitize(lon, 6)}</td>
             </tr>
           </tbody>
         </table>
