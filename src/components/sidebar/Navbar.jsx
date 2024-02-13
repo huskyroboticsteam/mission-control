@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import DeliveryIcon from "@mui/icons-material/Terrain";
-import ServicingIcon from "@mui/icons-material/Build";
-import AutonomousIcon from "@mui/icons-material/Code";
+import NavigationIcon from "@mui/icons-material/Map"
+import ArmDexterityIcon from "@mui/icons-material/BackHand"
+import ScienceIcon from "@mui/icons-material/Science"
 import TelemetryIcon from "@mui/icons-material/Info";
 import HelpIcon from "@mui/icons-material/Help";
 import "./Navbar.css";
@@ -10,33 +10,33 @@ function Navbar() {
   return (
     <nav className="navbar">
       <ul>
-        <li>
+      <li>
         <NavLink 
-            to="/delivery" 
+            to="/navigation" 
             className={({ isActive}) => isActive ? "active" : "inactive"}
           >
-            <DeliveryIcon fontSize="large" className="navbar__icon" />
-            Delivery
+            <NavigationIcon fontSize="large" className="navbar__icon" />
+            Navigation
           </NavLink>
         </li>
 
         <li>
         <NavLink 
-            to="/servicing" 
+            to="/arm-dexterity" 
             className={({ isActive}) => isActive ? "active" : "inactive"}
           >
-            <ServicingIcon fontSize="large" className="navbar__icon" />
-            Servicing
+            <ArmDexterityIcon fontSize="large" className="navbar__icon" />
+            Arm Dexterity
           </NavLink>
         </li>
 
         <li>
         <NavLink 
-            to="/autonomous" 
+            to="/science" 
             className={({ isActive}) => isActive ? "active" : "inactive"}
           >
-            <AutonomousIcon fontSize="large" className="navbar__icon" />
-            Autonomous
+            <ScienceIcon fontSize="large" className="navbar__icon" />
+            Science
           </NavLink>
         </li>
 
