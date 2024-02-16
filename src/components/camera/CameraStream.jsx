@@ -20,40 +20,40 @@ import "./CameraStream.css";
  */
 async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
   let newWindow = window.open("/camera/cam_popout.html", "", "width=500,height=500");
-  let hasLoaded = false;
-  newWindow.onload = () => {
-    hasLoaded = true;
-  }
-  while (!hasLoaded) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
-  newWindow.document.title = `${cameraTitle} Stream`;
-  newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
-  newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
 
-  let canvas = newWindow.document.querySelector('#ext-vid');
-  let context = canvas.getContext('2d');
-  let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
-  canvas.width = aspectRatio * 400;
-  canvas.height = 400;
-  context.fillStyle = "blue";
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  const returnPromise = new Promise((resolve, reject) => {
+    newWindow.onload = () => {
+      newWindow.document.title = `${cameraTitle} Stream`;
+      newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
+      newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
 
-  window.onunload = () => {
-    if (newWindow && !newWindow.closed) {
-        newWindow.close();
+      let canvas = newWindow.document.querySelector('#ext-vid');
+      let context = canvas.getContext('2d');
+      let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+      canvas.width = aspectRatio * 400;
+      canvas.height = 400;
+      context.fillStyle = "blue";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      window.onunload = () => {
+        if (newWindow && !newWindow.closed) {
+            newWindow.close();
+        }
+      };
+
+      newWindow.onbeforeunload = unloadCallback;
+
+      let output = {
+        popout: newWindow,
+        canvas: canvas,
+        context: context,
+        aspectRatio: aspectRatio
+      };
+      resolve(output); 
     }
-  };
-
-  newWindow.onbeforeunload = unloadCallback;
-
-  let output = {
-    popout: newWindow,
-    canvas: canvas,
-    context: context,
-    aspectRatio: aspectRatio
-  }; 
-  return output;
+  });
+  
+  return returnPromise;
 }
 
 /**
