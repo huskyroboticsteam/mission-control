@@ -16,105 +16,21 @@ import "./CameraStream.css";
  *    unloadCallback: a callback that is ran before the window is fully unloaded
  *    video_width: the stream width
  *    video_height: the stream height
- * Returns an object with keys: window, canvas, context, aspectRatio
+ * Returns: Promise of an object with keys: window, canvas, context, aspectRatio
  */
-function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
-  let newWindow = window.open("", "", "width=500,height=500");
-  let style = newWindow.document.createElement('style');
-  style.innerHTML = `
-    #ext-wrapper {
-      background-color: black;
-      width: 100%;
-      height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      display: flex;
-      justify-content: center;
-    }
+async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
+  let newWindow = window.open("/camera/cam_popout.html", "", "width=500,height=500");
+  var hasLoaded = false;
+  newWindow.onload = () => {
+    hasLoaded = true;
+  }
+  while (!hasLoaded) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  newWindow.document.title = `${cameraTitle} Stream`;
+  newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
+  newWindow.document.querySelector('#ext-download-button').onclick = `download(${cameraTitle}, ${video_width}, ${video_height})`;
 
-    #ext-title {
-      z-index: 100;
-      position: absolute;
-      width: 100%;
-      font-size: 30px;
-      font-weight: bold;
-      text-align: center;
-      color: white;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      background-color: #00000066;
-    }
-
-    #ext-fps {
-      z-index: 101;
-      position: absolute;
-      top: 5;
-      left: 5;
-      font-size: 15px;
-      font-weight: bold;
-      color: red;
-    }
-
-    #ext-download-wrapper {
-      z-index: 101;
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-    }
-
-    #ext-download-button {
-      cursor: pointer;
-    }
-
-    #ext-download-button:disabled {
-      cursor: not-allowed;
-    }
-
-    #ext-vid {
-      z-index: 1;
-      border: none;
-      display: block;
-      margin: auto 0;
-    }
-  `;
-  newWindow.document.head.appendChild(style);
-  let script = newWindow.document.createElement('script');
-  script.innerHTML = `
-    function download() {
-      let canvas = document.getElementById("ext-vid");
-
-      let time = new Date();
-      let timezoneOffset = time.getTimezoneOffset() * 60000;
-      let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
-
-      let link = document.createElement("a");
-      
-      let tempCanvas = document.createElement('canvas');
-      tempCanvas.width = ${video_width} // video.videoWidth;
-      tempCanvas.height = ${video_height} // video.videoHeight;
-
-      let tempContext = tempCanvas.getContext('2d');
-      tempContext.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
-
-      link.href = tempCanvas.toDataURL("image/jpeg", 1);
-      link.download = "${cameraTitle}-" + timeString + ".jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  `;
-  newWindow.document.head.appendChild(script);
-
-  newWindow.document.body.style.margin = "0";
-  newWindow.document.title = cameraTitle + " Stream";
-  newWindow.document.body.innerHTML = `
-    <div id="ext-wrapper">
-      <div id="ext-title">${cameraTitle}</div>
-      <div id="ext-fps">FPS: N/A</div>
-      <div id="ext-download-wrapper">
-        <button id="ext-download-button" onclick="download()" disabled>Download</button>
-      </div>
-      <canvas id="ext-vid"></canvas>
-    </div>`;
   let canvas = newWindow.document.querySelector('#ext-vid');
   let context = canvas.getContext('2d');
   let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
@@ -224,7 +140,7 @@ function CameraStream({ cameraName }) {
     }
   }, [vidTag, aspectRatio, hasFrame]);
 
-  const handlePopOut = useCallback(() => {
+  const handlePopOut = useCallback(async () => {
     if (popoutWindow) {
       // if the window popout exists
       popoutWindow.close();
@@ -232,7 +148,7 @@ function CameraStream({ cameraName }) {
     } else if (vidTag ){
       // if the window popout doesn't exist
       let video = document.getElementById(vidTag.props.id);
-      let { popout, canvas, context, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
+      let { popout, canvas, context, aspectRatio } = await createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;
