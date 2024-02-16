@@ -145,7 +145,6 @@ function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width
  *    video: HTMLVideoElement representing the video tag which should be processed.
  *    cameraTitle: name of the camera, used for the filename.
  */
-
 function downloadCurrentFrame(video, cameraTitle) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
   let canvas = document.createElement('canvas');
