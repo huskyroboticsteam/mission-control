@@ -8,14 +8,14 @@ function download(title, width, height) {
     let link = document.createElement("a");
 
     let tempCanvas = document.createElement('canvas');
-    tempCanvas.width = title // video.videoWidth;
-    tempCanvas.height = width // video.videoHeight;
+    tempCanvas.width = width // video.videoWidth;
+    tempCanvas.height = height // video.videoHeight;
 
     let tempContext = tempCanvas.getContext('2d');
     tempContext.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
 
     link.href = tempCanvas.toDataURL("image/jpeg", 1);
-    link.download = `${height}-${timeString}.jpg`;
+    link.download = `${title}-${timeString}.jpg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

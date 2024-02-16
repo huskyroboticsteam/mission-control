@@ -20,7 +20,7 @@ import "./CameraStream.css";
  */
 async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
   let newWindow = window.open("/camera/cam_popout.html", "", "width=500,height=500");
-  var hasLoaded = false;
+  let hasLoaded = false;
   newWindow.onload = () => {
     hasLoaded = true;
   }
@@ -29,7 +29,7 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
   }
   newWindow.document.title = `${cameraTitle} Stream`;
   newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
-  newWindow.document.querySelector('#ext-download-button').onclick = `download(${cameraTitle}, ${video_width}, ${video_height})`;
+  newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
 
   let canvas = newWindow.document.querySelector('#ext-vid');
   let context = canvas.getContext('2d');
