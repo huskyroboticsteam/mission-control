@@ -52,7 +52,7 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
       resolve(output); 
     }
   });
-  
+
   return returnPromise;
 }
 
@@ -194,11 +194,16 @@ function CameraStream({ cameraName }) {
           return fps;
         });
       }
-      setHasFrame(true);
+      if (vidTag) {
+        let vid = document.querySelector(`#${vidTag.props.id}`);
+        if (vid && vid.videoWidth && vid.videoHeight) {
+          setHasFrame(true);
+        }
+      }
       setAspectRatio(document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth);
       setLastFrameTime(currentTime); // current time in ms
     }
-  }, [cameraName, frameDataArray, popoutWindow]);
+  }, [cameraName, frameDataArray, popoutWindow, vidTag]);
 
   useEffect(() => {
     return () => {
