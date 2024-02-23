@@ -60,6 +60,9 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
  * Takes
  *    video: HTMLVideoElement representing the video tag which should be processed.
  *    cameraTitle: name of the camera, used for the filename.
+ * Note: This is the React version of this function for this CameraStream component,
+ *    The popout window "download" button uses a seperate function, defined in 
+ *    /public/camera/cam_popout.js
  */
 function downloadCurrentFrame(video, cameraTitle) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
