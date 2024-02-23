@@ -13,8 +13,8 @@ function download(title, width, height) {
     let link = document.createElement("a");
 
     let tempCanvas = document.createElement('canvas');
-    tempCanvas.width = width // video.videoWidth;
-    tempCanvas.height = height // video.videoHeight;
+    tempCanvas.width = width;
+    tempCanvas.height = height;
 
     let tempContext = tempCanvas.getContext('2d');
     tempContext.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
