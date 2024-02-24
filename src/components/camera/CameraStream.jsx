@@ -19,7 +19,7 @@ import "./CameraStream.css";
  * Returns: Promise of an object with keys: window, canvas, context, aspectRatio
  */
 async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
-  let newWindow = window.open("/camera/cam_popout.html", "", "width=500,height=500");
+  let newWindow = window.open("/camera/cam_popout.htmx", "", "width=500,height=500");
 
   const returnPromise = new Promise((resolve, reject) => {
     newWindow.onload = () => {
