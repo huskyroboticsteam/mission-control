@@ -4,60 +4,47 @@ import { IonResource, CesiumTerrainProvider, Cartesian3, Ion } from "cesium"
 import { useSelector } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude } from "../../store/telemetrySlice";
 Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
+
+class TestEntity extends React.Component {
+  constructor(props) {
+    super(props);
+    // Don't call this.setState() here!
+    this.state = { counter: 0 };
+  }
+
+  render() {
+    setInterval(() => { 
+      this.setState({ counter: this.state.counter + 0.00000050053768 });
+    }, 100);
+    return <Entity
+      name="Rover"
+      position={Cartesian3.fromDegrees(-119 + this.state.counter, 48, 0)}
+      point={{ pixelSize: 100 }}
+      description={"Lat: " + (-119 + this.state.counter).toFixed(5) + ", Lon: 48"}
+    />;
+  }
+}
+
 function Map() {  
   const lat = useSelector(selectRoverLatitude);
   const long = useSelector(selectRoverLongitude);
   
-  let viewer; // This will be raw Cesium's Viewer object.
-
-  const handleReady = tileset => {
-    if (viewer) {
-      viewer.zoomTo(tileset);
-    }
-  };
-  
-  // return (
-  //   <Viewer  
-  //       style={{overflow:"hidden"}}
-  //       baseLayerPicker={false} 
-  //       geocoder={false}
-  //       timeline={false}
-  //       animation={false}
-  //       fullscreenButton={false}
-  //       homeButton={false}
-  //       scene3DOnly
-  //     >
-  //     <Scene
-  //         debugShowFramesPerSecond = {true}
-  //     />
-  //     <Globe />
-  //     <Entity
-  //       name="Rover"
-  //       point={{ pixelSize: 100 }}
-  //       position={Cartesian3.fromDegrees(lat, long, 1000)}
-  //     />
-  //   </Viewer>
-  // );
   return (
     <Viewer  
       style={{overflow:"hidden"}}
-      baseLayerPicker={false} 
       geocoder={false}
       timeline={false}
       animation={false}
       fullscreenButton={false}
       homeButton={false}
-      scene3DOnly
-      ref={e => {
-        viewer = e && e.cesiumElement;
-      }}
     >
-      <Cesium3DTileset url={IonResource.fromAssetId(2275207)} onReady={handleReady} />
-      <Entity
-        name="Rover"
-        point={{ pixelSize: 100 }}
-        position={Cartesian3.fromDegrees(lat, long, 0)}
-      />
+      {/* <ImageryLayer imageryProvider={
+        new Cesium3DTileset.UrlTemplateImageryProvider({
+          url: 'http://localhost:8080/data/tiles/{z}/{x}/{y}.jpg'
+        })  
+      } /> */}
+      <TestEntity />
+      
     </Viewer>
   );
 }

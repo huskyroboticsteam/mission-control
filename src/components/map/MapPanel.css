@@ -1,0 +1,11 @@
+.map-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 2px;
+    padding: 2px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  

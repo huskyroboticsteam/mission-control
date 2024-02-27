@@ -3,6 +3,7 @@ import DeliveryPanel from "../delivery/DeliveryPanel";
 import ServicingPanel from "../servicing/ServicingPanel";
 import AutonomousPanel from "../autonomous/AutonomousPanel";
 import TelemetryPanel from "../telemetry/TelemetryPanel";
+import MapPanel from "../map/MapPanel"
 import HelpPanel from "../help/HelpPanel";
 import "./PanelContainer.css";
 
@@ -19,6 +20,8 @@ function PanelContainer() {
         <Route path="/autonomous" element={<AutonomousPanel/>}/>
 
         <Route path="/telemetry" element={<TelemetryPanel/>}/>
+        
+        <Route path="/map" element={<MapPanel/>}/>
         
         <Route path="/help" element={<HelpPanel/>}/>
       </Routes>

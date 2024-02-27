@@ -3,6 +3,7 @@ import DeliveryIcon from "@mui/icons-material/Terrain";
 import ServicingIcon from "@mui/icons-material/Build";
 import AutonomousIcon from "@mui/icons-material/Code";
 import TelemetryIcon from "@mui/icons-material/Info";
+import MapIcon from "@mui/icons-material/Map"
 import HelpIcon from "@mui/icons-material/Help";
 import "./Navbar.css";
 
@@ -47,6 +48,16 @@ function Navbar() {
           >
             <TelemetryIcon fontSize="large" className="navbar__icon" />
             Telemetry
+          </NavLink>
+        </li>
+
+        <li>
+        <NavLink 
+            to="/map" 
+            className={({ isActive}) => isActive ? "active" : "inactive"}
+          >
+            <MapIcon fontSize="large" className="navbar__icon" />
+            Map
           </NavLink>
         </li>
 
