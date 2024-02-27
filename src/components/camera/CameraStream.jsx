@@ -19,7 +19,7 @@ import "./CameraStream.css";
  * Returns: Promise of an object with keys: window, canvas, context, aspectRatio
  */
 async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
-  let newWindow = window.open("/camera/cam_popout.htmx", "", "width=500,height=500");
+  let newWindow = window.open("/camera/cam_popout.htm", "", "width=500,height=500");
 
   const returnPromise = new Promise((resolve, reject) => {
     newWindow.onload = () => {
@@ -62,7 +62,8 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
  *    cameraTitle: name of the camera, used for the filename.
  * Note: This is the React version of this function for this CameraStream component,
  *    The popout window "download" button uses a seperate function, defined in 
- *    /public/camera/cam_popout.js
+ *    /public/camera/cam_popout.js. If you make changes to this function, you need to 
+ *    make corresponding changes to the cam_popout.js file.
  */
 function downloadCurrentFrame(video, cameraTitle) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;

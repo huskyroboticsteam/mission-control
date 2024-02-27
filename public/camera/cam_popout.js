@@ -1,7 +1,8 @@
 /*
  * Note: This is the vanilla JS version of this function for the popout window.
  *    The CameraStream component "download" button uses a seperate function, defined in 
- *    the CameraStream.jsx file.
+ *    the CameraStream.jsx file. If you make changes to this function, you need to 
+ *    make corresponding changes to the CameraStream.jsx file.
  */
 function download(title, width, height) {
     let canvas = document.getElementById("ext-vid");
