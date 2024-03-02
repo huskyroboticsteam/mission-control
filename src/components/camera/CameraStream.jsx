@@ -149,7 +149,7 @@ function CameraStream({ cameraName }) {
       // if the window popout exists
       popoutWindow.close();
       setPopoutWindow(null);
-    } else if (vidTag ){
+    } else if (vidTag) {
       // if the window popout doesn't exist
       let video = document.getElementById(vidTag.props.id);
       let { popout, canvas, context, aspectRatio } = await createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
