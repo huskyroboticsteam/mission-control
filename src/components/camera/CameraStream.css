@@ -65,3 +65,23 @@
   cursor: pointer;
   padding-right: 10px;
 }
+
+.camera-stream-download-header {
+  font-weight: bold;
+  z-index: 5;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 5px;
+}
+
+.camera-stream-download-button {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.camera-stream-download-button:disabled {
+  cursor: not-allowed;
+}

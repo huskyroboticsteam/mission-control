@@ -13,44 +13,77 @@ import "./CameraStream.css";
  * Takes:
  *    cameraTitle: the camera title,
  *    cameraName: the camera name,
- *    unloadCallback, a callback that is ran before the window is fully unloaded
- * Returns a JSON object with keys: window, canvas, context, aspectRatio
+ *    unloadCallback: a callback that is ran before the window is fully unloaded
+ *    video_width: the stream width
+ *    video_height: the stream height
+ * Returns: Promise of an object with keys: window, canvas, context, aspectRatio
  */
-function createPopOutWindow(cameraTitle, cameraName, unloadCallback) {
-  let newWindow = window.open("", "", "width=500,height=500");
-  newWindow.document.body.style.margin = "0";
-  newWindow.document.title = cameraTitle + " Stream";
-  newWindow.document.body.innerHTML = `
-    <div style="background-color:black;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center">
-      <div style="z-index:100;position:absolute;width:100%;font-size:30px;font-weight:bold;text-align:center;color:white;padding-top:5px;padding-bottom:5px;background-color:#00000066;">${cameraTitle}</div>
-      <div id="ext-fps" style="z-index:101;position:absolute;top:5;left:5;font-size:15px;font-weight:bold;color:red;">FPS: N/A</div>
-      <canvas id="ext-vid" style="z-index:1;border:none;display:block;margin:auto 0;"></canvas>
-      </div>
-    </div>`;
-  let canvas = newWindow.document.querySelector('#ext-vid');
-  let context = canvas.getContext('2d');
-  let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
+  let newWindow = window.open("/camera/cam_popout.htm", "", "width=500,height=500");
 
-  canvas.width = aspectRatio * 400;
-  canvas.height = 400;
-  context.fillStyle = "blue";
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  const returnPromise = new Promise((resolve, reject) => {
+    newWindow.onload = () => {
+      newWindow.document.title = `${cameraTitle} Stream`;
+      newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
+      newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
 
-  window.onunload = () => {
-    if (newWindow && !newWindow.closed) {
-        newWindow.close();
+      let canvas = newWindow.document.querySelector('#ext-vid');
+      let context = canvas.getContext('2d');
+      let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
+      canvas.width = aspectRatio * 400;
+      canvas.height = 400;
+      context.fillStyle = "blue";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      window.onunload = () => {
+        if (newWindow && !newWindow.closed) {
+            newWindow.close();
+        }
+      };
+
+      newWindow.onbeforeunload = unloadCallback;
+
+      let output = {
+        popout: newWindow,
+        canvas: canvas,
+        context: context,
+        aspectRatio: aspectRatio
+      };
+      resolve(output); 
     }
-  };
+  });
 
-  newWindow.onbeforeunload = unloadCallback;
+  return returnPromise;
+}
 
-  let output = {
-    popout: newWindow,
-    canvas: canvas,
-    context: context,
-    aspectRatio: aspectRatio
-  }; 
-  return output;
+/**
+ * Takes
+ *    video: HTMLVideoElement representing the video tag which should be processed.
+ *    cameraTitle: name of the camera, used for the filename.
+ * Note: This is the React version of this function for this CameraStream component,
+ *    The popout window "download" button uses a seperate function, defined in 
+ *    /public/camera/cam_popout.js. If you make changes to this function, you need to 
+ *    make corresponding changes to the cam_popout.js file.
+ */
+function downloadCurrentFrame(video, cameraTitle) {
+  if (!video || !(video.videoWidth && video.videoHeight)) return null;
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext('2d');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  let link = document.createElement("a");
+  link.href = canvas.toDataURL("image/jpeg", 1);
+
+  let time = new Date();
+  let timezoneOffset = time.getTimezoneOffset() * 60000;
+  let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
+
+  link.download = `${cameraTitle}-${timeString}.jpg`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function CameraStream({ cameraName }) {
@@ -67,6 +100,7 @@ function CameraStream({ cameraName }) {
   const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
+  const [hasFrame, setHasFrame] = useState(false);
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0);
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
@@ -96,30 +130,36 @@ function CameraStream({ cameraName }) {
           cameraCanvas.current.height = Math.floor(window.innerHeight);
         }
       }
-      
+
+      if (hasFrame) {
+        let button = window.document.querySelector("#ext-download-button");
+        button.removeAttribute('disabled');
+      }
+
       let video = document.querySelector(`#${vidTag.props.id}`);
       cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       last_ww = window.innerWidth;
       last_wh = window.innerHeight;
       window.requestAnimationFrame(() => { drawFrameOnExt(window, last_ww, last_wh); });
     }
-  }, [vidTag, aspectRatio]);
+  }, [vidTag, aspectRatio, hasFrame]);
 
-  const handlePopOut = useCallback(() => {
+  const handlePopOut = useCallback(async () => {
     if (popoutWindow) {
       // if the window popout exists
       popoutWindow.close();
       setPopoutWindow(null);
-    } else {
+    } else if (vidTag) {
       // if the window popout doesn't exist
-      let { popout, canvas, context, aspectRatio } = createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null));
+      let video = document.getElementById(vidTag.props.id);
+      let { popout, canvas, context, aspectRatio } = await createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;
       cameraContext.current = context;
       popout.requestAnimationFrame(() => { drawFrameOnExt(popout, 0, 0); });
     }
-  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt]);
+  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt, vidTag]);
 
   const jmuxer = useMemo(() => {
     if (hasRendered && cameraName) {
@@ -158,10 +198,16 @@ function CameraStream({ cameraName }) {
           return fps;
         });
       }
+      if (vidTag) {
+        let vid = document.querySelector(`#${vidTag.props.id}`);
+        if (vid && vid.videoWidth && vid.videoHeight) {
+          setHasFrame(true);
+        }
+      }
       setAspectRatio(document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth);
       setLastFrameTime(currentTime); // current time in ms
     }
-  }, [cameraName, frameDataArray, popoutWindow]);
+  }, [cameraName, frameDataArray, popoutWindow, vidTag]);
 
   useEffect(() => {
     return () => {
@@ -188,6 +234,13 @@ function CameraStream({ cameraName }) {
         onClick={ handlePopOut }>
           { popoutWindow ? 'Merge Window' : 'Pop Out' }
         </span>
+      </div>
+      <div className='camera-stream-download-header'>
+        <button className='camera-stream-download-button'
+        title={`Download "${cameraTitle}" camera stream current frame`}
+        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)} disabled={!hasFrame}>
+          Download
+        </button>
       </div>
     </div>
   );
