@@ -1,4 +1,4 @@
-import { motorStatusReportReceived, enableMotors } from "../motorsSlice";
+import { motorStatusReportReceived, motorLimitsReceived, enableMotors } from "../motorsSlice";
 import { messageReceivedFromRover } from "../roverSocketSlice";
 import { requestDrive } from "../driveSlice";
 import { requestJointPower, selectAllJointNames } from "../jointsSlice";
@@ -18,6 +18,12 @@ const motorsMiddleware = store => next => action => {
           motorName,
           power,
           position
+        }));
+      } else if(message.type === "motorLimitsReport") {
+        const { motor: motorName, limits } = message;
+        store.dispatch(motorLimitsReceived({
+          motorName,
+          limits
         }));
       }
       return result;
