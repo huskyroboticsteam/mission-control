@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import JMuxer from "jmuxer";
+import { piexif } from "piexifjs";
+import { selectRoverPosition } from "../../store/telemetrySlice";
 import {
   openCameraStream,
   closeCameraStream,
@@ -65,17 +67,39 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
  *    /public/camera/cam_popout.js. If you make changes to this function, you need to 
  *    make corresponding changes to the cam_popout.js file.
  */
-function downloadCurrentFrame(video, cameraTitle) {
+function downloadCurrentFrame(video, cameraTitle, position) {
   if (!video || !(video.videoWidth && video.videoHeight)) return null;
   let canvas = document.createElement('canvas');
   let context = canvas.getContext('2d');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+  
+  let jpegData = canvas.toDataURL("image/jpeg", 1);
+  let out = jpegData;
+  if (position) {
+    let gpsIfd = {};
+    // position values are in degrees, positive is north
+    // [
+    //   degreesNumerator, degreesDenominator, 
+    //   minutesNumerator, minutesDenominator, 
+    //   secondsNumerator, secondsDenominator
+    // ]
+    gpsIfd[piexif.GPSIFD.GPSLatitude] = [Math.round(position.lat), 1,
+                                         Math.round(Math.round(position.lat / 60) - Math.round(position.lat)), 1,
+                                         Math.round(Math.round(position.lat / 3600) - (Math.round(position.lat / 60) - Math.round(position.lat))), 1];
+    // gpsIfd[piexif.GPSIFD.GPSLongitude] = [Math.round(position.lon), 0, 0];
+    gpsIfd[piexif.GPSIFD.GPSTimeStamp] = (Math.round(Date.now() / 1000) - position?.recency - 315964800).toString();
+
+    let exifObj = {"GPS":gpsIfd};
+    let exifBytes = piexif.dump(exifObj);
+    out = piexif.insert(exifBytes, jpegData);
+  }
 
   let link = document.createElement("a");
-  link.href = canvas.toDataURL("image/jpeg", 1);
-
+  link.href = out;
+  
   let time = new Date();
   let timezoneOffset = time.getTimezoneOffset() * 60000;
   let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
@@ -96,6 +120,8 @@ function CameraStream({ cameraName }) {
       dispatch(closeCameraStream({ cameraName }));
     };
   }, [cameraName, dispatch]);
+
+  const positionData = useSelector(selectRoverPosition);
 
   const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
@@ -238,7 +264,7 @@ function CameraStream({ cameraName }) {
       <div className='camera-stream-download-header'>
         <button className='camera-stream-download-button'
         title={`Download "${cameraTitle}" camera stream current frame`}
-        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)} disabled={!hasFrame}>
+        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle, positionData)} disabled={!hasFrame}>
           Download
         </button>
       </div>
