@@ -21,8 +21,7 @@ class DriveMode extends Component {
         return (
             <div className="driveMode">
                 <button disabled className="rover">
-                    <label>Drive</label>
-                    <label>Mode</label>
+                    <label>Drive Mode</label>
                     <select value={this.state.driveMode} onChange={this.changeDrive}>
                         <option value="normal">Normal</option>
                         <option value="turn">Turn</option>
