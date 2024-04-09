@@ -1,42 +1,49 @@
-import React, { Component } from 'react'
+import { Component } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestSwerveDriveMode, selectSwerveDriveMode, selectSwerveDriveOverride } from '../../store/swerveDriveModeSlice';
 import './SwerveDriveMode.css'
 
-class SwerveDriveMode extends Component {
-    constructor() {
-        super()
-        this.state =  {
-            prevMode: "normal",
-            driveMode: "normal"
-        }
-    }
+function SwerveDriveMode() {
+  const dispatch = useDispatch();
+  const mode = useSelector(selectSwerveDriveMode);
+  const override = useSelector(selectSwerveDriveOverride);
 
-    changeDrive = (event) => {
-        this.setState({
-            prevMode: this.state.driveMode,
-            driveMode: event.target.value
-        })
-    }
+  const changeDrive = (event) => {
+    dispatch(requestSwerveDriveMode({
+      mode: event.target.value,
+      override: override
+    }));
+  }
 
-    render() {
-        return (
-            <div className="swerveDriveMode">
-                <button disabled className="rover">
-                    <label>Drive Mode</label>
-                    <select value={this.state.driveMode} onChange={this.changeDrive}>
-                        <option value="normal">Normal</option>
-                        <option value="turn">Turn</option>
-                        <option value="crab">Crab</option>
-                    </select>
-                    <div>
-                        <button disabled className={`front left wheel ${this.state.driveMode} p${this.state.prevMode}`} />
-                        <button disabled className={`front right wheel ${this.state.driveMode} p${this.state.prevMode}`} />
-                        <button disabled className={`back left wheel ${this.state.driveMode} p${this.state.prevMode}`} />
-                        <button disabled className={`back right wheel ${this.state.driveMode} p${this.state.prevMode}`} />
-                    </div>
-                </button>
-            </div>
-        )
-    }
+  const changeOverride = (event) => {
+    dispatch(requestSwerveDriveMode({
+      mode: mode,
+      override: event.target.checked
+    }));
+  }
+
+  return (
+    <div className="swerveDriveMode">
+      <button disabled className="rover">
+        <label className="title">Drive Mode</label>
+        <select value={mode} onChange={changeDrive}>
+          <option value="normal">Normal</option>
+          <option value="turn-in-place">Turn</option>
+          <option value="crab">Crab</option>
+        </select>
+        <div className="override">
+          <input type="checkbox" defaultChecked={override} onChange={changeOverride}/>
+          <label className="overrideLabel">Override Threshold?</label>
+        </div>
+        <div>
+          <button disabled className={"front left wheel"} />
+          <button disabled className={"front right wheel"} />
+          <button disabled className={"back left wheel"} />
+          <button disabled className={"back right wheel"} />
+        </div>
+      </button>
+    </div>
+  )
 }
 
 export default SwerveDriveMode

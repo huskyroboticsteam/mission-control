@@ -11,7 +11,7 @@
     top: 20%;
 }
 
-.rover label {
+.title {
     position: relative;
     display: block;
     color: white;
@@ -28,6 +28,15 @@
     border-radius: 5px;
 }
 
+.override {
+  padding-top: 10px;
+}
+
+.overrideLabel {
+  color: white;
+  padding-left: 5px;
+}
+
 .wheel {
     position: absolute;
     height: 30%;
@@ -41,61 +50,3 @@
 .back { top: 86%; }
 .left { left: -16%; }
 .right { left: 86%; }
-
-.front.left.turn.pnormal, .back.right.turn.pnormal { animation: cwnt .25s forwards; }
-.front.right.turn.pnormal, .back.left.turn.pnormal { animation: ccwnt .25s forwards; }
-.front.left.crab.pturn, .back.right.crab.pturn { animation: cwtc .25s forwards; }
-.front.right.crab.pturn, .back.left.crab.pturn { animation: ccwtc .25s forwards; }
-.front.left.turn.pcrab, .back.right.turn.pcrab { animation: ccwct .25s forwards; }
-.front.right.turn.pcrab, .back.left.turn.pcrab { animation: cwct .25s forwards; }
-.front.left.normal.pturn, .back.right.normal.pturn { animation: ccwtn .25s forwards; }
-.front.right.normal.pturn, .back.left.normal.pturn { animation: cwtn .25s forwards; }
-.front.left.crab.pnormal, .back.right.crab.pnormal { animation: cwnc .25s forwards; }
-.front.right.crab.pnormal, .back.left.crab.pnormal { animation: ccwnc .25s forwards; }
-.front.left.normal.pcrab, .back.right.normal.pcrab { animation: ccwcn .25s forwards; }
-.front.right.normal.pcrab, .back.left.normal.pcrab { animation: cwcn .25s forwards; }
-
-@keyframes cwnt {
-    to { transform: rotate(45deg); }
-}
-@keyframes ccwnt {
-    to { transform: rotate(-45deg); }
-}
-@keyframes cwtc {
-    from { transform: rotate(45deg); }
-    to { transform: rotate(90deg); }
-}
-@keyframes ccwtc {
-    from { transform: rotate(-45deg); }
-    to { transform: rotate(-90deg); }
-}
-@keyframes ccwct {
-    from { transform: rotate(90deg); }
-    to { transform: rotate(45deg); }
-}
-@keyframes cwct {
-    from { transform: rotate(-90deg); }
-    to { transform: rotate(-45deg); }
-}
-@keyframes ccwtn {
-    from { transform: rotate(45deg); }
-    to { transform: rotate(0deg); }
-}
-@keyframes cwtn {
-    from { transform: rotate(-45deg); }
-    to { transform: rotate(0deg); }
-}
-@keyframes cwnc {
-    to { transform: rotate(90deg); }
-}
-@keyframes ccwnc {
-    to { transform: rotate(-90deg); }
-}
-@keyframes ccwcn {
-    from { transform: rotate(90deg); }
-    to { transform: rotate(0deg); }
-}
-@keyframes cwcn {
-    from { transform: rotate(-90deg); }
-    to { transform: rotate(0deg); }
-}

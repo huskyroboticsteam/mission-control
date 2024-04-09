@@ -31,8 +31,10 @@ const initialState = {
   },
   computed: {
     drive: {
+      type: "normal",
       tank: false,
       straight: 0,
+      crab: 0,
       steer: 0,
       tankLeft: 0,
       tankRight: 0,
@@ -146,27 +148,46 @@ function computeDriveInput(state, action) {
 
   const driveInput = state.computed.drive;
 
-  // Spacebar or the Y button toggles tank drive.
-  if (action.type === keyPressed.type && action.payload.key === " ") {
-    driveInput.tank = !driveInput.tank;
-  } else if (
-    action.type === gamepadButtonChanged.type &&
-    action.payload.gamepadName === "driveGamepad" &&
-    action.payload.buttonName === "Y" &&
-    action.payload.pressed
+  // Spacebar or the Y button toggles tank drive if swerve mode is normal.
+  if ((action.type === keyPressed.type && action.payload.key === " ") ||
+    (action.type === gamepadButtonChanged.type &&
+      action.payload.gamepadName === "driveGamepad" &&
+      action.payload.buttonName === "Y" &&
+      action.payload.pressed)
   ) {
-    driveInput.tank = !driveInput.tank;
+    if(driveInput.type === "normal") {
+      driveInput.tank = !driveInput.tank;
+    } else {
+      alert("Can't switch to tank drive when not on normal driveInput type!");
+    }
   }
 
-  driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-  driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-  driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
-  driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+  switch(driveInput.type) {
+    case "normal":
+      driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+      driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
+      driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+      break;
+
+    case "turn-in-place":
+      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+      break;
+
+    case "crab":
+      driveInput.straight = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+      break;
+
+    default:
+      alert("Not in a valid driveInput type!");
+  }
+  
   driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
-  ["straight", "steer", "tankLeft", "tankRight"].forEach(
+  ["straight", "crab", "steer", "tankLeft", "tankRight"].forEach(
     axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
   );
 }

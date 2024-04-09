@@ -1,4 +1,4 @@
-import { requestDrive, requestTankDrive } from "../driveSlice";
+import { requestDrive, requestTankDrive, requestTurnInPlaceDrive, requestCrabDrive } from "../driveSlice";
 import { selectMotorsAreEnabled } from "../motorsSlice";
 import { messageRover } from "../roverSocketSlice";
 
@@ -35,6 +35,33 @@ const driveMiddleware = store => next => action => {
         }));
       }
       break;
+    }
+
+    case requestTurnInPlaceDrive.type: {
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { steer } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "turnInPlaceDriveRequest",
+            steer
+          }
+        }));
+        break;
+      }
+    }
+
+    case requestCrabDrive.type: {
+      if (selectMotorsAreEnabled(store.getState())) {
+        const { crab, steer } = action.payload;
+        store.dispatch(messageRover({
+          message: {
+            type: "crabDriveRequest",
+            crab,
+            steer
+          }
+        }));
+        break;
+      }
     }
 
     default: break;

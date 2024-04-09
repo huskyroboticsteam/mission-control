@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   straight: 0,
+  crab: 0,
   steer: 0,
   tankLeft: 0,
   tankRight: 0
@@ -21,10 +22,21 @@ const driveSlice = createSlice({
       const { tankLeft, tankRight } = action.payload;
       state.tankLeft = tankLeft;
       state.tankRight = tankRight;
+    },
+
+    requestTurnInPlaceDrive(state, action) {
+      const { steer } = action.payload;
+      state.steer = steer;
+    },
+
+    requestCrabDrive(state, action) {
+      const { crab, steer } = action.payload;
+      state.crab = crab;
+      state.steer = steer;
     }
   }
 });
 
-export const { requestDrive, requestTankDrive } = driveSlice.actions;
+export const { requestDrive, requestTankDrive, requestTurnInPlaceDrive, requestCrabDrive } = driveSlice.actions;
 
 export default driveSlice.reducer;
