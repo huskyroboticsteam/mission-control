@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestSwerveDriveMode, selectSwerveDriveMode, selectSwerveDriveOverride } from '../../store/swerveDriveModeSlice';
 import './SwerveDriveMode.css'

@@ -175,7 +175,7 @@ function computeDriveInput(state, action) {
       break;
 
     case "crab":
-      driveInput.straight = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+      driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
       driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
       break;
 
