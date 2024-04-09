@@ -101,7 +101,7 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 
 ## Swerve Drive Mode Request
 ### Description
-Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles.
+Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles (`normal`: straight forward, `turn-in-place`: angled to allow for turning in place, `crab`: perpendicular to robot's heading for sideways movement).
 
 ### Syntax
 ```
