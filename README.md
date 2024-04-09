@@ -107,12 +107,14 @@ Sent from Mission Control to instruct the rover to orient the swerve modules in 
 ```
 {
     type: "swerveDriveModeRequest",
-    mode: "normal" | "turn-in-place" | "crab"
+    mode: "normal" | "turn-in-place" | "crab",
+    override: boolean
 }
 ```
 
 ### Parameters
 - `mode` - the requested drive mode
+- `override` - `true` to ignore error thresholding when moving swerve modules, `false` to respect them.
 
 ## Drive Request
 ### Description
@@ -150,18 +152,18 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 
 ## Turn-in-place Drive Request
 ### Description
-Sent from Mission Control to instruct the rover to turn in place with a specified turn value.
+Sent from Mission Control to instruct the rover to turn in place with a specified steer value.
 
 ### Syntax
 ```
 {
     type: "turnInPlaceDriveRequest",
-    turn: number
+    steer: number
 }
 ```
 
 ### Parameters
-- `turn` - turn component in [-1.0, 1.0], where positive means turn right and negative means turn left
+- `steer` - steer component in [-1.0, 1.0], where positive means turn right and negative means turn left
 
 ## Crab Drive Request
 ### Description
