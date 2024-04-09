@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import './DriveMode.css'
+import './SwerveDriveMode.css'
 
-class DriveMode extends Component {
+class SwerveDriveMode extends Component {
     constructor() {
         super()
         this.state =  {
@@ -19,7 +19,7 @@ class DriveMode extends Component {
 
     render() {
         return (
-            <div className="driveMode">
+            <div className="swerveDriveMode">
                 <button disabled className="rover">
                     <label>Drive Mode</label>
                     <select value={this.state.driveMode} onChange={this.changeDrive}>
@@ -39,4 +39,4 @@ class DriveMode extends Component {
     }
 }
 
-export default DriveMode
+export default SwerveDriveMode
