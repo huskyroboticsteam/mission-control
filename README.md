@@ -99,6 +99,18 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
+## Drive Mode Request
+### Description
+Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles.
+
+### Syntax
+```
+{
+    type: "driveModeRequest",
+    mode: "normal" | "turn-in-place" | "crab"
+}
+```
+
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
@@ -132,6 +144,38 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 ### Parameters
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
+
+## Turn-in-place Drive Request
+### Description
+Sent from Mission Control to instruct the rover to turn in place with a specified turn value.
+
+### Syntax
+```
+{
+    type: "turnInPlaceDriveRequest",
+    turn: number
+}
+```
+
+### Parameters
+- `turn` - turn component in [-1.0, 1.0], where positive means turn right and negative means turn left
+
+## Crab Drive Request
+### Description
+Sent from Mission Control to instruct the rover to crab sideways
+
+### Syntax
+```
+{
+    type: "crabDriveRequest",
+    crab: number,
+    steer: number
+}
+```
+
+### Parameters
+- `crab` - crab component in [-1.0, 1.0], where positive means to crab right and negative means to crab left
+- `steer` - steer component in [-1.0, 1.0], where positive means steer right and negative means steer left
 
 ## Holonomic Drive Request
 ### Description
