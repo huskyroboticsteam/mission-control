@@ -111,6 +111,9 @@ Sent from Mission Control to instruct the rover to orient the swerve modules in 
 }
 ```
 
+### Parameters
+- `mode` - the requested drive mode
+
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
