@@ -99,14 +99,14 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
-## Drive Mode Request
+## Swerve Drive Mode Request
 ### Description
 Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles.
 
 ### Syntax
 ```
 {
-    type: "driveModeRequest",
+    type: "swerveDriveModeRequest",
     mode: "normal" | "turn-in-place" | "crab"
 }
 ```
