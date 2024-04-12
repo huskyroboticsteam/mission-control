@@ -25,6 +25,9 @@ If any build or runtime errors appear (eg. a new major version of a package come
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
 
+### Browser
+You should install and use Chromium for optimal video streaming performance. It has been tested to work on version 123. Run `sudo apt install chromium` to install Chromium.
+
 ### Linux Users
 Linux users must set up a udev rule to ensure that the gamepad mappings are correct:
 ```bash
