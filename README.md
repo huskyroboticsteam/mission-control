@@ -26,7 +26,7 @@ If any build or runtime errors appear (eg. a new major version of a package come
 4. Run `npm install` to install dependencies.
 
 ### Browser
-The video streaming works best on Chromium. You should install and use Chromium version 123. Run `sudo apt install chromium` to install Chromium.
+You should install and use Chromium for best video streaming performance. It has been tested to work on version 123. Run `sudo apt install chromium` to install Chromium.
 
 ### Linux Users
 Linux users must set up a udev rule to ensure that the gamepad mappings are correct:
