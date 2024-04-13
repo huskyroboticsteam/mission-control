@@ -46,8 +46,8 @@ const driveMiddleware = store => next => action => {
             steer
           }
         }));
-        break;
       }
+      break;
     }
 
     case requestCrabDrive.type: {
@@ -60,8 +60,8 @@ const driveMiddleware = store => next => action => {
             steer
           }
         }));
-        break;
       }
+      break;
     }
 
     default: break;

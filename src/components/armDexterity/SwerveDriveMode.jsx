@@ -23,8 +23,10 @@ function SwerveDriveMode() {
 
   return (
     <div className="swerveDriveMode">
-      <button disabled className="rover">
-        <label className="title">Drive Mode</label>
+      <div className="rover">
+        <div className="titleContainer">
+          <label className="title">Drive Mode</label>
+        </div>
         <select value={mode} onChange={changeDrive}>
           <option value="normal">Normal</option>
           <option value="turn-in-place">Turn</option>
@@ -40,7 +42,7 @@ function SwerveDriveMode() {
           <button disabled className={"back left wheel"} />
           <button disabled className={"back right wheel"} />
         </div>
-      </button>
+      </div>
     </div>
   )
 }

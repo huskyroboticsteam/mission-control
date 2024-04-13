@@ -150,19 +150,19 @@ function computeDriveInput(state, action) {
 
   // Spacebar or the Y button toggles tank drive if swerve mode is normal.
   if ((action.type === keyPressed.type && action.payload.key === " ") ||
-    (action.type === gamepadButtonChanged.type &&
+      (action.type === gamepadButtonChanged.type &&
       action.payload.gamepadName === "driveGamepad" &&
       action.payload.buttonName === "Y" &&
       action.payload.pressed)
   ) {
-    if(driveInput.type === "normal") {
+    if (driveInput.type === "normal") {
       driveInput.tank = !driveInput.tank;
     } else {
       alert("Can't switch to tank drive when not on normal driveInput type!");
     }
   }
 
-  switch(driveInput.type) {
+  switch (driveInput.type) {
     case "normal":
       driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
       driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");

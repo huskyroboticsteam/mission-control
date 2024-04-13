@@ -58,7 +58,7 @@ const inputMiddleware = store => next => action => {
 }
 
 function updateDrive(prevComputedInput, computedInput, dispatch) {
-  if(computedInput.drive.type === "normal") {
+  if (computedInput.drive.type === "normal") {
     if (computedInput.drive.tank) {
       const { tankLeft: prevTankLeft, tankRight: prevTankRight } = prevComputedInput.drive;
       const { tankLeft, tankRight } = computedInput.drive;
@@ -72,16 +72,16 @@ function updateDrive(prevComputedInput, computedInput, dispatch) {
         dispatch(requestDrive({ straight, steer }));
       }
     }
-  } else if(computedInput.drive.type === "turn-in-place") {
+  } else if (computedInput.drive.type === "turn-in-place") {
     const { steer: prevSteer } = prevComputedInput.drive;
     const { steer } = computedInput.drive;
-    if(steer !== prevSteer) {
+    if (steer !== prevSteer) {
       dispatch(requestTurnInPlaceDrive({ steer }));
     }
-  } else if(computedInput.drive.type === "crab") {
+  } else if (computedInput.drive.type === "crab") {
     const { crab: prevCrab, steer: prevSteer } = prevComputedInput.drive;
     const { crab, steer } = computedInput.drive;
-    if(crab !== prevCrab || steer !== prevSteer) {
+    if (crab !== prevCrab || steer !== prevSteer) {
       dispatch(requestCrabDrive({ crab, steer }));
     }
   }

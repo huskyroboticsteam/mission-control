@@ -5,7 +5,11 @@
 }
 
 .rover {
+    background-color: #999999;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 60%;
     width: 40%;
     top: 20%;
@@ -13,11 +17,13 @@
 
 .title {
     position: relative;
-    display: block;
+    display: flex;
+    justify-content: center;
     color: white;
     width: 100%;
-    font-size: 3vh;
+    font-size: 3vh; 
     font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .rover select {
@@ -30,6 +36,8 @@
 
 .override {
   padding-top: 10px;
+  display: flex;
+  justify-content: center;
 }
 
 .overrideLabel {
