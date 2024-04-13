@@ -6,7 +6,7 @@ const telemetryMiddleware = store => next => action => {
   if (action.type === messageReceivedFromRover.type) {
     const { message } = action.payload;
     if (message.type === "roverPositionReport") {
-      const { orientW, orientX, orientY, orientZ, lon, lat, recency } = message;
+      const { orientW, orientX, orientY, orientZ, lon, lat, alt, recency } = message;
       store.dispatch(roverPositionReportReceived({
         orientW,
         orientX,
@@ -14,6 +14,7 @@ const telemetryMiddleware = store => next => action => {
         orientZ,
         lon,
         lat,
+        alt,
         recency
       }));
     }

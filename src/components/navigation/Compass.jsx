@@ -33,13 +33,12 @@ function sanitize(num, decimals) {
 }
 
 const Compass = () => {
-  const { orientW, orientX, orientY, orientZ, lon, lat } = useSelector(selectRoverPosition);
+  const { orientW, orientX, orientY, orientZ, lon, lat, alt } = useSelector(selectRoverPosition);
 
   let roll;
   let pitch;
   let yaw;
   let needleColor;
-  let alt;
 
   if (orientW == null || orientX == null || orientY == null || orientZ == null) {
     needleColor = "gray";
