@@ -1,9 +1,10 @@
-import React from 'react'
-import {useSelector} from 'react-redux'
-import {selectRoverPosition} from '../../store/telemetrySlice'
-import './Compass.css'
-import {Quaternion, Euler, Vector3} from '@math.gl/core'
-import * as Quat from 'gl-matrix/quat'
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectRoverPosition } from "../../store/telemetrySlice";
+import { selectLongitude, selectLatitude } from "../../store/waypointNavSlice";
+import "./Compass.css";
+import { Quaternion, Euler, Vector3 } from '@math.gl/core';
+import * as Quat from 'gl-matrix/quat';
 
 function getAttitude(roll, pitch) {
   let attitudeRPY = new Euler().fromRollPitchYaw(roll, pitch, 0.0)
@@ -63,6 +64,18 @@ const Compass = () => {
   }
   const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
 
+  const [targetHeading, setTargetHeading] = useState(null);
+  const targetLongitude = useSelector(selectLongitude);
+  const targetLatitude = useSelector(selectLatitude);
+
+  useEffect(() => {
+    console.log(targetLongitude, targetLatitude);
+    if (targetLongitude && targetLatitude) {
+      console.log("Changing heading");
+      setTargetHeading(0);
+    }
+  }, [targetLongitude, targetLatitude]);
+
   return (
     <div className="compass-container">
       <div className="info">
@@ -99,7 +112,12 @@ const Compass = () => {
         <div className="compass-parts">
           <div
             className={`compass__needle compass__needle--${needleColor}`}
-            style={{transform: `rotate(${heading ?? 0}deg)`}}></div>
+            style={{ transform: `rotate(${heading ?? 0}deg)` }}
+          ></div>
+          { targetHeading && <div
+            className={`compass__needle compass__needle--${needleColor}`}
+            style={{ transform: `rotate(${targetHeading}deg)` }}
+          ></div> }
           <div className={`compass__outer-ring ${needleColor}`}></div>
           <div className="compass__label compass__label--north">N</div>
           <div className="compass__label compass__label--south">S</div>
