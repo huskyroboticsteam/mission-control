@@ -58,6 +58,10 @@
   background-color: #f44336;
 }
 
+.compass__needle--target {
+  background-color: #4c4cff;
+}
+
 .compass__label {
   position: absolute;
   font-size: 12px;
