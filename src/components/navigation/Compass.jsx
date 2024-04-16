@@ -65,14 +65,14 @@ const Compass = () => {
   const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
 
   const [bearingHeading, setBearingHeading] = useState(null);
-  const [targetHeading, setTargetHeading] = useState(null);  // relative to north
   const targetLongitude = useSelector(selectLongitude);
   const targetLatitude = useSelector(selectLatitude);
 
   useEffect(() => {
     if (targetLongitude == null || targetLatitude == null) return;
-    setTargetHeading(-Math.atan2(targetLatitude - lat, targetLongitude - lon) * 180 / Math.PI + 90);
-  }, [targetLongitude, targetLatitude, lon, lat]);
+    const targetHeading = -Math.atan2(targetLatitude - lat, targetLongitude - lon) * 180 / Math.PI + 90;  // relative to north
+    setBearingHeading(targetHeading - heading);
+  }, [targetLongitude, targetLatitude, lon, lat, heading]);
 
   return (
     <div className="compass-container">
@@ -108,9 +108,9 @@ const Compass = () => {
       </div>
       <div className="compass">
         <div className="compass-parts">
-          {targetHeading != null && <div
+          {bearingHeading != null && <div
             className={`compass__needle compass__needle--target`}
-            style={{ transform: `rotate(${targetHeading}deg)` }}
+            style={{ transform: `rotate(${bearingHeading}deg)` }}
           ></div>}
           <div
             className={`compass__needle compass__needle--${needleColor}`}
