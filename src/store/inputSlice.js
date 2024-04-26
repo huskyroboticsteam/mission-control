@@ -36,8 +36,8 @@ const initialState = {
       straight: 0,
       crab: 0,
       steer: 0,
-      tankLeft: 0,
-      tankRight: 0,
+      left: 0,
+      right: 0,
       activeSuspension: 0
     },
     arm: {
@@ -166,8 +166,8 @@ function computeDriveInput(state, action) {
     case "normal":
       driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
       driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-      driveInput.tankLeft = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
-      driveInput.tankRight = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+      driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
+      driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
       break;
 
     case "turn-in-place":
@@ -187,7 +187,7 @@ function computeDriveInput(state, action) {
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
-  ["straight", "crab", "steer", "tankLeft", "tankRight"].forEach(
+  ["straight", "crab", "steer", "left", "right"].forEach(
     axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
   );
 }

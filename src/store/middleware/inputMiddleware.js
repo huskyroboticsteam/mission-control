@@ -60,10 +60,10 @@ const inputMiddleware = store => next => action => {
 function updateDrive(prevComputedInput, computedInput, dispatch) {
   if (computedInput.drive.type === "normal") {
     if (computedInput.drive.tank) {
-      const { tankLeft: prevTankLeft, tankRight: prevTankRight } = prevComputedInput.drive;
-      const { tankLeft, tankRight } = computedInput.drive;
-      if (tankLeft !== prevTankLeft || tankRight !== prevTankRight) {
-        dispatch(requestTankDrive({ left: tankLeft, right: tankRight }));
+      const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
+      const { left, right } = computedInput.drive;
+      if (left !== prevLeft || right !== prevRight) {
+        dispatch(requestTankDrive({ left, right }));
       }
     } else {
       const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;

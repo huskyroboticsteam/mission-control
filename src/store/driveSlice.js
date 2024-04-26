@@ -4,8 +4,8 @@ const initialState = {
   straight: 0,
   crab: 0,
   steer: 0,
-  tankLeft: 0,
-  tankRight: 0
+  left: 0,
+  right: 0
 };
 
 const driveSlice = createSlice({
@@ -19,9 +19,9 @@ const driveSlice = createSlice({
     },
 
     requestTankDrive(state, action) {
-      const { tankLeft, tankRight } = action.payload;
-      state.tankLeft = tankLeft;
-      state.tankRight = tankRight;
+      const { left, right } = action.payload;
+      state.left = left;
+      state.right = right;
     },
 
     requestTurnInPlaceDrive(state, action) {
