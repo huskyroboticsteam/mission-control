@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { requestWaypointNav } from "../../store/waypointNavSlice";
+import React, { useState, useEffect, useCallback } from "react";
+import { requestWaypointNav, setWaypointPosition } from "../../store/waypointNavSlice";
 import { selectOpMode } from "../../store/opModeSlice";
 import "./WaypointNav.css";
 
@@ -10,6 +10,13 @@ function WaypointNav() {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
   var opMode = useSelector(selectOpMode);
+
+  const handleWaypoint = useCallback(() => {
+    dispatch(setWaypointPosition({
+      longitude: lon,
+      latitude: lat
+    }));
+  }, [lat, lon]);
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -56,6 +63,7 @@ function WaypointNav() {
       <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
       <label>{submitted ? <input disabled type="checkbox" name="isGate" />: <input type="checkbox" name="isGate" />} Is Gate</label>
     </div>
+    {!submitted ? <button type="button" onClick={handleWaypoint}>Set Waypoint</button> : <button disabled type="button">Set Waypoint</button>}
     {opMode === "autonomous" && !submitted ? <button type="submit">Go</button> : <button disabled>Go</button>}
   </form>
   );
