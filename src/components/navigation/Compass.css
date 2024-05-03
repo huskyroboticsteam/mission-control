@@ -58,8 +58,18 @@
   background-color: #f44336;
 }
 
-.compass__needle--target {
-  background-color: #4c4cff;
+.target-dot {
+  background-color: rgba(0,0,0,0);
+  border: 5px solid rgba(255, 215, 0, 0.75);
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  transform-origin: 75px 75px;
+  top: 25px;
+  left: 25px;
+  border-radius: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }
 
 .compass__label {
