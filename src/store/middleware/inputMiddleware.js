@@ -3,6 +3,8 @@ import { requestCrabDrive, requestDrive, requestTankDrive, requestTurnInPlaceDri
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
+import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
+
 /**
  * Middleware that messages the rover in response to user input.
  */
@@ -58,7 +60,9 @@ const inputMiddleware = store => next => action => {
 }
 
 function updateDrive(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.drive.type === "normal") {
+  const mode = selectSwerveDriveMode(store.getState());
+  alert("got swerve mode: "+mode);
+  if (mode === "normal") {
     if (computedInput.drive.tank) {
       const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
       const { left, right } = computedInput.drive;
@@ -72,13 +76,13 @@ function updateDrive(prevComputedInput, computedInput, dispatch) {
         dispatch(requestDrive({ straight, steer }));
       }
     }
-  } else if (computedInput.drive.type === "turn-in-place") {
+  } else if (mode === "turn-in-place") {
     const { steer: prevSteer } = prevComputedInput.drive;
     const { steer } = computedInput.drive;
     if (steer !== prevSteer) {
       dispatch(requestTurnInPlaceDrive({ steer }));
     }
-  } else if (computedInput.drive.type === "crab") {
+  } else if (mode === "crab") {
     const { crab: prevCrab, steer: prevSteer } = prevComputedInput.drive;
     const { crab, steer } = computedInput.drive;
     if (crab !== prevCrab || steer !== prevSteer) {

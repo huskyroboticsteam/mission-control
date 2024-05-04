@@ -31,7 +31,6 @@ const initialState = {
   },
   computed: {
     drive: {
-      type: "normal",
       tank: false,
       straight: 0,
       crab: 0,
@@ -155,6 +154,7 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === "Y" &&
       action.payload.pressed)
   ) {
+    // TODO: Find a way to access the swerve mode from here
     if (driveInput.type === "normal") {
       driveInput.tank = !driveInput.tank;
     } else {
@@ -162,27 +162,12 @@ function computeDriveInput(state, action) {
     }
   }
 
-  switch (driveInput.type) {
-    case "normal":
-      driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-      driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
-      driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
-      break;
+  driveInput.straight = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+  driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+  driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
+  driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+  driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
 
-    case "turn-in-place":
-      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-      break;
-
-    case "crab":
-      driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-      driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-      break;
-
-    default:
-      alert("Not in a valid driveInput type!");
-  }
-  
   driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
