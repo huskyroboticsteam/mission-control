@@ -14,8 +14,8 @@ const swerveDriveModeMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "swerveDriveModeRequest",
-          mode: store.getState().swerveDriveMode.mode,
-          override: store.getState().swerveDriveMode.override
+          mode: action.payload.mode,
+          override: action.payload.override
         }
       }));
       break;

@@ -25,7 +25,7 @@ const inputMiddleware = store => next => action => {
       const computedInput = store.getState().input.computed;
       const mountedPeripheral = selectMountedPeripheral(store.getState());
 
-      updateDrive(prevComputedInput, computedInput, store.dispatch);
+      updateDrive(prevComputedInput, computedInput, store);
       updatePeripherals(
         prevComputedInput,
         computedInput,
@@ -59,9 +59,9 @@ const inputMiddleware = store => next => action => {
   }
 }
 
-function updateDrive(prevComputedInput, computedInput, dispatch) {
+function updateDrive(prevComputedInput, computedInput, store) {
+  const dispatch = store.dispatch;
   const mode = selectSwerveDriveMode(store.getState());
-  alert("got swerve mode: "+mode);
   if (mode === "normal") {
     if (computedInput.drive.tank) {
       const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
