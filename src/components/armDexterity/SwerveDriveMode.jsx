@@ -12,6 +12,7 @@ function SwerveDriveMode() {
       mode: event.target.value,
       override: override
     }));
+    document.activeElement.blur();
   }
 
   const changeOverride = (event) => {
