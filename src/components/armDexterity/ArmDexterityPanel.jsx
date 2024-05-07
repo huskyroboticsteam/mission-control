@@ -1,5 +1,6 @@
 import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
+import SwerveDriveMode from "./SwerveDriveMode";
 
 import "./ArmDexterityPanel.css"
 
@@ -9,6 +10,7 @@ function ArmDexterityPanel() {
       <RoverModel />
       <CameraStream cameraName="upperArm" />
       <CameraStream cameraName="front" />
+      <SwerveDriveMode />
     </div>
   );
 }
