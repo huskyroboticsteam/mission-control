@@ -39,10 +39,10 @@ function sanitize(num, decimals) {
 /**
  * Convert Coords to heading.
  * Based on https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
- * @param lati latitude of starting point
- * @param loni longitude of starting point
- * @param latf latitude of ending point
- * @param lonf longitude of ending point
+ * @param lati latitude of starting point in degrees
+ * @param loni longitude of starting point in degrees
+ * @param latf latitude of ending point in degrees
+ * @param lonf longitude of ending point in degrees
  * @return A decimal of the heading of the ending point relative to North (CW is +) in degrees
  */
 function convertCoordsToHeading(lati, loni, latf, lonf) {
