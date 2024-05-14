@@ -121,6 +121,10 @@ const Compass = () => {
           <div className="compass__label compass__label--south">S</div>
           <div className="compass__label compass__label--west">W</div>
           <div className="compass__label compass__label--east">E</div>
+          {targetHeading != null &&
+            <div className="compass__label compass__label--distance">
+              Target: &gt;20.0m
+            </div>}
         </div>
       </div>
     </div>
