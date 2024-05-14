@@ -43,7 +43,7 @@ function sanitize(num, decimals) {
  * @param loni longitude of starting point in degrees
  * @param latf latitude of ending point in degrees
  * @param lonf longitude of ending point in degrees
- * @return A decimal of the heading of the ending point relative to North (CW is +) in degrees
+ * @return The heading of the ending point relative to North (CW is +) in degrees
  */
 function convertCoordsToHeading(lati, loni, latf, lonf) {
   const RADIANS_TO_DEGREES = Math.PI / 180;
