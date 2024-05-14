@@ -108,6 +108,15 @@
   transform: translateY(-50%);
 }
 
+.compass__label--distance {
+  font-size: 15px;
+  bottom: 21%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: normal;
+  white-space: nowrap;
+}
+
 .compass__outer-ring {
   position: absolute;
   width: calc(100% + 10px);
@@ -134,4 +143,9 @@
   font-size: calc(5px + 1vmax);
   font-family: monospace;
   text-align: left;
+}
+
+.distance-to-target {
+  color: black;
+
 }
