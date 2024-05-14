@@ -61,14 +61,11 @@ function WaypointNav() {
   }, [opMode]);
 
   useEffect(() => {
-    setIsWaypointSet(storedLat !== null && storedLon !== null);
+    setIsWaypointSet(storedLat != null && storedLon != null);
   }, [storedLat, storedLon]);
   
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select">
-    <div>
-      Current Waypoint: {isWaypointSet ? <span style={{fontWeight: "bold"}}>{ storedLat }, { storedLon }</span> : <span style={{fontWeight: "bold", color: "red"}}>Unset</span>}
-    </div>
     <div className="waypoint-select__params">
       <label htmlFor="latitude">Latitude</label>
       <input disabled={isWaypointSet} type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>
@@ -82,7 +79,7 @@ function WaypointNav() {
     </div>
     {
       isWaypointSet ?
-        <button disabled={submitted} type="button" onClick={() => { dispatch(setWaypointPosition({ longitude: null, latitude: null })); }}>Unset Waypoint</button> :
+        <button className='unset-waypoint-button' disabled={submitted} type="button" onClick={() => { dispatch(setWaypointPosition({ longitude: null, latitude: null })); }}>Unset Waypoint</button> :
         <button type="button" onClick={handleWaypoint}>Set Waypoint</button>
     }
     <button disabled={opMode !== "autonomous" || submitted || !isWaypointSet} type="submit">Go</button>
