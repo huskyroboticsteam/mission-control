@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectRoverPosition } from "../../store/telemetrySlice";
 import { selectLongitude, selectLatitude } from "../../store/waypointNavSlice";
 import "./Compass.css";
-import { Quaternion, Euler, Vector3 } from '@math.gl/core';
+import { Quaternion, Euler, Vector3, clamp } from '@math.gl/core';
 import * as Quat from 'gl-matrix/quat';
 
 function getAttitude(roll, pitch) {
@@ -37,13 +37,13 @@ function sanitize(num, decimals) {
 }
 
 /**
- * Convert Coords to heading.
+ * Convert latitude and longitudes to heading.
  * Based on https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
- * @param lati latitude of starting point in degrees
- * @param loni longitude of starting point in degrees
- * @param latf latitude of ending point in degrees
- * @param lonf longitude of ending point in degrees
- * @return The heading of the ending point relative to North (CW is +) in degrees
+ * @param lati latitude of starting point in degrees.
+ * @param loni longitude of starting point in degrees.
+ * @param latf latitude of ending point in degrees.
+ * @param lonf longitude of ending point in degrees.
+ * @return The heading of the ending point relative to North (CW is +) in degrees.
  */
 function convertCoordsToHeading(lati, loni, latf, lonf) {
   const RADIANS_TO_DEGREES = Math.PI / 180;
@@ -57,6 +57,29 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
   const y = Math.cos(lati) * Math.sin(latf) - Math.sin(lati) * Math.cos(latf) * Math.cos(deltaL);
   const bearing = Math.atan2(x, y);
   return bearing / RADIANS_TO_DEGREES;
+}
+
+/**
+ * Convert latitude and longitudes to distance.
+ * Based on the Haversine formula (https://en.wikipedia.org/wiki/Haversine_formula)
+ * @param lati latitude of starting point in degrees.
+ * @param loni longitude of starting point in degrees.
+ * @param latf latitude of ending point in degrees.
+ * @param lonf longitude of ending point in degrees.
+ * @param radius radius of the planet in km (default is Earth: 6,371km).
+ * @return The distance in km.
+ */
+function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
+  const RADIANS_TO_DEGREES = Math.PI / 180;
+  lati *= RADIANS_TO_DEGREES;
+  loni *= RADIANS_TO_DEGREES;
+  latf *= RADIANS_TO_DEGREES;
+  lonf *= RADIANS_TO_DEGREES;
+
+  let h = (1 - Math.cos(latf - lati) + Math.cos(lati) * Math.cos(latf) * (1 - Math.cos(lonf - loni))) / 2;
+  h = clamp(h, 0, 1);  // ensure 0 <= h <= 1
+  const d = 2 * radius * Math.asin(Math.sqrt(h));
+  return d;
 }
 
 const TARGET_CIRCLE_OFFSET = 42.5;  // how many degrees the target "circle" needs to be offset
@@ -89,17 +112,22 @@ const Compass = () => {
   const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
 
   const [targetHeading, setTargetHeading] = useState(null);
+  const [targetDistance, setTargetDistance] = useState(null);
   const targetLongitude = useSelector(selectLongitude);
   const targetLatitude = useSelector(selectLatitude);
 
   useEffect(() => {
     if (targetLongitude == null || targetLatitude == null) {
       setTargetHeading(null);
+      setTargetDistance(null);
       return;
     }
     setTargetHeading(convertCoordsToHeading(lat, lon, targetLatitude, targetLongitude));
+    let dist = convertCoordsToDistance(lat, lon, targetLatitude, targetLongitude) * 1000;
+    setTargetDistance(dist);
+    console.log();
 
-  }, [targetLatitude, targetLongitude, lat, lon, heading]);
+  }, [targetLatitude, targetLongitude, lat, lon]);
 
   return (
     <div className="compass-container">
@@ -148,9 +176,9 @@ const Compass = () => {
           <div className="compass__label compass__label--south">S</div>
           <div className="compass__label compass__label--west">W</div>
           <div className="compass__label compass__label--east">E</div>
-          {targetHeading != null &&
+          {targetDistance != null &&
             <div className="compass__label compass__label--distance">
-              Target: &gt;20.0m
+              Target: {targetDistance > 20 ? '>20' : targetDistance.toFixed(1)} m
             </div>}
         </div>
       </div>
