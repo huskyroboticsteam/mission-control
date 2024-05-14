@@ -51,7 +51,7 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
   loni *= RADIANS_TO_DEGREES;
   latf *= RADIANS_TO_DEGREES;
   lonf *= RADIANS_TO_DEGREES;
-  
+
   const deltaL = lonf - loni;
   const x = Math.cos(latf) * Math.sin(deltaL);
   const y = Math.cos(lati) * Math.sin(latf) - Math.sin(lati) * Math.cos(latf) * Math.cos(deltaL);
@@ -59,8 +59,7 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
   return bearing / RADIANS_TO_DEGREES;
 }
 
-const targetOffset = 42.5;  // how many degrees the target "circle" needs to be offset
-// const targetOffset = 0;  // how many degrees the target "circle" needs to be offset
+const TARGET_CIRCLE_OFFSET = 42.5;  // how many degrees the target "circle" needs to be offset
 const Compass = () => {
   const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
 
@@ -138,7 +137,7 @@ const Compass = () => {
         <div className="compass-parts">
           {targetHeading != null && <div
             className={`target-dot`}
-            style={{ transform: `rotate(${targetHeading + targetOffset}deg)` }}
+            style={{ transform: `rotate(${targetHeading + TARGET_CIRCLE_OFFSET}deg)` }}
           ></div>}
           <div
             className={`compass__needle compass__needle--${needleColor}`}
