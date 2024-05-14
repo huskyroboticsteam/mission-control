@@ -46,16 +46,21 @@ function sanitize(num, decimals) {
  * @return A decimal of the heading of the ending point relative to North (CW is +) in degrees
  */
 function convertCoordsToHeading(lati, loni, latf, lonf) {
+  const RADIANS_TO_DEGREES = Math.PI / 180;
+  lati *= RADIANS_TO_DEGREES;
+  loni *= RADIANS_TO_DEGREES;
+  latf *= RADIANS_TO_DEGREES;
+  lonf *= RADIANS_TO_DEGREES;
+  
   const deltaL = lonf - loni;
   const x = Math.cos(latf) * Math.sin(deltaL);
   const y = Math.cos(lati) * Math.sin(latf) - Math.sin(lati) * Math.cos(latf) * Math.cos(deltaL);
   const bearing = Math.atan2(x, y);
-  console.log(bearing * 180 / Math.PI);
-  return bearing * 180 / Math.PI;
+  return bearing / RADIANS_TO_DEGREES;
 }
 
-// const targetOffset = -42.5;  // how many degrees the target "circle" needs to be offset
-const targetOffset = 0;  // how many degrees the target "circle" needs to be offset
+const targetOffset = 42.5;  // how many degrees the target "circle" needs to be offset
+// const targetOffset = 0;  // how many degrees the target "circle" needs to be offset
 const Compass = () => {
   const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
 
