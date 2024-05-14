@@ -64,3 +64,7 @@
   cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
 }
+
+.waypoint-select > .unset-waypoint-button {
+  background-color: #ed4245;
+}
