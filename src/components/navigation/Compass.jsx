@@ -36,7 +36,26 @@ function sanitize(num, decimals) {
   return num >= 0 ? ' ' + ret : ret
 }
 
-const targetOffset = 42.5;  // how many degrees the target "circle" needs to be offset
+/**
+ * Convert Coords to heading.
+ * Based on https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
+ * @param lati latitude of starting point
+ * @param loni longitude of starting point
+ * @param latf latitude of ending point
+ * @param lonf longitude of ending point
+ * @return A decimal of the heading of the ending point relative to North (CW is +) in degrees
+ */
+function convertCoordsToHeading(lati, loni, latf, lonf) {
+  const deltaL = lonf - loni;
+  const x = Math.cos(latf) * Math.sin(deltaL);
+  const y = Math.cos(lati) * Math.sin(latf) - Math.sin(lati) * Math.cos(latf) * Math.cos(deltaL);
+  const bearing = Math.atan2(x, y);
+  console.log(bearing * 180 / Math.PI);
+  return bearing * 180 / Math.PI;
+}
+
+// const targetOffset = -42.5;  // how many degrees the target "circle" needs to be offset
+const targetOffset = 0;  // how many degrees the target "circle" needs to be offset
 const Compass = () => {
   const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
 
@@ -70,9 +89,13 @@ const Compass = () => {
   const targetLatitude = useSelector(selectLatitude);
 
   useEffect(() => {
-    if (targetLongitude == null || targetLatitude == null) return;
-    setTargetHeading(-Math.atan2(targetLatitude - lat, targetLongitude - lon) * 180 / Math.PI + 90);
-  }, [targetLongitude, targetLatitude, lon, lat, heading]);
+    if (targetLongitude == null || targetLatitude == null) {
+      setTargetHeading(null);
+      return;
+    }
+    setTargetHeading(convertCoordsToHeading(lat, lon, targetLatitude, targetLongitude));
+
+  }, [targetLatitude, targetLongitude, lat, lon, heading]);
 
   return (
     <div className="compass-container">
