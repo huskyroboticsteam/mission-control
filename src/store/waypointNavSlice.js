@@ -13,13 +13,17 @@ const waypointNavSlice = createSlice({
   reducers: {
     requestWaypointNav(state, action) {
       const { latitude, longitude, isApproximate, isGate } = action.payload;
+      state.latitude = typeof latitude == "string" ? Number.parseFloat(latitude) : latitude;
+      state.longitude = typeof longitude == "string" ? Number.parseFloat(longitude) : longitude;
       state.isApproximate = !!isApproximate;
       state.isGate = !!isGate;
     },
     setWaypointPosition(state, action) {
-      const { latitude, longitude } = action.payload;
+      const { latitude, longitude, isApproximate, isGate } = action.payload;
       state.latitude = typeof latitude == "string" ? Number.parseFloat(latitude) : latitude;
       state.longitude = typeof longitude == "string" ? Number.parseFloat(longitude) : longitude;
+      state.isApproximate = !!isApproximate;
+      state.isGate = !!isGate;
     }
   }
 });
