@@ -23,7 +23,7 @@ function WaypointNav() {
     }));
   }, [lat, lon]);
 
-  function handleSubmit (e) {
+  function handleSubmit(e) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -32,11 +32,11 @@ function WaypointNav() {
     dispatch(requestWaypointNav(formJson));
   };
 
-  function grabFromClipboard () {
+  function grabFromClipboard() {
     navigator.clipboard.readText().then(text => {
       // Matches coordinates in the form of (-)*(.*), (-)*(.*)
       // where * are numbers and () are optional, e.g. -0.2, 0
-      if(text.match("-?\\d+\\.?\\d*, -?\\d+\\.?\\d*")) {
+      if (text.match("-?\\d+\\.?\\d*, -?\\d+\\.?\\d*")) {
         const [lat, lon] = text.split(", ", 2);
         setLat(lat);
         setLon(lon);
@@ -58,27 +58,27 @@ function WaypointNav() {
   useEffect(() => {
     setIsWaypointSet(storedLat != null && storedLon != null);
   }, [storedLat, storedLon]);
-  
+
   return (
-  <form method="post" onSubmit={handleSubmit} className="waypoint-select">
-    <div className="waypoint-select__params">
-      <label htmlFor="latitude">Latitude</label>
-      <input disabled={isWaypointSet} type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>
-      <label htmlFor="longitude">Longitude</label>
-      <input disabled={isWaypointSet} type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>
-      <button disabled={isWaypointSet} type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>
-    </div>
-    <div className="waypoint-checkbox">
-      <label><input disabled={isWaypointSet} type="checkbox" name="isApproximate" /> Approximate</label>
-      <label><input disabled={isWaypointSet} type="checkbox" name="isGate" /> Is Gate</label>
-    </div>
-    {
-      isWaypointSet ?
-        <button className='unset-waypoint-button' disabled={submitted} type="button" onClick={() => { dispatch(setWaypointPosition({ longitude: null, latitude: null })); }}>Unset Waypoint</button> :
-        <button type="button" onClick={handleWaypoint}>Set Waypoint</button>
-    }
-    <button disabled={opMode !== "autonomous" || submitted || !isWaypointSet} type="submit">Go</button>
-  </form>
+    <form method="post" onSubmit={handleSubmit} className="waypoint-select">
+      <div className="waypoint-select__params">
+        <label htmlFor="latitude">Latitude</label>
+        <input disabled={isWaypointSet} type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)} />
+        <label htmlFor="longitude">Longitude</label>
+        <input disabled={isWaypointSet} type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)} />
+        <button disabled={isWaypointSet} type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>
+      </div>
+      <div className="waypoint-checkbox">
+        <label><input disabled={isWaypointSet} type="checkbox" name="isApproximate" /> Approximate</label>
+        <label><input disabled={isWaypointSet} type="checkbox" name="isGate" /> Is Gate</label>
+      </div>
+      {
+        isWaypointSet ?
+          <button className='unset-waypoint-button' disabled={submitted} type="button" onClick={() => { dispatch(setWaypointPosition({ longitude: null, latitude: null })); }}>Unset Waypoint</button> :
+          <button type="button" onClick={handleWaypoint}>Set Waypoint</button>
+      }
+      <button disabled={opMode !== "autonomous" || submitted || !isWaypointSet} type="submit">Go</button>
+    </form>
   );
 }
 

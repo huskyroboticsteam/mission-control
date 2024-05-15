@@ -123,8 +123,6 @@ const Compass = () => {
     setTargetHeading(convertCoordsToHeading(lat, lon, targetLatitude, targetLongitude));
     let dist = convertCoordsToDistance(lat, lon, targetLatitude, targetLongitude) * 1000;
     setTargetDistance(dist);
-    console.log();
-
   }, [targetLatitude, targetLongitude, lat, lon]);
 
   return (
