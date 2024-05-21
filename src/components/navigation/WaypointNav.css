@@ -44,6 +44,7 @@
   font-weight: 600;
   border-radius: 5px;
   width: 50%;
+  cursor: pointer;
 }
 
 /* Disabled Buttons */
@@ -58,10 +59,10 @@
   font-weight: 600;
   border-radius: 5px;
   width: 50%;
+  cursor: not-allowed;
 }
 
 .waypoint-select>button:hover {
-  cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
 }
 
