@@ -46,17 +46,17 @@ function sanitize(num, decimals) {
  * @return The heading of the ending point relative to North (CW is +) in degrees.
  */
 function convertCoordsToHeading(lati, loni, latf, lonf) {
-  const RADIANS_TO_DEGREES = Math.PI / 180;
-  lati *= RADIANS_TO_DEGREES;
-  loni *= RADIANS_TO_DEGREES;
-  latf *= RADIANS_TO_DEGREES;
-  lonf *= RADIANS_TO_DEGREES;
+  const DEGREES_TO_RADIANS = Math.PI / 180;
+  lati *= DEGREES_TO_RADIANS;
+  loni *= DEGREES_TO_RADIANS;
+  latf *= DEGREES_TO_RADIANS;
+  lonf *= DEGREES_TO_RADIANS;
 
   const deltaL = lonf - loni;
   const x = Math.cos(latf) * Math.sin(deltaL);
   const y = Math.cos(lati) * Math.sin(latf) - Math.sin(lati) * Math.cos(latf) * Math.cos(deltaL);
   const bearing = Math.atan2(x, y);
-  return bearing / RADIANS_TO_DEGREES;
+  return bearing / DEGREES_TO_RADIANS;
 }
 
 /**
@@ -70,11 +70,11 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
  * @return The distance in km.
  */
 function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
-  const RADIANS_TO_DEGREES = Math.PI / 180;
-  lati *= RADIANS_TO_DEGREES;
-  loni *= RADIANS_TO_DEGREES;
-  latf *= RADIANS_TO_DEGREES;
-  lonf *= RADIANS_TO_DEGREES;
+  const DEGREES_TO_RADIANS = Math.PI / 180;
+  lati *= DEGREES_TO_RADIANS;
+  loni *= DEGREES_TO_RADIANS;
+  latf *= DEGREES_TO_RADIANS;
+  lonf *= DEGREES_TO_RADIANS;
 
   let h = (1 - Math.cos(latf - lati) + Math.cos(lati) * Math.cos(latf) * (1 - Math.cos(lonf - loni))) / 2;
   h = clamp(h, 0, 1);  // ensure 0 <= h <= 1
