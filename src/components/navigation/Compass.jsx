@@ -38,7 +38,7 @@ function sanitize(num, decimals) {
 
 /**
  * Convert latitude and longitudes to heading.
- * Based on https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
+ * @see https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
  * @param lati latitude of starting point in degrees.
  * @param loni longitude of starting point in degrees.
  * @param latf latitude of ending point in degrees.
@@ -61,7 +61,7 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
 
 /**
  * Convert latitude and longitudes to distance.
- * Based on the Haversine formula (https://en.wikipedia.org/wiki/Haversine_formula)
+ * @see https://en.wikipedia.org/wiki/Haversine_formula
  * @param lati latitude of starting point in degrees.
  * @param loni longitude of starting point in degrees.
  * @param latf latitude of ending point in degrees.
