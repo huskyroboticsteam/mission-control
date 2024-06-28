@@ -54,7 +54,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.1.1`)
+## Messages (`v2024.1.2`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -295,7 +295,7 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `fps` - the frame rate of the camera stream as an integer
 
 
@@ -312,7 +312,7 @@ Sent from Mission Control to instruct the rover server to stop providing a camer
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 
 ## Camera Stream Report
 ### Description
@@ -328,7 +328,7 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `data` - the raw h264 frame data, or `null` if no data is available
 
 
