@@ -117,7 +117,7 @@ const Compass = () => {
   const targetLatitude = useSelector(selectLatitude);
 
   useEffect(() => {
-    if (targetLongitude == null || targetLatitude == null) {
+    if (targetLongitude == null || targetLatitude == null || lat == null || lon == null) {
       setTargetHeading(null);
       setTargetDistance(null);
       return;
