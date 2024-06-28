@@ -138,6 +138,14 @@
   border-color: red;
 }
 
+.target-far {
+  color: red;
+}
+
+.target-close {
+  color: green;
+}
+
 .info {
   color: #f5f5f5;
   font-size: calc(5px + 1vmax);

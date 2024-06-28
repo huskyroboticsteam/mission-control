@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { selectRoverPosition } from "../../store/telemetrySlice";
 import { selectLongitude, selectLatitude } from "../../store/waypointNavSlice";
 import "./Compass.css";
 import { Quaternion, Euler, Vector3, clamp } from '@math.gl/core';
 import * as Quat from 'gl-matrix/quat';
+
+const CLOSE_DISTANCE = 0.5;  // Distance to be considered at the target
+const FAR_DISTANCE = 20.0;  // Distance to be considered far from the target
 
 function getAttitude(roll, pitch) {
   let attitudeRPY = new Euler().fromRollPitchYaw(roll, pitch, 0.0)
@@ -116,6 +119,20 @@ const Compass = () => {
   const targetLongitude = useSelector(selectLongitude);
   const targetLatitude = useSelector(selectLatitude);
 
+  /**
+   * Method to create text for the target distance indiciator  
+   */
+  function distanceToText(dist) {
+    if (dist == null) return "Unknown"
+    if (dist > FAR_DISTANCE) {
+      return `>${FAR_DISTANCE.toFixed(1)} m`;
+    } else if (dist < CLOSE_DISTANCE) {
+      return `<${CLOSE_DISTANCE.toFixed(1)} m`;
+    } else {
+      return `${targetDistance.toFixed(1)} m`;
+    }
+  };
+
   useEffect(() => {
     if (targetLongitude == null || targetLatitude == null || lat == null || lon == null) {
       setTargetHeading(null);
@@ -161,7 +178,7 @@ const Compass = () => {
       </div>
       <div className="compass">
         <div className="compass-parts">
-          {targetHeading != null && <div
+          {targetHeading != null && targetDistance > CLOSE_DISTANCE && <div
             className={`target-dot`}
             style={{ transform: `rotate(${targetHeading + TARGET_CIRCLE_OFFSET}deg)` }}
           ></div>}
@@ -176,7 +193,9 @@ const Compass = () => {
           <div className="compass__label compass__label--east">E</div>
           {targetDistance != null &&
             <div className="compass__label compass__label--distance">
-              Target: {targetDistance > 20 ? '>20' : targetDistance.toFixed(1)} m
+              <span className={targetDistance > CLOSE_DISTANCE ? "target-far" : "target-close"}>
+                Target: {distanceToText(targetDistance)}
+              </span>
             </div>}
         </div>
       </div>
