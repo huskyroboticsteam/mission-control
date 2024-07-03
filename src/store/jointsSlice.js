@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const jointNames = [
+  "frontLeftSwerve",
+  "frontRightSwerve",
+  "rearLeftSwerve",
+  "rearRightSwerve",
   "armBase",
   "shoulder",
   "elbow",

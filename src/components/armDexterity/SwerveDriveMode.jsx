@@ -1,11 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { requestSwerveDriveMode, selectSwerveDriveMode, selectSwerveDriveOverride } from '../../store/swerveDriveModeSlice';
+import { selectJointCurrentPosition } from "../../store/jointsSlice";
 import './SwerveDriveMode.css'
 
 function SwerveDriveMode() {
   const dispatch = useDispatch();
   const mode = useSelector(selectSwerveDriveMode);
   const override = useSelector(selectSwerveDriveOverride);
+
+  const lfPos = useSelector(selectJointCurrentPosition("frontLeftSwerve"));
+  const rfPos = useSelector(selectJointCurrentPosition("frontRightSwerve"));
+  const lrPos = useSelector(selectJointCurrentPosition("rearLeftSwerve"));
+  const rrPos = useSelector(selectJointCurrentPosition("rearRightSwerve"));
 
   const changeDrive = (event) => {
     dispatch(requestSwerveDriveMode({
@@ -38,10 +44,10 @@ function SwerveDriveMode() {
           <label className="overrideLabel">Override Threshold?</label>
         </div>
         <div>
-          <button disabled className={"front left wheel"} />
-          <button disabled className={"front right wheel"} />
-          <button disabled className={"back left wheel"} />
-          <button disabled className={"back right wheel"} />
+          <button disabled className={"front left wheel"} style={{transform: `rotate(${-lfPos}deg)`}} />
+          <button disabled className={"front right wheel"} style={{transform: `rotate(${-rfPos}deg)`}} />
+          <button disabled className={"back left wheel"} style={{transform: `rotate(${-lrPos}deg)`}} />
+          <button disabled className={"back right wheel"} style={{transform: `rotate(${-rrPos}deg)`}} />
         </div>
       </div>
     </div>
