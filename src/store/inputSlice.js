@@ -154,7 +154,6 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === "Y" &&
       action.payload.pressed)
   ) {
-    // TODO: Find a way to access the swerve mode from here
     if (driveInput.type === "normal") {
       driveInput.tank = !driveInput.tank;
     } else {
