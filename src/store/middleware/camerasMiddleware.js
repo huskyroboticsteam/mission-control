@@ -91,7 +91,7 @@ const camerasMiddleware = store => next => action => {
           frameData: message.data
         }));
       } else if (message.type === "cameraFrameReport") {
-        alert("Received frame.");
+        alert("camerasMiddleware received frame.");
       }
       break;
     }
