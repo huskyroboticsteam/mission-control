@@ -178,7 +178,7 @@ function Forearm({position}) {
 
 function Wrist() {
   const mesh = useFBX(wristMesh);
-  const position = useSelector(selectJointCurrentPosition("wrist"));
+  const position = useSelector(selectJointCurrentPosition("wristPitch"));
 
   return (
     <primitive

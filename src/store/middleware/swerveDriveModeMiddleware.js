@@ -9,8 +9,7 @@ const swerveDriveModeMiddleware = store => next => action => {
   const result = next(action);
 
   switch (action.type) {
-    case requestSwerveDriveMode.type:
-    case roverConnected.type: {
+    case requestSwerveDriveMode.type: {
       store.dispatch(messageRover({
         message: {
           type: "swerveDriveModeRequest",
