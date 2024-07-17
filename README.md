@@ -344,7 +344,7 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `fps` - the frame rate of the camera stream as an integer
 
 
@@ -361,7 +361,7 @@ Sent from Mission Control to instruct the rover server to stop providing a camer
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 
 ## Camera Stream Report
 ### Description
@@ -377,7 +377,7 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `data` - the raw h264 frame data, or `null` if no data is available
 
 
