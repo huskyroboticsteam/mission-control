@@ -4,7 +4,8 @@ import JMuxer from "jmuxer";
 import {
   openCameraStream,
   closeCameraStream,
-  selectCameraStreamFrameData
+  selectCameraStreamFrameData,
+  requestCameraFrame,
 } from "../../store/camerasSlice";
 import camelCaseToTitle from "../../util/camelCaseToTitle";
 import "./CameraStream.css";
@@ -65,26 +66,26 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
  *    /public/camera/cam_popout.js. If you make changes to this function, you need to 
  *    make corresponding changes to the cam_popout.js file.
  */
-function downloadCurrentFrame(video, cameraTitle) {
-  if (!video || !(video.videoWidth && video.videoHeight)) return null;
-  let canvas = document.createElement('canvas');
-  let context = canvas.getContext('2d');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+// function downloadCurrentFrame() {
+  // if (!video || !(video.videoWidth && video.videoHeight)) return null;
+  // let canvas = document.createElement('canvas');
+  // let context = canvas.getContext('2d');
+  // canvas.width = video.videoWidth;
+  // canvas.height = video.videoHeight;
+  // context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  let link = document.createElement("a");
-  link.href = canvas.toDataURL("image/jpeg", 1);
+  // let link = document.createElement("a");
+  // link.href = canvas.toDataURL("image/jpeg", 1);
 
-  let time = new Date();
-  let timezoneOffset = time.getTimezoneOffset() * 60000;
-  let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
+  // let time = new Date();
+  // let timezoneOffset = time.getTimezoneOffset() * 60000;
+  // let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
 
-  link.download = `${cameraTitle}-${timeString}.jpg`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+  // link.download = `${cameraTitle}-${timeString}.jpg`;
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
+// }
 
 function CameraStream({ cameraName }) {
   const dispatch = useDispatch();
@@ -112,7 +113,11 @@ function CameraStream({ cameraName }) {
   
   const vidTag = useMemo(() => {
     return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
-  }, [cameraName, cameraTitle, popoutWindow])
+  }, [cameraName, cameraTitle, popoutWindow]);
+
+  function requestDownloadFrame() {
+    dispatch(requestCameraFrame(cameraName));
+  };
   
   const drawFrameOnExt = useCallback((window, last_ww, last_wh) => {
     if (vidTag && window && cameraCanvas) {
@@ -238,7 +243,7 @@ function CameraStream({ cameraName }) {
       <div className='camera-stream-download-header'>
         <button className='camera-stream-download-button'
         title={`Download "${cameraTitle}" camera stream current frame`}
-        onClick={() => downloadCurrentFrame(document.querySelector(`#${vidTag.props.id}`), cameraTitle)} disabled={!hasFrame}>
+        onClick={requestDownloadFrame} disabled={!hasFrame}>
           Download
         </button>
       </div>
