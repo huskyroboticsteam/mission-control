@@ -380,6 +380,38 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 - `camera` - the name of the camera: `mast|hand|wrist`
 - `data` - the raw h264 frame data, or `null` if no data is available
 
+## Camera Frame Request
+### Description
+Sent from Mission Control to instruct the rover server to send a Camera Frame Report.
+
+### Syntax
+```
+{
+  type: "cameraFrameRequest",
+  camera: string
+}
+```
+
+### Parameters
+- `camera` - the name of the camera
+
+## Camera Frame Report
+### Description
+Sent from the rover server to inform Mission Control of a full resolution lossless camera frame.
+
+### Syntax
+```
+{
+  type: "cameraFrameReport",
+  camera: string,
+  data: string | null
+}
+```
+
+### Parameters
+- `camera` - the name of the camera
+- `data` - the image, base64 encoded
+
 
 ## Autonomous Waypoint Navigation Request
 ### Description
