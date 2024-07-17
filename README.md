@@ -102,6 +102,23 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
+## Swerve Drive Mode Request
+### Description
+Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles (`normal`: straight forward, `turn-in-place`: angled to allow for turning in place, `crab`: perpendicular to the rover's heading for sideways movement).
+
+### Syntax
+```
+{
+    type: "swerveDriveModeRequest",
+    mode: "normal" | "turn-in-place" | "crab",
+    override: boolean
+}
+```
+
+### Parameters
+- `mode` - the requested drive mode
+- `override` - `true` to ignore error thresholding when moving swerve modules, `false` to respect them.
+
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
@@ -136,6 +153,38 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
+## Turn-in-place Drive Request
+### Description
+Sent from Mission Control to instruct the rover to turn in place with a specified steer value.
+
+### Syntax
+```
+{
+    type: "turnInPlaceDriveRequest",
+    steer: number
+}
+```
+
+### Parameters
+- `steer` - steer component in [-1.0, 1.0], where positive means turn right and negative means turn left
+
+## Crab Drive Request
+### Description
+Sent from Mission Control to instruct the rover to crab sideways
+
+### Syntax
+```
+{
+    type: "crabDriveRequest",
+    crab: number,
+    steer: number
+}
+```
+
+### Parameters
+- `crab` - crab component in [-1.0, 1.0], where positive means to crab right and negative means to crab left
+- `steer` - steer component in [-1.0, 1.0], where positive means steer right and negative means steer left
+
 ## Holonomic Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with holonomic capabilities
@@ -163,7 +212,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
   power: number
 }
 ```
@@ -180,7 +229,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
   position: number
 }
 ```
@@ -197,7 +246,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm" | "activeSuspension",
   position: number
 }
 ```
