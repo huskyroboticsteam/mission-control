@@ -2,6 +2,7 @@ import {
   openCameraStream,
   closeCameraStream,
   cameraStreamDataReportReceived,
+  requestCameraFrame,
 } from "../camerasSlice";
 import {
   messageReceivedFromRover,
@@ -33,6 +34,16 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamCloseRequest",
+          camera: action.payload.cameraName
+        }
+      }));
+      break;
+    }
+
+    case requestCameraFrame.type: {
+      store.dispatch(messageRover({
+        message: {
+          type: "cameraFrameRequest",
           camera: action.payload.cameraName
         }
       }));
