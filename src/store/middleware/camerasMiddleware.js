@@ -74,11 +74,14 @@ const camerasMiddleware = store => next => action => {
 
     case messageReceivedFromRover.type: {
       const { message } = action.payload;
-      if (message.type === "cameraStreamReport")
+      if (message.type === "cameraStreamReport") {
         store.dispatch(cameraStreamDataReportReceived({
           cameraName: message.camera,
           frameData: message.data
         }));
+      } else if (message.type === "cameraFrameReport") {
+        alert("Received frame.");
+      }
       break;
     }
 
