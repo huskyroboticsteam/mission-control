@@ -92,20 +92,17 @@ const camerasMiddleware = store => next => action => {
           cameraName: message.camera,
           frameData: message.data
         }));
-      } else if (message.type === "cameraFrameReport") {
-        if (message.data !== "") {
-          let link = document.createElement("a");
-          link.href = `data:image/jpg;base64,${message.data}`;
-          let time = new Date();
-          let timezoneOffset = time.getTimezoneOffset() * 60000;
-          let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
+      } else if (message.type === "cameraFrameReport" && message.data !== "") {
+        let link = document.createElement("a");
+        link.href = `data:image/jpg;base64,${message.data}`;
+        let time = new Date();
+        let timezoneOffset = time.getTimezoneOffset() * 60000;
+        let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
 
-          link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-        }
+        link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
       break;
     }

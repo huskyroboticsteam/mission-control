@@ -404,7 +404,7 @@ Sent from the rover server to inform Mission Control of a full resolution lossle
 {
   type: "cameraFrameReport",
   camera: string,
-  data: string | null
+  data: string
 }
 ```
 
