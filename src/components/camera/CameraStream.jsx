@@ -7,9 +7,9 @@ import {
   selectCameraStreamFrameData,
   requestCameraFrame,
 } from "../../store/camerasSlice";
+import { selectRoverIsConnected } from "../../store/roverSocketSlice";
 import camelCaseToTitle from "../../util/camelCaseToTitle";
 import "./CameraStream.css";
-
 /**
  * Takes:
  *    cameraTitle: the camera title,
@@ -67,6 +67,7 @@ function CameraStream({ cameraName }) {
     };
   }, [cameraName, dispatch]);
 
+  const roverIsConnected = useSelector(selectRoverIsConnected);
   const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName));
   const cameraTitle = camelCaseToTitle(cameraName);
   const [hasRendered, setHasRendered] = useState(false);
@@ -76,6 +77,7 @@ function CameraStream({ cameraName }) {
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20);
   const [popoutWindow, setPopoutWindow] = useState(null);
   const [aspectRatio, setAspectRatio] = useState(1);
+
 
   const cameraCanvas = useRef(null);  // used for popout window
   const cameraContext = useRef(null);  // used for popout window
@@ -105,18 +107,20 @@ function CameraStream({ cameraName }) {
         }
       }
 
-      if (hasFrame) {
-        let button = window.document.querySelector("#ext-download-button");
-        button.removeAttribute('disabled');
-      }
-
       let video = document.querySelector(`#${vidTag.props.id}`);
       cameraContext.current.drawImage(video, 0, 0, cameraCanvas.current.width, cameraCanvas.current.height);
       last_ww = window.innerWidth;
       last_wh = window.innerHeight;
       window.requestAnimationFrame(() => { drawFrameOnExt(window, last_ww, last_wh); });
     }
-  }, [vidTag, aspectRatio, hasFrame]);
+  }, [vidTag, aspectRatio, hasFrame, roverIsConnected]);
+
+  useEffect(() => {
+    if (popoutWindow) {
+      let button = popoutWindow.document.querySelector("#ext-download-button");
+      if (button) button.disabled = !(hasFrame && roverIsConnected);
+    }
+  }, [popoutWindow, hasFrame, roverIsConnected]);
 
   const handlePopOut = useCallback(async () => {
     if (popoutWindow) {
@@ -212,7 +216,7 @@ function CameraStream({ cameraName }) {
       <div className='camera-stream-download-header'>
         <button className='camera-stream-download-button'
         title={`Download "${cameraTitle}" camera stream current frame`}
-        onClick={requestDownloadFrame} disabled={!hasFrame}>
+        onClick={requestDownloadFrame} disabled={!(hasFrame && roverIsConnected)}>
           Download
         </button>
       </div>
