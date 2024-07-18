@@ -25,7 +25,6 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
     newWindow.onload = () => {
       newWindow.document.title = `${cameraTitle} Stream`;
       newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
-      // newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
       newWindow.document.querySelector('#ext-download-button').onclick = downloadCallback;
       let canvas = newWindow.document.querySelector('#ext-vid');
       let context = canvas.getContext('2d');
@@ -37,7 +36,7 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
 
       window.onunload = () => {
         if (newWindow && !newWindow.closed) {
-            newWindow.close();
+          newWindow.close();
         }
       };
 
@@ -49,7 +48,7 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
         context: context,
         aspectRatio: aspectRatio
       };
-      resolve(output); 
+      resolve(output);
     }
   });
 
@@ -81,19 +80,19 @@ function CameraStream({ cameraName }) {
 
   const cameraCanvas = useRef(null);  // used for popout window
   const cameraContext = useRef(null);  // used for popout window
-  
+
   const vidTag = useMemo(() => {
-    return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
+    return <video style={{ opacity: popoutWindow ? '0' : '1' }} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow]);
 
   const requestDownloadFrame = useCallback(() => {
     dispatch(requestCameraFrame({ cameraName }));
   }, [cameraName, dispatch]);
-  
+
   const drawFrameOnExt = useCallback((window, last_ww, last_wh) => {
     if (vidTag && window && cameraCanvas) {
       // draw it onto the popout window
-      
+
       if (window.innerWidth !== last_ww || window.innerHeight !== last_wh) {
         // if the window is wider than the stream
         if (window.innerHeight / window.innerWidth > aspectRatio) {
@@ -113,7 +112,7 @@ function CameraStream({ cameraName }) {
       last_wh = window.innerHeight;
       window.requestAnimationFrame(() => { drawFrameOnExt(window, last_ww, last_wh); });
     }
-  }, [vidTag, aspectRatio, hasFrame, roverIsConnected]);
+  }, [vidTag, aspectRatio]);
 
   useEffect(() => {
     if (popoutWindow) {
@@ -147,10 +146,10 @@ function CameraStream({ cameraName }) {
         flushingTime: 0,
         maxDelay: 50,
         clearBuffer: true,
-        onError: function(data) {
+        onError: function (data) {
           console.warn('Buffer error encountered', data);
         },
-        
+
         onMissingVideoFrames: function (data) {
           console.warn('Video frames missing', data);
         }
@@ -194,7 +193,7 @@ function CameraStream({ cameraName }) {
       }
     };
   }, [popoutWindow]);
-  
+
   useEffect(() => {
     // this indicates that the site has rendered and the player is able to be modified (specifically the src)
     setHasRendered(true);
@@ -203,20 +202,20 @@ function CameraStream({ cameraName }) {
   return (
     <div className="camera-stream">
       <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
-      <div className="video-container">{ vidTag }</div>
-      { popoutWindow ? <h3>Stream In External Window</h3> : (!frameDataArray && <h3>No Stream Available</h3>) }
+      <div className="video-container">{vidTag}</div>
+      {popoutWindow ? <h3>Stream In External Window</h3> : (!frameDataArray && <h3>No Stream Available</h3>)}
       <div className='camera-stream-fps'>FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
       <div className='camera-stream-pop-header'>
         <span className='camera-stream-pop-button'
-        title={`Open "${cameraTitle}" camera stream in a new window.`}
-        onClick={ handlePopOut }>
-          { popoutWindow ? 'Merge Window' : 'Pop Out' }
+          title={`Open "${cameraTitle}" camera stream in a new window.`}
+          onClick={handlePopOut}>
+          {popoutWindow ? 'Merge Window' : 'Pop Out'}
         </span>
       </div>
       <div className='camera-stream-download-header'>
         <button className='camera-stream-download-button'
-        title={`Download "${cameraTitle}" camera stream current frame`}
-        onClick={requestDownloadFrame} disabled={!(hasFrame && roverIsConnected)}>
+          title={`Download "${cameraTitle}" camera stream current frame`}
+          onClick={requestDownloadFrame} disabled={!(hasFrame && roverIsConnected)}>
           Download
         </button>
       </div>

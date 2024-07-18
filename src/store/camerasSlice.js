@@ -25,7 +25,7 @@ const camerasSlice = createSlice({
       state[cameraName].frameData = null;
     },
 
-    requestCameraFrame() {},
+    requestCameraFrame() { },
 
     cameraStreamDataReportReceived(state, action) {
       const { cameraName, frameData } = action.payload;

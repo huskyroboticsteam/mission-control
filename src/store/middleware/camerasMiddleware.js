@@ -99,7 +99,7 @@ const camerasMiddleware = store => next => action => {
           let time = new Date();
           let timezoneOffset = time.getTimezoneOffset() * 60000;
           let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
-          
+
           link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`;
           document.body.appendChild(link);
           link.click();
