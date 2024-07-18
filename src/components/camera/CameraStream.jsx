@@ -15,19 +15,18 @@ import "./CameraStream.css";
  *    cameraTitle: the camera title,
  *    cameraName: the camera name,
  *    unloadCallback: a callback that is ran before the window is fully unloaded
- *    video_width: the stream width
- *    video_height: the stream height
+ *    downloadCallback: a callback that is ran when the download button is pressed
  * Returns: Promise of an object with keys: window, canvas, context, aspectRatio
  */
-async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video_width, video_height) {
+async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downloadCallback) {
   let newWindow = window.open("/camera/cam_popout.htm", "", "width=500,height=500");
 
   const returnPromise = new Promise((resolve, reject) => {
     newWindow.onload = () => {
       newWindow.document.title = `${cameraTitle} Stream`;
       newWindow.document.querySelector('#ext-title').innerText = cameraTitle;
-      newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
-
+      // newWindow.document.querySelector('#ext-download-button').setAttribute("onclick", `download("${cameraTitle}", ${video_width}, ${video_height})`);
+      newWindow.document.querySelector('#ext-download-button').onclick = downloadCallback;
       let canvas = newWindow.document.querySelector('#ext-vid');
       let context = canvas.getContext('2d');
       let aspectRatio = document.querySelector(`#${cameraName}-player`).videoHeight / document.querySelector(`#${cameraName}-player`).videoWidth;
@@ -56,36 +55,6 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, video
 
   return returnPromise;
 }
-
-/**
- * Takes
- *    video: HTMLVideoElement representing the video tag which should be processed.
- *    cameraTitle: name of the camera, used for the filename.
- * Note: This is the React version of this function for this CameraStream component,
- *    The popout window "download" button uses a seperate function, defined in 
- *    /public/camera/cam_popout.js. If you make changes to this function, you need to 
- *    make corresponding changes to the cam_popout.js file.
- */
-// function downloadCurrentFrame() {
-  // if (!video || !(video.videoWidth && video.videoHeight)) return null;
-  // let canvas = document.createElement('canvas');
-  // let context = canvas.getContext('2d');
-  // canvas.width = video.videoWidth;
-  // canvas.height = video.videoHeight;
-  // context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  // let link = document.createElement("a");
-  // link.href = canvas.toDataURL("image/jpeg", 1);
-
-  // let time = new Date();
-  // let timezoneOffset = time.getTimezoneOffset() * 60000;
-  // let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
-
-  // link.download = `${cameraTitle}-${timeString}.jpg`;
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
-// }
 
 function CameraStream({ cameraName }) {
   const dispatch = useDispatch();
@@ -157,7 +126,7 @@ function CameraStream({ cameraName }) {
     } else if (vidTag) {
       // if the window popout doesn't exist
       let video = document.getElementById(vidTag.props.id);
-      let { popout, canvas, context, aspectRatio } = await createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), video.videoWidth, video.videoHeight);
+      let { popout, canvas, context, aspectRatio } = await createPopOutWindow(cameraTitle, cameraName, () => setPopoutWindow(null), requestDownloadFrame);
       setAspectRatio(aspectRatio);
       setPopoutWindow(popout);
       cameraCanvas.current = canvas;

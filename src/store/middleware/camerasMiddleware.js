@@ -10,6 +10,8 @@ import {
   roverConnected,
   roverDisconnected
 } from "../roverSocketSlice";
+import camelCaseToTitle from "../../util/camelCaseToTitle";
+
 
 /**
  * Middleware that handles requesting and receiving camera streams from the
@@ -42,8 +44,10 @@ const camerasMiddleware = store => next => action => {
 
     case requestCameraFrame.type: {
       store.dispatch(messageRover({
-        type: "cameraFrameRequest",
-        camera: action.payload.cameraName
+        message: {
+          type: "cameraFrameRequest",
+          camera: action.payload.cameraName
+        }
       }));
       break;
     }
@@ -89,7 +93,19 @@ const camerasMiddleware = store => next => action => {
           frameData: message.data
         }));
       } else if (message.type === "cameraFrameReport") {
-        alert("camerasMiddleware received frame.");
+        if (message.data !== "") {
+          let link = document.createElement("a");
+          link.href = `data:image/jpg;base64,${message.data}`;
+          let time = new Date();
+          let timezoneOffset = time.getTimezoneOffset() * 60000;
+          let timeString = new Date(time - timezoneOffset).toISOString().replace(":", "_").substring(0, 19);
+          
+          link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+        }
       }
       break;
     }
