@@ -115,9 +115,9 @@ function CameraStream({ cameraName }) {
     return <video style={{opacity: popoutWindow ? '0' : '1'}} id={`${cameraName}-player`} className='video-tag' muted autoPlay preload="auto" alt={`${cameraTitle} stream`}></video>;
   }, [cameraName, cameraTitle, popoutWindow]);
 
-  function requestDownloadFrame() {
-    dispatch(requestCameraFrame(cameraName));
-  };
+  const requestDownloadFrame = useCallback(() => {
+    dispatch(requestCameraFrame({ cameraName }));
+  }, [cameraName, dispatch]);
   
   const drawFrameOnExt = useCallback((window, last_ww, last_wh) => {
     if (vidTag && window && cameraCanvas) {

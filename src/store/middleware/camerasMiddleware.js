@@ -42,10 +42,8 @@ const camerasMiddleware = store => next => action => {
 
     case requestCameraFrame.type: {
       store.dispatch(messageRover({
-        message: {
-          type: "cameraFrameRequest",
-          camera: action.payload.cameraName
-        }
+        type: "cameraFrameRequest",
+        camera: action.payload.cameraName
       }));
       break;
     }
