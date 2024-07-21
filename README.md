@@ -382,7 +382,7 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 
 ## Camera Frame Request
 ### Description
-Sent from Mission Control to instruct the rover server to send a Camera Frame Report.
+Sent from Mission Control to instruct the rover server to send a Camera Frame Report. If `camera` specifies a valid camera stream, the rover will respond with a Camera Frame Report containing the latest frame from that camera.
 
 ### Syntax
 ```
@@ -393,7 +393,7 @@ Sent from Mission Control to instruct the rover server to send a Camera Frame Re
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 
 ## Camera Frame Report
 ### Description
