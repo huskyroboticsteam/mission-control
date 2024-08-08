@@ -47,6 +47,7 @@ const initialState = {
       wristPitch: 0,
       wristRoll: 0,
       hand: 0,
+      handActuator: 0,
       ikUp: 0,
       ikForward: 0,
     },
@@ -222,6 +223,8 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "J", "L");
+  armInput.handActuator = getAxisFromButtons(peripheralGamepad, "B", "A") +
+    getAxisFromKeys(pressedKeys, ",", ".");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
