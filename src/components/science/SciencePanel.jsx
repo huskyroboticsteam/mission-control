@@ -7,8 +7,6 @@ function ArmDexterityPanel() {
     <div className="science-panel">
       <CameraStream cameraName="mast" />
       {/* placeholder cameras, will replace with other science feeds */}
-      <CameraStream cameraName="mast" />
-      <CameraStream cameraName="hand" />
       <CameraStream cameraName="wrist" />
     </div>
   );
