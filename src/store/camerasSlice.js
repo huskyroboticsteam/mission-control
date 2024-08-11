@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const cameraNames = ["mast", "hand", "wrist"];
+const cameraNames = ["mast", "hand", "wrist", "pano", "drill"];
 
 const initialState = cameraNames.reduce((state, cameraName) => ({
   ...state,
