@@ -199,7 +199,7 @@ function computeArmInput(state) {
       -peripheralGamepad["LeftStickY"] +
       getAxisFromKeys(pressedKeys, "S", "W");
     armInput.ikUp =
-      peripheralGamepad["RightStickY"] +
+      -peripheralGamepad["RightStickY"] +
       getAxisFromKeys(pressedKeys, "G", "T");
     armInput.shoulder = 0;
     armInput.elbow = 0;
