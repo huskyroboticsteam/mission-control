@@ -47,6 +47,7 @@ const initialState = {
       wristPitch: 0,
       wristRoll: 0,
       hand: 0,
+      handActuator: 0,
       ikUp: 0,
       ikForward: 0,
     },
@@ -86,6 +87,9 @@ const inputSlice = createSlice({
       if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
+      } else if (axisName === "DPadX") {
+        state[gamepadName]["DPadLeft"] = value < 0;
+        state[gamepadName]["DPadRight"] = value > 0;
       } else if (isLinux() && (axisName === "LeftTrigger" || axisName === "RightTrigger") && value !== 0.0) {
         // bug in linux, trigger values keep jumping to 0.
         // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
@@ -195,7 +199,7 @@ function computeArmInput(state) {
       -peripheralGamepad["LeftStickY"] +
       getAxisFromKeys(pressedKeys, "S", "W");
     armInput.ikUp =
-      peripheralGamepad["RightStickY"] +
+      -peripheralGamepad["RightStickY"] +
       getAxisFromKeys(pressedKeys, "G", "T");
     armInput.shoulder = 0;
     armInput.elbow = 0;
@@ -204,8 +208,8 @@ function computeArmInput(state) {
       peripheralGamepad["LeftStickY"] +
       getAxisFromKeys(pressedKeys, "S", "W");
     armInput.elbow =
-      peripheralGamepad["RightStickY"] +
-      getAxisFromKeys(pressedKeys, "G", "T");
+      -peripheralGamepad["RightStickY"] +
+      getAxisFromKeys(pressedKeys, "T", "G");
     armInput.ikUp = 0;
     armInput.ikForward = 0;
   }
@@ -213,7 +217,7 @@ function computeArmInput(state) {
     peripheralGamepad["RightStickX"] +
     getAxisFromKeys(pressedKeys, "F", "H");
   armInput.wristPitch =
-    getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
+    -getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
     getAxisFromKeys(pressedKeys, "K", "I");
   armInput.wristRoll =
     getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
@@ -222,6 +226,8 @@ function computeArmInput(state) {
     peripheralGamepad["LeftTrigger"] -
     peripheralGamepad["RightTrigger"] +
     getAxisFromKeys(pressedKeys, "J", "L");
+  armInput.handActuator = getAxisFromButtons(peripheralGamepad, "B", "A") +
+    getAxisFromKeys(pressedKeys, ",", ".");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
