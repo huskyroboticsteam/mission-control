@@ -22,7 +22,7 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamOpenRequest",
-          camera: action.payload.cameraName,
+          cameraID: Number(action.payload.cameraID),
           fps: 20,  // default to 20
         }
       }));
@@ -33,7 +33,7 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamCloseRequest",
-          camera: action.payload.cameraName
+          cameraID: Number(action.payload.cameraID)
         }
       }));
       break;
@@ -43,13 +43,13 @@ const camerasMiddleware = store => next => action => {
       // Inform the rover of camera streams we would like to receive when we
       // connect.
       const cameras = store.getState().cameras;
-      Object.keys(cameras).forEach(cameraName => {
-        const camera = cameras[cameraName];
+      Object.keys(cameras).forEach(cameraID => {
+        const camera = cameras[cameraID];
         if (camera.isStreaming) {
           store.dispatch(messageRover({
             message: {
               type: "cameraStreamOpenRequest",
-              camera: cameraName,
+              cameraID: Number(cameraID),
               fps: 20, // default to 20
             }
           }));
@@ -60,11 +60,11 @@ const camerasMiddleware = store => next => action => {
 
     case roverDisconnected.type: {
       const cameras = store.getState().cameras;
-      Object.keys(cameras).forEach(cameraName => {
-        const camera = cameras[cameraName];
+      Object.keys(cameras).forEach(cameraID => {
+        const camera = cameras[cameraID];
         if (camera.isStreaming && camera.frameData !== null) {
           store.dispatch(cameraStreamDataReportReceived({
-            cameraName,
+            cameraName: cameraID,
             frameData: null
           }));
         }
@@ -76,7 +76,7 @@ const camerasMiddleware = store => next => action => {
       const { message } = action.payload;
       if (message.type === "cameraStreamReport")
         store.dispatch(cameraStreamDataReportReceived({
-          cameraName: message.camera,
+          cameraID: message.cameraID,
           frameData: message.data
         }));
       break;

@@ -7,9 +7,9 @@ import "./ArmDexterityPanel.css"
 function ArmDexterityPanel() {
   return (
     <div className="arm-dexterity-panel">
-      <CameraStream cameraName="hand" />
-      <CameraStream cameraName="wrist" />
-      <CameraStream cameraName="mast" />
+      <CameraStream cameraName="hand" cameraID={20} />
+      <CameraStream cameraName="wrist" cameraID={30} />
+      <CameraStream cameraName="mast" cameraID={40} />
       <RoverModel />
       <SwerveDriveMode />
     </div>
