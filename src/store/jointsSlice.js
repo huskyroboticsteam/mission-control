@@ -12,7 +12,6 @@ const jointNames = [
   "wristPitch",
   "wristRoll",
   "hand",
-  "handActuator",
   "drillArm",
   "activeSuspension",
   "ikUp",
