@@ -64,3 +64,36 @@
   cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
 }
+
+.waypoint-status {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.waypoint-status--in_progress {
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+}
+
+.waypoint-status--reached {
+  background-color: #e8f5e9;
+  border: 1px solid #a5d6a7;
+}
+
+.waypoint-status--failed {
+  background-color: #ffebee;
+  border: 1px solid #ef9a9a;
+}
+
+.status-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.status-error {
+  color: #c62828;
+  font-weight: 500;
+}
