@@ -63,3 +63,9 @@
   cursor: pointer;
   background-color: #e06000;
 }
+
+.nav-status {
+  background-color: blue;
+  margin: 14px;
+  padding: 20px;
+}
