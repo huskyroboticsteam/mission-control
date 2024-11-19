@@ -4,7 +4,6 @@ import { selectRoverPosition } from "../../store/telemetrySlice";
 import "./Compass.css";
 import { Quaternion, Euler, Vector3 } from '@math.gl/core';
 import * as Quat from 'gl-matrix/quat';
-import { getAlertTitleUtilityClass } from "@mui/material";
 
 function getAttitude(roll, pitch) {
   let attitudeRPY = new Euler().fromRollPitchYaw(roll, pitch, 0.0);
@@ -46,8 +45,7 @@ const Compass = () => {
   } else {
     let quat = new Quaternion(orientX, orientY, orientZ, orientW);
     let rpy = new Euler().fromQuaternion(quat, Euler.ZYX);
-    let attitude = getAttitude(rpy.roll, rpy.pitch)
-    
+    let attitude = getAttitude(rpy.roll, rpy.pitch);
     roll = Math.round(rpy.roll * 180 / Math.PI);
     pitch = Math.round(rpy.pitch * 180 / Math.PI);
     yaw = Math.round(rpy.yaw * 180 / Math.PI);
