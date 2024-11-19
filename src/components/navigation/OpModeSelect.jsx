@@ -2,6 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestOpMode, selectOpMode } from "../../store/opModeSlice";
 import "./OpModeSelect.css";
 import { selectRoverPosition } from "../../store/telemetrySlice";
+import { selectLatitude } from "../../store/waypointNavSlice";
+import { selectLongitude } from "../../store/waypointNavSlice";
+import { useSelect } from "@react-three/drei";
 
 
 function sanitize(num, decimals) {
@@ -17,10 +20,21 @@ function sanitize(num, decimals) {
   return num >= 0 ? " " + ret : ret;
 }
 
+function navStatus() {
+  
+  return (
+    <div>lauda
+      
+    </div>
+  )
+}
+
 function OpModeSelect() {
     const dispatch = useDispatch();
     const opMode = useSelector(selectOpMode);
     const {lon, lat } = useSelector(selectRoverPosition);
+    const latitude = useSelector(selectLatitude);
+    const longitude = useSelector(selectLongitude);
   
     const handleClick = () => {
       if (opMode === "teleoperation") {
@@ -30,11 +44,6 @@ function OpModeSelect() {
       }
     };
 
-    
-
-
-    
-  
     return (
       <div className={`op-mode-select op-mode-select--${opMode}`}>
         <p>
@@ -46,8 +55,9 @@ function OpModeSelect() {
         {
           opMode === "autonomous" ?
             <div className="nav-status">
-              <p>Longitude: {sanitize(lon)}</p>
-              <p>Latitude: {sanitize(lat)}</p>
+              {(lon!=0.95*longitude && lat!=0.95*latitude) ? <p>reaching...</p> : <p>reached</p>}
+              {/* <p>Longitude: {sanitize(lon)}</p>
+              <p>Latitude: {sanitize(lat)}</p> */}
             </div>
           : <></>
         }
