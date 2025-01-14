@@ -6,6 +6,7 @@ import { selectLatitude, selectLongitude } from "../../store/waypointNavSlice";
 
 // Constants for navigation
 const POSITION_THRESHOLD = 0.0001; // Roughly 11 meters at the equator
+const APPROACHING_THRESHOLD = POSITION_THRESHOLD * 3; // Three times the position threshold
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
   // Using absolute difference for a simple distance check
@@ -18,10 +19,10 @@ function sanitize(num, decimals) {
   if (num == null) {
     return "N/A";
   }
+  let ret = num.toString();
   if (decimals !== undefined) {
     ret = num.toFixed(decimals);
   }
-
   return num >= 0 ? " " + ret : ret;
 }
 
@@ -40,21 +41,40 @@ function OpModeSelect() {
     }
   };
 
-  const hasReachedWaypoint = () => {
+  const getNavigationStatus = () => {
     // Guard against null or undefined values
     if (!lon || !lat || !targetLatitude || !targetLongitude) {
-      return false;
+      return {
+        status: "unknown",
+        distance: null,
+        color: "gray"
+      };
     }
 
-    const distance = calculateDistance(
-      lat,
-      lon,
-      targetLatitude,
-      targetLongitude
-    );
+    const distance = calculateDistance(lat, lon, targetLatitude, targetLongitude);
 
-    return distance <= POSITION_THRESHOLD;
+    if (distance <= POSITION_THRESHOLD) {
+      return {
+        status: "reached",
+        distance,
+        color: "green"
+      };
+    } else if (distance <= APPROACHING_THRESHOLD) {
+      return {
+        status: "approaching",
+        distance,
+        color: "yellow"
+      };
+    } else {
+      return {
+        status: "navigating",
+        distance,
+        color: "red"
+      };
+    }
   };
+
+  const navStatus = getNavigationStatus();
 
   return (
     <div className={`op-mode-select op-mode-select--${opMode}`}>
@@ -68,12 +88,18 @@ function OpModeSelect() {
         Switch to {opMode === "teleoperation" ? "Autonomous" : "Teleoperation"}
       </button>
       {opMode === "autonomous" && (
-        <div className="nav-status">
-          {hasReachedWaypoint() ? <p>reached</p> : <p>reaching...</p>}
+        <div className={`nav-status nav-status--${navStatus.color}`}>
+          <div className="nav-status__header">Navigation Status</div>
+          <div className="nav-status__content">
+            <div>Status: <span className={`nav-status__label--${navStatus.color}`}>{navStatus.status}</span></div>
+            <div>Distance: {navStatus.distance ? navStatus.distance.toFixed(6) : 'N/A'}</div>
+            <div className="nav-status__coordinates">
+              <div>Current: ({sanitize(lat, 6)}, {sanitize(lon, 6)})</div>
+              <div>Target: ({sanitize(targetLatitude, 6)}, {sanitize(targetLongitude, 6)})</div>
+            </div>
+          </div>
         </div>
       )}
-      <div>Testing if I get Target Longitude: {targetLongitude}</div>
-      <div>Testing if I get Target Longitude: {targetLatitude}</div>
     </div>
   );
 }
