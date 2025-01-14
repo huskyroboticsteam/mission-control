@@ -5,11 +5,10 @@ import { selectRoverPosition } from "../../store/telemetrySlice";
 import { selectLatitude, selectLongitude } from "../../store/waypointNavSlice";
 
 // Constants for navigation
-const POSITION_THRESHOLD = 0.0001; // Roughly 11 meters at the equator
-const APPROACHING_THRESHOLD = POSITION_THRESHOLD * 3; // Three times the position threshold
+const POSITION_THRESHOLD = 0.00001; 
+const APPROACHING_THRESHOLD = POSITION_THRESHOLD * 3; 
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  // Using absolute difference for a simple distance check
   const latDiff = Math.abs(lat1 - lat2);
   const lonDiff = Math.abs(lon1 - lon2);
   return Math.sqrt(latDiff * latDiff + lonDiff * lonDiff);
