@@ -4,8 +4,8 @@ import { selectLatitude, selectLongitude } from "../../store/waypointNavSlice";
 import "./NavigationStatus.css";
 
 // Constants for navigation
-const POSITION_THRESHOLD = 0.00001;
-const APPROACHING_THRESHOLD = POSITION_THRESHOLD * 3;
+const POSITION_THRESHOLD = 0.5;
+const APPROACHING_THRESHOLD = 3.0;
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const latDiff = Math.abs(lat1 - lat2);
