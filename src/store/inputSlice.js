@@ -52,8 +52,7 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      lazySusanPosition: 0,
-      instrumentationArm: 0
+      lazySusanPosition: 0
     }
   },
   inverseKinematics: {
@@ -252,7 +251,6 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  scienceInput.instrumentationArm = getAxisFromKeys(pressedKeys,"C", "V");
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {

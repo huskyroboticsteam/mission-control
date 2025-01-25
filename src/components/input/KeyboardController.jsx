@@ -15,7 +15,7 @@ function KeyboardController() {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch]); 
+  }, [dispatch]);
 
   // We don't need to render this component.
   return null;
