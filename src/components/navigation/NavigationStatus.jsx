@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { selectRoverPosition } from "../../store/telemetrySlice";
 import { selectLatitude, selectLongitude } from "../../store/waypointNavSlice";
 import "./NavigationStatus.css";
+import { POSITION_THRESHOLD } from "../../constants/navigationConstants";
 
-// Constants for navigation
-const POSITION_THRESHOLD = 0.5;
+
 const APPROACHING_THRESHOLD = 3.0;
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -21,7 +21,7 @@ function sanitize(num, decimals) {
     if (decimals !== undefined) {
         ret = num.toFixed(decimals);
     }
-    return num >= 0 ? " " + ret : ret;
+    return num >= 0 ? ret : ret;
 }
 
 function NavigationStatus() {

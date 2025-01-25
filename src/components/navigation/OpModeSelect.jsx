@@ -18,16 +18,13 @@ function OpModeSelect() {
   return (
     <div className={`op-mode-select op-mode-select--${opMode}`}>
       <p>
-        Current operation mode:{" "}
-        <span className={`op-mode-select__op-mode op-mode-select__op-mode--${opMode}`}>
-          {opMode}
-        </span>
+        Current operation mode: <span className={`op-mode-select__op-mode op-mode-select__op-mode--${opMode}`}>{opMode}</span>
       </p>
-      <button onClick={handleClick}>
+      <button onClick={handleClick} >
         Switch to {opMode === "teleoperation" ? "Autonomous" : "Teleoperation"}
       </button>
       {opMode === "autonomous" && <NavigationStatus />}
-    </div>
+    </div >
   );
 }
 

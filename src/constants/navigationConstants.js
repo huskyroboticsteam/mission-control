@@ -1,0 +1,1 @@
+export const POSITION_THRESHOLD = 0.5;
