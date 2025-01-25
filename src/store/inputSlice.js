@@ -58,7 +58,8 @@ const initialState = {
   inverseKinematics: {
     enabled: false,
     lastSentArmIKState: null
-  }
+  },
+  triggerHeld: false,
 };
 
 function isLinux() {
@@ -106,16 +107,21 @@ const inputSlice = createSlice({
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, buttonName, pressed } = action.payload;
       if (buttonName === "LT" || buttonName === "RT")
+        state.triggerHeld = pressed;
         // Treat triggers as axes, not buttons.
         return;
       state[gamepadName][buttonName] = pressed;
       computeInput(prevState, state, action);
     },
 
-    keyPressed(state, action) {
+    keyPressed(state, action) { // FOCUS HERE
       const prevState = JSON.parse(JSON.stringify(state));
       const key = action.payload.key.toUpperCase();
+      // console.log("STATE: ", state) // DEBUG
+      // console.log("ACTION: ", action) // DEBUG
       if (!state.keyboard.pressedKeys.includes(key)) {
+        // console.log("KEY: ", key) // DEBUG
+        // need a function to detect if a button is currently being pressed
         state.keyboard.pressedKeys.push(key);
       }
       computeInput(prevState, state, action);
@@ -149,7 +155,6 @@ function computeInput(prevState, state, action) {
 function computeDriveInput(state, action) {
   const driveGamepad = state.driveGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
-
   const driveInput = state.computed.drive;
 
   // Spacebar or the Y button toggles tank drive if swerve mode is normal.
@@ -165,12 +170,15 @@ function computeDriveInput(state, action) {
       alert("Can't switch to tank drive when not on normal driveInput type!");
     }
   }
-
-  driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-  driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
-  driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
-  driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
-  driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+  if (state.triggerHeld) { // if trigger being held, new bindings!
+    // input new bindings here
+  } else { // if trigger not being held, old bindings!
+    driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+    driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
+    driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
+    driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
+    driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
+  }
 
   driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
@@ -189,30 +197,35 @@ function computePeripheralInput(prevState, state, action) {
 function computeArmInput(state) {
   const peripheralGamepad = state.peripheralGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
-
   const armInput = state.computed.arm;
-  armInput.armBase =
-    peripheralGamepad["LeftStickX"] +
-    getAxisFromKeys(pressedKeys, "A", "D");
-  if (state.inverseKinematics.enabled) {
-    armInput.ikForward =
-      -peripheralGamepad["LeftStickY"] +
-      getAxisFromKeys(pressedKeys, "S", "W");
-    armInput.ikUp =
-      -peripheralGamepad["RightStickY"] +
-      getAxisFromKeys(pressedKeys, "G", "T");
-    armInput.shoulder = 0;
-    armInput.elbow = 0;
-  } else {
-    armInput.shoulder =
-      peripheralGamepad["LeftStickY"] +
-      getAxisFromKeys(pressedKeys, "S", "W");
-    armInput.elbow =
-      -peripheralGamepad["RightStickY"] +
-      getAxisFromKeys(pressedKeys, "T", "G");
-    armInput.ikUp = 0;
-    armInput.ikForward = 0;
+
+  if (state.triggerHeld) { // if trigger being held, new bindings!
+    // input new bindings here
+  } else { // if trigger not being held, old bindings!
+    armInput.armBase =
+      peripheralGamepad["LeftStickX"] +
+      getAxisFromKeys(pressedKeys, "A", "D");
+    if (state.inverseKinematics.enabled) {
+      armInput.ikForward =
+        -peripheralGamepad["LeftStickY"] +
+        getAxisFromKeys(pressedKeys, "S", "W");
+      armInput.ikUp =
+        -peripheralGamepad["RightStickY"] +
+        getAxisFromKeys(pressedKeys, "G", "T");
+      armInput.shoulder = 0;
+      armInput.elbow = 0;
+    } else {
+      armInput.shoulder =
+        peripheralGamepad["LeftStickY"] +
+        getAxisFromKeys(pressedKeys, "S", "W");
+      armInput.elbow =
+        -peripheralGamepad["RightStickY"] +
+        getAxisFromKeys(pressedKeys, "T", "G");
+      armInput.ikUp = 0;
+      armInput.ikForward = 0;
+    }
   }
+
   armInput.forearm =
     peripheralGamepad["RightStickX"] +
     getAxisFromKeys(pressedKeys, "F", "H");
