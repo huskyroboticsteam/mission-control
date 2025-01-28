@@ -106,10 +106,12 @@ const inputSlice = createSlice({
     gamepadButtonChanged(state, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, buttonName, pressed } = action.payload;
-      if (buttonName === "LT" || buttonName === "RT")
+      if (buttonName === "LT" || buttonName === "RT") {
         state.triggerHeld = pressed;
+        console.log("triggahs pressed") // DEBUG
         // Treat triggers as axes, not buttons.
         return;
+      }
       state[gamepadName][buttonName] = pressed;
       computeInput(prevState, state, action);
     },
@@ -120,8 +122,7 @@ const inputSlice = createSlice({
       // console.log("STATE: ", state) // DEBUG
       // console.log("ACTION: ", action) // DEBUG
       if (!state.keyboard.pressedKeys.includes(key)) {
-        // console.log("KEY: ", key) // DEBUG
-        // need a function to detect if a button is currently being pressed
+        console.log("KEY: ", key) // DEBUG
         state.keyboard.pressedKeys.push(key);
       }
       computeInput(prevState, state, action);
@@ -159,7 +160,7 @@ function computeDriveInput(state, action) {
 
   // Spacebar or the Y button toggles tank drive if swerve mode is normal.
   if ((action.type === keyPressed.type && action.payload.key === " ") ||
-      (action.type === gamepadButtonChanged.type &&
+    (action.type === gamepadButtonChanged.type &&
       action.payload.gamepadName === "driveGamepad" &&
       action.payload.buttonName === "Y" &&
       action.payload.pressed)
@@ -224,23 +225,22 @@ function computeArmInput(state) {
       armInput.ikUp = 0;
       armInput.ikForward = 0;
     }
+    armInput.forearm =
+      peripheralGamepad["RightStickX"] +
+      getAxisFromKeys(pressedKeys, "F", "H");
+    armInput.wristPitch =
+      -getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
+      getAxisFromKeys(pressedKeys, "K", "I");
+    armInput.wristRoll =
+      getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
+      getAxisFromKeys(pressedKeys, "U", "O");
+    armInput.hand =
+      peripheralGamepad["LeftTrigger"] -
+      peripheralGamepad["RightTrigger"] +
+      getAxisFromKeys(pressedKeys, "J", "L");
+    armInput.handActuator = getAxisFromButtons(peripheralGamepad, "B", "A") +
+      getAxisFromKeys(pressedKeys, ",", ".");
   }
-
-  armInput.forearm =
-    peripheralGamepad["RightStickX"] +
-    getAxisFromKeys(pressedKeys, "F", "H");
-  armInput.wristPitch =
-    -getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
-    getAxisFromKeys(pressedKeys, "K", "I");
-  armInput.wristRoll =
-    getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
-    getAxisFromKeys(pressedKeys, "U", "O");
-  armInput.hand =
-    peripheralGamepad["LeftTrigger"] -
-    peripheralGamepad["RightTrigger"] +
-    getAxisFromKeys(pressedKeys, "J", "L");
-  armInput.handActuator = getAxisFromButtons(peripheralGamepad, "B", "A") +
-    getAxisFromKeys(pressedKeys, ",", ".");
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad);
