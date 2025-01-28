@@ -102,23 +102,6 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
-## Swerve Drive Mode Request
-### Description
-Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles (`normal`: straight forward, `turn-in-place`: angled to allow for turning in place, `crab`: perpendicular to the rover's heading for sideways movement).
-
-### Syntax
-```
-{
-    type: "swerveDriveModeRequest",
-    mode: "normal" | "turn-in-place" | "crab",
-    override: boolean
-}
-```
-
-### Parameters
-- `mode` - the requested drive mode
-- `override` - `true` to ignore error thresholding when moving swerve modules, `false` to respect them.
-
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
