@@ -1,5 +1,5 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
-import { requestCrabDrive, requestDrive, requestTankDrive, requestTurnInPlaceDrive } from "../driveSlice";
+import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
@@ -62,31 +62,17 @@ const inputMiddleware = store => next => action => {
 function updateDrive(prevComputedInput, computedInput, store) {
   const dispatch = store.dispatch;
   const mode = selectSwerveDriveMode(store.getState());
-  if (mode === "normal") {
-    if (computedInput.drive.tank) {
-      const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
-      const { left, right } = computedInput.drive;
-      if (left !== prevLeft || right !== prevRight) {
-        dispatch(requestTankDrive({ left, right }));
-      }
-    } else {
-      const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
-      const { straight, steer } = computedInput.drive;
-      if (straight !== prevStraight || steer !== prevSteer) {
-        dispatch(requestDrive({ straight, steer }));
-      }
+  if (computedInput.drive.tank) {
+    const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
+    const { left, right } = computedInput.drive;
+    if (left !== prevLeft || right !== prevRight) {
+    dispatch(requestTankDrive({ left, right }));
     }
-  } else if (mode === "turn-in-place") {
-    const { steer: prevSteer } = prevComputedInput.drive;
-    const { steer } = computedInput.drive;
-    if (steer !== prevSteer) {
-      dispatch(requestTurnInPlaceDrive({ steer }));
-    }
-  } else if (mode === "crab") {
-    const { crab: prevCrab, steer: prevSteer } = prevComputedInput.drive;
-    const { crab, steer } = computedInput.drive;
-    if (crab !== prevCrab || steer !== prevSteer) {
-      dispatch(requestCrabDrive({ crab, steer }));
+  } else {
+    const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
+    const { straight, steer } = computedInput.drive;
+    if (straight !== prevStraight || steer !== prevSteer) {
+    dispatch(requestDrive({ straight, steer }));
     }
   }
   

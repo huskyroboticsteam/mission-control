@@ -9,7 +9,6 @@ function ArmDexterityPanel() {
     <div className="arm-dexterity-panel">
       <CameraStream cameraName="hand" />
       <RoverModel />
-      <SwerveDriveMode />
     </div>
   );
 }

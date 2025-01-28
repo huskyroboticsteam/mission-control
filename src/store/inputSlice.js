@@ -32,9 +32,6 @@ const initialState = {
   computed: {
     drive: {
       tank: false,
-      straight: 0,
-      crab: 0,
-      steer: 0,
       left: 0,
       right: 0,
       activeSuspension: 0
@@ -159,18 +156,13 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === "Y" &&
       action.payload.pressed)
   ) {
-    if (driveInput.type === "normal") {
-      driveInput.tank = !driveInput.tank;
-    } else {
-      alert("Can't switch to tank drive when not on normal driveInput type!");
-    }
+    driveInput.tank = !driveInput.tank;
   }
 
   driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
   driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
-  driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
 
   driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
