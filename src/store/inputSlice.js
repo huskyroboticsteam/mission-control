@@ -171,9 +171,11 @@ function computeDriveInput(state, action) {
       alert("Can't switch to tank drive when not on normal driveInput type!");
     }
   }
-  if (state.triggerHeld) { // if trigger being held, new bindings!
+  if (state.triggerHeld) { // if trigger being held, new bindings!\
+    console.log("new function layer") //DEBUG
     // input new bindings here
   } else { // if trigger not being held, old bindings!
+    console.log("old function layer") //DEBUG
     driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
     driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
     driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
@@ -202,7 +204,9 @@ function computeArmInput(state) {
 
   if (state.triggerHeld) { // if trigger being held, new bindings!
     // input new bindings here
+    console.log("new function layer") //DEBUG
   } else { // if trigger not being held, old bindings!
+    console.log("old function layer") //DEBUG
     armInput.armBase =
       peripheralGamepad["LeftStickX"] +
       getAxisFromKeys(pressedKeys, "A", "D");
