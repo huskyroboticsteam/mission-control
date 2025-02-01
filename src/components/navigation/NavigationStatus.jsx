@@ -4,9 +4,6 @@ import { selectLatitude, selectLongitude } from "../../store/waypointNavSlice";
 import "./NavigationStatus.css";
 import { POSITION_THRESHOLD, APPROACHING_THRESHOLD } from "../../constants/navigationConstants";
 
-
-
-
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const latDiff = Math.abs(lat1 - lat2);
     const lonDiff = Math.abs(lon1 - lon2);

@@ -49,10 +49,10 @@ const initialState = {
       hand: 0,
       handActuator: 0,
       ikUp: 0,
-      ikForward: 0,
+      ikForward: 0
     },
     science: {
-      lazySusanPosition: 0,
+      lazySusanPosition: 0
     }
   },
   inverseKinematics: {
