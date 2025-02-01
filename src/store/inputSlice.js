@@ -52,7 +52,9 @@ const initialState = {
     },
     science: {
       lazySusanPosition: 0,
-      instrumentationArm: 0
+      instrumentationArm: 0,
+      drillOn: false
+
     }
   },
   inverseKinematics: {
@@ -249,7 +251,8 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  scienceInput.instrumentationArm = getAxisFromButtons(prevPressedKeys, "C", "V");
+  scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V");
+  scienceInput.drillOn = toggleKey(prevPressedKeys,pressedKeys, "B", scienceInput.drillOn);
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -264,6 +267,10 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
+}
+
+function toggleKey(pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) return !currState;
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
