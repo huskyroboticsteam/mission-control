@@ -53,7 +53,9 @@ const initialState = {
     },
     science: {
       lazySusanPosition: 0,
-      instrumentationArm: 0
+      instrumentationArm: 0,
+      drillOn: false
+
     }
   },
   inverseKinematics: {
@@ -172,7 +174,7 @@ function computeDriveInput(state, action) {
   driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
   driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
-
+  
   driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
@@ -252,7 +254,8 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  scienceInput.instrumentationArm = getAxisFromButtons(prevPressedKeys, "C", "V");
+  scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V");
+  scienceInput.drillOn = toggleKey(prevPressedKeys,pressedKeys, "B", scienceInput.drillOn);
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -267,6 +270,10 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
+}
+
+function toggleKey(pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) return !currState;
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
