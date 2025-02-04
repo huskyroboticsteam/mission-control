@@ -4,5 +4,7 @@
         "target": "ESNext",    
         "types": ["vite/client"],
         "isolatedModules": true,
+        "module": "Node16",
+        "moduleResolution": "node16"
     },
  }
