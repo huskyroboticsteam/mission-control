@@ -25,6 +25,8 @@ const camerasSlice = createSlice({
       state[cameraName].frameData = null;
     },
 
+    requestCameraFrame() { },
+
     cameraStreamDataReportReceived(state, action) {
       const { cameraName, frameData } = action.payload;
       if (state[cameraName].isStreaming)
@@ -36,7 +38,8 @@ const camerasSlice = createSlice({
 export const {
   openCameraStream,
   closeCameraStream,
-  cameraStreamDataReportReceived
+  cameraStreamDataReportReceived,
+  requestCameraFrame
 } = camerasSlice.actions;
 
 export const selectAllCameraNames = state => Object.keys(state.cameras);
