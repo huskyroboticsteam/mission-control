@@ -272,7 +272,7 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   return axis;
 }
 
-function toggleKey(pressedKeys, key, currState) {
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
   if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) return !currState;
 }
 
