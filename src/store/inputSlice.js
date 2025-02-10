@@ -108,21 +108,16 @@ const inputSlice = createSlice({
       const { gamepadName, buttonName, pressed } = action.payload;
       if (buttonName === "LT" || buttonName === "RT") {
         state.triggerHeld = pressed;
-        console.log("triggahs pressed") // DEBUG
-        // Treat triggers as axes, not buttons.
         return;
       }
       state[gamepadName][buttonName] = pressed;
       computeInput(prevState, state, action);
     },
 
-    keyPressed(state, action) { // FOCUS HERE
+    keyPressed(state, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const key = action.payload.key.toUpperCase();
-      // console.log("STATE: ", state) // DEBUG
-      // console.log("ACTION: ", action) // DEBUG
       if (!state.keyboard.pressedKeys.includes(key)) {
-        console.log("KEY: ", key) // DEBUG
         state.keyboard.pressedKeys.push(key);
       }
       computeInput(prevState, state, action);
@@ -171,11 +166,10 @@ function computeDriveInput(state, action) {
       alert("Can't switch to tank drive when not on normal driveInput type!");
     }
   }
-  if (state.triggerHeld) { // if trigger being held, new bindings!\
-    console.log("new function layer") //DEBUG
-    // input new bindings here
-  } else { // if trigger not being held, old bindings!
-    console.log("old function layer") //DEBUG
+  if (state.triggerHeld) { 
+    // TODO: Input new bindings
+  } else {
+    // TODO: Input old bindings
     driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
     driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
     driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
@@ -202,11 +196,10 @@ function computeArmInput(state) {
   const pressedKeys = state.keyboard.pressedKeys;
   const armInput = state.computed.arm;
 
-  if (state.triggerHeld) { // if trigger being held, new bindings!
-    // input new bindings here
-    console.log("new function layer") //DEBUG
-  } else { // if trigger not being held, old bindings!
-    console.log("old function layer") //DEBUG
+  if (state.triggerHeld) {
+    // TODO: Input new bindings
+  } else {
+    // TODO: Input old bindings
     armInput.armBase =
       peripheralGamepad["LeftStickX"] +
       getAxisFromKeys(pressedKeys, "A", "D");
