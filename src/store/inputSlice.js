@@ -52,7 +52,11 @@ const initialState = {
       ikForward: 0
     },
     science: {
-      lazySusanPosition: 0
+      lazySusanPosition: 0,
+      instrumentationArm: 0, 
+      instrumentationArmManualOverride: true, 
+      instrumentationArmLocation: 0, 
+      instrumentationArmSetpoint: 0
     }
   },
   inverseKinematics: {
@@ -251,6 +255,25 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
+  
+  if(scienceInput.instrumentationArmManualOverride) {
+    scienceInput.instrumentationArm = getAxisFromButtons(prevPressedKeys, "C", "V");
+  } else {
+    if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
+      scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
+    }
+    switch(scienceInput.instrumentationArmLocation) {
+      case 0:
+        scienceInput.instrumentationArmSetpoint = 1;
+        break;
+      case 1:
+        scienceInput.instrumentationArmSetpoint = 2;
+        break;
+      case 2:
+        scienceInput.instrumentationArmSetpoint = 3;
+        break;
+    }
+  }
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
