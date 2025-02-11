@@ -264,13 +264,13 @@ function computeScienceInput(prevState, state, action) {
     }
     switch(scienceInput.instrumentationArmLocation) {
       case 0:
-        scienceInput.instrumentationArmSetpoint = 0;
+        scienceInput.instrumentationArmSetpoint = 1;
         break;
       case 1:
-        scienceInput.instrumentationArmSetpoint = 0;
+        scienceInput.instrumentationArmSetpoint = 2;
         break;
       case 2:
-        scienceInput.instrumentationArmSetpoint = 0;
+        scienceInput.instrumentationArmSetpoint = 3;
         break;
     }
   }
