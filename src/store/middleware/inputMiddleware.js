@@ -142,14 +142,12 @@ function updateScience(
   dispatch
 ) {
   Object.keys(computedInput.science).forEach(field => {
-    if (computed.science[field] !== prevComputedInput.science[field]
+    if (computedInput.science[field] !== prevComputedInput.science[field]
       || mountedPeripheral !== prevMountedPeripheral) {
-      if (field === 'drillOn') {
-        dispatch(requestMotorPower({
-          motorName: 'drillMotor',
-          power: (computedInput.science[field] ? 1.0 : 0.0)
-        }));
-      }
+      dispatch(requestMotorPower({
+        motorName: field,
+        power: computedInput.science[field]
+      }))
     }
   })
 }
