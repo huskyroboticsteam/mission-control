@@ -251,7 +251,7 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V");
+  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
 
