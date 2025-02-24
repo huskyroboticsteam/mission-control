@@ -50,7 +50,7 @@ const motorsMiddleware = store => next => action => {
         store.dispatch(messageRover({
           message: {
             type: "motorPowerRequest",
-            joint: motorName,
+            motor: motorName,
             power
           }
         }));
