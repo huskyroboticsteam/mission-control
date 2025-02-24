@@ -149,7 +149,7 @@ function computeDriveInput(state, action) {
 
   const driveInput = state.computed.drive;
 
-  // Spacebar or the Y button toggles tank drive if swerve mode is normal.
+  // Spacebar or the Y button toggles tank drive.
   if ((action.type === keyPressed.type && action.payload.key === " ") ||
       (action.type === gamepadButtonChanged.type &&
       action.payload.gamepadName === "driveGamepad" &&

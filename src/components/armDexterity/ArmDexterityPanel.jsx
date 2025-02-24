@@ -1,6 +1,5 @@
 import RoverModel from "../roverModel/RoverModel";
 import CameraStream from "../camera/CameraStream";
-import SwerveDriveMode from "./SwerveDriveMode";
 
 import "./ArmDexterityPanel.css"
 

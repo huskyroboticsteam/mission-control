@@ -3,7 +3,6 @@ import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -61,7 +60,6 @@ const inputMiddleware = store => next => action => {
 
 function updateDrive(prevComputedInput, computedInput, store) {
   const dispatch = store.dispatch;
-  const mode = selectSwerveDriveMode(store.getState());
   if (computedInput.drive.tank) {
     const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
     const { left, right } = computedInput.drive;
