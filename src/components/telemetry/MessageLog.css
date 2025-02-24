@@ -1,11 +1,17 @@
 .message {
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--border-color);
-  line-height: 1.4;
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.message:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .message .timestamp {
-  color: var(--text-color-muted);
+  color: #666;
   margin-right: 8px;
   font-size: 0.9em;
 }
@@ -13,23 +19,22 @@
 .message .direction {
   font-weight: bold;
   margin-right: 8px;
-  color: var(--text-color);
 }
 
-
-.message.sent {
-  background-color: var(--blue-bg);
-  border-left: 3px solid var(--blue);
-}
-
-.message.received {
-  background-color: var(--green-bg);
-  border-left: 3px solid var(--green);
+.message .content {
+  font-family: monospace;
 }
 
 .message.error {
-  background-color: var(--red-bg);
-  border-left: 3px solid var(--red);
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.message.warning {
+  background-color: rgba(255, 165, 0, 0.05);
+}
+
+.message.success {
+  background-color: rgba(0, 255, 0, 0.05);
 }
 
 .message-log {

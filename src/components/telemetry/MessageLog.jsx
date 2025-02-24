@@ -15,15 +15,28 @@ function MessageLog() {
     scrollToBottom();
   }, [messages]);
 
+  const getStatusColor = (type) => {
+    return type === "error" ? "red" : "inherit";
+  };
+
   return (
     <div className="message-log">
       <h3>Message Log</h3>
       <div className="message-container">
         {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.type}`}>
+          <div
+            key={index}
+            className={`message ${msg.type}`}
+            style={{ borderLeft: `4px solid ${getStatusColor(msg.type)}` }}
+          >
             <span className="timestamp">{msg.timestamp}</span>
             <span className="direction">{msg.direction}:</span>
-            <span className="content">{JSON.stringify(msg.content)}</span>
+            <span
+              className="content"
+              style={{ color: getStatusColor(msg.type) }}
+            >
+              {JSON.stringify(msg.content)}
+            </span>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -32,4 +45,4 @@ function MessageLog() {
   );
 }
 
-export default MessageLog; 
+export default MessageLog;
