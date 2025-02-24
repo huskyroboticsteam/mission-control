@@ -34,7 +34,6 @@ const initialState = {
       tank: false,
       left: 0,
       right: 0,
-      activeSuspension: 0
     },
     arm: {
       armBase: 0,
@@ -46,7 +45,7 @@ const initialState = {
       hand: 0,
       handActuator: 0,
       ikUp: 0,
-      ikForward: 0,
+      ikForward: 0
     },
     science: {
       lazySusanPosition: 0
@@ -163,8 +162,6 @@ function computeDriveInput(state, action) {
   driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
   driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
   driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
-
-  driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);

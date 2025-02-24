@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { requestOpMode, selectOpMode } from "../../store/opModeSlice";
 import "./OpModeSelect.css";
+import NavigationStatus from "./NavigationStatus";
 
 function OpModeSelect() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function OpModeSelect() {
       <button onClick={handleClick} >
         Switch to {opMode === "teleoperation" ? "Autonomous" : "Teleoperation"}
       </button>
+      {opMode === "autonomous" && <NavigationStatus />}
     </div >
   );
 }

@@ -54,7 +54,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.1.3`)
+## Messages (`v2024.2.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -195,7 +195,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
   power: number
 }
 ```
@@ -212,7 +212,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
   position: number
 }
 ```
@@ -229,7 +229,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm" | "activeSuspension",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm",
   position: number
 }
 ```
@@ -362,6 +362,38 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ### Parameters
 - `camera` - the name of the camera: `mast|hand|wrist`
 - `data` - the raw h264 frame data, or `null` if no data is available
+
+## Camera Frame Request
+### Description
+Sent from Mission Control to instruct the rover server to send a Camera Frame Report. If `camera` specifies a valid camera stream, the rover will respond with a Camera Frame Report containing the latest frame from that camera.
+
+### Syntax
+```
+{
+  type: "cameraFrameRequest",
+  camera: string
+}
+```
+
+### Parameters
+- `camera` - the name of the camera: `mast|hand|wrist`
+
+## Camera Frame Report
+### Description
+Sent from the rover server to inform Mission Control of a full resolution lossless camera frame.
+
+### Syntax
+```
+{
+  type: "cameraFrameReport",
+  camera: string,
+  data: string
+}
+```
+
+### Parameters
+- `camera` - the name of the camera
+- `data` - the image, base64 encoded
 
 
 ## Autonomous Waypoint Navigation Request
