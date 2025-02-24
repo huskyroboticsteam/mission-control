@@ -52,7 +52,8 @@ const initialState = {
       ikForward: 0
     },
     science: {
-      lazySusanPosition: 0
+      lazySusanPosition: 0,
+      drillActuator: 0
     }
   },
   inverseKinematics: {
@@ -251,6 +252,8 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
+  
+  scienceInput.drillActuator = getAxisFromButtons(pressedKeys, 'N', 'M');
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
