@@ -1,0 +1,60 @@
+.message {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.4;
+}
+
+.message .timestamp {
+  color: var(--text-color-muted);
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+
+.message .direction {
+  font-weight: bold;
+  margin-right: 8px;
+  color: var(--text-color);
+}
+
+
+.message.sent {
+  background-color: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+}
+
+.message.received {
+  background-color: var(--green-bg);
+  border-left: 3px solid var(--green);
+}
+
+.message.error {
+  background-color: var(--red-bg);
+  border-left: 3px solid var(--red);
+}
+
+.message-log {
+  border: 1px solid var(--border-color);
+  margin: 10px;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 20px);
+  width: 400px;
+  min-width: 300px;
+  max-width: 100%;
+}
+
+.message-log h3 {
+  margin: 0 0 10px 0;
+  color: var(--text-color);
+}
+
+.message-container {
+  flex: 1;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.9em;
+  background-color: var(--bg-color-secondary);
+  border-radius: 4px;
+  min-height: 200px;
+}

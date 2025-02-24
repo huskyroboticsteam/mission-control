@@ -2,7 +2,8 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isConnected: false,
-  isConnecting: false
+  isConnecting: false,
+  messageLog: []
 };
 
 const roverSocketSlice = createSlice({
@@ -22,6 +23,13 @@ const roverSocketSlice = createSlice({
     connectToRover(state) {
       state.isConnecting = true;
       // Connecting via WebSocket is handled in middleware.
+    },
+
+    logMessage: (state, action) => {
+      state.messageLog = [...state.messageLog, {
+        timestamp: new Date().toISOString(),
+        ...action.payload
+      }].slice(-100); // Keep last 100 messages
     }
   }
 });
@@ -29,7 +37,8 @@ const roverSocketSlice = createSlice({
 export const {
   roverConnected,
   roverDisconnected,
-  connectToRover
+  connectToRover,
+  logMessage
 } = roverSocketSlice.actions;
 // Actions handled by rover socket middleware.
 export const disconnectFromRover = createAction("roverSocket/disconnect");
@@ -38,5 +47,6 @@ export const messageReceivedFromRover = createAction("roverSocket/messageReceive
 
 export const selectRoverIsConnected = state => state.roverSocket.isConnected;
 export const selectRoverIsConnecting = state => state.roverSocket.isConnecting;
+export const selectMessageLog = (state) => state.roverSocket.messageLog;
 
 export default roverSocketSlice.reducer;
