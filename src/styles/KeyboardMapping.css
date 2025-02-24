@@ -1,29 +1,9 @@
-.help-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  max-height: 100vh;
-  overflow-y: auto;
-}
-
-.controls-images {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.controls-images img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Keyboard mapping styles */
 .keyboard-mapping {
   background: rgba(0, 0, 0, 0.8);
   padding: 20px;
   border-radius: 8px;
   color: white;
+  max-width: 500px;
 }
 
 .keyboard-mapping h3 {
@@ -69,21 +49,4 @@
 
 .control-item .action {
   color: #ddd;
-}
-
-@media (min-width: 768px) {
-  .help-panel {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .controls-images {
-    flex: 1;
-  }
-
-  .keyboard-mapping {
-    flex: 1;
-    position: sticky;
-    top: 20px;
-  }
-}
+} 

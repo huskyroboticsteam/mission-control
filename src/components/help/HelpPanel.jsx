@@ -1,16 +1,44 @@
 import "./HelpPanel.css";
-import keyboardControls from "./keyboardControls.png";
+import { useSelector } from 'react-redux';
+import { keyboardMap } from '../../utils/keyboardMap';
 import standardDriveControls from "./standardDriveControls.png";
 import tankDriveControls from "./tankDriveControls.png";
 import armControls from "./armControls.png";
 
 function HelpPanel() {
+  const pressedKeys = useSelector(state => state.input.keyboard.pressedKeys);
+
   return (
     <div className="help-panel">
-      <img src={standardDriveControls} alt="standard drive controls" />
-      <img src={tankDriveControls} alt="tank drive controls" />
-      <img src={armControls} alt="arm controls" />
-      <img src={keyboardControls} alt="keyboard controls" />
+      <div className="controls-images">
+        <img src={standardDriveControls} alt="standard drive controls" />
+        <img src={tankDriveControls} alt="tank drive controls" />
+        <img src={armControls} alt="arm controls" />
+      </div>
+
+      <div className="keyboard-mapping">
+        <h3>Keyboard Controls</h3>
+        {Object.entries(keyboardMap).map(([section, { title, controls }]) => (
+          <div key={section} className="mapping-section">
+            <h4>{title}</h4>
+            <div className="controls-grid">
+              {Object.entries(controls).map(([keys, action]) => (
+                <div 
+                  key={keys} 
+                  className={`control-item ${
+                    keys.split('/').some(key => 
+                      pressedKeys.includes(key.toUpperCase())
+                    ) ? 'active' : ''
+                  }`}
+                >
+                  <span className="keys">{keys}</span>
+                  <span className="action">{action}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
