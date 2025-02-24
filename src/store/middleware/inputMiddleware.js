@@ -104,6 +104,14 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
+  else if (mountedPeripheral === 'scienceStation')
+    updateScience(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
 }
 
 function updateArm(
@@ -125,6 +133,24 @@ function updateArm(
         })
       );
   });
+}
+
+function updateScience(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  Object.keys(computedInput.science).forEach(field => {
+    if (computedInput.science[field] !== prevComputedInput.science[field]
+      || mountedPeripheral !== prevMountedPeripheral) {
+      dispatch(requestJointPower({
+        jointName: field,
+        power: computedInput.science[field]
+      }))
+    }
+  })
 }
 
 export default inputMiddleware;

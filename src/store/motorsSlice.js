@@ -12,6 +12,7 @@ const motorNames = [
   "wristPitch",
   "wristRoll",
   "hand",
+  "drillMotor"
 ];
 
 const initialState = motorNames.reduce((state, motorName) => ({
@@ -39,7 +40,7 @@ const motorSlice = createSlice({
     enableMotors(state, action) {
       const { enabled } = action.payload;
       state.motorsEnabled = enabled;
-    }
+    },
   }
 });
 
