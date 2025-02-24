@@ -89,15 +89,6 @@ function updateDrive(prevComputedInput, computedInput, store) {
       dispatch(requestCrabDrive({ crab, steer }));
     }
   }
-  
-  const prevActiveSuspension = prevComputedInput.drive.activeSuspension;
-  const activeSuspension = computedInput.drive.activeSuspension;
-  if (activeSuspension !== prevActiveSuspension) {
-    dispatch(requestJointPower({
-      "jointName": "activeSuspension",
-      power: activeSuspension
-    }));
-  }
 }
 
 function updatePeripherals(
