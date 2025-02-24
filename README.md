@@ -102,7 +102,6 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
-
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
@@ -132,6 +131,10 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
   right: number
 }
 ```
+
+### Parameters
+- `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
+- `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
 ## Joint Power Request
 ### Description

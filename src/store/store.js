@@ -3,7 +3,6 @@ import roverSocketReducer from "./roverSocketSlice";
 import peripheralsReducer from "./peripheralsSlice";
 import emergencyStopReducer from "./emergencyStopSlice";
 import opModeReducer from "./opModeSlice";
-import swerveDriveModeReducer from "./swerveDriveModeSlice";
 import inputReducer from "./inputSlice";
 import driveReducer from "./driveSlice";
 import jointsReducer from "./jointsSlice";
@@ -15,7 +14,6 @@ import roverSocketMiddleware from "./middleware/roverSocketMiddleware";
 import peripheralsMiddleware from "./middleware/peripheralsMiddleware";
 import emergencyStopMiddleware from "./middleware/emergencyStopMiddleware";
 import opModeMiddleware from "./middleware/opModeMiddleware";
-import swerveDriveModeMiddleware from "./middleware/swerveDriveModeMiddleware";
 import inputMiddleware from "./middleware/inputMiddleware";
 import driveMiddleware from "./middleware/driveMiddleware";
 import jointsMiddleware from "./middleware/jointsMiddleware";
@@ -30,7 +28,6 @@ export default configureStore({
     peripherals: peripheralsReducer,
     emergencyStop: emergencyStopReducer,
     opMode: opModeReducer,
-    swerveDriveMode: swerveDriveModeReducer,
     input: inputReducer,
     drive: driveReducer,
     joints: jointsReducer,
@@ -45,7 +42,6 @@ export default configureStore({
     peripheralsMiddleware,
     emergencyStopMiddleware,
     opModeMiddleware,
-    swerveDriveModeMiddleware,
     inputMiddleware,
     driveMiddleware,
     jointsMiddleware,
