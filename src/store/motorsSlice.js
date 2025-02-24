@@ -19,7 +19,6 @@ const initialState = motorNames.reduce((state, motorName) => ({
   ...state,
   [motorName]: {
     currentPower: null,
-    requestedPower: null,
     currentPosition: null
   }
 }), {
