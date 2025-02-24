@@ -3,8 +3,6 @@ import { requestCrabDrive, requestDrive, requestTankDrive, requestTurnInPlaceDri
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
-import { requestMotorPower } from "../motorsSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -144,8 +142,8 @@ function updateScience(
   Object.keys(computedInput.science).forEach(field => {
     if (computedInput.science[field] !== prevComputedInput.science[field]
       || mountedPeripheral !== prevMountedPeripheral) {
-      dispatch(requestMotorPower({
-        motorName: field,
+      dispatch(requestJointPower({
+        jointName: field,
         power: computedInput.science[field]
       }))
     }

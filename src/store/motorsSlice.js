@@ -42,16 +42,10 @@ const motorSlice = createSlice({
       const { enabled } = action.payload;
       state.motorsEnabled = enabled;
     },
-
-    requestMotorPower(state, action) {
-      const { motorName, power } = action.payload;
-      const motor = state[motorName];
-      motor.requestedPower = power;
-    }
   }
 });
 
-export const { motorStatusReportReceived, enableMotors, requestMotorPower } = motorSlice.actions;
+export const { motorStatusReportReceived, enableMotors } = motorSlice.actions;
 
 export const selectAllMotorNames = state => Object.keys(state.motors);
 export const selectMotorsAreEnabled = state => state.motors.motorsEnabled;
