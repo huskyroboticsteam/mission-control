@@ -12,7 +12,7 @@ function KeyboardMapping() {
         <div key={section} className="mapping-section">
           <h4>{title}</h4>
           <div className="controls-grid">
-            {Object.entries(controls).map(([keys, { description }]) => (
+            {Object.entries(controls).map(([keys, control]) => (
               <div 
                 key={keys} 
                 className={`control-item ${
@@ -22,7 +22,7 @@ function KeyboardMapping() {
                 }`}
               >
                 <span className="keys">{keys}</span>
-                <span className="action">{description}</span>
+                <span className="action">{control.description}</span>
               </div>
             ))}
           </div>
