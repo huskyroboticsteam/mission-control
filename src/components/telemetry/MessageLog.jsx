@@ -19,6 +19,17 @@ function MessageLog() {
     return type === "error" ? "red" : "inherit";
   };
 
+  const formatContent = (content) => {
+    try {
+      if (typeof content === 'string') {
+        return content;
+      }
+      return JSON.stringify(content, null, 2);
+    } catch (e) {
+      return String(content);
+    }
+  };
+
   return (
     <div className="message-log">
       <h3>Message Log</h3>
@@ -29,14 +40,16 @@ function MessageLog() {
             className={`message ${msg.type}`}
             style={{ borderLeft: `4px solid ${getStatusColor(msg.type)}` }}
           >
-            <span className="timestamp">{msg.timestamp}</span>
-            <span className="direction">{msg.direction}:</span>
-            <span
+            <div className="message-header">
+              <span className="timestamp">{msg.timestamp}</span>
+              <span className="direction">{msg.direction}</span>
+            </div>
+            <pre
               className="content"
               style={{ color: getStatusColor(msg.type) }}
             >
-              {JSON.stringify(msg.content)}
-            </span>
+              {formatContent(msg.content)}
+            </pre>
           </div>
         ))}
         <div ref={messagesEndRef} />

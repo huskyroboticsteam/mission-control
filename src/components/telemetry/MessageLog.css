@@ -38,28 +38,49 @@
 }
 
 .message-log {
-  border: 1px solid var(--border-color);
-  margin: 10px;
-  background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
-  height: calc(100% - 20px);
-  width: 400px;
-  min-width: 300px;
-  max-width: 100%;
-}
-
-.message-log h3 {
-  margin: 0 0 10px 0;
-  color: var(--text-color);
+  height: 100%;
+  overflow: hidden;
 }
 
 .message-container {
   flex: 1;
   overflow-y: auto;
-  font-family: monospace;
-  font-size: 0.9em;
-  background-color: var(--bg-color-secondary);
+  padding: 8px;
+}
+
+.message {
+  background: #f5f5f5;
   border-radius: 4px;
-  min-height: 200px;
+  margin-bottom: 8px;
+  padding: 8px;
+  font-family: monospace;
+}
+
+.message.error {
+  background: #222222;
+}
+
+.message-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.timestamp {
+  color: #888;
+}
+
+.direction {
+  font-weight: bold;
+}
+
+.content {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.9em;
 }
