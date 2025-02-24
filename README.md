@@ -102,23 +102,6 @@ Sent from Mission Control to instruct the rover server to run with a specified o
 ### Parameters
 - `mode` - the requested operation mode
 
-## Swerve Drive Mode Request
-### Description
-Sent from Mission Control to instruct the rover to orient the swerve modules in pre-determined angles (`normal`: straight forward, `turn-in-place`: angled to allow for turning in place, `crab`: perpendicular to the rover's heading for sideways movement).
-
-### Syntax
-```
-{
-    type: "swerveDriveModeRequest",
-    mode: "normal" | "turn-in-place" | "crab",
-    override: boolean
-}
-```
-
-### Parameters
-- `mode` - the requested drive mode
-- `override` - `true` to ignore error thresholding when moving swerve modules, `false` to respect them.
-
 ## Drive Request
 ### Description
 Sent from Mission Control to instruct the rover to drive with a specified straight and steer value.
@@ -152,57 +135,6 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 ### Parameters
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
-
-## Turn-in-place Drive Request
-### Description
-Sent from Mission Control to instruct the rover to turn in place with a specified steer value.
-
-### Syntax
-```
-{
-    type: "turnInPlaceDriveRequest",
-    steer: number
-}
-```
-
-### Parameters
-- `steer` - steer component in [-1.0, 1.0], where positive means turn right and negative means turn left
-
-## Crab Drive Request
-### Description
-Sent from Mission Control to instruct the rover to crab sideways
-
-### Syntax
-```
-{
-    type: "crabDriveRequest",
-    crab: number,
-    steer: number
-}
-```
-
-### Parameters
-- `crab` - crab component in [-1.0, 1.0], where positive means to crab right and negative means to crab left
-- `steer` - steer component in [-1.0, 1.0], where positive means steer right and negative means steer left
-
-## Holonomic Drive Request
-### Description
-Sent from Mission Control to instruct the rover to drive with holonomic capabilities
-(i.e., it can rotate independently without requiring translational motion).
-
-### Syntax
-```
-{
-  type: "holonomicDriveRequest",
-  straight: number,
-  left: number,
-  turnCCW: number
-}
-```
-### Parameters
-- `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
-- `left` - left component in [-1.0, 1.0], where positive means drive left and negative means drive right
-- `turnCCW` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
 
 ## Joint Power Request
 ### Description
