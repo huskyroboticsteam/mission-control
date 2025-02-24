@@ -104,8 +104,15 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
+  else if (mountedPeripheral === "scienceStation")
+    updateScience(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    );
 }
-
 function updateArm(
   prevComputedInput,
   computedInput,

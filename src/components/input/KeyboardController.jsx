@@ -7,17 +7,10 @@ function KeyboardController() {
 
   useEffect(() => {
     const handleKeyDown = event => {
-      // Prevent default behavior for game control keys
-      if (event.key !== 'F12' && event.key !== 'F5') {
-        event.preventDefault();
-      }
       dispatch(keyPressed({ key: event.key }));
     };
     
     const handleKeyUp = event => {
-      if (event.key !== 'F12' && event.key !== 'F5') {
-        event.preventDefault();
-      }
       dispatch(keyReleased({ key: event.key }));
     };
 
