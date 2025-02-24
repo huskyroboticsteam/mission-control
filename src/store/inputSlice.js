@@ -33,9 +33,6 @@ const initialState = {
   computed: {
     drive: {
       tank: false,
-      straight: 0,
-      crab: 0,
-      steer: 0,
       left: 0,
       right: 0,
     },
