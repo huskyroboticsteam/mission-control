@@ -5,7 +5,8 @@ import {
   roverConnected,
   roverDisconnected,
   messageRover,
-  messageReceivedFromRover
+  messageReceivedFromRover,
+  logMessage
 } from "../roverSocketSlice";
 
 /**
@@ -30,6 +31,11 @@ const roverSocketMiddleware = () => {
   const onMessage = store => event => {
     const message = JSON.parse(event.data);
     store.dispatch(messageReceivedFromRover({ message }));
+    store.dispatch(logMessage({
+      type: 'received',
+      direction: 'FROM_ROVER',
+      content: message
+    }));
   };
 
   return store => next => action => {
@@ -57,8 +63,23 @@ const roverSocketMiddleware = () => {
       }
 
       case messageRover.type: {
-        if (socket && socket.readyState === WebSocket.OPEN)
+        if (socket && socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(action.payload.message));
+          store.dispatch(logMessage({
+            type: 'sent',
+            direction: 'TO_ROVER',
+            content: action.payload.message
+          }));
+        } else {
+          store.dispatch(logMessage({
+            type: 'error',
+            direction: 'TO_ROVER',
+            content: {
+              error: 'Failed to send - socket not connected',
+              message: action.payload.message
+            }
+          }));
+        }
         break;
       }
 
