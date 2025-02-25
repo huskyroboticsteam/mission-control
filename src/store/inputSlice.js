@@ -40,8 +40,8 @@ const initialState = {
       shoulder: 0,
       elbow: 0,
       forearm: 0,
-      wristPitch: 0,
-      wristRoll: 0,
+      wristDiffLeft: 0,
+      wristDiffRight: 0,
       hand: 0,
       handActuator: 0,
       ikUp: 0,
@@ -205,10 +205,10 @@ function computeArmInput(state) {
   armInput.forearm =
     peripheralGamepad["RightStickX"] +
     getAxisFromKeys(pressedKeys, "F", "H");
-  armInput.wristPitch =
+  armInput.wristDiffLeft =
     -getAxisFromButtons(peripheralGamepad, "DPadDown", "DPadUp") +
     getAxisFromKeys(pressedKeys, "K", "I");
-  armInput.wristRoll =
+  armInput.wristDiffRight =
     getAxisFromButtons(peripheralGamepad, "DPadLeft", "DPadRight") +
     getAxisFromKeys(pressedKeys, "U", "O");
   armInput.hand =
