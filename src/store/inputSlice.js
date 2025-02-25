@@ -37,7 +37,6 @@ const initialState = {
       steer: 0,
       left: 0,
       right: 0,
-      activeSuspension: 0
     },
     arm: {
       armBase: 0,
@@ -52,11 +51,13 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      lazySusanPosition: 0,
-      instrumentationArm: 0, 
       instrumentationArmManualOverride: true, 
       instrumentationArmLocation: 0, 
-      instrumentationArmSetpoint: 0
+      instrumentationArmSetpoint: 0,
+      // lazySusanPosition: 0,
+      // instrumentationArm: 0,
+      drillMotor: 0
+
     }
   },
   inverseKinematics: {
@@ -176,8 +177,6 @@ function computeDriveInput(state, action) {
   driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
   driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
 
-  driveInput.activeSuspension = getAxisFromButtons(driveGamepad, "DPadDown", "DPadUp") + getAxisFromKeys(pressedKeys, "B", "M");
-
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
   ["straight", "crab", "steer", "left", "right"].forEach(
@@ -274,6 +273,8 @@ function computeScienceInput(prevState, state, action) {
         break;
     }
   }
+  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
+  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -288,6 +289,14 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
+}
+
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
+    if(currState == 0) return 1;
+    else return 0;
+  }
+  return currState;
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {

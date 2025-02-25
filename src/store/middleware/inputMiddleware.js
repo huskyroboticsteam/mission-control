@@ -4,6 +4,7 @@ import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
+import { requestMotorPower } from "../motorsSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -89,15 +90,6 @@ function updateDrive(prevComputedInput, computedInput, store) {
       dispatch(requestCrabDrive({ crab, steer }));
     }
   }
-  
-  const prevActiveSuspension = prevComputedInput.drive.activeSuspension;
-  const activeSuspension = computedInput.drive.activeSuspension;
-  if (activeSuspension !== prevActiveSuspension) {
-    dispatch(requestJointPower({
-      "jointName": "activeSuspension",
-      power: activeSuspension
-    }));
-  }
 }
 
 function updatePeripherals(
@@ -115,6 +107,14 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
+  else if (mountedPeripheral === 'scienceStation')
+    updateScience(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
 }
 
 function updateArm(
@@ -132,6 +132,24 @@ function updateArm(
         power: computedInput.arm[jointName]
       }));
   });
+}
+
+function updateScience(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  Object.keys(computedInput.science).forEach(field => {
+    if (computedInput.science[field] !== prevComputedInput.science[field]
+      || mountedPeripheral !== prevMountedPeripheral) {
+      dispatch(requestMotorPower({
+        motorName: field,
+        power: computedInput.science[field]
+      }))
+    }
+  })
 }
 
 export default inputMiddleware;

@@ -14,7 +14,6 @@ const jointNames = [
   "hand",
   "handActuator",
   "drillArm",
-  "activeSuspension",
   "ikUp",
   "ikForward"
 ];
