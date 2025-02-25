@@ -2,6 +2,9 @@ import { selectMountedPeripheral } from "../peripheralsSlice";
 import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
+import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
+import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
+import { requestMotorPower } from "../motorsSlice";
 import {
   messageReceivedFromRover,
   messageRover,
@@ -104,6 +107,14 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     );
+  else if (mountedPeripheral === 'scienceStation')
+    updateScience(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
 }
 
 function updateArm(
@@ -125,6 +136,24 @@ function updateArm(
         })
       );
   });
+}
+
+function updateScience(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  Object.keys(computedInput.science).forEach(field => {
+    if (computedInput.science[field] !== prevComputedInput.science[field]
+      || mountedPeripheral !== prevMountedPeripheral) {
+      dispatch(requestMotorPower({
+        motorName: field,
+        power: computedInput.science[field]
+      }))
+    }
+  })
 }
 
 export default inputMiddleware;

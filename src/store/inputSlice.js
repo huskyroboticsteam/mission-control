@@ -48,7 +48,13 @@ const initialState = {
       ikForward: 0
     },
     science: {
-      lazySusanPosition: 0
+      instrumentationArmManualOverride: true, 
+      instrumentationArmLocation: 0, 
+      instrumentationArmSetpoint: 0,
+      // lazySusanPosition: 0,
+      // instrumentationArm: 0,
+      drillMotor: 0
+
     }
   },
   inverseKinematics: {
@@ -240,6 +246,27 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
+  
+  if(scienceInput.instrumentationArmManualOverride) {
+    scienceInput.instrumentationArm = getAxisFromButtons(prevPressedKeys, "C", "V");
+  } else {
+    if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
+      scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
+    }
+    switch(scienceInput.instrumentationArmLocation) {
+      case 0:
+        scienceInput.instrumentationArmSetpoint = 1;
+        break;
+      case 1:
+        scienceInput.instrumentationArmSetpoint = 2;
+        break;
+      case 2:
+        scienceInput.instrumentationArmSetpoint = 3;
+        break;
+    }
+  }
+  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
+  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -254,6 +281,14 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
+}
+
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
+    if(currState == 0) return 1;
+    else return 0;
+  }
+  return currState;
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
