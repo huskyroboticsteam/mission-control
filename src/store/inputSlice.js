@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { selectMountedPeripheral } from "./peripheralsSlice";
 
 const gamepadTemplate = {
   isConnected: false,
@@ -51,8 +52,9 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      // lazySusanPosition: 0,
-      // instrumentationArm: 0,
+      forearm1: 0,
+      forearm2: 0,
+      drillActuator: 0,
       drillMotor: 0
 
     }
@@ -145,7 +147,7 @@ const inputSlice = createSlice({
 
 function computeInput(prevState, state, action) {
   computeDriveInput(state, action);
-  computePeripheralInput(prevState, state, action);
+  computePeripheralInput(prevState, state);
 }
 
 function computeDriveInput(state, action) {
@@ -181,9 +183,10 @@ function computeDriveInput(state, action) {
   );
 }
 
-function computePeripheralInput(prevState, state, action) {
+function computePeripheralInput(prevState, state) {
   computeArmInput(state);
-  computeScienceInput(prevState, state, action);
+  computeScienceInput(prevState, state);
+  console.log(state.computed.science);
 }
 
 function computeArmInput(state) {
@@ -236,22 +239,27 @@ function computeArmInput(state) {
   );
 }
 
-function computeScienceInput(prevState, state, action) {
+function computeScienceInput(prevState, state) {
   const prevPeripheralGamepad = prevState.peripheralGamepad;
   const peripheralGamepad = state.peripheralGamepad;
   const prevPressedKeys = prevState.keyboard.pressedKeys;
   const pressedKeys = state.keyboard.pressedKeys;
   const scienceInput = state.computed.science;
-  const prevLazySusanAxis =
-    getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
-    getAxisFromKeys(prevPressedKeys, "A", "D");
-  const lazySusanAxis =
-    getAxisFromButtons(peripheralGamepad, "LB", "RB") +
-    getAxisFromKeys(pressedKeys, "A", "D");
-  if (lazySusanAxis !== prevLazySusanAxis)
-    scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
-      lazySusanAxis) % 6) + 6) % 6;
+  // const prevLazySusanAxis =
+  //   getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
+  //   getAxisFromKeys(prevPressedKeys, "A", "D");
+  // const lazySusanAxis =
+  //   getAxisFromButtons(peripheralGamepad, "LB", "RB") +
+  //   getAxisFromKeys(pressedKeys, "A", "D");
+  // if (lazySusanAxis !== prevLazySusanAxis)
+  //   scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
+  //     lazySusanAxis) % 6) + 6) % 6;
   // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
+
+  const forearm = getAxisFromKeys(pressedKeys, "E", "R");
+  scienceInput.forearm1 = forearm;
+  scienceInput.forearm2 = forearm;
+  scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
 
