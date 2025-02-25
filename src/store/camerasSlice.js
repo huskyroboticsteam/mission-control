@@ -25,6 +25,26 @@ const camerasSlice = createSlice({
       state[cameraName].frameData = null;
     },
 
+    requestCameraFrame(state, action) {
+      const { cameraName } = action.payload;
+      const video = document.querySelector(`#${cameraName}-player`);
+
+      let canvas = document.createElement('canvas');
+      let context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      let link = document.createElement('a');
+      link.href = canvas.toDataURL('image/jpeg', 1);
+      let time = new Date().toISOString().replaceAll(':', '_').substring(0, 19);
+      link.download = `${cameraName}-${time}.jpg`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+
     cameraStreamDataReportReceived(state, action) {
       const { cameraName, frameData } = action.payload;
       if (state[cameraName].isStreaming)
@@ -36,7 +56,8 @@ const camerasSlice = createSlice({
 export const {
   openCameraStream,
   closeCameraStream,
-  cameraStreamDataReportReceived
+  cameraStreamDataReportReceived,
+  requestCameraFrame
 } = camerasSlice.actions;
 
 export const selectAllCameraNames = state => Object.keys(state.cameras);
