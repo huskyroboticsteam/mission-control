@@ -12,7 +12,8 @@ const motorNames = [
   "wristPitch",
   "wristRoll",
   "hand",
-  "drillMotor"
+  "drillMotor", 
+  "drillArmMotor"
 ];
 
 const initialState = motorNames.reduce((state, motorName) => ({
