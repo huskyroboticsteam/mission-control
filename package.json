@@ -32,7 +32,8 @@
     "start": "vite",
     "build": "tsc && vite build --config vite.config.js",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "serve": "^14.2.4",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "prettier": "^3.5.2"
   }
 }
