@@ -180,8 +180,10 @@ function computeDriveInput(state, action) {
 
   const drivePrecisionMultiplier = getPrecisionMultiplier(
     pressedKeys,
-    driveGamepad
+    driveGamepad,
+    true
   );
+
   ["straight", "steer", "left", "right"].forEach(
     (axis) =>
       (driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis]))
@@ -258,11 +260,12 @@ function computeScienceInput(prevState, state, action) {
   }
 }
 
-function getPrecisionMultiplier(pressedKeys, gamepad) {
+function getPrecisionMultiplier(pressedKeys, gamepad, isDrive = false) {
   let multiplier = 1;
   Object.values(keyboardMap.drive.special).forEach((config) => {
     if (pressedKeys.includes(config.control)) {
-      multiplier *= 0.2;
+      if (isDrive) multiplier *= 0.6;
+      else multiplier *= 0.2;
     }
   });
 
