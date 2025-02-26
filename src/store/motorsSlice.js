@@ -9,8 +9,8 @@ const motorNames = [
   "shoulder",
   "elbow",
   "forearm",
-  "wristPitch",
-  "wristRoll",
+  "wristDiffLeft",
+  "wristDiffRight",
   "hand",
 ];
 
