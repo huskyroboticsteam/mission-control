@@ -261,7 +261,7 @@ function computeScienceInput(prevState, state, action) {
 function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1;
   Object.values(keyboardMap.drive.special).forEach((config) => {
-    if (config === "precision" && pressedKeys.includes(config.control)) {
+    if (pressedKeys.includes(config.control)) {
       multiplier *= 0.2;
     }
   });
