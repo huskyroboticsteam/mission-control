@@ -20,7 +20,7 @@ export const keyboardMap = {
     special: {
       toggleTankDrive: {
         description: "Toggle Tank/Normal Drive",
-        control: "SPACE",
+        control: " ",
       },
       precision: {
         description: "Precision Control",
