@@ -3,92 +3,92 @@ export const keyboardMap = {
     title: "Drive Controls",
     controls: {
       "Arrow Keys": {
-        description: "Drive Control (Tank Mode)",
+        description: "Drive Control",
         mapping: {
-          "ARROWUP": ["straight+", "right+"],
-          "ARROWDOWN": ["straight-", "left+"],
-          "ARROWLEFT": ["steer-", "left+"],
-          "ARROWRIGHT": ["steer+", "right+"]
-        }
+          ARROWUP: ["straight+"],
+          ARROWDOWN: ["straight-"],
+          ARROWLEFT: ["steer-"],
+          ARROWRIGHT: ["steer+"],
+        },
       },
-      "Space": {
-        description: "Toggle Tank/Swerve Drive",
-        mapping: "toggleTankDrive"
+      Space: {
+        description: "Toggle Tank/Normal Drive",
+        mapping: "toggleTankDrive",
       },
-      "Shift": {
+      Shift: {
         description: "Precision Control",
-        mapping: "precision"
-      }
-    }
+        mapping: "precision",
+      },
+    },
   },
   arm: {
     title: "Arm Controls",
     controls: {
       "W/S": {
-        description: "Shoulder Joint",
+        description: "Shoulder Joint / IK Forward",
         mapping: {
-          "W": "shoulder+",
-          "S": "shoulder-"
-        }
+          W: "shoulder+",
+          S: "shoulder-",
+        },
       },
       "A/D": {
         description: "Arm Base",
         mapping: {
-          "A": "armBase-",
-          "D": "armBase+"
-        }
+          A: "armBase-",
+          D: "armBase+",
+        },
       },
       "T/G": {
-        description: "Elbow Joint",
+        description: "Elbow Joint / IK Up",
         mapping: {
-          "T": "elbow+",
-          "G": "elbow-"
-        }
+          T: "elbow+",
+          G: "elbow-",
+        },
       },
       "F/H": {
         description: "Forearm",
         mapping: {
-          "F": "forearm-",
-          "H": "forearm+"
-        }
+          F: "forearm-",
+          H: "forearm+",
+        },
       },
       "I/K": {
-        description: "Wrist Pitch",
+        description: "Wrist Diff Left",
         mapping: {
-          "I": "wristPitch+",
-          "K": "wristPitch-"
-        }
+          I: "wristDiffLeft+",
+          K: "wristDiffLeft-",
+        },
       },
       "U/O": {
-        description: "Wrist Roll",
+        description: "Wrist Diff Right",
         mapping: {
-          "U": "wristRoll-",
-          "O": "wristRoll+"
-        }
+          U: "wristDiffRight-",
+          O: "wristDiffRight+",
+        },
       },
       "J/L": {
         description: "Hand",
         mapping: {
-          "J": "hand-",
-          "L": "hand+"
-        }
+          J: "hand-",
+          L: "hand+",
+        },
       },
       ",/.": {
         description: "Hand Actuator",
         mapping: {
           ",": "handActuator-",
-          ".": "handActuator+"
-        }
-      }
-    }
+          ".": "handActuator+",
+        },
+      },
+    },
   },
   science: {
     title: "Science Controls",
     controls: {
-      "B": {
-        description: "Toggle Drill Motor",
-        mapping: "toggleDrill"
-      }
-    }
-  }
-}; 
+      B: {
+        description: "Drill Motor",
+        mapping: "toggleDrillMotor",
+      },
+    },
+  },
+};
