@@ -1,93 +1,100 @@
 export const keyboardMap = {
   drive: {
     title: "Drive Controls",
-    controls: {
-      "Arrow Keys": {
-        description: "Drive Control",
-        mapping: {
-          ARROWUP: ["straight+"],
-          ARROWDOWN: ["straight-"],
-          ARROWLEFT: ["steer-"],
-          ARROWRIGHT: ["steer+"],
+    joints: {
+      straight: {
+        description: "Forward/Backward",
+        controls: {
+          ARROWUP: "+",
+          ARROWDOWN: "-",
         },
       },
-      Space: {
-        description: "Toggle Tank/Normal Drive",
-        mapping: "toggleTankDrive",
+      steer: {
+        description: "Turn Left/Right",
+        controls: {
+          ARROWLEFT: "-",
+          ARROWRIGHT: "+",
+        },
       },
-      Shift: {
+    },
+    special: {
+      toggleTankDrive: {
+        description: "Toggle Tank/Normal Drive",
+        control: "SPACE",
+      },
+      precision: {
         description: "Precision Control",
-        mapping: "precision",
+        control: "SHIFT",
       },
     },
   },
   arm: {
     title: "Arm Controls",
-    controls: {
-      "W/S": {
-        description: "Shoulder Joint / IK Forward",
-        mapping: {
-          W: "shoulder+",
-          S: "shoulder-",
-        },
-      },
-      "A/D": {
+    joints: {
+      armBase: {
         description: "Arm Base",
-        mapping: {
-          A: "armBase-",
-          D: "armBase+",
+        controls: {
+          A: "-",
+          D: "+",
         },
       },
-      "T/G": {
+      shoulder: {
+        description: "Shoulder Joint / IK Forward",
+        controls: {
+          W: "+",
+          S: "-",
+        },
+      },
+      elbow: {
         description: "Elbow Joint / IK Up",
-        mapping: {
-          T: "elbow+",
-          G: "elbow-",
+        controls: {
+          T: "+",
+          G: "-",
         },
       },
-      "F/H": {
+      forearm: {
         description: "Forearm",
-        mapping: {
-          F: "forearm-",
-          H: "forearm+",
+        controls: {
+          F: "-",
+          H: "+",
         },
       },
-      "I/K": {
+      wristDiffLeft: {
         description: "Wrist Diff Left",
-        mapping: {
-          I: "wristDiffLeft+",
-          K: "wristDiffLeft-",
+        controls: {
+          I: "+",
+          K: "-",
         },
       },
-      "U/O": {
+      wristDiffRight: {
         description: "Wrist Diff Right",
-        mapping: {
-          U: "wristDiffRight-",
-          O: "wristDiffRight+",
+        controls: {
+          U: "-",
+          O: "+",
         },
       },
-      "J/L": {
+      hand: {
         description: "Hand",
-        mapping: {
-          J: "hand-",
-          L: "hand+",
+        controls: {
+          J: "-",
+          L: "+",
         },
       },
-      ",/.": {
+      handActuator: {
         description: "Hand Actuator",
-        mapping: {
-          ",": "handActuator-",
-          ".": "handActuator+",
+        controls: {
+          ",": "-",
+          ".": "+",
         },
       },
     },
   },
   science: {
     title: "Science Controls",
-    controls: {
-      B: {
+    special: {
+      toggleDrillMotor: {
         description: "Drill Motor",
-        mapping: "toggleDrillMotor",
+        control: "B",
       },
     },
   },
@@ -96,44 +103,92 @@ export const keyboardMap = {
 export const gamepadMap = {
   drive: {
     title: "Drive Gamepad Controls",
-    axes: {
-      LeftStickY: "straight-",
-      RightStickX: "steer+",
+    joints: {
+      straight: {
+        normal: {
+          LeftStickY: "-",
+        },
+      },
+      steer: {
+        normal: {
+          RightStickX: "+",
+        },
+      },
+      left: {
+        tank: {
+          LeftStickY: "+",
+        },
+      },
+      right: {
+        tank: {
+          RightStickY: "+",
+        },
+      },
     },
-    tankAxes: {
-      LeftStickY: "left+",
-      RightStickY: "right+",
-    },
-    buttons: {
-      LB: "precision",
-      RB: "precision",
+    special: {
+      precision: ["LB", "RB"],
     },
   },
   peripheral: {
     title: "Peripheral Gamepad Controls",
-    axes: {
-      LeftStickX: "armBase+",
-      LeftStickY: {
-        normal: "shoulder+",
-        ik: "ikForward-",
+    joints: {
+      armBase: {
+        axes: {
+          LeftStickX: "+",
+        },
       },
-      RightStickY: {
-        normal: "elbow-",
-        ik: "ikUp-",
+      shoulder: {
+        normal: {
+          LeftStickY: "+",
+        },
       },
-      RightStickX: "forearm+",
-      LeftTrigger: "hand+",
-      RightTrigger: "hand-",
+      ikForward: {
+        ik: {
+          LeftStickY: "-",
+        },
+      },
+      elbow: {
+        normal: {
+          RightStickY: "-",
+        },
+      },
+      ikUp: {
+        ik: {
+          RightStickY: "-",
+        },
+      },
+      forearm: {
+        axes: {
+          RightStickX: "+",
+        },
+      },
+      hand: {
+        axes: {
+          LeftTrigger: "+",
+          RightTrigger: "-",
+        },
+      },
+      wristDiffLeft: {
+        buttons: {
+          DPadDown: "-",
+          DPadUp: "+",
+        },
+      },
+      wristDiffRight: {
+        buttons: {
+          DPadLeft: "-",
+          DPadRight: "+",
+        },
+      },
+      handActuator: {
+        buttons: {
+          B: "-",
+          A: "+",
+        },
+      },
     },
-    buttons: {
-      DPadDown: "wristDiffLeft-",
-      DPadUp: "wristDiffLeft+",
-      DPadLeft: "wristDiffRight-",
-      DPadRight: "wristDiffRight+",
-      B: "handActuator-",
-      A: "handActuator+",
-      LB: "precision",
-      RB: "precision",
+    special: {
+      precision: ["LB", "RB"],
     },
   },
 };

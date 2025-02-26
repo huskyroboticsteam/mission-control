@@ -156,31 +156,26 @@ function computeDriveInput(state, action) {
   );
 
   pressedKeys.forEach((key) => {
-    Object.values(keyboardMap.drive.controls).forEach((control) => {
-      if (control.mapping === "toggleTankDrive") {
-        driveInput.tank = !driveInput.tank;
-      }
-
-      if (
-        control.mapping &&
-        typeof control.mapping === "object" &&
-        control.mapping[key]
-      ) {
-        control.mapping[key].forEach((action) => {
-          const [axis, direction] = action.split(/([+-])/);
-          driveInput[axis] += direction === "+" ? 1 : -1;
-        });
-      }
-    });
+    if (key === keyboardMap.drive.special.toggleTankDrive.control) {
+      driveInput.tank = !driveInput.tank;
+    } else {
+      Object.entries(keyboardMap.drive.joints).forEach(([joint, config]) => {
+        const controls = config.controls;
+        if (controls[key]) {
+          driveInput[joint] += controls[key] === "+" ? 1 : -1;
+        }
+      });
+    }
   });
 
-  const axisMap = driveInput.tank
-    ? gamepadMap.drive.tankAxes
-    : gamepadMap.drive.axes;
-  Object.entries(axisMap).forEach(([gamepadAxis, mapping]) => {
-    const [axis, direction] = mapping.split(/([+-])/);
-    const value = driveGamepad[gamepadAxis];
-    driveInput[axis] += direction === "+" ? value : -value;
+  const mode = driveInput.tank ? "tank" : "normal";
+  Object.entries(gamepadMap.drive.joints).forEach(([joint, config]) => {
+    if (config[mode]) {
+      Object.entries(config[mode]).forEach(([axis, direction]) => {
+        const value = driveGamepad[axis];
+        driveInput[joint] += direction === "+" ? value : -value;
+      });
+    }
   });
 
   const drivePrecisionMultiplier = getPrecisionMultiplier(
@@ -207,34 +202,36 @@ function computeArmInput(state) {
   Object.keys(armInput).forEach((key) => (armInput[key] = 0));
 
   pressedKeys.forEach((key) => {
-    Object.values(keyboardMap.arm.controls).forEach((control) => {
-      if (control.mapping && control.mapping[key]) {
-        const [axis, direction] = control.mapping[key].split(/([+-])/);
-        armInput[axis] += direction === "+" ? 1 : -1;
+    Object.entries(keyboardMap.arm.joints).forEach(([joint, config]) => {
+      const controls = config.controls;
+      if (controls[key]) {
+        armInput[joint] += controls[key] === "+" ? 1 : -1;
       }
     });
   });
 
-  Object.entries(gamepadMap.peripheral.axes).forEach(
-    ([gamepadAxis, mapping]) => {
-      const value = peripheralGamepad[gamepadAxis];
-      if (typeof mapping === "object") {
-        const mode = isIKEnabled ? "ik" : "normal";
-        const [axis, direction] = mapping[mode].split(/([+-])/);
-        armInput[axis] += direction === "+" ? value : -value;
-      } else {
-        const [axis, direction] = mapping.split(/([+-])/);
-        armInput[axis] += direction === "+" ? value : -value;
-      }
+  Object.entries(gamepadMap.peripheral.joints).forEach(([joint, config]) => {
+    if (config.axes) {
+      Object.entries(config.axes).forEach(([axis, direction]) => {
+        const value = peripheralGamepad[axis];
+        armInput[joint] += direction === "+" ? value : -value;
+      });
     }
-  );
 
-  Object.entries(gamepadMap.peripheral.buttons).forEach(([button, mapping]) => {
-    if (mapping !== "precision") {
-      const [axis, direction] = mapping.split(/([+-])/);
-      if (peripheralGamepad[button]) {
-        armInput[axis] += direction === "+" ? 1 : -1;
-      }
+    const mode = isIKEnabled ? "ik" : "normal";
+    if (config[mode]) {
+      Object.entries(config[mode]).forEach(([input, direction]) => {
+        const value = peripheralGamepad[input];
+        armInput[joint] += direction === "+" ? value : -value;
+      });
+    }
+
+    if (config.buttons) {
+      Object.entries(config.buttons).forEach(([button, direction]) => {
+        if (peripheralGamepad[button]) {
+          armInput[joint] += direction === "+" ? 1 : -1;
+        }
+      });
     }
   });
 
@@ -242,7 +239,6 @@ function computeArmInput(state) {
     pressedKeys,
     peripheralGamepad
   );
-
   Object.entries(armInput).forEach(
     ([jointName, power]) =>
       (armInput[jointName] = clamp1(power * armPrecisionMultiplier))
@@ -254,23 +250,27 @@ function computeScienceInput(prevState, state, action) {
   const pressedKeys = state.keyboard.pressedKeys;
   const scienceInput = state.computed.science;
 
-  if (pressedKeys.includes("B") && !prevPressedKeys.includes("B")) {
+  if (
+    pressedKeys.includes(keyboardMap.science.special.toggleDrillMotor.control) &&
+    !prevPressedKeys.includes(keyboardMap.science.special.toggleDrillMotor.control)
+  ) {
     scienceInput.drillMotor = !scienceInput.drillMotor;
   }
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1;
-  Object.values(keyboardMap.drive.controls).forEach((control) => {
-    if (
-      control.mapping === "precision" &&
-      pressedKeys.includes(control.keys?.[0] || "SHIFT")
-    ) {
+  Object.values(keyboardMap.drive.special).forEach((config) => {
+    if (config === "precision" && pressedKeys.includes(config.control)) {
       multiplier *= 0.2;
     }
   });
-  if (gamepad["LB"]) multiplier *= 0.3;
-  if (gamepad["RB"]) multiplier *= 0.3;
+
+  Object.entries(gamepadMap.drive.special).forEach(([joint, config]) => {
+    if (config.precision) {
+      if (gamepad[joint]) multiplier *= 0.3;
+    }
+  });
   return multiplier;
 }
 
