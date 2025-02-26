@@ -57,7 +57,6 @@ function KeyboardMapping() {
 
   return (
     <div className="keyboard-mapping">
-      <h3>Keyboard Controls</h3>
       {Object.entries(keyboardMap || {}).map(([title, section]) => (
         <div key={title} className="mapping-section">
           <h4>{title.toUpperCase()}</h4>
