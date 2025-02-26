@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { keyboardMap } from "../utils/keyboardMap";
+import { keyboardMap, gamepadMap } from "../utils/controlMapping";
 
 const gamepadTemplate = {
   isConnected: false,
@@ -151,34 +151,16 @@ function computeDriveInput(state, action) {
   const pressedKeys = state.keyboard.pressedKeys;
   const driveInput = state.computed.drive;
 
+  ["straight", "steer", "left", "right"].forEach(
+    (axis) => (driveInput[axis] = 0)
+  );
+
   pressedKeys.forEach((key) => {
     Object.values(keyboardMap.drive.controls).forEach((control) => {
-      if (control.mapping === "toggleTankDrive" && key === "SPACE") {
-        if (driveInput.type === "normal") {
-          driveInput.tank = !driveInput.tank;
-        } else {
-          alert(
-            "Can't switch to tank drive when not on normal driveInput type!"
-          );
-        }
+      if (control.mapping === "toggleTankDrive") {
+        driveInput.tank = !driveInput.tank;
       }
-    });
-  });
 
-  driveInput.straight = 0;
-  driveInput.steer = 0;
-  driveInput.left = 0;
-  driveInput.right = 0;
-  driveInput.crab = 0;
-
-  driveInput.straight -= driveGamepad["LeftStickY"];
-  driveInput.steer += driveGamepad["RightStickX"];
-  driveInput.left += driveGamepad["LeftStickY"];
-  driveInput.right += driveGamepad["RightStickY"];
-  driveInput.crab += driveGamepad["LeftStickX"];
-
-  pressedKeys.forEach((key) => {
-    Object.values(keyboardMap.drive.controls).forEach((control) => {
       if (
         control.mapping &&
         typeof control.mapping === "object" &&
@@ -192,11 +174,20 @@ function computeDriveInput(state, action) {
     });
   });
 
+  const axisMap = driveInput.tank
+    ? gamepadMap.drive.tankAxes
+    : gamepadMap.drive.axes;
+  Object.entries(axisMap).forEach(([gamepadAxis, mapping]) => {
+    const [axis, direction] = mapping.split(/([+-])/);
+    const value = driveGamepad[gamepadAxis];
+    driveInput[axis] += direction === "+" ? value : -value;
+  });
+
   const drivePrecisionMultiplier = getPrecisionMultiplier(
     pressedKeys,
     driveGamepad
   );
-  ["straight", "crab", "steer", "left", "right"].forEach(
+  ["straight", "steer", "left", "right"].forEach(
     (axis) =>
       (driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis]))
   );
@@ -211,33 +202,9 @@ function computeArmInput(state) {
   const peripheralGamepad = state.peripheralGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
   const armInput = state.computed.arm;
+  const isIKEnabled = state.inverseKinematics.enabled;
 
   Object.keys(armInput).forEach((key) => (armInput[key] = 0));
-
-  armInput.armBase += peripheralGamepad["LeftStickX"];
-
-  if (state.inverseKinematics.enabled) {
-    armInput.ikForward -= peripheralGamepad["LeftStickY"];
-    armInput.ikUp -= peripheralGamepad["RightStickY"];
-  } else {
-    armInput.shoulder += peripheralGamepad["LeftStickY"];
-    armInput.elbow -= peripheralGamepad["RightStickY"];
-  }
-
-  armInput.forearm += peripheralGamepad["RightStickX"];
-  armInput.wristDiffLeft = -getAxisFromButtons(
-    peripheralGamepad,
-    "DPadDown",
-    "DPadUp"
-  );
-  armInput.wristDiffRight = getAxisFromButtons(
-    peripheralGamepad,
-    "DPadLeft",
-    "DPadRight"
-  );
-  armInput.hand +=
-    peripheralGamepad["LeftTrigger"] - peripheralGamepad["RightTrigger"];
-  armInput.handActuator += getAxisFromButtons(peripheralGamepad, "B", "A");
 
   pressedKeys.forEach((key) => {
     Object.values(keyboardMap.arm.controls).forEach((control) => {
@@ -248,10 +215,34 @@ function computeArmInput(state) {
     });
   });
 
+  Object.entries(gamepadMap.peripheral.axes).forEach(
+    ([gamepadAxis, mapping]) => {
+      const value = peripheralGamepad[gamepadAxis];
+      if (typeof mapping === "object") {
+        const mode = isIKEnabled ? "ik" : "normal";
+        const [axis, direction] = mapping[mode].split(/([+-])/);
+        armInput[axis] += direction === "+" ? value : -value;
+      } else {
+        const [axis, direction] = mapping.split(/([+-])/);
+        armInput[axis] += direction === "+" ? value : -value;
+      }
+    }
+  );
+
+  Object.entries(gamepadMap.peripheral.buttons).forEach(([button, mapping]) => {
+    if (mapping !== "precision") {
+      const [axis, direction] = mapping.split(/([+-])/);
+      if (peripheralGamepad[button]) {
+        armInput[axis] += direction === "+" ? 1 : -1;
+      }
+    }
+  });
+
   const armPrecisionMultiplier = getPrecisionMultiplier(
     pressedKeys,
     peripheralGamepad
   );
+
   Object.entries(armInput).forEach(
     ([jointName, power]) =>
       (armInput[jointName] = clamp1(power * armPrecisionMultiplier))
@@ -268,23 +259,8 @@ function computeScienceInput(prevState, state, action) {
   }
 }
 
-function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
-  let axis = 0;
-  if (gamepad[negativeButton]) axis--;
-  if (gamepad[positiveButton]) axis++;
-  return axis;
-}
-
-function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
-  let axis = 0;
-  if (pressedKeys.includes(negativeKey)) axis--;
-  if (pressedKeys.includes(positiveKey)) axis++;
-  return axis;
-}
-
 function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1;
-  // Check for precision control from mapping
   Object.values(keyboardMap.drive.controls).forEach((control) => {
     if (
       control.mapping === "precision" &&

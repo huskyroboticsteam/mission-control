@@ -1,6 +1,6 @@
 import "./HelpPanel.css";
 import { useSelector } from 'react-redux';
-import { keyboardMap } from '../../utils/keyboardMap';
+import { keyboardMap } from '../../utils/controlMapping';
 import standardDriveControls from "./standardDriveControls.png";
 import tankDriveControls from "./tankDriveControls.png";
 import armControls from "./armControls.png";

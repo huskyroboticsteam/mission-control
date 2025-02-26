@@ -92,3 +92,53 @@ export const keyboardMap = {
     },
   },
 };
+
+export const gamepadMap = {
+  drive: {
+    title: "Drive Gamepad Controls",
+    axes: {
+      LeftStickY: "straight-",
+      RightStickX: "steer+",
+    },
+    tankAxes: {
+      LeftStickY: "left+",
+      RightStickY: "right+",
+    },
+    buttons: {
+      LB: "precision",
+      RB: "precision",
+    },
+  },
+  peripheral: {
+    title: "Peripheral Gamepad Controls",
+    axes: {
+      LeftStickX: "armBase+",
+      LeftStickY: {
+        normal: "shoulder+",
+        ik: "ikForward-",
+      },
+      RightStickY: {
+        normal: "elbow-",
+        ik: "ikUp-",
+      },
+      RightStickX: "forearm+",
+      LeftTrigger: "hand+",
+      RightTrigger: "hand-",
+    },
+    buttons: {
+      DPadDown: "wristDiffLeft-",
+      DPadUp: "wristDiffLeft+",
+      DPadLeft: "wristDiffRight-",
+      DPadRight: "wristDiffRight+",
+      B: "handActuator-",
+      A: "handActuator+",
+      LB: "precision",
+      RB: "precision",
+    },
+  },
+};
+
+export const inputMap = {
+  keyboard: keyboardMap,
+  gamepad: gamepadMap,
+};
