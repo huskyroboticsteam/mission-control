@@ -1,62 +1,52 @@
-.keyboard-mapping,
-.controller-mapping {
-  padding: 1rem;
+.keyboard-mapping {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  max-width: 500px;
+}
+
+.keyboard-mapping h3 {
+  margin: 0 0 20px 0;
+  text-align: center;
 }
 
 .mapping-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .mapping-section h4 {
-  margin-bottom: 0.5rem;
-  color: #333;
+  color: #88ccff;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
 }
 
 .controls-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.5rem;
+  gap: 10px;
 }
 
 .control-item {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  background: #f5f5f5;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 10px;
+  padding: 5px 10px;
   border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
   transition: background-color 0.2s;
 }
 
 .control-item.active {
-  background: #e0e0e0;
+  background: rgba(136, 204, 255, 0.3);
 }
 
 .control-item .keys {
-  background: #ddd;
-  padding: 0.2rem 0.5rem;
-  border-radius: 3px;
-  margin-right: 0.5rem;
   font-family: monospace;
+  color: #88ccff;
+  font-weight: bold;
 }
 
 .control-item .action {
-  flex: 1;
-}
-
-.axis-control {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.axis-label {
-  margin-right: 0.5rem;
-  font-family: monospace;
-}
-
-.axis-bar {
-  height: 10px; /* Height of the bar */
-  border-radius: 5px; /* Rounded edges */
-  flex-grow: 1; /* Allow the bar to grow */
-  transition: width 0.2s; /* Smooth transition for width change */
+  color: #ddd;
 } 

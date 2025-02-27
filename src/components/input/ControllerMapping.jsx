@@ -4,12 +4,15 @@ import { useSelector } from "react-redux";
 
 function ControllerMapping() {
   const driveGamepadState = useSelector((state) => state.input.driveGamepad);
-  const peripheralGamepadState = useSelector((state) => state.input.peripheralGamepadState);
+  const peripheralGamepadState = useSelector(
+    (state) => state.input.peripheralGamepad
+  );
 
   const renderControls = (section, gamepadState) => {
     if (!section) return [];
     const controls = [];
 
+    if (section.joints) {
       Object.entries(section.joints).forEach(([joint, config]) => {
         const controlEntries = [];
 
@@ -26,15 +29,6 @@ function ControllerMapping() {
         if (config.axes) {
           Object.entries(config.axes).forEach(([input, direction]) => {
             controlEntries.push([input, direction]);
-            const axisValue = gamepadState?.axes?.[input];
-            if (axisValue !== undefined) {
-              controls.push(
-                <div className="axis-control" key={`axis-${input}`}>
-                  <span className="axis-label">{input}</span>
-                  <div className="axis-bar" style={{ width: `${Math.abs(axisValue) * 100}%`, backgroundColor: axisValue > 0 ? 'green' : 'red' }} />
-                </div>
-              );
-            }
           });
         }
         if (config.buttons) {
@@ -47,7 +41,9 @@ function ControllerMapping() {
           const inputs = controlEntries.map(([input]) => input).join("/");
           const isActive = controlEntries.some(([input]) => {
             return (
-              (input !== undefined && gamepadState[input] !== undefined && (Math.abs(gamepadState[input]) > 0.1)) ||
+              (input !== undefined &&
+                gamepadState[input] !== undefined &&
+                Math.abs(gamepadState[input]) > 0.1) ||
               gamepadState[input]?.pressed
             );
           });
@@ -63,6 +59,7 @@ function ControllerMapping() {
           );
         }
       });
+    }
 
     if (section.special) {
       Object.entries(section.special).forEach(([name, inputs]) => {
