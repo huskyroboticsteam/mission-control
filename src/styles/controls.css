@@ -1,0 +1,62 @@
+.keyboard-mapping,
+.controller-mapping {
+  padding: 1rem;
+}
+
+.mapping-section {
+  margin-bottom: 1.5rem;
+}
+
+.mapping-section h4 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.control-item.active {
+  background: #e0e0e0;
+}
+
+.control-item .keys {
+  background: #ddd;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  font-family: monospace;
+}
+
+.control-item .action {
+  flex: 1;
+}
+
+.axis-control {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.axis-label {
+  margin-right: 0.5rem;
+  font-family: monospace;
+}
+
+.axis-bar {
+  height: 10px; /* Height of the bar */
+  border-radius: 5px; /* Rounded edges */
+  flex-grow: 1; /* Allow the bar to grow */
+  transition: width 0.2s; /* Smooth transition for width change */
+} 

@@ -79,8 +79,8 @@ const inputSlice = createSlice({
     gamepadAxisChanged(state, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, axisName, value } = action.payload;
-      // linux maps dpad to axes, so map them to buttons
-      // also rescale triggers from [-1,1] -> [0,1], if necessary
+
+      // Update the state
       if (axisName === "DPadY") {
         state[gamepadName]["DPadDown"] = value < 0;
         state[gamepadName]["DPadUp"] = value > 0;
@@ -100,6 +100,7 @@ const inputSlice = createSlice({
         let scaledValue = value * Math.abs(value);
         state[gamepadName][axisName] = scaledValue;
       }
+
       computeInput(prevState, state, action);
     },
 
@@ -172,8 +173,10 @@ function computeDriveInput(state, action) {
   Object.entries(gamepadMap.drive.joints).forEach(([joint, config]) => {
     if (config[mode]) {
       Object.entries(config[mode]).forEach(([axis, direction]) => {
-        const value = driveGamepad[axis];
-        driveInput[joint] += direction === "+" ? value : -value;
+        if (driveGamepad[axis]) {
+          const value = driveGamepad[axis];
+          driveInput[joint] += direction === "+" ? value : -value;
+        }
       });
     }
   });
@@ -215,16 +218,20 @@ function computeArmInput(state) {
   Object.entries(gamepadMap.peripheral.joints).forEach(([joint, config]) => {
     if (config.axes) {
       Object.entries(config.axes).forEach(([axis, direction]) => {
-        const value = peripheralGamepad[axis];
-        armInput[joint] += direction === "+" ? value : -value;
+        if (peripheralGamepad[axis]) {
+          const value = peripheralGamepad[axis];
+          armInput[joint] += direction === "+" ? value : -value;
+        }
       });
     }
 
     const mode = isIKEnabled ? "ik" : "normal";
     if (config[mode]) {
       Object.entries(config[mode]).forEach(([input, direction]) => {
-        const value = peripheralGamepad[input];
-        armInput[joint] += direction === "+" ? value : -value;
+        if (peripheralGamepad[input]) {
+          const value = peripheralGamepad[input];
+          armInput[joint] += direction === "+" ? value : -value;
+        }
       });
     }
 
@@ -253,8 +260,12 @@ function computeScienceInput(prevState, state, action) {
   const scienceInput = state.computed.science;
 
   if (
-    pressedKeys.includes(keyboardMap.science.special.toggleDrillMotor.control) &&
-    !prevPressedKeys.includes(keyboardMap.science.special.toggleDrillMotor.control)
+    pressedKeys.includes(
+      keyboardMap.science.special.toggleDrillMotor.control
+    ) &&
+    !prevPressedKeys.includes(
+      keyboardMap.science.special.toggleDrillMotor.control
+    )
   ) {
     scienceInput.drillMotor = !scienceInput.drillMotor;
   }

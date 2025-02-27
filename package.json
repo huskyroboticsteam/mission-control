@@ -20,7 +20,7 @@
     "jmuxer": "^2.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-gamepad": "1.0.3",
+    "react-gamepad": "SBRK/react-gamepad",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.17.0",
     "stream": "0.0.2",
