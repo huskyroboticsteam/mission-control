@@ -15,8 +15,8 @@ const jointNames = [
   "handActuator",
   "drillArm",
   "drillActuator",
-  "forearm1",
-  "forearm2",
+  "fourbar1",
+  "fourbar2",
   "ikUp",
   "ikForward"
 ];

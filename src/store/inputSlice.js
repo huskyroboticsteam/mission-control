@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { selectMountedPeripheral } from "./peripheralsSlice";
 
 const gamepadTemplate = {
   isConnected: false,
@@ -52,8 +51,8 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      forearm1: 0,
-      forearm2: 0,
+      fourbar1: 0,
+      fourbar2: 0,
       drillActuator: 0,
       drillMotor: 0
 
@@ -256,9 +255,12 @@ function computeScienceInput(prevState, state) {
   //     lazySusanAxis) % 6) + 6) % 6;
   // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
 
-  const forearm = getAxisFromKeys(pressedKeys, "E", "R");
-  scienceInput.forearm1 = forearm;
-  scienceInput.forearm2 = forearm;
+  const fourbar = clamp1(
+    getAxisFromKeys(pressedKeys, "E", "R") *
+    getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
+    0.8);
+  scienceInput.fourbar1 = fourbar;
+  scienceInput.fourbar2 = fourbar;
   scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
@@ -289,6 +291,9 @@ function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1;
   if (pressedKeys.includes("SHIFT"))
     multiplier *= 0.2;
+  else if (pressedKeys.includes("CAPSLOCK")) {
+    multiplier *= 1.5;
+  }
   if (gamepad["LB"])
     multiplier *= 0.3;
   if (gamepad["RB"])
@@ -296,11 +301,13 @@ function getPrecisionMultiplier(pressedKeys, gamepad) {
   return multiplier;
 }
 
-function clamp1(n) {
-  if (n < -1) return -1;
-  if (n > 1) return 1;
+function clamp(n, lo, hi) {
+  if (n < lo) return lo;
+  if (n > hi) return hi;
   return n;
 }
+
+function clamp1(n) { return clamp(n, -1, 1); }
 
 export const {
   gamepadConnected,
