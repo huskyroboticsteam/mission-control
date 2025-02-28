@@ -7,9 +7,20 @@ import "./WaypointNav.css";
 function WaypointNav() {
   const dispatch = useDispatch();
   const [submitted, setSubmitted] = useState(false);
+  const [points, setPoints] = useState([]);
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
   var opMode = useSelector(selectOpMode);
+
+  function addPoint() {
+    let point = [lat, lon];
+    let newPoints = points;
+    newPoints.push(point);
+    setPoints(newPoints);
+    setLat(0);
+    setLon(0);
+    console.log(points);
+  }
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -46,11 +57,16 @@ function WaypointNav() {
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
+      {/* <form>
+        Waypoints:
+        <textarea rows="5" cols="80" placeholder="(latitude,longitude),(latitude,longitude)..."></textarea>  
+      </form> */}
       <label htmlFor="latitude">Latitude</label>
       {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
       <label htmlFor="longitude">Longitude</label>
       {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
       {submitted ? <button disabled>Copy from Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>}
+      <button type="button" onClick={addPoint}>Add Point</button>
     </div>
     <div className="waypoint-checkbox">
       <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
@@ -60,5 +76,7 @@ function WaypointNav() {
   </form>
   );
 }
+
+
 
 export default WaypointNav;
