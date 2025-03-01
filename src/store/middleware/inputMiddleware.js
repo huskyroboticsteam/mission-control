@@ -3,14 +3,7 @@ import { requestDrive, requestTankDrive } from "../driveSlice";
 import { requestJointPower } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
 import { requestMotorPower } from "../motorsSlice";
-import {
-  messageReceivedFromRover,
-  messageRover,
-  roverDisconnected,
-  roverConnected,
-} from "../roverSocketSlice";
 
 /**
  * Middleware that messages the rover in response to user input.
