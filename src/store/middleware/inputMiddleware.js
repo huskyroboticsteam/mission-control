@@ -1,10 +1,10 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
-import { requestCrabDrive, requestDrive, requestTankDrive, requestTurnInPlaceDrive } from "../driveSlice";
-import { requestJointPower, selectAllJointNames } from "../jointsSlice";
+import { /*requestCrabDrive, */requestDrive, requestTankDrive/*, requestTurnInPlaceDrive */} from "../driveSlice";
+import { requestJointPower/*, selectAllJointNames*/ } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
-import { requestMotorPower, selectAllMotorNames } from "../motorsSlice";
+// import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
+import { requestMotorPower/*, selectAllMotorNames*/ } from "../motorsSlice";
 
 /**
  * Middleware that messages the rover in response to user input.

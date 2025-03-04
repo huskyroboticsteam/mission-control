@@ -13,8 +13,7 @@ const motorNames = [
   "wristRoll",
   "hand",
   "drillMotor", 
-  "drillArmMotor"
-  "drillMotor",
+  "drillArmMotor",
   "drillActuator"
 ];
 
