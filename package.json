@@ -31,7 +31,9 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build --config vite.config.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +52,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "serve": "^14.2.4",
+    "typescript": "^5.7.3",
+    "prettier": "^3.5.2"
   }
 }
