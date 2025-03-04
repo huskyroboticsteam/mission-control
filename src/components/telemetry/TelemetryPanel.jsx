@@ -1,6 +1,6 @@
-import JointTelemetry from "./JointTelemetry";
-import InputTelemetry from "./InputTelemetry";
-import "./TelemetryPanel.css";
+import JointTelemetry from './JointTelemetry'
+import InputTelemetry from './InputTelemetry'
+import './TelemetryPanel.css'
 
 function TelemetryPanel() {
   return (
@@ -8,7 +8,7 @@ function TelemetryPanel() {
       <InputTelemetry />
       <JointTelemetry />
     </div>
-  );
+  )
 }
 
-export default TelemetryPanel;
+export default TelemetryPanel

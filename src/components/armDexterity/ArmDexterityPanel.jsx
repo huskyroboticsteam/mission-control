@@ -1,7 +1,7 @@
-import RoverModel from "../roverModel/RoverModel";
-import CameraStream from "../camera/CameraStream";
+import RoverModel from '../roverModel/RoverModel'
+import CameraStream from '../camera/CameraStream'
 
-import "./ArmDexterityPanel.css"
+import './ArmDexterityPanel.css'
 
 function ArmDexterityPanel() {
   return (
@@ -9,7 +9,7 @@ function ArmDexterityPanel() {
       <CameraStream cameraName="hand" />
       <RoverModel />
     </div>
-  );
+  )
 }
 
-export default ArmDexterityPanel;
+export default ArmDexterityPanel

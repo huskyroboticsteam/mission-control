@@ -35,7 +35,8 @@
   white-space: nowrap;
 }
 
-.motor-telemetry td:nth-child(2), .motor-telemetry th:nth-child(2) {
+.motor-telemetry td:nth-child(2),
+.motor-telemetry th:nth-child(2) {
   border-left: 2px solid #666;
   border-right: 2px solid #666;
 }

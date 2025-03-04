@@ -1,17 +1,17 @@
-import { useEffect } from "react";
-import RoverSocketManager from "../networking/RoverSocketManager";
-import GamepadController from "../input/GamepadController";
-import KeyboardController from "../input/KeyboardController";
-import Sidebar from "../sidebar/Sidebar";
-import PanelContainer from "../panelContainer/PanelContainer";
-import "./App.css";
+import {useEffect} from 'react'
+import RoverSocketManager from '../networking/RoverSocketManager'
+import GamepadController from '../input/GamepadController'
+import KeyboardController from '../input/KeyboardController'
+import Sidebar from '../sidebar/Sidebar'
+import PanelContainer from '../panelContainer/PanelContainer'
+import './App.css'
 
 function App() {
   // Disable context menu.
   useEffect(() => {
-    const handleContextMenu = event => event.preventDefault();
-    document.addEventListener("contextmenu", handleContextMenu);
-  }, []);
+    const handleContextMenu = (event) => event.preventDefault()
+    document.addEventListener('contextmenu', handleContextMenu)
+  }, [])
 
   return (
     <div className="app">
@@ -22,7 +22,7 @@ function App() {
       <Sidebar />
       <PanelContainer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

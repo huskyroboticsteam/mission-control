@@ -1,26 +1,29 @@
-import { messageRover } from "../roverSocketSlice";
-import { requestWaypointNav } from "../waypointNavSlice";
+import {messageRover} from '../roverSocketSlice'
+import {requestWaypointNav} from '../waypointNavSlice'
 
-const waypointNavMiddleware = store => next => action => {
-  const result = next(action);
+const waypointNavMiddleware = (store) => (next) => (action) => {
+  const result = next(action)
 
   switch (action.type) {
     case requestWaypointNav.type:
-      store.dispatch(messageRover({
-        message: {
-          type: "waypointNavRequest",
-          latitude: store.getState().waypointNav.latitude,
-          longitude: store.getState().waypointNav.longitude,
-          isApproximate: store.getState().waypointNav.isApproximate,
-          isGate: store.getState().waypointNav.isGate,
-        }
-      }));
-      break;
+      store.dispatch(
+        messageRover({
+          message: {
+            type: 'waypointNavRequest',
+            latitude: store.getState().waypointNav.latitude,
+            longitude: store.getState().waypointNav.longitude,
+            isApproximate: store.getState().waypointNav.isApproximate,
+            isGate: store.getState().waypointNav.isGate,
+          },
+        })
+      )
+      break
 
-    default: break;
+    default:
+      break
   }
 
-  return result;
+  return result
 }
 
-export default waypointNavMiddleware;
+export default waypointNavMiddleware

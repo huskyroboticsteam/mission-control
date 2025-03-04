@@ -1,29 +1,32 @@
-import { roverConnected, messageRover } from "../roverSocketSlice";
-import { requestStop } from "../emergencyStopSlice";
+import {roverConnected, messageRover} from '../roverSocketSlice'
+import {requestStop} from '../emergencyStopSlice'
 
 /**
  * Middleware that handles sending messages to the rover to request emergency
  * stops.
  */
-const emergencyStopMiddleware = store => next => action => {
-  const result = next(action);
+const emergencyStopMiddleware = (store) => (next) => (action) => {
+  const result = next(action)
 
   switch (action.type) {
     case requestStop.type:
     case roverConnected.type: {
-      store.dispatch(messageRover({
-        message: {
-          type: "emergencyStopRequest",
-          stop: store.getState().emergencyStop.stopped
-        }
-      }));
-      break;
+      store.dispatch(
+        messageRover({
+          message: {
+            type: 'emergencyStopRequest',
+            stop: store.getState().emergencyStop.stopped,
+          },
+        })
+      )
+      break
     }
 
-    default: break;
+    default:
+      break
   }
 
-  return result;
+  return result
 }
 
-export default emergencyStopMiddleware;
+export default emergencyStopMiddleware
