@@ -48,7 +48,14 @@ const initialState = {
       ikForward: 0
     },
     science: {
-      lazySusanPosition: 0
+      instrumentationArmManualOverride: true, 
+      instrumentationArmLocation: 0, 
+      instrumentationArmSetpoint: 0,
+      // lazySusanPosition: 0,
+      // instrumentationArm: 0,
+      drillActuator: 0,
+      drillMotor: 0
+
     }
   },
   inverseKinematics: {
@@ -139,7 +146,7 @@ const inputSlice = createSlice({
 
 function computeInput(prevState, state, action) {
   computeDriveInput(state, action);
-  computePeripheralInput(prevState, state, action);
+  computePeripheralInput(prevState, state);
 }
 
 function computeDriveInput(state, action) {
@@ -164,15 +171,15 @@ function computeDriveInput(state, action) {
   driveInput.right = driveGamepad["RightStickY"] + getAxisFromKeys(pressedKeys, "ARROWRIGHT", "ARROWUP");
 
   // Apply precision controls and clamp.
-  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true);
   ["straight", "crab", "steer", "left", "right"].forEach(
     axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
   );
 }
 
-function computePeripheralInput(prevState, state, action) {
+function computePeripheralInput(prevState, state) {
   computeArmInput(state);
-  computeScienceInput(prevState, state, action);
+  computeScienceInput(prevState, state);
 }
 
 function computeArmInput(state) {
@@ -225,7 +232,7 @@ function computeArmInput(state) {
   );
 }
 
-function computeScienceInput(prevState, state, action) {
+function computeScienceInput(prevState, state) {
   const prevPeripheralGamepad = prevState.peripheralGamepad;
   const peripheralGamepad = state.peripheralGamepad;
   const prevPressedKeys = prevState.keyboard.pressedKeys;
@@ -240,6 +247,35 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
+  
+  if(scienceInput.instrumentationArmManualOverride) {
+    scienceInput.instrumentationArm = getAxisFromKeys(pressedKeys, "C", "V");
+  } else {
+    if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
+      scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
+    }
+    switch(scienceInput.instrumentationArmLocation) {
+      case 0:
+        scienceInput.instrumentationArmSetpoint = 1;
+        break;
+      case 1:
+        scienceInput.instrumentationArmSetpoint = 2;
+        break;
+      case 2:
+        scienceInput.instrumentationArmSetpoint = 3;
+        break;
+    }
+  }
+  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
+
+  const fourbar = clamp1(
+    getAxisFromKeys(pressedKeys, "E", "R") *
+    getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
+    0.45);
+  scienceInput.fourbar1 = fourbar;
+  scienceInput.fourbar2 = fourbar;
+  scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
+  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -256,10 +292,23 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   return axis;
 }
 
-function getPrecisionMultiplier(pressedKeys, gamepad) {
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
+    if(currState == 0) return -1;
+    else return 0;
+  }
+  return currState;
+}
+
+function getPrecisionMultiplier(pressedKeys, gamepad, driveMode=false) {
   let multiplier = 1;
-  if (pressedKeys.includes("SHIFT"))
+  if (pressedKeys.includes("SHIFT")) {
     multiplier *= 0.2;
+    if (driveMode) multiplier *= 3;
+  }
+  else if (pressedKeys.includes("CAPSLOCK")) {
+    multiplier *= 2.5;
+  }
   if (gamepad["LB"])
     multiplier *= 0.3;
   if (gamepad["RB"])
@@ -267,11 +316,13 @@ function getPrecisionMultiplier(pressedKeys, gamepad) {
   return multiplier;
 }
 
-function clamp1(n) {
-  if (n < -1) return -1;
-  if (n > 1) return 1;
+function clamp(n, lo, hi) {
+  if (n < lo) return lo;
+  if (n > hi) return hi;
   return n;
 }
+
+function clamp1(n) { return clamp(n, -1, 1); }
 
 export const {
   gamepadConnected,
