@@ -249,7 +249,7 @@ function computeScienceInput(prevState, state) {
       lazySusanAxis) % 6) + 6) % 6;
   
   if(scienceInput.instrumentationArmManualOverride) {
-    scienceInput.instrumentationArm = getAxisFromButtons(pressedKeys, "C", "V");
+    scienceInput.instrumentationArm = getAxisFromKeys(pressedKeys, "C", "V");
   } else {
     if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
       scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
