@@ -33,7 +33,7 @@ function sanitize(num, decimals) {
 }
 
 const Compass = () => {
-  const { orientW, orientX, orientY, orientZ, lon, lat } = useSelector(selectRoverPosition);
+  const { orientW, orientX, orientY, orientZ, lon, lat, alt } = useSelector(selectRoverPosition);
 
   let roll;
   let pitch;
@@ -46,7 +46,6 @@ const Compass = () => {
     let quat = new Quaternion(orientX, orientY, orientZ, orientW);
     let rpy = new Euler().fromQuaternion(quat, Euler.ZYX);
     let attitude = getAttitude(rpy.roll, rpy.pitch);
-
     roll = Math.round(rpy.roll * 180 / Math.PI);
     pitch = Math.round(rpy.pitch * 180 / Math.PI);
     yaw = Math.round(rpy.yaw * 180 / Math.PI);
@@ -85,6 +84,10 @@ const Compass = () => {
             <tr>
               <td>longitude:</td>
               <td>{sanitize(lon, 6)}</td>
+            </tr>
+            <tr>
+              <td>altitude:</td>
+              <td>{sanitize(alt, 6)}</td>  
             </tr>
           </tbody>
         </table>
