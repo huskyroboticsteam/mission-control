@@ -5,11 +5,11 @@ const jointNames = [
   "shoulder",
   "elbow",
   "forearm",
-  "wristPitch",
-  "wristRoll",
+  "wristDiffLeft",
+  "wristDiffRight",
   "hand",
   "handActuator",
-  "drillArm",
+  "drillMotor",
   "ikUp",
   "ikForward"
 ];

@@ -5,7 +5,7 @@ import {
   roverConnected,
   roverDisconnected,
   messageRover,
-  messageReceivedFromRover
+  messageReceivedFromRover,
 } from "../roverSocketSlice";
 
 /**
@@ -16,23 +16,23 @@ const roverSocketMiddleware = () => {
   let socket = null;
   let isConnecting = false;
 
-  const onOpen = store => () => {
+  const onOpen = (store) => () => {
     isConnecting = false;
     store.dispatch(roverConnected());
-  }
+  };
 
-  const onClose = store => () => {
+  const onClose = (store) => () => {
     socket = null;
     isConnecting = false;
     store.dispatch(roverDisconnected());
   };
 
-  const onMessage = store => event => {
+  const onMessage = (store) => (event) => {
     const message = JSON.parse(event.data);
     store.dispatch(messageReceivedFromRover({ message }));
   };
 
-  return store => next => action => {
+  return (store) => (next) => (action) => {
     const result = next(action);
 
     switch (action.type) {
@@ -51,8 +51,7 @@ const roverSocketMiddleware = () => {
       }
 
       case disconnectFromRover.type: {
-        if (socket && socket.readyState !== WebSocket.closed)
-          socket.close();
+        if (socket && socket.readyState !== WebSocket.closed) socket.close();
         break;
       }
 
@@ -62,7 +61,8 @@ const roverSocketMiddleware = () => {
         break;
       }
 
-      default: break;
+      default:
+        break;
     }
 
     return result;
