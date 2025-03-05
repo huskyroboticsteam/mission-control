@@ -1,8 +1,8 @@
-import "./HelpPanel.css";
-import keyboardControls from "./keyboardControls.png";
-import standardDriveControls from "./standardDriveControls.png";
-import tankDriveControls from "./tankDriveControls.png";
-import armControls from "./armControls.png";
+import './HelpPanel.css'
+import keyboardControls from './keyboardControls.png'
+import standardDriveControls from './standardDriveControls.png'
+import tankDriveControls from './tankDriveControls.png'
+import armControls from './armControls.png'
 
 function HelpPanel() {
   return (
@@ -12,7 +12,7 @@ function HelpPanel() {
       <img src={armControls} alt="arm controls" />
       <img src={keyboardControls} alt="keyboard controls" />
     </div>
-  );
+  )
 }
 
-export default HelpPanel;
+export default HelpPanel
