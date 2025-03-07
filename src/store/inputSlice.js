@@ -167,9 +167,8 @@ function computeDriveInput(state, action) {
     }
   }
   if (state.triggerHeld) { 
-    // TODO: Input new bindings
+
   } else {
-    // TODO: Input old bindings
     driveInput.straight = -driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
     driveInput.steer = driveGamepad["RightStickX"] + getAxisFromKeys(pressedKeys, "ARROWLEFT", "ARROWRIGHT");
     driveInput.left = driveGamepad["LeftStickY"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWLEFT")
@@ -197,9 +196,8 @@ function computeArmInput(state) {
   const armInput = state.computed.arm;
 
   if (state.triggerHeld) {
-    // TODO: Input new bindings
+
   } else {
-    // TODO: Input old bindings
     armInput.armBase =
       peripheralGamepad["LeftStickX"] +
       getAxisFromKeys(pressedKeys, "A", "D");
