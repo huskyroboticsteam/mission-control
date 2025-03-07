@@ -13,10 +13,12 @@ const waypointNavSlice = createSlice({
   initialState,
   reducers: {
     requestWaypointNav(state, action) {
-      const {latitude, longitude, isApproximate, isGate} = action.payload
+      const {latitude, longitude, points, isApproximate, isGate} = action.payload
       state.latitude = typeof latitude == 'string' ? Number.parseFloat(latitude) : latitude
       state.longitude = typeof longitude == 'string' ? Number.parseFloat(longitude) : longitude
       state.points = points
+      console.log("this is the state: ")
+      console.log(points)
       state.isApproximate = !!isApproximate
       state.isGate = !!isGate
     },

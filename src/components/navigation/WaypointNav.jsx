@@ -62,14 +62,11 @@ function WaypointNav() {
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">
-      {/* <form>
-        Waypoints:
-        <textarea rows="5" cols="80" placeholder="(latitude,longitude),(latitude,longitude)..."></textarea>  
-      </form> */}
       <label htmlFor="latitude">Latitude</label>
       {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
       <label htmlFor="longitude">Longitude</label>
       {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
+      <input type="hidden" value={points} name="points"></input>
       {submitted ? <button disabled>Copy from Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>}
       <button type="button" onClick={addPoint}>Add Point</button>
     </div>

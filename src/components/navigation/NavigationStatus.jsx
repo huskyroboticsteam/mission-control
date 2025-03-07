@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux'
 import {selectRoverPosition} from '../../store/telemetrySlice'
-import {selectLatitude, selectLongitude} from '../../store/waypointNavSlice'
+import {selectLatitude, selectLongitude, selectPoints } from '../../store/waypointNavSlice'
 import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
 
@@ -23,8 +23,12 @@ function sanitize(num, decimals) {
 
 function NavigationStatus() {
   const {lon, lat} = useSelector(selectRoverPosition)
-  const targetLatitude = useSelector(selectLatitude)
-  const targetLongitude = useSelector(selectLongitude)
+  const targetPoints = useSelector(selectPoints)
+  const targetLatitude = targetPoints.length > 0 ? targetPoints[0][0] : 0
+  const targetLongitude = targetPoints.length > 0 ? targetPoints[0][1] : 0
+  console.log(targetLatitude)
+  console.log(targetLongitude)
+  console.log(targetPoints)
 
   const getNavigationStatus = () => {
     // Guard against null or undefined values
