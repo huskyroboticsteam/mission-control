@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { requestWaypointNav } from "../../store/waypointNavSlice";
-import { selectOpMode } from "../../store/opModeSlice";
-import "./WaypointNav.css";
+import {useDispatch, useSelector} from 'react-redux'
+import React, {useState, useEffect} from 'react'
+import {requestWaypointNav} from '../../store/waypointNavSlice'
+import {selectOpMode} from '../../store/opModeSlice'
+import './WaypointNav.css'
 
 function WaypointNav() {
   const dispatch = useDispatch();
@@ -22,38 +22,43 @@ function WaypointNav() {
     console.log(points);
   }
 
-  function handleSubmit (e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    setSubmitted(true);
-    dispatch(requestWaypointNav(formJson));
-  };
+  function handleSubmit(e) {
+    e.preventDefault()
+    const form = e.target
+    const formData = new FormData(form)
+    const formJson = Object.fromEntries(formData.entries())
+    setSubmitted(true)
+    dispatch(requestWaypointNav(formJson))
+  }
 
-  function grabFromClipboard () {
-    navigator.clipboard.readText().then(text => {
-      // Matches coordinates in the form of (-)*(.*), (-)*(.*)
-      // where * are numbers and () are optional, e.g. -0.2, 0
-      if(text.match("-?\\d+\\.?\\d*, -?\\d+\\.?\\d*")) {
-        const [lat, lon] = text.split(", ", 2);
-        setLat(lat);
-        setLon(lon);
-      } else {
-        alert("Clipboard contents do not match expected format lat, lon!");
-      }
-    }).catch(err => {
-      console.error("Failed to read clipboard contents: ", err);
-      alert("Failed to read clipboard contents! (Make sure to allow us to read your clipboard contents)")
-    })
+  function grabFromClipboard() {
+    navigator.clipboard
+      .readText()
+      .then((text) => {
+        // Matches coordinates in the form of (-)*(.*), (-)*(.*)
+        // where * are numbers and () are optional, e.g. -0.2, 0
+        if (text.match('-?\\d+\\.?\\d*, -?\\d+\\.?\\d*')) {
+          const [lat, lon] = text.split(', ', 2)
+          setLat(lat)
+          setLon(lon)
+        } else {
+          alert('Clipboard contents do not match expected format lat, lon!')
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to read clipboard contents: ', err)
+        alert(
+          'Failed to read clipboard contents! (Make sure to allow us to read your clipboard contents)'
+        )
+      })
   }
 
   useEffect(() => {
-    if (opMode === "teleoperation") {
-      setSubmitted(false);
+    if (opMode === 'teleoperation') {
+      setSubmitted(false)
     }
-  }, [opMode]);
-  
+  }, [opMode])
+
   return (
   <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
     <div className="waypoint-select__params">

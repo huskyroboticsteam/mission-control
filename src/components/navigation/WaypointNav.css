@@ -13,7 +13,7 @@
   height: 50%;
 }
 
-.waypoint-select__params input[type="text"] {
+.waypoint-select__params input[type='text'] {
   width: 40%;
   padding: 10px;
   border: 1px solid #ccc;
