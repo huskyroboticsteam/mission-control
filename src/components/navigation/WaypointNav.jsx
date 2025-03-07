@@ -5,21 +5,21 @@ import {selectOpMode} from '../../store/opModeSlice'
 import './WaypointNav.css'
 
 function WaypointNav() {
-  const dispatch = useDispatch();
-  const [submitted, setSubmitted] = useState(false);
-  const [points, setPoints] = useState([]);
-  const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
-  var opMode = useSelector(selectOpMode);
+  const dispatch = useDispatch()
+  const [submitted, setSubmitted] = useState(false)
+  const [points, setPoints] = useState([])
+  const [lat, setLat] = useState(0)
+  const [lon, setLon] = useState(0)
+  var opMode = useSelector(selectOpMode)
 
   function addPoint() {
-    let point = [lat, lon];
-    let newPoints = points;
-    newPoints.push(point);
-    setPoints(newPoints);
-    setLat(0);
-    setLon(0);
-    console.log(points);
+    let point = [lat, lon]
+    let newPoints = points
+    newPoints.push(point)
+    setPoints(newPoints)
+    setLat(0)
+    setLon(0)
+    console.log(points)
   }
 
   function handleSubmit(e) {
@@ -60,25 +60,62 @@ function WaypointNav() {
   }, [opMode])
 
   return (
-  <form method="post" onSubmit={handleSubmit} className="waypoint-select"> 
-    <div className="waypoint-select__params">
-      <label htmlFor="latitude">Latitude</label>
-      {submitted ? <input disabled value={lat} onChange={e => e}/> : <input type="number" step="any" name="latitude" value={lat} onChange={e => setLat(e.target.value)}/>}
-      <label htmlFor="longitude">Longitude</label>
-      {submitted ? <input disabled value={lon} onChange={e => e}/> : <input type="number" step="any" name="longitude" value={lon} onChange={e => setLon(e.target.value)}/>}
-      <input type="hidden" value={points} name="points"></input>
-      {submitted ? <button disabled>Copy from Clipboard</button> : <button type="button" onClick={grabFromClipboard}>Copy from Clipboard</button>}
-      <button type="button" onClick={addPoint}>Add Point</button>
-    </div>
-    <div className="waypoint-checkbox">
-      <label>{submitted ? <input disabled type="checkbox" name="isApproximate" /> : <input type="checkbox" name="isApproximate" />} Approximate</label>
-      <label>{submitted ? <input disabled type="checkbox" name="isGate" />: <input type="checkbox" name="isGate" />} Is Gate</label>
-    </div>
-    {opMode === "autonomous" && !submitted ? <button type="submit">Go</button> : <button disabled>Go</button>}
-  </form>
-  );
+    <form method="post" onSubmit={handleSubmit} className="waypoint-select">
+      <div className="waypoint-select__params">
+        <label htmlFor="latitude">Latitude</label>
+        {submitted ? (
+          <input disabled value={lat} onChange={(e) => e} />
+        ) : (
+          <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} />
+        )}
+        <label htmlFor="longitude">Longitude</label>
+        {submitted ? (
+          <input disabled value={lon} onChange={(e) => e} />
+        ) : (
+          <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
+        )}
+        {/* temp note about a plan: don't send the latitude and longitude in the values, send two hidden forms with the first value in the points array.
+          What this plan has an issue with is updating the points array when the rover reaches the first destination */}
+        <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
+        <input type="hidden" value={points.length > 0 ? points[0][1] : 0} name="longitude"></input>
+        <input type="hidden" value={[]} name="points"></input>{' '}
+        {/* temp so I don't have to delete everything i added before verifying this works */}
+        {submitted ? (
+          <button disabled>Copy from Clipboard</button>
+        ) : (
+          <button type="button" onClick={grabFromClipboard}>
+            Copy from Clipboard
+          </button>
+        )}
+        <button type="button" onClick={addPoint}>
+          Add Point
+        </button>
+      </div>
+      <div className="waypoint-checkbox">
+        <label>
+          {submitted ? (
+            <input disabled type="checkbox" name="isApproximate" />
+          ) : (
+            <input type="checkbox" name="isApproximate" />
+          )}{' '}
+          Approximate
+        </label>
+        <label>
+          {submitted ? (
+            <input disabled type="checkbox" name="isGate" />
+          ) : (
+            <input type="checkbox" name="isGate" />
+          )}{' '}
+          Is Gate
+        </label>
+      </div>
+      {opMode === 'autonomous' && !submitted ? (
+        <button type="submit">Go</button>
+      ) : (
+        <button disabled>Go</button>
+      )}
+    </form>
+  )
 }
 
-
-
-export default WaypointNav;
+export default WaypointNav

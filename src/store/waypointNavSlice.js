@@ -17,7 +17,7 @@ const waypointNavSlice = createSlice({
       state.latitude = typeof latitude == 'string' ? Number.parseFloat(latitude) : latitude
       state.longitude = typeof longitude == 'string' ? Number.parseFloat(longitude) : longitude
       state.points = points
-      console.log("this is the state: ")
+      console.log('this is the state: ')
       console.log(points)
       state.isApproximate = !!isApproximate
       state.isGate = !!isGate
