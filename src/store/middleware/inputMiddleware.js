@@ -1,92 +1,85 @@
-import { selectMountedPeripheral } from "../peripheralsSlice";
-import { requestCrabDrive, requestDrive, requestTankDrive, requestTurnInPlaceDrive } from "../driveSlice";
-import { requestJointPower } from "../jointsSlice";
-import { enableIK, visuallyEnableIK } from "../inputSlice";
-import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
+import {selectMountedPeripheral} from '../peripheralsSlice'
+import {requestDrive, requestTankDrive} from '../driveSlice'
+import {requestJointPower} from '../jointsSlice'
+import {enableIK, visuallyEnableIK} from '../inputSlice'
+import {
+  messageReceivedFromRover,
+  messageRover,
+  roverDisconnected,
+  roverConnected,
+} from '../roverSocketSlice'
 
 /**
  * Middleware that messages the rover in response to user input.
  */
-const inputMiddleware = store => next => action => {
-  if (action.type.startsWith("input/")) {
+const inputMiddleware = (store) => (next) => (action) => {
+  if (action.type.startsWith('input/')) {
     if (action.type === enableIK.type) {
-      store.dispatch(messageRover({
-        message: {
-          type: "requestArmIKEnabled",
-          enabled: action.payload.enable
-        }
-      }));
-      return next(action);
+      store.dispatch(
+        messageRover({
+          message: {
+            type: 'requestArmIKEnabled',
+            enabled: action.payload.enable,
+          },
+        })
+      )
+      return next(action)
     } else {
-      const prevComputedInput = store.getState().input.computed;
-      const prevMountedPeripheral = selectMountedPeripheral(store.getState());
-      const result = next(action);
-      const computedInput = store.getState().input.computed;
-      const mountedPeripheral = selectMountedPeripheral(store.getState());
+      const prevComputedInput = store.getState().input.computed
+      const prevMountedPeripheral = selectMountedPeripheral(store.getState())
+      const result = next(action)
+      const computedInput = store.getState().input.computed
+      const mountedPeripheral = selectMountedPeripheral(store.getState())
 
-      updateDrive(prevComputedInput, computedInput, store);
+      updateDrive(prevComputedInput, computedInput, store)
       updatePeripherals(
         prevComputedInput,
         computedInput,
         prevMountedPeripheral,
         mountedPeripheral,
         store.dispatch
-      );
-      return result;
+      )
+      return result
     }
   } else {
     switch (action.type) {
-      case roverDisconnected.type: case roverConnected.type: {
-        store.dispatch(enableIK({ enable: false }));
-        break;
+      case roverDisconnected.type:
+      case roverConnected.type: {
+        store.dispatch(enableIK({enable: false}))
+        break
       }
 
       case messageReceivedFromRover.type: {
-        const { message } = action.payload;
-        if (message.type === "armIKEnabledReport") {
-          let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState;
+        const {message} = action.payload
+        if (message.type === 'armIKEnabledReport') {
+          let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState
           if (lastArmIKState !== null && lastArmIKState !== message.enabled) {
-            alert("Arm IK was unable to be " + (!message.enabled ? "enabled." : "disabled."));
+            alert('Arm IK was unable to be ' + (!message.enabled ? 'enabled.' : 'disabled.'))
           }
-          store.dispatch(visuallyEnableIK(message.enabled));
+          store.dispatch(visuallyEnableIK(message.enabled))
         }
-        break;
+        break
       }
-      default: break;
+      default:
+        break
     }
-    return next(action);
+    return next(action)
   }
 }
 
 function updateDrive(prevComputedInput, computedInput, store) {
-  const dispatch = store.dispatch;
-  const mode = selectSwerveDriveMode(store.getState());
-  if (mode === "normal") {
-    if (computedInput.drive.tank) {
-      const { left: prevLeft, right: prevRight } = prevComputedInput.drive;
-      const { left, right } = computedInput.drive;
-      if (left !== prevLeft || right !== prevRight) {
-        dispatch(requestTankDrive({ left, right }));
-      }
-    } else {
-      const { straight: prevStraight, steer: prevSteer } = prevComputedInput.drive;
-      const { straight, steer } = computedInput.drive;
-      if (straight !== prevStraight || steer !== prevSteer) {
-        dispatch(requestDrive({ straight, steer }));
-      }
+  const dispatch = store.dispatch
+  if (computedInput.drive.tank) {
+    const {left: prevLeft, right: prevRight} = prevComputedInput.drive
+    const {left, right} = computedInput.drive
+    if (left !== prevLeft || right !== prevRight) {
+      dispatch(requestTankDrive({left, right}))
     }
-  } else if (mode === "turn-in-place") {
-    const { steer: prevSteer } = prevComputedInput.drive;
-    const { steer } = computedInput.drive;
-    if (steer !== prevSteer) {
-      dispatch(requestTurnInPlaceDrive({ steer }));
-    }
-  } else if (mode === "crab") {
-    const { crab: prevCrab, steer: prevSteer } = prevComputedInput.drive;
-    const { crab, steer } = computedInput.drive;
-    if (crab !== prevCrab || steer !== prevSteer) {
-      dispatch(requestCrabDrive({ crab, steer }));
+  } else {
+    const {straight: prevStraight, steer: prevSteer} = prevComputedInput.drive
+    const {straight, steer} = computedInput.drive
+    if (straight !== prevStraight || steer !== prevSteer) {
+      dispatch(requestDrive({straight, steer}))
     }
   }
 }
@@ -98,18 +91,23 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (!mountedPeripheral) { return; }
-  Object.keys(computedInput[mountedPeripheral]).forEach(jointName => {
-    if (computedInput[mountedPeripheral][jointName] !==
-        prevComputedInput[mountedPeripheral][jointName]
-        || mountedPeripheral !== prevMountedPeripheral
+  if (!mountedPeripheral) {
+    return
+  }
+  Object.keys(computedInput[mountedPeripheral]).forEach((jointName) => {
+    if (
+      computedInput[mountedPeripheral][jointName] !==
+        prevComputedInput[mountedPeripheral][jointName] ||
+      mountedPeripheral !== prevMountedPeripheral
     ) {
-      dispatch(requestJointPower({
-        jointName,
-        power: computedInput[mountedPeripheral][jointName]
-      }));
+      dispatch(
+        requestJointPower({
+          jointName,
+          power: computedInput[mountedPeripheral][jointName],
+        })
+      )
     }
-  });
+  })
 }
 
-export default inputMiddleware;
+export default inputMiddleware
