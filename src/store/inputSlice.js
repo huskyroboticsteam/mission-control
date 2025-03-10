@@ -51,11 +51,8 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      fourbar1: 0,
-      fourbar2: 0,
       drillActuator: 0,
       drillMotor: 0
-
     }
   },
   inverseKinematics: {
@@ -176,7 +173,7 @@ function computeDriveInput(state, action) {
   driveInput.crab = driveGamepad["LeftStickX"] + getAxisFromKeys(pressedKeys, "ARROWDOWN", "ARROWUP");
 
   // Apply precision controls and clamp.
-  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true);
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad);
   ["straight", "crab", "steer", "left", "right"].forEach(
     axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
   );
@@ -243,23 +240,16 @@ function computeScienceInput(prevState, state) {
   const prevPressedKeys = prevState.keyboard.pressedKeys;
   const pressedKeys = state.keyboard.pressedKeys;
   const scienceInput = state.computed.science;
-  // const prevLazySusanAxis =
-  //   getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
-  //   getAxisFromKeys(prevPressedKeys, "A", "D");
-  // const lazySusanAxis =
-  //   getAxisFromButtons(peripheralGamepad, "LB", "RB") +
-  //   getAxisFromKeys(pressedKeys, "A", "D");
-  // if (lazySusanAxis !== prevLazySusanAxis)
-  //   scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
-  //     lazySusanAxis) % 6) + 6) % 6;
-  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
+  const prevLazySusanAxis =
+    getAxisFromButtons(prevPeripheralGamepad, "LB", "RB") +
+    getAxisFromKeys(prevPressedKeys, "A", "D");
+  const lazySusanAxis =
+    getAxisFromButtons(peripheralGamepad, "LB", "RB") +
+    getAxisFromKeys(pressedKeys, "A", "D");
+  if (lazySusanAxis !== prevLazySusanAxis)
+    scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
+      lazySusanAxis) % 6) + 6) % 6;
 
-  const fourbar = clamp1(
-    getAxisFromKeys(pressedKeys, "E", "R") *
-    getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
-    0.45);
-  scienceInput.fourbar1 = fourbar;
-  scienceInput.fourbar2 = fourbar;
   scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
@@ -280,21 +270,16 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
 
 function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
   if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
-    if(currState == 0) return -1;
+    if(currState == 0) return 1;
     else return 0;
   }
   return currState;
 }
 
-function getPrecisionMultiplier(pressedKeys, gamepad, driveMode=false) {
+function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1;
-  if (pressedKeys.includes("SHIFT")) {
+  if (pressedKeys.includes("SHIFT"))
     multiplier *= 0.2;
-    if (driveMode) multiplier *= 3;
-  }
-  else if (pressedKeys.includes("CAPSLOCK")) {
-    multiplier *= 2.5;
-  }
   if (gamepad["LB"])
     multiplier *= 0.3;
   if (gamepad["RB"])
@@ -302,13 +287,11 @@ function getPrecisionMultiplier(pressedKeys, gamepad, driveMode=false) {
   return multiplier;
 }
 
-function clamp(n, lo, hi) {
-  if (n < lo) return lo;
-  if (n > hi) return hi;
+function clamp1(n) {
+  if (n < -1) return -1;
+  if (n > 1) return 1;
   return n;
 }
-
-function clamp1(n) { return clamp(n, -1, 1); }
 
 export const {
   gamepadConnected,

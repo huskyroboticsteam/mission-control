@@ -13,10 +13,8 @@ const jointNames = [
   "wristRoll",
   "hand",
   "handActuator",
-  "drillArm",
+  "drillMotor",
   "drillActuator",
-  "fourbar1",
-  "fourbar2",
   "ikUp",
   "ikForward"
 ];

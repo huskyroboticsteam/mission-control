@@ -1,5 +1,5 @@
-import { motorStatusReportReceived, enableMotors, requestMotorPower, selectMotorsAreEnabled } from "../motorsSlice";
-import { messageRover, messageReceivedFromRover } from "../roverSocketSlice";
+import { motorStatusReportReceived, enableMotors } from "../motorsSlice";
+import { messageReceivedFromRover } from "../roverSocketSlice";
 import { requestDrive } from "../driveSlice";
 import { requestJointPower, selectAllJointNames } from "../jointsSlice";
 import { enableIK } from "../inputSlice";
@@ -42,20 +42,6 @@ const motorsMiddleware = store => next => action => {
         });
       }
       return next(action);
-    }
-
-    case requestMotorPower.type: {
-      if (selectMotorsAreEnabled(store.getState())) {
-        const { motorName, power } = action.payload;
-        store.dispatch(messageRover({
-          message: {
-            type: "motorPowerRequest",
-            motor: motorName,
-            power
-          }
-        }));
-      }
-      break;
     }
 
     default: break;
