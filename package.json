@@ -19,6 +19,7 @@
     "cesium": "^1.113.0",
     "gl-matrix": "^3.4.3",
     "jmuxer": "^2.0.5",
+    "prettier": "^3.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gamepad": "1.0.3",
@@ -33,8 +34,10 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build --config vite.config.js",
-    "preview": "vite preview"
+    "build": "vite build --config vite.config.js",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "eslintConfig": {
     "extends": [

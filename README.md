@@ -25,6 +25,9 @@ If any build or runtime errors appear (eg. a new major version of a package come
 3. Run `cd mission-control` to navigate into the repository.
 4. Run `npm install` to install dependencies.
 
+### Browser
+You should install and use Chromium for optimal video streaming performance. It has been tested to work on version 123. Run `sudo apt install chromium` to install Chromium.
+
 ### Linux Users
 Linux users must set up a udev rule to ensure that the gamepad mappings are correct:
 ```bash
@@ -51,7 +54,7 @@ The rover can be operated through Mission Control with either a keyboard or two 
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.1.1`)
+## Messages (`v2024.2.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -133,25 +136,6 @@ Sent from Mission Control to instruct the rover to drive like a tank with a spec
 - `left` - left component in [-1.0, 1.0], where positive means drive forward on the left side and negative means drive backward on the left side
 - `right` - right component in [-1.0, 1.0], where positive means drive forward on the right side and negative means drive backward on the right side
 
-## Holonomic Drive Request
-### Description
-Sent from Mission Control to instruct the rover to drive with holonomic capabilities
-(i.e., it can rotate independently without requiring translational motion).
-
-### Syntax
-```
-{
-  type: "holonomicDriveRequest",
-  straight: number,
-  left: number,
-  turnCCW: number
-}
-```
-### Parameters
-- `straight` - straight component in [-1.0, 1.0], where positive means drive forward and negative means drive backward
-- `left` - left component in [-1.0, 1.0], where positive means drive left and negative means drive right
-- `turnCCW` - turning component in [-1.0, 1.0], where positive means turning in the counterclockwise direction and negative means turning in the clockwise direction
-
 ## Joint Power Request
 ### Description
 Sent from Mission Control to instruct the rover server to make a joint move with a specified power.
@@ -160,7 +144,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
   power: number
 }
 ```
@@ -177,7 +161,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
   position: number
 }
 ```
@@ -194,7 +178,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wrist" | "hand" | "drillArm" | "activeSuspension",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm",
   position: number
 }
 ```
@@ -266,6 +250,7 @@ Sent from the rover to inform Mission Control of the rover's current position in
   orientZ: number,
   lon: number,
   lat: number,
+  alt: number,
   recency: number
 }
 ```
@@ -276,6 +261,7 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `orientZ` - refers to the orientation quaternion Z component
 - `lon` - refers to the longitude of the rover in world reference frame in degrees in floating point values
 - `lat` - refers to the latitude of the rover in world reference frame in degrees in floating point values
+- `alt` - refers to the altitude of the rover in meters relative to mean sea level
 - `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request
@@ -292,7 +278,7 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `fps` - the frame rate of the camera stream as an integer
 
 
@@ -309,7 +295,7 @@ Sent from Mission Control to instruct the rover server to stop providing a camer
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 
 ## Camera Stream Report
 ### Description
@@ -325,8 +311,40 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the name of the camera: `mast|hand|wrist`
 - `data` - the raw h264 frame data, or `null` if no data is available
+
+## Camera Frame Request
+### Description
+Sent from Mission Control to instruct the rover server to send a Camera Frame Report. If `camera` specifies a valid camera stream, the rover will respond with a Camera Frame Report containing the latest frame from that camera.
+
+### Syntax
+```
+{
+  type: "cameraFrameRequest",
+  camera: string
+}
+```
+
+### Parameters
+- `camera` - the name of the camera: `mast|hand|wrist`
+
+## Camera Frame Report
+### Description
+Sent from the rover server to inform Mission Control of a full resolution lossless camera frame.
+
+### Syntax
+```
+{
+  type: "cameraFrameReport",
+  camera: string,
+  data: string
+}
+```
+
+### Parameters
+- `camera` - the name of the camera
+- `data` - the image, base64 encoded
 
 
 ## Autonomous Waypoint Navigation Request

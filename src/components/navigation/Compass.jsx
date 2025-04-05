@@ -1,16 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectRoverPosition } from "../../store/telemetrySlice";
-import "./Compass.css";
-import { Quaternion, Euler, Vector3 } from '@math.gl/core';
-import * as Quat from 'gl-matrix/quat';
+import React from 'react'
+import {useSelector} from 'react-redux'
+import {selectRoverPosition} from '../../store/telemetrySlice'
+import './Compass.css'
+import {Quaternion, Euler, Vector3} from '@math.gl/core'
+import * as Quat from 'gl-matrix/quat'
 
 function getAttitude(roll, pitch) {
-  let attitudeRPY = new Euler().fromRollPitchYaw(roll, pitch, 0.0);
+  let attitudeRPY = new Euler().fromRollPitchYaw(roll, pitch, 0.0)
   // taken from Euler.getQuaternion(), which we can't call because it's broken
-  let attitudeQuat = new Quaternion().rotateZ(attitudeRPY.x).rotateX(attitudeRPY.y).rotateY(attitudeRPY.z);
-  let attitude = Quat.getAxisAngle(new Vector3(), attitudeQuat);
-  return attitude;
+  let attitudeQuat = new Quaternion()
+    .rotateZ(attitudeRPY.x)
+    .rotateX(attitudeRPY.y)
+    .rotateY(attitudeRPY.z)
+  let attitude = Quat.getAxisAngle(new Vector3(), attitudeQuat)
+  return attitude
 }
 
 /**
@@ -21,45 +24,44 @@ function getAttitude(roll, pitch) {
  */
 function sanitize(num, decimals) {
   if (num == null) {
-    return "N/A";
+    return 'N/A'
   }
 
-  let ret = num.toString();
+  let ret = num.toString()
   if (decimals !== undefined) {
-    ret = num.toFixed(decimals);
+    ret = num.toFixed(decimals)
   }
 
-  return num >= 0 ? " " + ret : ret;
+  return num >= 0 ? ' ' + ret : ret
 }
 
 const Compass = () => {
-  const { orientW, orientX, orientY, orientZ, lon, lat } = useSelector(selectRoverPosition);
+  const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
 
-  let roll;
-  let pitch;
-  let yaw;
-  let needleColor;
+  let roll
+  let pitch
+  let yaw
+  let needleColor
 
   if (orientW == null || orientX == null || orientY == null || orientZ == null) {
-    needleColor = "gray";
+    needleColor = 'gray'
   } else {
-    let quat = new Quaternion(orientX, orientY, orientZ, orientW);
-    let rpy = new Euler().fromQuaternion(quat, Euler.ZYX);
-    let attitude = getAttitude(rpy.roll, rpy.pitch);
-
-    roll = Math.round(rpy.roll * 180 / Math.PI);
-    pitch = Math.round(rpy.pitch * 180 / Math.PI);
-    yaw = Math.round(rpy.yaw * 180 / Math.PI);
+    let quat = new Quaternion(orientX, orientY, orientZ, orientW)
+    let rpy = new Euler().fromQuaternion(quat, Euler.ZYX)
+    let attitude = getAttitude(rpy.roll, rpy.pitch)
+    roll = Math.round((rpy.roll * 180) / Math.PI)
+    pitch = Math.round((rpy.pitch * 180) / Math.PI)
+    yaw = Math.round((rpy.yaw * 180) / Math.PI)
 
     if (Math.abs(attitude) < 20) {
-      needleColor = "green";
+      needleColor = 'green'
     } else if (Math.abs(attitude) < 45) {
-      needleColor = "yellow";
+      needleColor = 'yellow'
     } else {
-      needleColor = "red";
+      needleColor = 'red'
     }
   }
-  const heading = yaw != null ? -yaw : undefined; // yaw is CCW, heading is CW
+  const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
 
   return (
     <div className="compass-container">
@@ -80,11 +82,15 @@ const Compass = () => {
             </tr>
             <tr>
               <td>latitude:</td>
-              <td>{sanitize(lon, 6)}</td>
+              <td>{sanitize(lat, 6)}</td>
             </tr>
             <tr>
               <td>longitude:</td>
-              <td>{sanitize(lat, 6)}</td>
+              <td>{sanitize(lon, 6)}</td>
+            </tr>
+            <tr>
+              <td>altitude:</td>
+              <td>{sanitize(alt, 6)}</td>
             </tr>
           </tbody>
         </table>
@@ -93,8 +99,7 @@ const Compass = () => {
         <div className="compass-parts">
           <div
             className={`compass__needle compass__needle--${needleColor}`}
-            style={{ transform: `rotate(${heading ?? 0}deg)` }}
-          ></div>
+            style={{transform: `rotate(${heading ?? 0}deg)`}}></div>
           <div className={`compass__outer-ring ${needleColor}`}></div>
           <div className="compass__label compass__label--north">N</div>
           <div className="compass__label compass__label--south">S</div>
@@ -103,7 +108,7 @@ const Compass = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Compass;
+export default Compass

@@ -1,32 +1,29 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import DeliveryPanel from "../delivery/DeliveryPanel";
-import ServicingPanel from "../servicing/ServicingPanel";
-import AutonomousPanel from "../autonomous/AutonomousPanel";
-import TelemetryPanel from "../telemetry/TelemetryPanel";
-import MapPanel from "../map/MapPanel"
-import HelpPanel from "../help/HelpPanel";
-import "./PanelContainer.css";
+import {Routes, Route, Navigate} from 'react-router-dom'
+import TelemetryPanel from '../telemetry/TelemetryPanel'
+import HelpPanel from '../help/HelpPanel'
+import NavigationPanel from '../navigation/NavigationPanel'
+import ArmDexterityPanel from '../armDexterity/ArmDexterityPanel'
+import SciencePanel from '../science/SciencePanel'
+import './PanelContainer.css'
 
 function PanelContainer() {
   return (
     <div className="panel-container">
       <Routes>
-        <Route path="" element={<Navigate to="/delivery"/>}/> 
+        <Route path="" element={<Navigate to="/navigation" />} />
 
-        <Route path="/delivery" element={<DeliveryPanel/>}/>
+        <Route path="/navigation" element={<NavigationPanel />} />
 
-        <Route path="/servicing" element={<ServicingPanel/>}/>
+        <Route path="/arm-dexterity" element={<ArmDexterityPanel />} />
 
-        <Route path="/autonomous" element={<AutonomousPanel/>}/>
+        <Route path="/science" element={<SciencePanel />} />
 
-        <Route path="/telemetry" element={<TelemetryPanel/>}/>
-        
-        <Route path="/map" element={<MapPanel/>}/>
-        
-        <Route path="/help" element={<HelpPanel/>}/>
+        <Route path="/telemetry" element={<TelemetryPanel />} />
+
+        <Route path="/help" element={<HelpPanel />} />
       </Routes>
     </div>
-  );
+  )
 }
 
-export default PanelContainer;
+export default PanelContainer
