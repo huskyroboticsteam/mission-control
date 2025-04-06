@@ -12,6 +12,10 @@ import {
 } from '../roverSocketSlice'
 import camelCaseToTitle from '../../util/camelCaseToTitle'
 
+import {selectRoverPosition} from '../../store/telemetrySlice'
+import { piexif } from "piexifjs";
+
+
 /**
  * Middleware that handles requesting and receiving camera streams from the
  * rover.
