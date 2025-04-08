@@ -1,6 +1,6 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import { /*requestCrabDrive, */requestDrive, requestTankDrive/*, requestTurnInPlaceDrive */} from "../driveSlice";
-import { requestJointPower/*, selectAllJointNames*/ } from "../jointsSlice";
+import { requestJointPower, selectAllJointNames } from "../jointsSlice";
 import { enableIK, visuallyEnableIK } from "../inputSlice";
 import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
 // import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
@@ -142,17 +142,17 @@ function updateScience(
   Object.keys(computedInput.science).forEach(field => {
     if (computedInput.science[field] !== prevComputedInput.science[field]
       || mountedPeripheral !== prevMountedPeripheral) {
-      // if (selectAllJointNames().find(field) !== undefined) {
-      //   dispatch(requestJointPower({
-      //     jointName: field,
-      //     power: computedInput.science[field]
-      //   }));
-      // } else {
+      if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
+        dispatch(requestJointPower({
+          jointName: field,
+          power: computedInput.science[field]
+        }));
+      } else {
         dispatch(requestMotorPower({
           motorName: field,
           power: computedInput.science[field]
         }));
-      // }
+      }
     }
   })
 }

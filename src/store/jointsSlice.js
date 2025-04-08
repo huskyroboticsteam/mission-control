@@ -11,10 +11,9 @@ const jointNames = [
   "handActuator",
   "drillArm",
   "drillActuator",
-  "fourbar1",
-  "fourbar2",
   "ikUp",
-  "ikForward"
+  "ikForward",
+  "fourBarLinkage"
 ];
 
 const initialState = jointNames.reduce((state, jointName) => ({
@@ -53,7 +52,7 @@ const jointsSlice = createSlice({
 
 export const { requestJointPower, requestJointPosition, jointPositionReportReceived } = jointsSlice.actions;
 
-export const selectAllJointNames = state => Object.keys(state.joints);
+export const selectAllJointNames = jointNames;
 export const selectJointCurrentPosition = jointName => state => state.joints[jointName].currentPosition;
 
 export default jointsSlice.reducer;

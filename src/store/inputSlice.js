@@ -48,11 +48,9 @@ const initialState = {
       ikForward: 0
     },
     science: {
-      instrumentationArmManualOverride: true, 
-      instrumentationArmLocation: 0, 
-      instrumentationArmSetpoint: 0,
       // lazySusanPosition: 0,
       // instrumentationArm: 0,
+      fourBarLinkage: 0,
       drillActuator: 0,
       drillMotor: 0
 
@@ -247,9 +245,9 @@ function computeScienceInput(prevState, state) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
-  
-  if(scienceInput.instrumentationArmManualOverride) {
-    scienceInput.instrumentationArm = getAxisFromKeys(pressedKeys, "C", "V");
+  var fourBarPos = 0;
+  if(true) {
+    fourBarPos = getAxisFromKeys(pressedKeys, "C", "V");
   } else {
     if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
       scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
@@ -266,14 +264,11 @@ function computeScienceInput(prevState, state) {
         break;
     }
   }
-  // scienceInput.instrumentationArm = getAxisFromKeys(prevPressedKeys, "C", "V"); // add proper names and control
-
-  const fourbar = clamp1(
-    getAxisFromKeys(pressedKeys, "E", "R") *
-    getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
-    0.45);
-  scienceInput.fourbar1 = fourbar;
-  scienceInput.fourbar2 = fourbar;
+  // const fourbar = clamp1(
+  //   getAxisFromKeys(pressedKeys, "E", "R") *
+  //   getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
+  //   0.45);
+  scienceInput.fourBarLinkage = fourBarPos;
   scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }
