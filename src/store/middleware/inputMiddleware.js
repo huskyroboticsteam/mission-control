@@ -2,12 +2,14 @@ import {selectMountedPeripheral} from '../peripheralsSlice'
 import {requestDrive, requestTankDrive} from '../driveSlice'
 import {requestJointPower} from '../jointsSlice'
 import {enableIK, visuallyEnableIK} from '../inputSlice'
+import { requestStop } from '../emergencyStopSlice'
 import {
   messageReceivedFromRover,
   messageRover,
   roverDisconnected,
   roverConnected,
 } from '../roverSocketSlice'
+import { current } from '@reduxjs/toolkit'
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -23,6 +25,9 @@ const inputMiddleware = (store) => (next) => (action) => {
           },
         })
       )
+      return next(action)
+    } else if (action.type === 'input/keyPressed' && action.payload.key === ' ') {
+      store.dispatch(requestStop({ stop: !store.getState().input.emergencyStop }))
       return next(action)
     } else {
       const prevComputedInput = store.getState().input.computed
