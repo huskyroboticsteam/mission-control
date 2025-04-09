@@ -52,7 +52,7 @@ const jointsSlice = createSlice({
 
 export const { requestJointPower, requestJointPosition, jointPositionReportReceived } = jointsSlice.actions;
 
-export const selectAllJointNames = jointNames;
+export const selectAllJointNames = state => Object.keys(state.joints);
 export const selectJointCurrentPosition = jointName => state => state.joints[jointName].currentPosition;
 
 export default jointsSlice.reducer;
