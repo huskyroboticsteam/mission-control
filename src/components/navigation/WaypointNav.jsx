@@ -74,12 +74,12 @@ function WaypointNav() {
         ) : (
           <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
         )}
-        {/* temp note about a plan: don't send the latitude and longitude in the values, send two hidden forms with the first value in the points array.
-          What this plan has an issue with is updating the points array when the rover reaches the first destination */}
+        {/* temp note: currently sends first value of points in latitude and longitude, eventually want to switch to
+        only using the points array. */}
         <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
         <input type="hidden" value={points.length > 0 ? points[0][1] : 0} name="longitude"></input>
-        <input type="hidden" value={[]} name="points"></input>{' '}
-        {/* temp so I don't have to delete everything i added before verifying this works */}
+        <input type="hidden" value={JSON.stringify(points)} name="points"></input>
+
         {submitted ? (
           <button disabled>Copy from Clipboard</button>
         ) : (
