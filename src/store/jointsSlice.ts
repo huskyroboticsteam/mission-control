@@ -17,7 +17,16 @@ const jointNames = [
   "activeSuspension",
   "ikUp",
   "ikForward"
-];
+] as const;
+
+type JointName = typeof jointNames[number];
+
+// Define the structure (interface) for a single joint's state.
+interface JointState {
+  requestedPower: number | null;
+  requestedPosition: number | null;
+  currentPosition: number | null;
+}
 
 const initialState = jointNames.reduce((state, jointName) => ({
   ...state,

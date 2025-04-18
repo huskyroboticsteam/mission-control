@@ -1,6 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface DriveState {
+  straight: number,
+  crab: number,
+  steer: number,
+  left: number,
+  right: number
+}
+
+interface DrivePayload {
+  straight: number;
+  steer: number;
+}
+
+interface TankDrivePayload {
+  left: number;
+  right: number;
+}
+
+interface TurnInPlacePayload {
+  steer: number;
+}
+
+interface CrabDrivePayload {
+  crab: number;
+  steer: number;
+}
+
+const initialState: DriveState = {
   straight: 0,
   crab: 0,
   steer: 0,
@@ -12,24 +39,25 @@ const driveSlice = createSlice({
   name: "drive",
   initialState,
   reducers: {
-    requestDrive(state, action) {
+    requestDrive(state: DriveState, action: PayloadAction<DrivePayload>) {
       const { straight, steer } = action.payload;
+
       state.straight = straight;
       state.steer = steer;
     },
 
-    requestTankDrive(state, action) {
+    requestTankDrive(state: DriveState, action: PayloadAction<TankDrivePayload>) {
       const { left, right } = action.payload;
       state.left = left;
       state.right = right;
     },
 
-    requestTurnInPlaceDrive(state, action) {
+    requestTurnInPlaceDrive(state: DriveState, action: PayloadAction<TurnInPlacePayload>) {
       const { steer } = action.payload;
       state.steer = steer;
     },
 
-    requestCrabDrive(state, action) {
+    requestCrabDrive(state: DriveState, action: PayloadAction<CrabDrivePayload>) {
       const { crab, steer } = action.payload;
       state.crab = crab;
       state.steer = steer;
