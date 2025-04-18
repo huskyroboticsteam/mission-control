@@ -6,15 +6,14 @@ import { requestJointPower, selectJointCurrentPosition } from '../../store/joint
 function ArmDexterityPanel() {
   const dispatch = useDispatch()
   const isDrillOn = useSelector(state => selectJointCurrentPosition('drillMotor')(state)) === 'on' || false // Get drill state from Redux store
-  console.log('isDrillOn:', isDrillOn)
 
   const drillOnClick = () => {
-    dispatch(requestJointPower({ jointName: 'drillMotor', power: 'on' })) // Dispatch action to turn drill on
+    dispatch(requestJointPower({ jointName: 'drillMotor', power: 1})) // Dispatch action to turn drill on
     console.log('Drill is now ON')
   }
 
   const drillOffClick = () => {
-    dispatch(requestJointPower({ jointName: 'drillMotor', power: 'off' })) // Dispatch action to turn drill off
+    dispatch(requestJointPower({ jointName: 'drillMotor', power: 0})) // Dispatch action to turn drill off
     console.log('Drill is now OFF')
   }
 
