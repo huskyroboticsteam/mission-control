@@ -1,6 +1,106 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const gamepadTemplate = {
+interface GamepadState {
+  isConnected: boolean,
+  "LeftStickX": number,
+  "LeftStickY": number,
+  "RightStickX": number,
+  "RightStickY": number,
+  "LeftTrigger": number,
+  "RightTrigger": number,
+  "LS": boolean,
+  "RS": boolean,
+  "A": boolean,
+  "B": boolean,
+  "X": boolean,
+  "Y": boolean,
+  "Start": boolean,
+  "Back": boolean,
+  "LB": boolean,
+  "RB": boolean,
+  "DPadUp": boolean,
+  "DPadDown": boolean
+};
+
+interface KeyboardState {
+  isConnected: boolean, 
+  pressedKeys: []
+};
+
+interface DriveState {
+  tank: boolean,
+  straight: number,
+  crab: number,
+  steer: number,
+  left: number,
+  right: number,
+  activeSuspension: number, 
+  type?: string
+};
+
+interface ArmState {
+  armBase: number,
+  shoulder: number,
+  elbow: number,
+  forearm: number,
+  wristPitch: number,
+  wristRoll: number,
+  hand: number,
+  handActuator: number,
+  ikUp: number,
+  ikForward: number
+};
+
+interface ScienceState {
+  lazySusanPosition: number,
+  instrumentationArm: number,
+  drillOn: boolean
+};
+
+interface InverseKinematicsState {
+  enabled: boolean,
+  lastSentArmIKState: InverseKinematicsState
+};
+
+interface InputState {
+  driveGamepad: GamepadState;
+  peripheralGamepad: GamepadState;
+  keyboard: KeyboardState;
+  computed: {
+    drive: DriveState;
+    arm: ArmState;
+    science: ScienceState;
+  };
+  inverseKinematics: InverseKinematicsState;
+};
+
+// Payloads
+interface GamepadConnectionPayload {
+  gamepadName: string;
+}
+
+interface GamepadAxisPayload {
+  gamepadName: string;
+  axisName: string;
+  value: number;
+}
+
+interface GamepadButtonPayload {
+  gamepadName: string;
+  buttonName: string;
+  pressed: boolean;
+}
+
+interface KeyPayload {
+  key: string;
+}
+
+interface EnableIKPayload {
+  enable: boolean;
+}
+/** -=--------------------=--------------------=--------------------=--------------------=-------------------= */
+
+const gamepadTemplate: GamepadState = {
   isConnected: false,
   "LeftStickX": 0,
   "LeftStickY": 0,
@@ -22,7 +122,7 @@ const gamepadTemplate = {
   "DPadDown": false
 };
 
-const initialState = {
+const initialState: InputState = {
   driveGamepad: { ...gamepadTemplate },
   peripheralGamepad: { ...gamepadTemplate },
   keyboard: {
@@ -64,7 +164,7 @@ const initialState = {
   }
 };
 
-function isLinux() {
+function isLinux(): boolean {
   return navigator.platform.toLowerCase().includes("linux");
 }
 
@@ -72,17 +172,18 @@ const inputSlice = createSlice({
   name: "input",
   initialState,
   reducers: {
-    gamepadConnected(state, action) {
+    // not sure if this is correct. don't know why there's state[gamepadName].isconnected
+    gamepadConnected(state: InputState, action: PayloadAction<GamepadConnectionPayload>) {
       const { gamepadName } = action.payload;
       state[gamepadName].isConnected = true;
     },
 
-    gamepadDisconnected(state, action) {
+    gamepadDisconnected(state: InputState, action) {
       const { gamepadName } = action.payload;
       state[gamepadName].isConnected = false;
     },
 
-    gamepadAxisChanged(state, action) {
+    gamepadAxisChanged(state: InputState, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, axisName, value } = action.payload;
       // linux maps dpad to axes, so map them to buttons
@@ -105,7 +206,7 @@ const inputSlice = createSlice({
       computeInput(prevState, state, action);
     },
 
-    gamepadButtonChanged(state, action) {
+    gamepadButtonChanged(state: InputState, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const { gamepadName, buttonName, pressed } = action.payload;
       if (buttonName === "LT" || buttonName === "RT")
@@ -115,7 +216,7 @@ const inputSlice = createSlice({
       computeInput(prevState, state, action);
     },
 
-    keyPressed(state, action) {
+    keyPressed(state: InputState, action) {
       const prevState = JSON.parse(JSON.stringify(state));
       const key = action.payload.key.toUpperCase();
       if (!state.keyboard.pressedKeys.includes(key)) {
@@ -144,12 +245,14 @@ const inputSlice = createSlice({
   }
 });
 
-function computeInput(prevState, state, action) {
+/** Todo: add action type */
+function computeInput(prevState: InputState, state: InputState, action): void { 
   computeDriveInput(state, action);
   computePeripheralInput(prevState, state, action);
 }
 
-function computeDriveInput(state, action) {
+/** Todo: add action type */
+function computeDriveInput(state: InputState, action): void {
   const driveGamepad = state.driveGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
@@ -184,12 +287,13 @@ function computeDriveInput(state, action) {
   );
 }
 
-function computePeripheralInput(prevState, state, action) {
+/** Todo add action type */
+function computePeripheralInput(prevState: InputState, state: InputState, action): void {
   computeArmInput(state);
   computeScienceInput(prevState, state, action);
 }
 
-function computeArmInput(state) {
+function computeArmInput(state: InputState): void {
   const peripheralGamepad = state.peripheralGamepad;
   const pressedKeys = state.keyboard.pressedKeys;
 
@@ -239,7 +343,8 @@ function computeArmInput(state) {
   );
 }
 
-function computeScienceInput(prevState, state, action) {
+/** figure out what to deal with action */
+function computeScienceInput(prevState: InputState, state: InputState, action): void {
   const prevPeripheralGamepad = prevState.peripheralGamepad;
   const peripheralGamepad = state.peripheralGamepad;
   const prevPressedKeys = prevState.keyboard.pressedKeys;
@@ -258,25 +363,30 @@ function computeScienceInput(prevState, state, action) {
   scienceInput.drillOn = toggleKey(prevPressedKeys,pressedKeys, "B", scienceInput.drillOn);
 }
 
-function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
+
+function getAxisFromButtons(gamepad: GamepadState, negativeButton: string, positiveButton: string): number {
   let axis = 0;
   if (gamepad[negativeButton]) axis--;
   if (gamepad[positiveButton]) axis++;
   return axis;
 }
 
-function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
+function getAxisFromKeys(pressedKeys: string[], negativeKey: string, positiveKey: string): number {
   let axis = 0;
   if (pressedKeys.includes(negativeKey)) axis--;
   if (pressedKeys.includes(positiveKey)) axis++;
   return axis;
 }
 
-function toggleKey(pressedKeys, key, currState) {
-  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) return !currState;
+function toggleKey(prevPressedKeys: string[], pressedKeys: string[], key: string, currState: boolean): boolean {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
+    return !currState;
+  }
+  return currState;
 }
 
-function getPrecisionMultiplier(pressedKeys, gamepad) {
+/** todo pressedKeys */
+function getPrecisionMultiplier(pressedKeys, gamepad: GamepadState): number {
   let multiplier = 1;
   if (pressedKeys.includes("SHIFT"))
     multiplier *= 0.2;
@@ -287,7 +397,7 @@ function getPrecisionMultiplier(pressedKeys, gamepad) {
   return multiplier;
 }
 
-function clamp1(n) {
+function clamp1(n: number): number {
   if (n < -1) return -1;
   if (n > 1) return 1;
   return n;
