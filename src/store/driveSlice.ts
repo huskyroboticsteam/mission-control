@@ -1,30 +1,30 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import {PayloadAction, createSlice} from '@reduxjs/toolkit'
 
 interface DriveState {
-  straight: number,
-  crab: number,
-  steer: number,
-  left: number,
+  straight: number
+  crab: number
+  steer: number
+  left: number
   right: number
 }
 
 interface DrivePayload {
-  straight: number;
-  steer: number;
+  straight: number
+  steer: number
 }
 
 interface TankDrivePayload {
-  left: number;
-  right: number;
+  left: number
+  right: number
 }
 
 interface TurnInPlacePayload {
-  steer: number;
+  steer: number
 }
 
 interface CrabDrivePayload {
-  crab: number;
-  steer: number;
+  crab: number
+  steer: number
 }
 
 const initialState: DriveState = {
@@ -32,39 +32,40 @@ const initialState: DriveState = {
   crab: 0,
   steer: 0,
   left: 0,
-  right: 0
-};
+  right: 0,
+}
 
 const driveSlice = createSlice({
-  name: "drive",
+  name: 'drive',
   initialState,
   reducers: {
     requestDrive(state: DriveState, action: PayloadAction<DrivePayload>) {
-      const { straight, steer } = action.payload;
+      const {straight, steer} = action.payload
 
-      state.straight = straight;
-      state.steer = steer;
+      state.straight = straight
+      state.steer = steer
     },
 
     requestTankDrive(state: DriveState, action: PayloadAction<TankDrivePayload>) {
-      const { left, right } = action.payload;
-      state.left = left;
-      state.right = right;
+      const {left, right} = action.payload
+      state.left = left
+      state.right = right
     },
 
     requestTurnInPlaceDrive(state: DriveState, action: PayloadAction<TurnInPlacePayload>) {
-      const { steer } = action.payload;
-      state.steer = steer;
+      const {steer} = action.payload
+      state.steer = steer
     },
 
     requestCrabDrive(state: DriveState, action: PayloadAction<CrabDrivePayload>) {
-      const { crab, steer } = action.payload;
-      state.crab = crab;
-      state.steer = steer;
-    }
-  }
-});
+      const {crab, steer} = action.payload
+      state.crab = crab
+      state.steer = steer
+    },
+  },
+})
 
-export const { requestDrive, requestTankDrive, requestTurnInPlaceDrive, requestCrabDrive } = driveSlice.actions;
+export const {requestDrive, requestTankDrive, requestTurnInPlaceDrive, requestCrabDrive} =
+  driveSlice.actions
 
-export default driveSlice.reducer;
+export default driveSlice.reducer
