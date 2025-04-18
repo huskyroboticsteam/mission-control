@@ -1,18 +1,20 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const jointNames = [
-  'armBase',
-  'shoulder',
-  'elbow',
-  'forearm',
-  'wristPitch',
-  'wristRoll',
-  'hand',
-  'handActuator',
-  'drillArm',
-  'ikUp',
-  'ikForward',
-]
+  "armBase",
+  "shoulder",
+  "elbow",
+  "forearm",
+  "wristPitch",
+  "wristRoll",
+  "hand",
+  "handActuator",
+  "drillArm",
+  "drillMotor",
+  "activeSuspension",
+  "ikUp",
+  "ikForward"
+];
 
 const initialState = jointNames.reduce(
   (state, jointName) => ({
@@ -31,9 +33,14 @@ const jointsSlice = createSlice({
   initialState,
   reducers: {
     requestJointPower(state, action) {
-      const {jointName, power} = action.payload
-      const joint = state[jointName]
-      joint.requestedPower = power
+      const { jointName, power } = action.payload;
+      const joint = state[jointName];
+      joint.requestedPower = power;
+      if (power === 'on'){
+        joint.currentPosition = 'on';
+      } else if (power === 'off'){
+        joint.currentPosition = 'off';
+      }
     },
 
     requestJointPosition(state, action) {
