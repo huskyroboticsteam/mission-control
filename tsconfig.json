@@ -1,8 +1,10 @@
-{
-  "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "target": "ESNext",
-    "types": ["vite/client"],
-    "isolatedModules": true
-  }
-}
+{  
+    "compilerOptions": {    
+        "lib": ["dom", "dom.iterable", "esnext"],    
+        "target": "ESNext",    
+        "types": ["vite/client"],
+        "isolatedModules": true,
+        "module": "Node16",
+        "moduleResolution": "node16"
+    },
+ }
