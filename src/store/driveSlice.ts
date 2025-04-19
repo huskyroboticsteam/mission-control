@@ -1,6 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit'
 
-interface DriveState {
+type DriveState = {
   straight: number
   crab: number
   steer: number
@@ -8,21 +8,21 @@ interface DriveState {
   right: number
 }
 
-interface DrivePayload {
+type DrivePayload = {
   straight: number
   steer: number
 }
 
-interface TankDrivePayload {
+type TankDrivePayload = {
   left: number
   right: number
 }
 
-interface TurnInPlacePayload {
+type TurnInPlacePayload = {
   steer: number
 }
 
-interface CrabDrivePayload {
+type CrabDrivePayload = {
   crab: number
   steer: number
 }

@@ -1,6 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit'
 
-interface GamepadState {
+type GamepadState = {
   isConnected: boolean
   LeftStickX: number
   LeftStickY: number
@@ -24,12 +24,12 @@ interface GamepadState {
   DPadRight: boolean
 }
 
-interface KeyboardState {
+type KeyboardState = {
   isConnected: boolean
   pressedKeys: string[]
 }
 
-interface DriveState {
+type DriveState = {
   tank: boolean
   straight: number
   crab: number
@@ -40,7 +40,7 @@ interface DriveState {
   type?: string
 }
 
-interface ArmState {
+type ArmState = {
   armBase: number
   shoulder: number
   elbow: number
@@ -53,18 +53,18 @@ interface ArmState {
   ikForward: number
 }
 
-interface ScienceState {
+type ScienceState = {
   lazySusanPosition: number
   instrumentationArm: number
   drillOn: boolean
 }
 
-interface InverseKinematicsState {
+type InverseKinematicsState = {
   enabled: boolean
   lastSentArmIKState: boolean | null
 }
 
-interface InputState {
+type InputState = {
   driveGamepad: GamepadState
   peripheralGamepad: GamepadState
   keyboard: KeyboardState
@@ -77,27 +77,27 @@ interface InputState {
 }
 
 // Payloads
-interface GamepadConnectionPayload {
+type GamepadConnectionPayload = {
   gamepadName: 'driveGamepad' | 'peripheralGamepad'
 }
 
-interface GamepadAxisPayload {
+type GamepadAxisPayload = {
   gamepadName: string
   axisName: string
   value: number
 }
 
-interface GamepadButtonPayload {
+type GamepadButtonPayload = {
   gamepadName: string
   buttonName: string
   pressed: boolean
 }
 
-interface KeyPayload {
+type KeyPayload = {
   key: string
 }
 
-interface EnableIKPayload {
+type EnableIKPayload = {
   enable: boolean
 }
 /** -=--------------------=--------------------=--------------------=--------------------=-------------------= */
