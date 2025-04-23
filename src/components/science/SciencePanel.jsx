@@ -1,17 +1,17 @@
-import CameraStream from '../camera/CameraStream';
-import './SciencePanel.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectDrillIsEnabled, enableDrillOn } from '../../store/jointsSlice';
+import CameraStream from '../camera/CameraStream'
+import './SciencePanel.css'
+import {useDispatch, useSelector} from 'react-redux'
+import {selectDrillIsEnabled, enableDrillOn} from '../../store/jointsSlice'
 
 function ArmDexterityPanel() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const isDrillOn = useSelector(selectDrillIsEnabled)
 
-  const handleClick = () =>{
+  const handleClick = () => {
     if (!isDrillOn) {
-      console.log("Drill is OFF");
+      console.log('Drill is OFF')
     } else {
-      console.log("Drill is ON");
+      console.log('Drill is ON')
     }
     dispatch(enableDrillOn({enabled: !isDrillOn}))
   }
@@ -24,12 +24,11 @@ function ArmDexterityPanel() {
     <div className="science-panel">
       <CameraStream cameraName="pano" />
       <CameraStream cameraName="drill" />
-      <div className = {className}>
+      <div className={className}>
         <button onClick={handleClick}>{text}</button>
       </div>
-        
     </div>
   )
 }
 
-export default ArmDexterityPanel;
+export default ArmDexterityPanel
