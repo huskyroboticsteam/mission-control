@@ -19,7 +19,6 @@ function WaypointNav() {
     setPoints(newPoints)
     setLat(0)
     setLon(0)
-    console.log(points)
   }
 
   function handleSubmit(e) {
@@ -74,7 +73,7 @@ function WaypointNav() {
         ) : (
           <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
         )}
-        {/* temp note: currently sends first value of points in latitude and longitude, eventually want to switch to
+        {/* temp note: currently sends first value of points in latitude and longitude for testing, eventually want to switch to
         only using the points array. */}
         <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
         <input type="hidden" value={points.length > 0 ? points[0][1] : 0} name="longitude"></input>
