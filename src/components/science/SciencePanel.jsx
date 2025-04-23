@@ -1,3 +1,4 @@
+import React, {useEffect} from 'react'
 import CameraStream from '../camera/CameraStream'
 import './SciencePanel.css'
 import {useDispatch, useSelector} from 'react-redux'
@@ -15,6 +16,19 @@ function ArmDexterityPanel() {
     }
     dispatch(enableDrillOn({enabled: !isDrillOn}))
   }
+
+  useEffect (() => {
+    const handleKeyPress = (event) => {
+      if (event.key.toLowerCase() === 'b') {
+        handleClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [isDrillOn]);
 
   const className =
     'enable-drill-button enable-drill-button--' + (isDrillOn ? 'enabled' : 'disabled')
