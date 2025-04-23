@@ -1,36 +1,35 @@
-import CameraStream from '../camera/CameraStream'
-import './SciencePanel.css'
-import { useDispatch, useSelector } from 'react-redux' // Import Redux hooks
-import { requestJointPower, selectJointCurrentPosition } from '../../store/jointsSlice' // Import actions and selectors from jointsSlice
+import CameraStream from '../camera/CameraStream';
+import './SciencePanel.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectDrillIsEnabled, enableDrillOn } from '../../store/jointsSlice';
 
 function ArmDexterityPanel() {
-  const dispatch = useDispatch()
-  const isDrillOn = useSelector(state => selectJointCurrentPosition('drillMotor')(state)) === 'on' || false // Get drill state from Redux store
+  const dispatch = useDispatch();
+  const isDrillOn = useSelector(selectDrillIsEnabled)
 
-  const drillOnClick = () => {
-    dispatch(requestJointPower({ jointName: 'drillMotor', power: 1})) // Dispatch action to turn drill on
-    console.log('Drill is now ON')
+  const handleClick = () =>{
+    if (!isDrillOn) {
+      console.log("Drill is OFF");
+    } else {
+      console.log("Drill is ON");
+    }
+    dispatch(enableDrillOn({enabled: !isDrillOn}))
   }
 
-  const drillOffClick = () => {
-    dispatch(requestJointPower({ jointName: 'drillMotor', power: 0})) // Dispatch action to turn drill off
-    console.log('Drill is now OFF')
-  }
+  const className =
+    'enable-drill-button enable-drill-button--' + (isDrillOn ? 'enabled' : 'disabled')
+  const text = isDrillOn ? 'Disable drill' : 'Enable drill'
 
   return (
     <div className="science-panel">
       <CameraStream cameraName="pano" />
       <CameraStream cameraName="drill" />
-      <div className="drill-controls">
-        <button onClick={drillOnClick} disabled={isDrillOn}>
-          Drill On
-        </button>
-        <button onClick={drillOffClick} disabled={!isDrillOn}>
-          Drill Off
-        </button>
+      <div className = {className}>
+        <button onClick={handleClick}>{text}</button>
       </div>
+        
     </div>
   )
 }
 
-export default ArmDexterityPanel
+export default ArmDexterityPanel;

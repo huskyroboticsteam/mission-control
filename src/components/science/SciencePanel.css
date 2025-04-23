@@ -9,16 +9,54 @@
   box-sizing: border-box;
 }
 
-.drill-controls{
-  margin-top: 20px;
+.enable-drill-button {
+  display: flex;
+  justify-content: space-between; /* Space between the two buttons */
+  align-items: center;
+  border-top: 1px solid gray;
+  padding: 10px;
 }
 
-.drill-controls button{
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
+.enable-drill-button {
+  flex: 1; /* Make both buttons take equal space */
+  margin: 0 5px; /* Add spacing between buttons */
+}
+
+.enable-drill-button > button {
+  display: block;
   border: none;
+  color: white;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
   border-radius: 5px;
+  width: 100%;
+}
+
+.enable-drill-button--enabled > button {
+  background-color: #ed4245; /* Red for enabled */
+}
+
+.enable-drill-button--disabled > button {
+  background-color: #4fb185; /* Green for disabled */
+}
+
+.enable-drill-button--enabled > button:hover {
+  cursor: pointer;
+  background-color: #dc3134;
+}
+
+.enable-drill-button--disabled > button:hover {
+  cursor: pointer;
+  background-color: #3ea074;
+}
+
+.enable-drill-button--enabled > button:active {
+  cursor: pointer;
+  background-color: #cb2023;
+}
+
+.enable-drill-button--disabled > button:active {
+  cursor: pointer;
+  background-color: #2d8f63;
 }
