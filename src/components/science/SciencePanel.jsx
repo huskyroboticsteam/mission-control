@@ -18,7 +18,7 @@ function ArmDexterityPanel() {
 
   const className =
     'enable-drill-button enable-drill-button--' + (isDrillOn ? 'enabled' : 'disabled')
-  const text = isDrillOn ? 'Disable drill' : 'Enable drill'
+  const text = isDrillOn ? 'Turn on Drill' : 'Turn off Drill'
 
   return (
     <div className="science-panel">

@@ -18,29 +18,29 @@
 }
 
 .enable-motors-button--enabled > button {
-  background-color: #ed4245;
+  background-color: #3ea074;
 }
 
 .enable-motors-button--disabled > button {
-  background-color: #4fb185;
+  background-color: #ed4245;
 }
 
 .enable-motors-button--enabled > button:hover {
   cursor: pointer;
-  background-color: #dc3134;
+  background-color: #3ea074;
 }
 
 .enable-motors-button--disabled > button:hover {
   cursor: pointer;
-  background-color: #3ea074;
+  background-color: #ed4245;
 }
 
 .enable-motors-button--enabled > button:active {
   cursor: pointer;
-  background-color: #cb2023;
+  background-color: #3ea074;
 }
 
 .enable-motors--disabled > button:active {
   cursor: pointer;
-  background-color: #2d8f63;
+  background-color: #ed4245;
 }
