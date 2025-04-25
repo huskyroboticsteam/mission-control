@@ -13,8 +13,8 @@ function WaypointNav() {
   var opMode = useSelector(selectOpMode)
 
   function addPoint() {
-    let point = [lat, lon]
-    let newPoints = points
+    const point = [lat, lon]
+    const newPoints = points
     newPoints.push(point)
     setPoints(newPoints)
     setLat(0)
@@ -28,6 +28,7 @@ function WaypointNav() {
     const formJson = Object.fromEntries(formData.entries())
     setSubmitted(true)
     dispatch(requestWaypointNav(formJson))
+    points.length = 0
   }
 
   function grabFromClipboard() {
