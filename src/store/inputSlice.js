@@ -49,7 +49,6 @@ const initialState = {
     },
     science: {
       // lazySusanPosition: 0,
-      // instrumentationArm: 0,
       fourBarLinkage: 0,
       drillActuator: 0,
       drillMotor: 0

@@ -139,20 +139,13 @@ function updateScience(
   mountedPeripheral,
   dispatch
 ) {
-  Object.keys(computedInput.science).forEach(field => {
-    if (computedInput.science[field] !== prevComputedInput.science[field]
+  Object.keys(computedInput.science).forEach(scienceName => {
+    if (computedInput.science[scienceName] !== prevComputedInput.science[scienceName]
       || mountedPeripheral !== prevMountedPeripheral) {
-      if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
-        dispatch(requestJointPower({
-          jointName: field,
-          power: computedInput.science[field]
-        }));
-      } else {
-        dispatch(requestMotorPower({
-          motorName: field,
-          power: computedInput.science[field]
-        }));
-      }
+        dispatch({
+          scienceName,
+          power: computedInput.science[scienceName],
+        })
     }
   })
 }
