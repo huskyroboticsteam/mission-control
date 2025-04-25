@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 70px;
+  grid-column: span 2;
 }
 
 .waypoint-select__params {

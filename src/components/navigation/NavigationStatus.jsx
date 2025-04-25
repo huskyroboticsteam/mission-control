@@ -8,6 +8,7 @@ import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigat
 //MAJOR ISSUE: CONSTANTS ARE IN METERS BUT CURRENT DATA IS IN LATITUDE/LONGITUDE.
 //I DO NOT GET THE MATH VERY WELL SO I AM STRUGGLING
 
+//origin is position of rover
 /*// see comments at top of file for source for math
 double phi = PI * origin.lat / 180.0;
 double cosPhi = std::cos(phi);
@@ -40,24 +41,14 @@ function sanitize(num, decimals) {
 function NavigationStatus() {
   const {lon, lat} = useSelector(selectRoverPosition)
   const targetPoints = useSelector(selectPoints)
-  const targetLatitude = Array.isArray(targetPoints[0]) ? parseInt(targetPoints[0][0]) : null
-  const targetLongitude = Array.isArray(targetPoints[0]) ? parseInt(targetPoints[0][1]) : null
+  const targetLatitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][0]) : null
+  const targetLongitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][1]) : null
   
 
   const getNavigationStatus = () => {
     // Guard against null or undefined values
     //Also guards against the value of 0. Unlikely to be an issue but it is of note
     if (!lon || !lat || !targetLatitude || !targetLongitude) {
-      console.log("lon: " + !lon)
-      console.log("lat: " + !lat)
-      console.log("targetLatitude: " + !targetLatitude)
-      console.log("targetLatitude type: " + typeof targetLatitude)
-      console.log("targetLatitude value: " + targetLatitude)
-      console.log("targetLongitude type: " + typeof targetLongitude)
-      console.log("targetLongitude value: " + targetLongitude)
-      console.log("targetLongitude: " + !targetLongitude)
-      console.log("isArray: " + Array.isArray(targetPoints[0]))
-      console.log("array: " + targetPoints)
       return {
         status: 'unknown',
         distance: null,
@@ -68,6 +59,9 @@ function NavigationStatus() {
     const distance = calculateDistance(lat, lon, targetLatitude, targetLongitude)
 
     if (distance <= POSITION_THRESHOLD) {
+      //NOTE: There are plans to update the data the rover sends to include the target point and the naviagion status. As such, most of this
+      //wouldn't be necessary. It's here for now, but remove it once that comes to fruition.
+      
       //IMPORTANT NOTE: THE targetPoints VARIABLE IS SOMEWHAT DISCONNECTED FROM THE STATE. REMOVING VALUES HERE WILL NOT REMOVE THEM FROM THE STATE
       //THIS SHOULD BE FINE BECAUSE THE STATE IS NOT MODIFIED, ONLY REPLACED, WHICH SHOULD UPDATE targetPoints, AND THE ONLY TIME THE STATE IS
       //UPDATED IS WHEN IT GETS AN ENTIRELY NEW ARRAY
@@ -78,7 +72,7 @@ function NavigationStatus() {
       console.log("Longitude distance: " + Math.abs(lon - targetPoints[0][1]))
       console.log("Position threshold: " + POSITION_THRESHOLD)
       if (Math.abs(lat - targetPoints[0][0]) < POSITION_THRESHOLD && Math.abs(lon - targetPoints[0][1]) < POSITION_THRESHOLD) {
-        targetPoints.shift()
+        //targetPoints.shift()
       }
       console.log(targetPoints)
       console.log(useSelector(selectPoints))
