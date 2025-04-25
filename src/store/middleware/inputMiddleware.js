@@ -96,8 +96,11 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === 'arm')
+  if (mountedPeripheral === 'arm') {
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+  } else if (mountedPeripheral === 'scienceStation') {
+    updateScienceStation(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+  }
 }
 
 function updateArm(
@@ -119,6 +122,16 @@ function updateArm(
         })
       )
   })
+}
+
+function updateScienceStation(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  // input stuff here or sumn idk
 }
 
 export default inputMiddleware
