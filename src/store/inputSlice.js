@@ -154,6 +154,11 @@ function computeDriveInput(state, action) {
 
   const driveInput = state.computed.drive
 
+  // Emergency stop is toggled by the space bar.
+  if (action.type === keyPressed.type && action.payload.key === ' ') {
+    state.emergencyStop = !state.emergencyStop
+  }
+
   // Y key or the Y button toggles tank drive.
   if (
     (action.type === keyPressed.type && action.payload.key === 'y') ||
@@ -169,6 +174,7 @@ function computeDriveInput(state, action) {
     }
   }
   if (state.triggerHeld) {
+    // Additional function layer binds go here
   } else {
     driveInput.straight =
       -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
@@ -202,34 +208,31 @@ function computeArmInput(state) {
   const pressedKeys = state.keyboard.pressedKeys
   const armInput = state.computed.arm
 
-  if (state.triggerHeld) {
+  armInput.armBase = peripheralGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'A', 'D')
+  if (state.inverseKinematics.enabled) {
+    armInput.ikForward = -peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
+    armInput.ikUp = -peripheralGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'G', 'T')
+    armInput.shoulder = 0
+    armInput.elbow = 0
   } else {
-    armInput.armBase = peripheralGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'A', 'D')
-    if (state.inverseKinematics.enabled) {
-      armInput.ikForward = -peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
-      armInput.ikUp = -peripheralGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'G', 'T')
-      armInput.shoulder = 0
-      armInput.elbow = 0
-    } else {
-      armInput.shoulder = peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
-      armInput.elbow = -peripheralGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'T', 'G')
-      armInput.ikUp = 0
-      armInput.ikForward = 0
-    }
-    armInput.forearm = peripheralGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'F', 'H')
-    armInput.wristPitch =
-      -getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
-      getAxisFromKeys(pressedKeys, 'K', 'I')
-    armInput.wristRoll =
-      getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
-      getAxisFromKeys(pressedKeys, 'U', 'O')
-    armInput.hand =
-      peripheralGamepad['LeftTrigger'] -
-      peripheralGamepad['RightTrigger'] +
-      getAxisFromKeys(pressedKeys, 'J', 'L')
-    armInput.handActuator =
-      getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
+    armInput.shoulder = peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
+    armInput.elbow = -peripheralGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'T', 'G')
+    armInput.ikUp = 0
+    armInput.ikForward = 0
   }
+  armInput.forearm = peripheralGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'F', 'H')
+  armInput.wristPitch =
+    -getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
+    getAxisFromKeys(pressedKeys, 'K', 'I')
+  armInput.wristRoll =
+    getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
+    getAxisFromKeys(pressedKeys, 'U', 'O')
+  armInput.hand =
+    peripheralGamepad['LeftTrigger'] -
+    peripheralGamepad['RightTrigger'] +
+    getAxisFromKeys(pressedKeys, 'J', 'L')
+  armInput.handActuator =
+    getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad)
