@@ -55,6 +55,7 @@ const initialState = {
     enabled: false,
     lastSentArmIKState: null,
   },
+  emergencyStop: false,
 }
 
 function isLinux() {
@@ -151,15 +152,19 @@ function computeDriveInput(state, action) {
 
   const driveInput = state.computed.drive
 
-  // Spacebar or the Y button toggles tank drive.
+  // Y key or the Y button toggles tank drive.
   if (
-    (action.type === keyPressed.type && action.payload.key === ' ') ||
+    (action.type === keyPressed.type && action.payload.key === 'y') ||
     (action.type === gamepadButtonChanged.type &&
       action.payload.gamepadName === 'driveGamepad' &&
       action.payload.buttonName === 'Y' &&
       action.payload.pressed)
   ) {
     driveInput.tank = !driveInput.tank
+  }
+
+  if (action.type === keyPressed.type && action.payload.key === ' ') {
+    state.emergencyStop = !state.emergencyStop
   }
 
   driveInput.straight =
