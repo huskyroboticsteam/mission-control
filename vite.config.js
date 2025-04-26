@@ -16,5 +16,5 @@ export default defineConfig({
     build: {
         outDir: './build'
     },
-    assetsInclude: ['**/*.fbx'],
+    assetsInclude: ['**/*.fbx', "**/*.glb"],
 });

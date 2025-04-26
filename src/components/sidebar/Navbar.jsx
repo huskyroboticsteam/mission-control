@@ -4,6 +4,7 @@ import ArmDexterityIcon from '@mui/icons-material/BackHand'
 import ScienceIcon from '@mui/icons-material/Science'
 import TelemetryIcon from '@mui/icons-material/Info'
 import HelpIcon from '@mui/icons-material/Help'
+import MapIcon from '@mui/icons-material/Map';
 import './Navbar.css'
 
 function Navbar() {
@@ -44,6 +45,12 @@ function Navbar() {
           <NavLink to="/help" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/map" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
+            <MapIcon fontSize='large' className="navbar__icon" />
+            Map
           </NavLink>
         </li>
       </ul>
