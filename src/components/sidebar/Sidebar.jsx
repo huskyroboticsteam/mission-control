@@ -4,7 +4,7 @@ import EnableMotorsButton from './EnableMotorsButton'
 import ToggleInverseKinematics from './ToggleInverseKinematics'
 import InputInfo from './InputInfo'
 import ConnectionInfo from './ConnectionInfo'
-import OpModeSelect from '../navigation/OpModeToggleButton';
+import OpModeSelect from '../navigation/OpModeToggleButton'
 import './Sidebar.css'
 
 function Sidebar() {

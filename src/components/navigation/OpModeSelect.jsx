@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
-import { selectOpMode } from '../../store/opModeSlice';
-import './OpModeSelect.css';
-import NavigationStatus from './NavigationStatus';
+import {useSelector} from 'react-redux'
+import {selectOpMode} from '../../store/opModeSlice'
+import './OpModeSelect.css'
+import NavigationStatus from './NavigationStatus'
 
 function OpModeSelect() {
-  const opMode = useSelector(selectOpMode);
+  const opMode = useSelector(selectOpMode)
 
   return (
     <div className={`op-mode-select op-mode-select--${opMode}`}>
@@ -16,7 +16,7 @@ function OpModeSelect() {
       </p>
       {opMode === 'autonomous' && <NavigationStatus />}
     </div>
-  );
+  )
 }
 
-export default OpModeSelect;
+export default OpModeSelect
