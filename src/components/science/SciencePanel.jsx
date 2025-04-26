@@ -17,18 +17,18 @@ function ArmDexterityPanel() {
     dispatch(enableDrillOn({enabled: !isDrillOn}))
   }
 
-  useEffect (() => {
+  useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key.toLowerCase() === 'b') {
-        handleClick();
+        handleClick()
       }
-    };
+    }
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress)
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [isDrillOn]);
+      window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [isDrillOn])
 
   const className =
     'enable-drill-button enable-drill-button--' + (isDrillOn ? 'enabled' : 'disabled')
