@@ -108,7 +108,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
           })
         )
       } else if (message.type === 'cameraFrameReport' && message.data !== '') {
-        const position = useSelector(selectRoverPosition)
+        const position = message.position
 
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
