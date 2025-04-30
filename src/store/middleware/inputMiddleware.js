@@ -96,42 +96,29 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === 'arm') {
-    updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-  } else if (mountedPeripheral === 'scienceStation') {
-    updateScienceStation(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+  const peripheralMapping = {
+    arm: computedInput.arm,
+    scienceStation: computedInput.scienceStation,
   }
-}
 
-function updateArm(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  Object.keys(computedInput.arm).forEach((jointName) => {
-    if (
-      computedInput.arm[jointName] !== prevComputedInput.arm[jointName] ||
-      mountedPeripheral !== prevMountedPeripheral
-    )
-      dispatch(
-        requestJointPower({
-          jointName,
-          power: computedInput.arm[jointName],
-        })
-      )
-  })
-}
+  const prevPeripheralInput = prevComputedInput[mountedPeripheral]
+  const currentPeripheralInput = peripheralMapping[mountedPeripheral]
 
-function updateScienceStation(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  // input stuff here or sumn idk
+  if (currentPeripheralInput) {
+    Object.keys(currentPeripheralInput).forEach((jointName) => {
+      if (
+        currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
+        mountedPeripheral !== prevMountedPeripheral
+      ) {
+        dispatch(
+          requestJointPower({
+            jointName,
+            power: currentPeripheralInput[jointName],
+          })
+        )
+      }
+    })
+  }
 }
 
 export default inputMiddleware
