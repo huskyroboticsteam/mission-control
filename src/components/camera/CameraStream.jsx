@@ -95,7 +95,7 @@ function CameraStream({ cameraName, cameraID }) {
       // Close the camera stream.
       dispatch(closeCameraStream({ cameraID }));
     };
-  }, [cameraName, cameraID, dispatch]);
+  }, [cameraID, dispatch]);
 
   const frameDataArray = useSelector(selectCameraStreamFrameData(cameraID));
   const cameraTitle = camelCaseToTitle(cameraName);

@@ -22,7 +22,7 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamOpenRequest",
-          cameraID: Number(action.payload.cameraID),
+          camera: Number(action.payload.cameraID),
           fps: 20,  // default to 20
         }
       }));
@@ -33,7 +33,7 @@ const camerasMiddleware = store => next => action => {
       store.dispatch(messageRover({
         message: {
           type: "cameraStreamCloseRequest",
-          cameraID: Number(action.payload.cameraID)
+          camera: Number(action.payload.cameraID)
         }
       }));
       break;
@@ -49,7 +49,7 @@ const camerasMiddleware = store => next => action => {
           store.dispatch(messageRover({
             message: {
               type: "cameraStreamOpenRequest",
-              cameraID: Number(cameraID),
+              camera: Number(cameraID),
               fps: 20, // default to 20
             }
           }));
@@ -76,7 +76,7 @@ const camerasMiddleware = store => next => action => {
       const { message } = action.payload;
       if (message.type === "cameraStreamReport")
         store.dispatch(cameraStreamDataReportReceived({
-          cameraID: message.cameraID,
+          cameraID: message.camera,
           frameData: message.data
         }));
       break;
