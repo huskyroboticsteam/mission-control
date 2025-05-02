@@ -110,6 +110,7 @@ function updatePeripherals(
         currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
         mountedPeripheral !== prevMountedPeripheral
       ) {
+        console.log(`dispatch power for: ${jointName}: ${currentPeripheralInput[jointName]}`)
         dispatch(
           requestJointPower({
             jointName,
