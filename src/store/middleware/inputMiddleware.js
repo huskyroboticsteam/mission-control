@@ -96,29 +96,38 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === 'arm')
-    updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-}
+  console.log("mounted: ", mountedPeripheral)
+  console.log("prevComputedInput:", prevComputedInput)
+  console.log("computedInnput:", computedInput)
+  
+  const peripheralMapping = { // lazySusanPosition is undefined here
+    arm: computedInput.arm,
+    scienceStation: computedInput.science,
+  }
 
-function updateArm(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  Object.keys(computedInput.arm).forEach((jointName) => {
-    if (
-      computedInput.arm[jointName] !== prevComputedInput.arm[jointName] ||
-      mountedPeripheral !== prevMountedPeripheral
-    )
-      dispatch(
-        requestJointPower({
-          jointName,
-          power: computedInput.arm[jointName],
-        })
-      )
-  })
+  const prevPeripheralInput = prevComputedInput[mountedPeripheral]
+  const currentPeripheralInput = peripheralMapping[mountedPeripheral]
+
+  console.log("currentPeripheralInput:", currentPeripheralInput)
+  if (currentPeripheralInput) {
+
+    console.log("peripheral")
+    Object.keys(currentPeripheralInput).forEach((jointName) => {
+      console.log(jointName)
+      if (
+        currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
+        mountedPeripheral !== prevMountedPeripheral
+      ) {
+        console.log(`dispatch power for: ${jointName}: ${currentPeripheralInput[jointName]}`)
+        dispatch(
+          requestJointPower({
+            jointName,
+            power: currentPeripheralInput[jointName],
+          })
+        )
+      }
+    })
+  }
 }
 
 export default inputMiddleware
