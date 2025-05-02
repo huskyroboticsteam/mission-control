@@ -1,84 +1,84 @@
 #enable-ik-toggle {
-    display: flex;
-    border-top: 1px solid gray;
-    padding: 14px;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  border-top: 1px solid gray;
+  padding: 14px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #enable-ik-title {
-    color: white;
-    font-weight: bold;
-    font-size: 22px;
-    margin-bottom: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+  margin-bottom: 5px;
 }
 
 #enable-ik-title-disabled {
-    color: gray;
-    font-weight: bold;
-    font-size: 22px;
-    margin-bottom: 5px;
+  color: gray;
+  font-weight: bold;
+  font-size: 22px;
+  margin-bottom: 5px;
 }
 
 #switch-wrapper {
-    width: 100px;
-    height: 30px;
-    cursor: pointer;
+  width: 100px;
+  height: 30px;
+  cursor: pointer;
 }
 
 #switch-wrapper-disabled {
-    width: 100px;
-    height: 30px;
-    cursor: not-allowed;
+  width: 100px;
+  height: 30px;
+  cursor: not-allowed;
 }
 
 #enable-ik {
-    background-color: gray;
+  background-color: gray;
 }
 
 #disable-ik {
-    background-color: green;
+  background-color: green;
 }
 
 .ik-switch {
-    width: 100%;
-    height: 100%;
-    border-radius: 100px;
-    outline: 2px solid white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  outline: 2px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .ik-switch-disconnected {
-    outline: 2px solid rgb(68, 68, 68);
+  outline: 2px solid rgb(68, 68, 68);
 }
 
 #enable-ik-handle {
-    align-self: flex-start;
+  align-self: flex-start;
 }
 
 #disable-ik-handle {
-    align-self: flex-end;
+  align-self: flex-end;
 }
 
 .switch-handle-disconnected {
-    height: 28px;
-    width: 28px;
-    border-radius: 28px;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color: rgb(68, 68, 68);
-    border: 3px solid rgb(39, 39, 39);
-    box-sizing: border-box;
+  height: 28px;
+  width: 28px;
+  border-radius: 28px;
+  margin-left: 2px;
+  margin-right: 2px;
+  background-color: rgb(68, 68, 68);
+  border: 3px solid rgb(39, 39, 39);
+  box-sizing: border-box;
 }
 
 .switch-handle {
-    height: 28px;
-    width: 28px;
-    border-radius: 28px;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color: white;
+  height: 28px;
+  width: 28px;
+  border-radius: 28px;
+  margin-left: 2px;
+  margin-right: 2px;
+  background-color: white;
 }

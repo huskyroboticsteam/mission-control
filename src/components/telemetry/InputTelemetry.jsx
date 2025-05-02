@@ -1,14 +1,14 @@
-import { useSelector } from "react-redux";
-import { selectDriveGamepad, selectPeripheralGamepad } from "../../store/inputSlice";
-import "./InputTelemetry.css";
+import {useSelector} from 'react-redux'
+import {selectDriveGamepad, selectPeripheralGamepad} from '../../store/inputSlice'
+import './InputTelemetry.css'
 
 function InputTelemetry() {
-  const driveGamepad = useSelector(selectDriveGamepad);
-  const peripheralGamepad = useSelector(selectPeripheralGamepad);
+  const driveGamepad = useSelector(selectDriveGamepad)
+  const peripheralGamepad = useSelector(selectPeripheralGamepad)
   const replacer = (key, value) => {
-    const exclude = ["LS", "RS", "Start", "Back", "isConnected"];
-    if (exclude.includes(key)) return undefined;
-    else return value;
+    const exclude = ['LS', 'RS', 'Start', 'Back', 'isConnected']
+    if (exclude.includes(key)) return undefined
+    else return value
   }
 
   return (
@@ -18,7 +18,7 @@ function InputTelemetry() {
       <h2>Peripheral Gamepad</h2>
       <pre>{JSON.stringify(peripheralGamepad, replacer, 2)}</pre>
     </div>
-  );
+  )
 }
 
-export default InputTelemetry;
+export default InputTelemetry

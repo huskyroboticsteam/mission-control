@@ -1,6 +1,6 @@
-import CameraStream from "../camera/CameraStream";
+import CameraStream from '../camera/CameraStream'
 
-import "./SciencePanel.css"
+import './SciencePanel.css'
 
 function ArmDexterityPanel() {
   return (
@@ -11,7 +11,7 @@ function ArmDexterityPanel() {
       {/* <CameraStream cameraName="hand" cameraID={20} />
       <CameraStream cameraName="wrist" cameraID={30} /> */}
     </div>
-  );
+  )
 }
 
-export default ArmDexterityPanel;
+export default ArmDexterityPanel

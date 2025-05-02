@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import {createSlice} from '@reduxjs/toolkit'
 
 const cameraNames = ["mast", "hand", "wrist"];
 const cameraNameToID = {"mast": 40, "hand": 20, "wrist": 30};
@@ -12,7 +12,7 @@ const initialState = cameraNames.reduce((state, cameraName) => ({
 }), {});
 
 const camerasSlice = createSlice({
-  name: "cameras",
+  name: 'cameras',
   initialState,
   reducers: {
     openCameraStream(state, action) {
@@ -26,6 +26,8 @@ const camerasSlice = createSlice({
       state[cameraID].frameData = null;
     },
 
+    requestCameraFrame() {},
+
     cameraStreamDataReportReceived(state, action) {
       const { cameraID, frameData } = action.payload;
       if (state[cameraID].isStreaming)
@@ -37,11 +39,12 @@ const camerasSlice = createSlice({
 export const {
   openCameraStream,
   closeCameraStream,
-  cameraStreamDataReportReceived
-} = camerasSlice.actions;
+  cameraStreamDataReportReceived,
+  requestCameraFrame,
+} = camerasSlice.actions
 
 export const selectAllCameraNames = state => Object.keys(state.cameras);
 export const selectCameraIsStreamming = cameraID => state => state.cameras[cameraID].isStreaming;
 export const selectCameraStreamFrameData = cameraID => state => state.cameras[cameraID].frameData;
 
-export default camerasSlice.reducer;
+export default camerasSlice.reducer
