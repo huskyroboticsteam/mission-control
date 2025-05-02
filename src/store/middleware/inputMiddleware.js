@@ -96,16 +96,24 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  const peripheralMapping = {
+  console.log("mounted: ", mountedPeripheral)
+  console.log("prevComputedInput:", prevComputedInput)
+  console.log("computedInnput:", computedInput)
+  
+  const peripheralMapping = { // lazySusanPosition is undefined here
     arm: computedInput.arm,
-    scienceStation: computedInput.scienceStation,
+    scienceStation: computedInput.science,
   }
 
   const prevPeripheralInput = prevComputedInput[mountedPeripheral]
   const currentPeripheralInput = peripheralMapping[mountedPeripheral]
 
+  console.log("currentPeripheralInput:", currentPeripheralInput)
   if (currentPeripheralInput) {
+
+    console.log("peripheral")
     Object.keys(currentPeripheralInput).forEach((jointName) => {
+      console.log(jointName)
       if (
         currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
         mountedPeripheral !== prevMountedPeripheral
