@@ -57,19 +57,19 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
   return returnPromise
 }
 
-function CameraStream({cameraName}) {
+function CameraStream({cameraName, cameraID}) {
   const dispatch = useDispatch()
   useEffect(() => {
     // Open the camera stream.
-    dispatch(openCameraStream({cameraName}))
+    dispatch(openCameraStream({cameraID}))
     return () => {
       // Close the camera stream.
-      dispatch(closeCameraStream({cameraName}))
+      dispatch(closeCameraStream({cameraID}))
     }
   }, [cameraName, dispatch])
 
   const roverIsConnected = useSelector(selectRoverIsConnected)
-  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName))
+  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraID))
   const cameraTitle = camelCaseToTitle(cameraName)
   const [hasRendered, setHasRendered] = useState(false)
   const [hasFrame, setHasFrame] = useState(false)

@@ -7,8 +7,8 @@ import './NavigationPanel.css'
 function NavigationPanel() {
   return (
     <div className="navigation-panel">
-      <CameraStream cameraName="mast" />
-      <CameraStream cameraName="hand" />
+      <CameraStream cameraName="mast" cameraID={40} />
+      <CameraStream cameraName="hand" cameraID={20} />
       <Compass />
       <OpModeSelect />
       <WaypointNav />
