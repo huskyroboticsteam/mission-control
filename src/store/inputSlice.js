@@ -51,8 +51,8 @@ const initialState = {
       // lazySusanPosition: 0,
       fourBarLinkage: 0,
       drillActuator: 0,
-      drillMotor: 0
-
+      drillMotor: 0,
+      requestPos: false
     }
   },
   inverseKinematics: {
@@ -247,22 +247,27 @@ function computeScienceInput(prevState, state) {
   var fourBarPos = 0;
   if(true) {
     fourBarPos = getAxisFromKeys(pressedKeys, "C", "V");
-  } else {
-    if(pressedKeys.includes("X") && !prevPressedKeys.includes("X")) {
-      scienceInput.instrumentationArmLocation = (scienceInput.instrumentationArmLocation + 1) % 3;
-    }
-    switch(scienceInput.instrumentationArmLocation) {
-      case 0:
-        scienceInput.instrumentationArmSetpoint = 1;
-        break;
-      case 1:
-        scienceInput.instrumentationArmSetpoint = 2;
-        break;
-      case 2:
-        scienceInput.instrumentationArmSetpoint = 3;
-        break;
-    }
+  } 
+  // Toggle from setting pos to not toggling pos
+  if(pressedKeys.includes("/")) {
+    scienceInput.requestPos = !scienceInput.requestPos;
+    console.log("toggle!");
   }
+  // get pos to toggle
+  if(pressedKeys.includes("1")) {
+    // 30 degrees
+    scienceInput.fourBarLinkage = 30;
+  }
+  else if(pressedKeys.includes("2")) {
+    // 60 degrees
+    scienceInput.fourBarLinkage = 60;
+  }
+  else if(pressedKeys.includes("3")) {
+    // 90 degrees
+    scienceInput.fourBarLinkage = 90;
+  }
+
+
   // const fourbar = clamp1(
   //   getAxisFromKeys(pressedKeys, "E", "R") *
   //   getPrecisionMultiplier(pressedKeys, peripheralGamepad) *

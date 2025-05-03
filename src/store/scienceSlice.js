@@ -3,13 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const scienceNames = [
   "fourBarLinkage",
   "drillActuator",
-  "drillMotor"
+  "drillMotor",
+  "positionRequest"
 ];
 
 const initialState = scienceNames.reduce((state, scienceName) => ({
   ...state,
   [scienceName]: {
-    scienceInput: null
+    scienceInput: null,
   }
 }), {});
 
@@ -22,6 +23,7 @@ const scienceSlice = createSlice({
       const science = state[scienceName];
       science.scienceInput = power;
     }
+
   }
 });
 
