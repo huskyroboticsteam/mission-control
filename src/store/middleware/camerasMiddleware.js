@@ -113,7 +113,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
           .replace(':', '_')
           .substring(0, 19)
 
-        link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`
+        link.download = `camera${message.camera}-${timeString}.jpg`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
