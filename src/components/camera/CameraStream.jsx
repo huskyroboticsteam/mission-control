@@ -96,8 +96,8 @@ function CameraStream({cameraName, cameraID}) {
   }, [cameraName, cameraTitle, popoutWindow])
 
   const requestDownloadFrame = useCallback(() => {
-    dispatch(requestCameraFrame({cameraName}))
-  }, [cameraName, dispatch])
+    dispatch(requestCameraFrame({cameraID}))
+  }, [cameraID, dispatch])
 
   const drawFrameOnExt = useCallback(
     (window, last_ww, last_wh) => {
@@ -257,6 +257,21 @@ function CameraStream({cameraName, cameraID}) {
           onClick={requestDownloadFrame}
           disabled={!(hasFrame && roverIsConnected)}>
           Download
+        </button>
+        <button
+          className="camera-stream-download-button"
+          onClick={() => {
+            dispatch(closeCameraStream({cameraID}))
+            setHasFrame(false)
+          }}
+          disabled={!(hasFrame && roverIsConnected)}>
+          Off
+        </button>
+        <button
+          className="camera-stream-download-button"
+          onClick={() => {dispatch(openCameraStream({cameraID}))}}
+          disabled={!(!hasFrame && roverIsConnected)}>
+          On
         </button>
       </div>
     </div>

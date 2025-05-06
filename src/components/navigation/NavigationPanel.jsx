@@ -8,7 +8,10 @@ function NavigationPanel() {
   return (
     <div className="navigation-panel">
       <CameraStream cameraName="mast" cameraID={40} />
-      <CameraStream cameraName="hand" cameraID={20} />
+      <CameraStream cameraName="wrist" cameraID={30} />
+      {/* <CameraStream cameraName="hand" cameraID={20} /> */}
+      <CameraStream cameraName="rand" cameraID={50} />
+
       <Compass />
       <OpModeSelect />
       <WaypointNav />
