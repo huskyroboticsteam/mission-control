@@ -108,48 +108,46 @@ const camerasMiddleware = (store) => (next) => (action) => {
           })
         )
       } else if (message.type === 'cameraFrameReport' && message.data !== '') {
-
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
 
-        //Fits the telemetry(position/gps) data into exif metadata
-          let gpsIfd = {}
+        // Fits the telemetry(position/gps) data into exif metadata
+        let gpsIfd = {}
 
-          const lat = Math.abs(message.lat)
-          const latRef = message.lat >= 0 ? 'N' : 'S'
-          gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
-          gpsIfd[piexif.GPSIFD.GPSLatitude] = [
-            [Math.floor(lat), 1],
-            [Math.floor((lat % 1) * 60), 1],
-            [Math.floor(((lat * 60) % 1) * 60), 1],
-          ]
+        const lat = Math.abs(message.lat)
+        const latRef = message.lat >= 0 ? 'N' : 'S'
+        gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
+        gpsIfd[piexif.GPSIFD.GPSLatitude] = [
+          [Math.floor(lat), 1],
+          [Math.floor((lat % 1) * 60), 1],
+          [Math.floor(((lat * 60) % 1) * 60), 1],
+        ]
 
-          const lon = Math.abs(message.lon)
-          const lonRef = message.lon >= 0 ? 'E' : 'W'
-          gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
-          gpsIfd[piexif.GPSIFD.GPSLongitude] = [
-            [Math.floor(lon), 1],
-            [Math.floor((lon % 1) * 60), 1],
-            [Math.floor(((lon * 60) % 1) * 60), 1],
-          ]
+        const lon = Math.abs(message.lon)
+        const lonRef = message.lon >= 0 ? 'E' : 'W'
+        gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
+        gpsIfd[piexif.GPSIFD.GPSLongitude] = [
+          [Math.floor(lon), 1],
+          [Math.floor((lon % 1) * 60), 1],
+          [Math.floor(((lon * 60) % 1) * 60), 1],
+        ]
 
-          gpsIfd[piexif.GPSIFD.GPSDateStamp] = new Date()
-            .toISOString()
-            .slice(0, 10)
-            .replace(/-/g, ':')
+        gpsIfd[piexif.GPSIFD.GPSDateStamp] = new Date()
+          .toISOString()
+          .slice(0, 10)
+          .replace(/-/g, ':')
 
-          gpsIfd[piexif.GPSIFD.GPSTimeStamp] = [
-            [new Date().getUTCHours(), 1],
-            [new Date().getUTCMinutes(), 1],
-            [new Date().getUTCSeconds(), 1],
-          ]
+        gpsIfd[piexif.GPSIFD.GPSTimeStamp] = [
+          [new Date().getUTCHours(), 1],
+          [new Date().getUTCMinutes(), 1],
+          [new Date().getUTCSeconds(), 1],
+        ]
 
-          //TODO: add heading
+        // add heading
 
-          const exifObj = {GPS: gpsIfd}
-          const exifBytes = piexif.dump(exifObj)
-          out = piexif.insert(exifBytes, jpegData)
-        }
+        const exifObj = {GPS: gpsIfd}
+        const exifBytes = piexif.dump(exifObj)
+        out = piexif.insert(exifBytes, jpegData)
 
         let link = document.createElement('a')
         link.href = out
