@@ -108,17 +108,15 @@ const camerasMiddleware = (store) => (next) => (action) => {
           })
         )
       } else if (message.type === 'cameraFrameReport' && message.data !== '') {
-        const position = message.position
 
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
 
         //Fits the telemetry(position/gps) data into exif metadata
-        if (position) {
           let gpsIfd = {}
 
-          const lat = Math.abs(position.lat)
-          const latRef = position.lat >= 0 ? 'N' : 'S'
+          const lat = Math.abs(message.lat)
+          const latRef = message.lat >= 0 ? 'N' : 'S'
           gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
           gpsIfd[piexif.GPSIFD.GPSLatitude] = [
             [Math.floor(lat), 1],
@@ -126,8 +124,8 @@ const camerasMiddleware = (store) => (next) => (action) => {
             [Math.floor(((lat * 60) % 1) * 60), 1],
           ]
 
-          const lon = Math.abs(position.lon)
-          const lonRef = position.lon >= 0 ? 'E' : 'W'
+          const lon = Math.abs(message.lon)
+          const lonRef = message.lon >= 0 ? 'E' : 'W'
           gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
           gpsIfd[piexif.GPSIFD.GPSLongitude] = [
             [Math.floor(lon), 1],
@@ -145,6 +143,8 @@ const camerasMiddleware = (store) => (next) => (action) => {
             [new Date().getUTCMinutes(), 1],
             [new Date().getUTCSeconds(), 1],
           ]
+
+          //TODO: add heading
 
           const exifObj = {GPS: gpsIfd}
           const exifBytes = piexif.dump(exifObj)
