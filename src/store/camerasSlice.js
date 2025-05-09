@@ -46,8 +46,7 @@ export const {
 } = camerasSlice.actions
 
 export const selectAllCameraNames = (state) => Object.keys(state.cameras)
-export const selectCameraIsStreaming = (cameraID) => (state) =>
-  state.cameras[cameraID].isStreaming
+export const selectCameraIsStreaming = (cameraID) => (state) => state.cameras[cameraID].isStreaming
 export const selectCameraStreamFrameData = (cameraID) => (state) =>
   state.cameras[cameraID].frameData
 

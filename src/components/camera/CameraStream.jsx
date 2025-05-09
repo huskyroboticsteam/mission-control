@@ -269,7 +269,9 @@ function CameraStream({cameraName, cameraID}) {
         </button>
         <button
           className="camera-stream-download-button"
-          onClick={() => {dispatch(openCameraStream({cameraID}))}}
+          onClick={() => {
+            dispatch(openCameraStream({cameraID}))
+          }}
           disabled={!(!hasFrame && roverIsConnected)}>
           On
         </button>
