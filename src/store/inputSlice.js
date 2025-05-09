@@ -125,8 +125,8 @@ const inputSlice = createSlice({
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key)
       }
-      if (key === 'B'){
-        state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 :1;
+      if (key === 'B') {
+        state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 : 1
       }
       computeInput(prevState, state, action)
     },
@@ -309,5 +309,5 @@ export const selectInputDeviceIsConnected = (deviceName) => (state) =>
 export const selectDriveGamepad = (state) => state.input.driveGamepad
 export const selectPeripheralGamepad = (state) => state.input.peripheralGamepad
 export const selectInverseKinematicsEnabled = (state) => state.input.inverseKinematics.enabled
-export const selectDrillMotor = (state) => state.input.computed.science.drillMotor;
+export const selectDrillMotor = (state) => state.input.computed.science.drillMotor
 export default inputSlice.reducer

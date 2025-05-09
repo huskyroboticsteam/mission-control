@@ -42,13 +42,13 @@ const jointsSlice = createSlice({
     },
 
     requestJointPosition(state, action) {
-      const { jointName, position } = action.payload
+      const {jointName, position} = action.payload
       const joint = state[jointName]
       joint.requestedPosition = position
     },
 
     jointPositionReportReceived(state, action) {
-      const { jointName, position } = action.payload
+      const {jointName, position} = action.payload
       const joint = state[jointName]
       joint.currentPosition = position
       //return state
