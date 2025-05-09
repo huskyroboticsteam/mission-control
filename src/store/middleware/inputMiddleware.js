@@ -98,6 +98,8 @@ function updatePeripherals(
 ) {
   if (mountedPeripheral === 'arm')
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+
+  updateDrillMotor(prevComputedInput, computedInput, dispatch)
 }
 
 function updateArm(
@@ -119,6 +121,18 @@ function updateArm(
         })
       )
   })
+}
+
+function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
+  if (computedInput.science.drillEnabled !== prevComputedInput.science.drillEnabled) {
+    const power = computedInput.science.drillEnabled ? 1 : 0; 
+    dispatch(
+      requestJointPower({
+        jointName: 'drillMotor',
+        power,
+      })
+    );
+  }
 }
 
 export default inputMiddleware

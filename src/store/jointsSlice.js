@@ -25,9 +25,7 @@ const initialState = jointNames.reduce(
       currentPosition: null,
     },
   }),
-  {
-    drillEnabled: false,
-  }
+  {}
 )
 
 const jointsSlice = createSlice({
@@ -39,36 +37,30 @@ const jointsSlice = createSlice({
       const joint = state[jointName]
       if (joint) {
         joint.requestedPower = power
-        console.log(power)
+        console.log(`Joint: ${jointName}, Power: ${power}`)
       }
     },
 
     requestJointPosition(state, action) {
-      const {jointName, position} = action.payload
+      const { jointName, position } = action.payload
       const joint = state[jointName]
       joint.requestedPosition = position
     },
 
     jointPositionReportReceived(state, action) {
-      const {jointName, position} = action.payload
+      const { jointName, position } = action.payload
       const joint = state[jointName]
       joint.currentPosition = position
-      return state
-    },
-
-    enableDrillOn(state, action) {
-      const {enabled} = action.payload
-      state.drillEnabled = enabled
+      //return state
     },
   },
 })
 
-export const {requestJointPower, requestJointPosition, jointPositionReportReceived, enableDrillOn} =
+export const {requestJointPower, requestJointPosition, jointPositionReportReceived} =
   jointsSlice.actions
 
 export const selectAllJointNames = (state) => Object.keys(state.joints)
 export const selectJointCurrentPosition = (jointName) => (state) =>
   state.joints[jointName].currentPosition
-export const selectDrillIsEnabled = (state) => state.joints.drillEnabled
 
 export default jointsSlice.reducer
