@@ -10,6 +10,8 @@ const jointNames = [
   'hand',
   'handActuator',
   'drillArm',
+  'drillMotor',
+  'activeSuspension',
   'ikUp',
   'ikForward',
 ]
@@ -33,7 +35,10 @@ const jointsSlice = createSlice({
     requestJointPower(state, action) {
       const {jointName, power} = action.payload
       const joint = state[jointName]
-      joint.requestedPower = power
+      if (joint) {
+        joint.requestedPower = power
+        console.log(`Joint: ${jointName}, Power: ${power}`)
+      }
     },
 
     requestJointPosition(state, action) {
@@ -46,7 +51,7 @@ const jointsSlice = createSlice({
       const {jointName, position} = action.payload
       const joint = state[jointName]
       joint.currentPosition = position
-      return state
+      //return state
     },
   },
 })
