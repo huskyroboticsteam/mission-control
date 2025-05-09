@@ -5,8 +5,9 @@ import './SciencePanel.css'
 function ArmDexterityPanel() {
   return (
     <div className="science-panel">
-      <CameraStream cameraName="pano" />
-      <CameraStream cameraName="drill" />
+      <CameraStream cameraName="mast" cameraID={40} />
+      {/* <CameraStream cameraName="pano" /> */}
+      {/* <CameraStream cameraName="drill" /> */}
     </div>
   )
 }
