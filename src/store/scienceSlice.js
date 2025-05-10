@@ -7,6 +7,11 @@ const scienceNames = [
   "positionRequest"
 ];
 
+// List of all joints that are able to request positions
+const posRequestValidJoints = [
+  "fourBarLinkage"
+];
+
 const initialState = scienceNames.reduce((state, scienceName) => ({
   ...state,
   [scienceName]: {
@@ -31,5 +36,6 @@ export const { requestSciencePower, requestSciencePosition, sciencePositionRepor
 
 export const selectAllScienceNames = state => Object.keys(state.sciences);
 export const selectScienceCurrentPosition = scienceName => state => state.sciences[scienceName].currentPosition;
+export const getPosRequstValidJoints = posRequestValidJoints;
 
 export default scienceSlice.reducer;
