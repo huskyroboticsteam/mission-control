@@ -167,11 +167,7 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === 'Y' &&
       action.payload.pressed)
   ) {
-    if (driveInput.type === 'normal') {
-      driveInput.tank = !driveInput.tank
-    } else {
-      alert("Can't switch to tank drive when not on normal driveInput type!")
-    }
+    driveInput.tank = !driveInput.tank
   }
   if (state.triggerHeld) {
     // Additional function layer binds go here
@@ -301,4 +297,5 @@ export const selectInputDeviceIsConnected = (deviceName) => (state) =>
 export const selectDriveGamepad = (state) => state.input.driveGamepad
 export const selectPeripheralGamepad = (state) => state.input.peripheralGamepad
 export const selectInverseKinematicsEnabled = (state) => state.input.inverseKinematics.enabled
+export const selectDriveTank = (state) => state.input.computed.drive.tank
 export default inputSlice.reducer

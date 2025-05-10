@@ -1,10 +1,14 @@
-import Compass from './Compass'
-import OpModeSelect from './OpModeSelect'
+import {useSelector} from 'react-redux'
+import {selectDriveTank} from '../../store/inputSlice'
 import CameraStream from '../camera/CameraStream'
-import WaypointNav from './WaypointNav'
+import Compass from './Compass'
 import './NavigationPanel.css'
+import OpModeSelect from './OpModeSelect'
+import WaypointNav from './WaypointNav'
 
 function NavigationPanel() {
+  const tank = useSelector(selectDriveTank)
+
   return (
     <div className="navigation-panel">
       <CameraStream cameraName="mast" />
@@ -12,6 +16,7 @@ function NavigationPanel() {
       <Compass />
       <OpModeSelect />
       <WaypointNav />
+      {tank ? <div>Tank Drive</div> : <div>Normal Drive</div>}
     </div>
   )
 }
