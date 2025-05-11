@@ -1,11 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {SERVOS, ServoNames} from '../constants/servoConstants.js'
+import {SERVOS, ServoType} from '../constants/servoConstants.js'
 
-const initialState = (Object.keys(SERVOS) as ServoNames).reduce(
-  (state, servo) => ({
+const initialState = Object.keys(SERVOS).reduce(
+  (state, servoName) => ({
     ...state,
-    [servo]: {
-      type: SERVOS[servo as keyof typeof SERVOS].type,
+    [servoName]: {
+      type: SERVOS[servoName as keyof typeof SERVOS].type,
       requestedPosition: null,
       currentPosition: null,
     },
@@ -19,7 +19,32 @@ const servoSlice = createSlice({
   reducers: {
     requestServoPosition(state, action) {
       const {servoName, position} = action.payload
+      if (SERVOS[servoName].type !== ServoType.Positional) {
+        // throw Error("requestServoPosition on a non-positional Servo!")
+      }
 
-    }
+      let clampedPos = position
+      if (SERVOS[servoName].limits) {
+        const limits = SERVOS[servoName].limits!
+        clampedPos = Math.min(Math.max(position, limits.lo), limits.hi)
+      }
+      const servo = state[servoName]
+      servo.requestedPosition = clampedPos
+    },
+
+    servoPositionReportReceived(state, action) {
+      const {servoName, position} = action.payload
+      const servo = state[servoName]
+      servo.currentPosition = position
+      return state
+    },
   },
 })
+
+export const {requestServoPosition, servoPositionReportReceived} = servoSlice.actions
+
+export const selectAllServoNames = (state) => Object.keys(state.servo)
+export const selectServoCurrentPosition = (servoName) => (state) =>
+  state.servo[servoName].currentPosition
+
+export default servoSlice.reducer

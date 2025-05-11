@@ -10,6 +10,7 @@ import motorsReducer from './motorsSlice'
 import camerasReducer from './camerasSlice'
 import telemetryReducer from './telemetrySlice'
 import waypointNavReducer from './waypointNavSlice'
+import servoReducer from './servoSlice'
 import roverSocketMiddleware from './middleware/roverSocketMiddleware'
 import peripheralsMiddleware from './middleware/peripheralsMiddleware'
 import emergencyStopMiddleware from './middleware/emergencyStopMiddleware'
@@ -21,6 +22,7 @@ import motorsMiddleware from './middleware/motorsMiddleware'
 import camerasMiddleware from './middleware/camerasMiddleware'
 import telemetryMiddleware from './middleware/telemetryMiddleware'
 import waypointNavMiddleware from './middleware/waypointNavMiddleware'
+import servoMiddleware from './middleware/servoMiddleware'
 
 export default configureStore({
   reducer: {
@@ -35,6 +37,7 @@ export default configureStore({
     cameras: camerasReducer,
     telemetry: telemetryReducer,
     waypointNav: waypointNavReducer,
+    servo: servoReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -50,5 +53,6 @@ export default configureStore({
       camerasMiddleware,
       telemetryMiddleware,
       waypointNavMiddleware,
+      servoMiddleware,
     ]),
 })
