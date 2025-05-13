@@ -1,9 +1,10 @@
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import React from 'react'
-import {selectAllServoNames, selectServoCurrentPosition} from '../../store/servoSlice.js'
+import {selectAllServoNames, selectServoCurrentPosition, requestServoPosition} from '../../store/servoSlice.js'
 import camelCaseToTitle from '../../util/camelCaseToTitle.js'
 
 function Servos() {
+  const dispatch = useDispatch()
   const servoNames = useSelector(selectAllServoNames)
 
   return (
@@ -21,6 +22,22 @@ function Servos() {
           ))}
         </tbody>
       </table>
+      <button onClick={() => {
+        dispatch(
+          requestServoPosition({
+            servoName: "syringe",
+            position: 120
+          })
+        )
+      }}>Up</button>
+      <button onClick={() => {
+        dispatch(
+          requestServoPosition({
+            servoName: "syringe",
+            position: 35
+          })
+        )
+      }}>Down</button>
     </div>
   )
 }

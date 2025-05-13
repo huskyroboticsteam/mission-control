@@ -1,9 +1,9 @@
 export enum ServoNames {
-  syringeServo,
-  soilBoxServo,
-  microscopeServo,
-  cuvetteServo,
-  filterServo,
+  microscope,
+  syringe,
+  cuvette,
+  filter,
+  soilBox,
   // Spectrometer Servo
 
   // Plunger Stepper (1):
@@ -26,11 +26,11 @@ export const SERVOS: {
     limits?: {hi: number; lo: number}
   }
 } = {
-  microscopeServo: {
+  microscope: {
     servoNum: 0,
     type: ServoType.Continuous,
   },
-  syringeServo: {
+  syringe: {
     servoNum: 1,
     type: ServoType.Positional,
     limits: {
@@ -38,7 +38,7 @@ export const SERVOS: {
       lo: 35,
     },
   },
-  cuvetteServo: {
+  cuvette: {
     servoNum: 2,
     type: ServoType.Positional,
     limits: {
@@ -46,7 +46,7 @@ export const SERVOS: {
       lo: 80,
     },
   },
-  filterServo: {
+  filter: {
     servoNum: 3,
     type: ServoType.Positional,
     limits: {
@@ -54,7 +54,7 @@ export const SERVOS: {
       lo: 180,
     },
   },
-  soilBoxServo: {
+  soilBox: {
     servoNum: 4,
     type: ServoType.Positional,
     limits: {
