@@ -245,34 +245,36 @@ function computeScienceInput(prevState, state) {
     scienceInput.lazySusanPosition = (((scienceInput.lazySusanPosition +
       lazySusanAxis) % 6) + 6) % 6;
   var fourBarPos = 0;
-  if(true) {
-    fourBarPos = getAxisFromKeys(pressedKeys, "C", "V");
-  } 
+
   // Toggle from setting pos to not toggling pos
   if(pressedKeys.includes("/")) {
     scienceInput.requestPos = !scienceInput.requestPos;
     console.log("toggle!");
   }
-  // get pos to toggle
-  if(pressedKeys.includes("1")) {
-    // 30 degrees
-    scienceInput.fourBarLinkage = 30;
-  }
-  else if(pressedKeys.includes("2")) {
-    // 60 degrees
-    scienceInput.fourBarLinkage = 60;
-  }
-  else if(pressedKeys.includes("3")) {
-    // 90 degrees
-    scienceInput.fourBarLinkage = 90;
-  }
 
+  if(!scienceInput.requestPos) {
+    scienceInput.fourBarLinkage = getAxisFromKeys(pressedKeys, "C", "V");
+  } 
+  else {
+    // get pos to toggle
+    if(pressedKeys.includes("1")) {
+      // 30 degrees
+      scienceInput.fourBarLinkage = 30;
+    }
+    else if(pressedKeys.includes("2")) {
+      // 60 degrees
+      scienceInput.fourBarLinkage = 60;
+    }
+    else if(pressedKeys.includes("3")) {
+      // 90 degrees
+      scienceInput.fourBarLinkage = 90;
+    }
+  }
 
   // const fourbar = clamp1(
   //   getAxisFromKeys(pressedKeys, "E", "R") *
   //   getPrecisionMultiplier(pressedKeys, peripheralGamepad) *
   //   0.45);
-  scienceInput.fourBarLinkage = fourBarPos;
   scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
   scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
 }

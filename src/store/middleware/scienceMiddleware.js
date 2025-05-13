@@ -1,5 +1,5 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
-import {selectJointCurrentPosition, requestJointPower, selectAllJointNames } from "../jointsSlice";
+import {selectJointCurrentPosition, requestJointPower, requestJointPosition, selectAllJointNames } from "../jointsSlice";
 import { requestMotorPower/*, selectAllMotorNames*/ } from "../motorsSlice";
 import {getPosRequstValidJoints} from "../scienceSlice";
 import { Computer, ComputerOutlined } from "@mui/icons-material";
@@ -22,13 +22,13 @@ const inputMiddleware = (store) => (next) => (action) => {
         mountedPeripheral,
         store.dispatch
       );
-      updateScienceRequests(
-        prevComputedInput,
-        computedInput,
-        prevMountedPeripheral,
-        mountedPeripheral,
-        store.dispatch
-      );
+      // updateScienceRequests(
+      //   prevComputedInput,
+      //   computedInput,
+      //   prevMountedPeripheral,
+      //   mountedPeripheral,
+      //   store.dispatch
+      // );
       return result;
     }
 
@@ -43,7 +43,14 @@ function updateScience(
     // simple arm is going too far
     if ((computedInput.science[field] !== prevComputedInput.science[field]
       || mountedPeripheral !== prevMountedPeripheral) && Number.isInteger(computedInput.science[field])) {
-      if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
+      if(computedInput.science.requestPos) {
+        console.log(computedInput.science[field]);
+          dispatch(requestJointPosition({
+            jointName: field,
+            position: computedInput.science[field]
+          }));
+      }
+      else if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
           dispatch(requestJointPower({
             jointName: field,
             power: computedInput.science[field]
@@ -60,35 +67,35 @@ function updateScience(
 
 // Upon toggling science positioning request move joint until the
 // desired angle is reached. Currently only works with fourbar
-function updateScienceRequests(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  Object.keys(computedInput.science).forEach(field => {
-    if(computedInput.science.requestPos && 
-      getPosRequstValidJoints.includes(field)) {
-      console.log(field);
-      var currAngle = Math.round(selectJointCurrentPosition[field]);
-      console.log(currAngle);
-      if(currAngle != computedInput.science[field]
-        && currAngle < computedInput.science[field]) {
-        dispatch(requestJointPower({
-          jointName: field,
-          power: 1
-        }));
-      }
-      else if (currAngle != computedInput.science[field]
-      && currAngle < computedInput.science[field]){
-        dispatch(requestJointPower({
-          jointName: field,
-          power: -1
-        }));
-      }
-    }
-  })
-}
+// function updateScienceRequests(
+//   prevComputedInput,
+//   computedInput,
+//   prevMountedPeripheral,
+//   mountedPeripheral,
+//   dispatch
+// ) {
+//   Object.keys(computedInput.science).forEach(field => {
+//     if(computedInput.science.requestPos && 
+//       getPosRequstValidJoints.includes(field)) {
+//       console.log(field);
+//       var currAngle = Math.round(selectJointCurrentPosition[field]);
+//       console.log(currAngle);
+//       if(currAngle != computedInput.science[field]
+//         && currAngle < computedInput.science[field]) {
+//         dispatch(requestJointPower({
+//           jointName: field,
+//           power: 1
+//         }));
+//       }
+//       else if (currAngle != computedInput.science[field]
+//       && currAngle < computedInput.science[field]){
+//         dispatch(requestJointPower({
+//           jointName: field,
+//           power: -1
+//         }));
+//       }
+//     }
+//   })
+// }
 
 export default inputMiddleware;
