@@ -37,7 +37,7 @@ export default configureStore({
     motors: motorsReducer,
     cameras: camerasReducer,
     telemetry: telemetryReducer,
-    waypointNav: waypointNavReducer,
+    waypointNav: waypointNavReducer
   },
 
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat([

@@ -1,8 +1,8 @@
-import Compass from './Compass'
-import OpModeSelect from './OpModeSelect'
-import CameraStream from '../camera/CameraStream'
-import WaypointNav from './WaypointNav'
-import './NavigationPanel.css'
+import Compass from "./Compass";
+import OpModeSelect from "./OpModeSelect";
+import CameraStream from "../camera/CameraStream";
+import WaypointNav from "./WaypointNav";
+import "./NavigationPanel.css"
 
 function NavigationPanel() {
   return (
@@ -13,7 +13,7 @@ function NavigationPanel() {
       <OpModeSelect />
       <WaypointNav />
     </div>
-  )
+  );
 }
 
-export default NavigationPanel
+export default NavigationPanel;

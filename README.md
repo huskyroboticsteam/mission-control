@@ -250,7 +250,6 @@ Sent from the rover to inform Mission Control of the rover's current position in
   orientZ: number,
   lon: number,
   lat: number,
-  alt: number,
   recency: number
 }
 ```
@@ -261,7 +260,6 @@ Sent from the rover to inform Mission Control of the rover's current position in
 - `orientZ` - refers to the orientation quaternion Z component
 - `lon` - refers to the longitude of the rover in world reference frame in degrees in floating point values
 - `lat` - refers to the latitude of the rover in world reference frame in degrees in floating point values
-- `alt` - refers to the altitude of the rover in meters relative to mean sea level
 - `recency` - refers to the difference in time between when the measurement was taken and sent in seconds
 
 ## Camera Stream Open Request

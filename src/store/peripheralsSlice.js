@@ -1,21 +1,21 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  mountedPeripheral: null,
-}
+  mountedPeripheral: null
+};
 
 const peripheralsSlice = createSlice({
-  name: 'peripherals',
+  name: "peripherals",
   initialState,
   reducers: {
     mountedPeripheralReportReceived(state, action) {
-      state.mountedPeripheral = action.payload.peripheral
-    },
-  },
-})
+      state.mountedPeripheral = action.payload.peripheral;
+    }
+  }
+});
 
-export const {mountedPeripheralReportReceived} = peripheralsSlice.actions
+export const { mountedPeripheralReportReceived } = peripheralsSlice.actions;
 
-export const selectMountedPeripheral = (state) => state.peripherals.mountedPeripheral
+export const selectMountedPeripheral = state => state.peripherals.mountedPeripheral;
 
-export default peripheralsSlice.reducer
+export default peripheralsSlice.reducer;

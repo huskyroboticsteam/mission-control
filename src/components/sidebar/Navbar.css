@@ -33,7 +33,7 @@ a.active {
   background-color: #3f4145;
 }
 
-a.inactive:hover {
+a.inactive:hover { 
   color: lightgray;
   background-color: #2f3135;
 }
