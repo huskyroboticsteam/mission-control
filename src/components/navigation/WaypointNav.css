@@ -1,9 +1,17 @@
+.waypoint-nav {
+   display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 70px;
+  grid-column: 2 / span 2;
+}
+
 .waypoint-select {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 70px;
-  grid-column: span 2;
+  /*grid-column: span 1;*/
 }
 
 .waypoint-select__params {
@@ -64,4 +72,12 @@
 .waypoint-select > button:hover {
   cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
+}
+
+.waypoint-array {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 50%;
 }

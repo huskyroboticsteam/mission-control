@@ -21,6 +21,13 @@ function WaypointNav() {
     setLon(0)
   }
 
+  function removePoint(index) {
+    //slicing because just copying the list leads to the html not re-rendering
+    const newPoints = points.slice();
+    newPoints.splice(index, 1)
+    setPoints(newPoints)
+  }
+
   function handleSubmit(e) {
     e.preventDefault()
     const form = e.target
@@ -60,62 +67,78 @@ function WaypointNav() {
   }, [opMode])
 
   return (
-    <form method="post" onSubmit={handleSubmit} className="waypoint-select">
-      <div className="waypoint-select__params">
-        <label htmlFor="latitude">Latitude</label>
-        {submitted ? (
-          <input disabled value={lat} onChange={(e) => e} />
-        ) : (
-          <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} />
-        )}
-        <label htmlFor="longitude">Longitude</label>
-        {submitted ? (
-          <input disabled value={lon} onChange={(e) => e} />
-        ) : (
-          <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
-        )}
-        {/* temp note: currently sends first value of points in latitude and longitude for testing, eventually want to switch to
-        only using the points array. */}
-        <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
-        <input type="hidden" value={points.length > 0 ? points[0][1] : 0} name="longitude"></input>
-        <input type="hidden" value={JSON.stringify(points)} name="points"></input>
+    <div className="waypoint-nav"> {/* only here to create a parent element for the form and the point list */}
+      <form method="post" onSubmit={handleSubmit} className="waypoint-select">
+        <div className="waypoint-select__params">
+          <label htmlFor="latitude">Latitude</label>
+          {submitted ? (
+            <input disabled value={lat} onChange={(e) => e} />
+          ) : (
+            <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} />
+          )}
+          <label htmlFor="longitude">Longitude</label>
+          {submitted ? (
+            <input disabled value={lon} onChange={(e) => e} />
+          ) : (
+            <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
+          )}
+          {/* temp note: currently sends first value of points in latitude and longitude for testing, eventually want to switch to
+          only using the points array. */}
+          <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
+          <input type="hidden" value={points.length > 0 ? points[0][1] : 0} name="longitude"></input>
+          <input type="hidden" value={JSON.stringify(points)} name="points"></input>
 
-        {submitted ? (
-          <button disabled>Copy from Clipboard</button>
-        ) : (
-          <button type="button" onClick={grabFromClipboard}>
-            Copy from Clipboard
+          {submitted ? (
+            <button disabled>Copy from Clipboard</button>
+          ) : (
+            <button type="button" onClick={grabFromClipboard}>
+              Copy from Clipboard
+            </button>
+          )}
+          <button type="button" onClick={addPoint}>
+            Add Point
           </button>
+        </div>
+        <div className="waypoint-checkbox">
+          <label>
+            {submitted ? (
+              <input disabled type="checkbox" name="isApproximate" />
+            ) : (
+              <input type="checkbox" name="isApproximate" />
+            )}{' '}
+            Approximate
+          </label>
+          <label>
+            {submitted ? (
+              <input disabled type="checkbox" name="isGate" />
+            ) : (
+              <input type="checkbox" name="isGate" />
+            )}{' '}
+            Is Gate
+          </label>
+        </div>
+        {opMode === 'autonomous' && !submitted ? (
+          <button type="submit">Go</button>
+        ) : (
+          <button disabled>Go</button>
         )}
-        <button type="button" onClick={addPoint}>
-          Add Point
-        </button>
+      </form>
+      <div className="waypoint-array">
+        <ul>{points.map((point, index) => 
+          <li key={index}>
+            <p>
+              lat: {point[0]} 
+              <br></br>
+              lon: {point[1]}
+            </p>
+            <button type="button" className="remove-points" onClick={() => removePoint(index)}>Remove</button>
+          </li>
+          )}
+        </ul>
       </div>
-      <div className="waypoint-checkbox">
-        <label>
-          {submitted ? (
-            <input disabled type="checkbox" name="isApproximate" />
-          ) : (
-            <input type="checkbox" name="isApproximate" />
-          )}{' '}
-          Approximate
-        </label>
-        <label>
-          {submitted ? (
-            <input disabled type="checkbox" name="isGate" />
-          ) : (
-            <input type="checkbox" name="isGate" />
-          )}{' '}
-          Is Gate
-        </label>
-      </div>
-      {opMode === 'autonomous' && !submitted ? (
-        <button type="submit">Go</button>
-      ) : (
-        <button disabled>Go</button>
-      )}
-    </form>
+    </div>
   )
 }
+
 
 export default WaypointNav

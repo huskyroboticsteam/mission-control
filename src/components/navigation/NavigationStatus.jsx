@@ -6,26 +6,6 @@ import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
 
 //MAJOR ISSUE: CONSTANTS ARE IN METERS BUT CURRENT DATA IS IN LATITUDE/LONGITUDE.
-//I DO NOT GET THE MATH VERY WELL SO I AM STRUGGLING
-
-//origin is position of rover
-/*// see comments at top of file for source for math
-double phi = PI * origin.lat / 180.0;
-double cosPhi = std::cos(phi);
-double sinPhi = std::sin(phi);
-
-double a = datum.getA();
-double eSq = datum.getSquareEccentricity();
-double oneMinusESqSinSqPhi = 1 - eSq * std::pow(sinPhi, 2);
-
-metersPerDegLon = (PI * a * cosPhi) / (180.0 * std::sqrt(oneMinusESqSinSqPhi));
-metersPerDegLat = (PI * a * (1 - eSq)) / (180.0 * std::pow(oneMinusESqSinSqPhi, 1.5));*/
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const latDiff = Math.abs(lat1 - lat2)
-  const lonDiff = Math.abs(lon1 - lon2)
-  return Math.sqrt(latDiff * latDiff + lonDiff * lonDiff)
-}
 
 function sanitize(num, decimals) {
   if (num == null) {
