@@ -1,6 +1,6 @@
 import { selectMountedPeripheral } from "../peripheralsSlice";
 import {selectJointCurrentPosition, requestJointPower, requestJointPosition, selectAllJointNames } from "../jointsSlice";
-import { requestMotorPower/*, selectAllMotorNames*/ } from "../motorsSlice";
+import { /*, selectAllMotorNames*/ } from "../motorsSlice";
 import {getPosRequstValidJoints} from "../scienceSlice";
 import { Computer, ComputerOutlined } from "@mui/icons-material";
 
@@ -55,11 +55,6 @@ function updateScience(
             jointName: field,
             power: computedInput.science[field]
           }));
-      } else {
-        dispatch(requestMotorPower({
-          motorName: field,
-          power: computedInput.science[field]
-        }));
       }
     }
   })

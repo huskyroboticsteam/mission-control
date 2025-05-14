@@ -59,7 +59,7 @@
   background-color: #3000c0;
 }
 
-.op-mode-select--autonomous  > button:active {
+.op-mode-select--autonomous > button:active {
   cursor: pointer;
   background-color: #e06000;
 }
