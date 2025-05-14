@@ -79,5 +79,15 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 50%;
+}
+
+.waypoint-array > ol {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.waypoint-array > li {
+  flex: 0 0 10%;
 }

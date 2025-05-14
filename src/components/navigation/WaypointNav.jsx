@@ -14,7 +14,9 @@ function WaypointNav() {
 
   function addPoint() {
     const point = [lat, lon]
-    const newPoints = points
+    //slicing because just copying the list leads to the html not re-rendering when lat & lon are 0
+    //this is an edge case, but still
+    const newPoints = points.slice();
     newPoints.push(point)
     setPoints(newPoints)
     setLat(0)
@@ -124,7 +126,7 @@ function WaypointNav() {
         )}
       </form>
       <div className="waypoint-array">
-        <ul>{points.map((point, index) => 
+        <ol>{points.map((point, index) => 
           <li key={index}>
             <p>
               lat: {point[0]} 
@@ -134,7 +136,7 @@ function WaypointNav() {
             <button type="button" className="remove-points" onClick={() => removePoint(index)}>Remove</button>
           </li>
           )}
-        </ul>
+        </ol>
       </div>
     </div>
   )
