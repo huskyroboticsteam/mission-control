@@ -202,9 +202,9 @@ function computeDriveInput(state, action) {
   );
 }
 
-function computePeripheralInput(prevState, state, action) {
+function computePeripheralInput(prevState, state) {
   computeArmInput(state)
-  computeScienceInput(prevState, state, action)
+  computeScienceInput(prevState, state)
 }
 
 function computeArmInput(state) {
@@ -245,7 +245,7 @@ function computeArmInput(state) {
   )
 }
 
-function computeScienceInput(prevState, state, action) {
+function computeScienceInput(prevState, state) {
   const prevPeripheralGamepad = prevState.peripheralGamepad
   const peripheralGamepad = state.peripheralGamepad
   const prevPressedKeys = prevState.keyboard.pressedKeys
@@ -302,6 +302,15 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(positiveKey)) axis++
   return axis
 }
+
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
+  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
+    if(currState == 0) return -1;
+    else return 0;
+  }
+  return currState;
+}
+
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1

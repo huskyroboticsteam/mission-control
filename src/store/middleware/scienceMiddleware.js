@@ -34,6 +34,7 @@ function updateScience(
 ) {
   Object.keys(computedInput.science).forEach(field => {
     // simple arm is going too far
+    
     if ((computedInput.science[field] !== prevComputedInput.science[field]
       || mountedPeripheral !== prevMountedPeripheral) && Number.isInteger(computedInput.science[field])) {
       if(computedInput.science.requestPos) {
@@ -44,6 +45,7 @@ function updateScience(
           }));
       }
       else if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
+        console.log(field)
           dispatch(requestJointPower({
             jointName: field,
             power: computedInput.science[field]

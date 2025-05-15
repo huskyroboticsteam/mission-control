@@ -27,6 +27,7 @@ const scienceSlice = createSlice({
       const { scienceName, power } = action.payload;
       const science = state[scienceName];
       science.scienceInput = power;
+      return state;
     }
 
   }

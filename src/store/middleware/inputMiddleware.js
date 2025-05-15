@@ -1,16 +1,21 @@
-import { selectMountedPeripheral } from "../peripheralsSlice";
-import { /*requestCrabDrive, */requestDrive, requestTankDrive/*, requestTurnInPlaceDrive */} from "../driveSlice";
-import { requestJointPower, selectAllJointNames } from "../jointsSlice";
-import { enableIK, visuallyEnableIK } from "../inputSlice";
-import { messageReceivedFromRover, messageRover, roverDisconnected, roverConnected } from "../roverSocketSlice";
-// import { selectSwerveDriveMode } from "../swerveDriveModeSlice";
-import { /*, selectAllMotorNames*/ } from "../motorsSlice";
+import {selectMountedPeripheral} from '../peripheralsSlice'
+import {requestDrive, requestTankDrive} from '../driveSlice'
+import {requestJointPower} from '../jointsSlice'
+import {enableIK, visuallyEnableIK} from '../inputSlice'
+import {requestStop} from '../emergencyStopSlice'
+import {
+  messageReceivedFromRover,
+  messageRover,
+  roverDisconnected,
+  roverConnected,
+} from '../roverSocketSlice'
+import {current} from '@reduxjs/toolkit'
 
 /**
  * Middleware that messages the rover in response to user input.
  */
 const inputMiddleware = (store) => (next) => (action) => {
-  console.log(action.type);
+  console.log(action);
   if (action.type.startsWith('input/')) {
     if (action.type === enableIK.type) {
       store.dispatch(
@@ -92,22 +97,10 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === "arm")
-    updateArm(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      dispatch
-    );
+  if (mountedPeripheral === 'arm')
+    updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
   else if (mountedPeripheral === 'scienceStation')
-    updateScience(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      dispatch
-    )
+    updateScience(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
 }
 
 function updateArm(
