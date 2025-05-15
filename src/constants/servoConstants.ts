@@ -10,6 +10,7 @@ export enum ServoNames {
   // Mixer Stepper
   // Lazy Susan Stepper
   // Spectrometer Lazy Susan Stepper
+  // Mast Camera Steppers
 }
 
 export enum ServoType {
