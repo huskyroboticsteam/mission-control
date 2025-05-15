@@ -34,22 +34,22 @@ export const SERVOS: {
     servoNum: 1,
     type: ServoType.Positional,
     limits: {
-      hi: 120,
-      lo: 35,
+      hi: 120,  // redo once lever is fixed
+      lo: 65,
     },
   },
   cuvette: {
     servoNum: 2,
     type: ServoType.Positional,
     limits: {
-      hi: 90,
-      lo: 80,
+      hi: 160,
+      lo: 85,
     },
   },
   filter: {
     servoNum: 3,
     type: ServoType.Positional,
-    limits: {
+    limits: { // redo once they fix filter servo cxn
       hi: 0,
       lo: 180,
     },
@@ -59,11 +59,11 @@ export const SERVOS: {
     type: ServoType.Positional,
     limits: {
       hi: 110,
-      lo: 0,
+      lo: 40,
     },
-    // Closed: 0
-    // First open: 45
+    // Closed: 40
+    // First open: 65
     // Second: 80
-    // Third: 80+
+    // Third: 95+ // dbl check after soil sensor is positioned correctly
   },
 }

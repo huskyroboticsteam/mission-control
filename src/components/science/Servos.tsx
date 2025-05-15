@@ -25,16 +25,16 @@ function Servos() {
       <button onClick={() => {
         dispatch(
           requestServoPosition({
-            servoName: "syringe",
-            position: 120
+            servoName: "cuvette",
+            position: 160
           })
         )
       }}>Up</button>
       <button onClick={() => {
         dispatch(
           requestServoPosition({
-            servoName: "syringe",
-            position: 35
+            servoName: "cuvette",
+            position: 85
           })
         )
       }}>Down</button>
