@@ -10,6 +10,7 @@ import { /*, selectAllMotorNames*/ } from "../motorsSlice";
  * Middleware that messages the rover in response to user input.
  */
 const inputMiddleware = (store) => (next) => (action) => {
+  console.log(action.type);
   if (action.type.startsWith('input/')) {
     if (action.type === enableIK.type) {
       store.dispatch(

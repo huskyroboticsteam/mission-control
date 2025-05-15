@@ -1,29 +1,35 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const jointNames = [
-  "armBase",
-  "shoulder",
-  "elbow",
-  "forearm",
-  "wristPitch",
-  "wristRoll",
-  "hand",
-  "handActuator",
+  'armBase',
+  'shoulder',
+  'elbow',
+  'forearm',
+  'wristPitch',
+  'wristRoll',
+  'hand',
+  'handActuator',
   "drillArm",
   "drillActuator",
   "ikUp",
   "ikForward",
-  "fourBarLinkage"
-];
+  "fourBarLinkage",
+  "drillMotor"
+]
+// drill motor is defined as a joint for now
+// as to not causes the unkown motor/ joint reference
 
-const initialState = jointNames.reduce((state, jointName) => ({
-  ...state,
-  [jointName]: {
-    requestedPower: null,
-    requestedPosition: null,
-    currentPosition: null
-  }
-}), {});
+const initialState = jointNames.reduce(
+  (state, jointName) => ({
+    ...state,
+    [jointName]: {
+      requestedPower: null,
+      requestedPosition: null,
+      currentPosition: null,
+    },
+  }),
+  {}
+)
 
 const jointsSlice = createSlice({
   name: 'joints',

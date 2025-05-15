@@ -22,13 +22,6 @@ const scienceMiddleware = (store) => (next) => (action) => {
         mountedPeripheral,
         store.dispatch
       );
-      // updateScienceRequests(
-      //   prevComputedInput,
-      //   computedInput,
-      //   prevMountedPeripheral,
-      //   mountedPeripheral,
-      //   store.dispatch
-      // );
       return result;
     }
 
@@ -59,38 +52,5 @@ function updateScience(
     }
   })
 }
-
-// Upon toggling science positioning request move joint until the
-// desired angle is reached. Currently only works with fourbar
-// function updateScienceRequests(
-//   prevComputedInput,
-//   computedInput,
-//   prevMountedPeripheral,
-//   mountedPeripheral,
-//   dispatch
-// ) {
-//   Object.keys(computedInput.science).forEach(field => {
-//     if(computedInput.science.requestPos && 
-//       getPosRequstValidJoints.includes(field)) {
-//       console.log(field);
-//       var currAngle = Math.round(selectJointCurrentPosition[field]);
-//       console.log(currAngle);
-//       if(currAngle != computedInput.science[field]
-//         && currAngle < computedInput.science[field]) {
-//         dispatch(requestJointPower({
-//           jointName: field,
-//           power: 1
-//         }));
-//       }
-//       else if (currAngle != computedInput.science[field]
-//       && currAngle < computedInput.science[field]){
-//         dispatch(requestJointPower({
-//           jointName: field,
-//           power: -1
-//         }));
-//       }
-//     }
-//   })
-// }
 
 export default scienceMiddleware;
