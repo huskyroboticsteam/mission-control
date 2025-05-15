@@ -7,7 +7,7 @@ import { Computer, ComputerOutlined } from "@mui/icons-material";
 /**
  * Middleware that messages the rover in response to user input.
  */
-const inputMiddleware = (store) => (next) => (action) => {
+const scienceMiddleware = (store) => (next) => (action) => {
       const prevComputedInput = store.getState().input.computed;
       const prevMountedPeripheral = selectMountedPeripheral(store.getState());
       const result = next(action);
@@ -93,4 +93,4 @@ function updateScience(
 //   })
 // }
 
-export default inputMiddleware;
+export default scienceMiddleware;
