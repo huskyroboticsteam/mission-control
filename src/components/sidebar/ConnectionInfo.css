@@ -1,22 +1,65 @@
-.connection-info {
+.op-mode-select {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  cursor: default;
-  padding: 5px 10px 5px 5px;
-  border-top: 1px solid gray;
-  font-size: large;
+  align-items: center;
+}
+
+.op-mode-select > p {
+  color: #cccccc;
+  font-size: 20px;
+  padding: 5px;
+  border-radius: 5px;
   text-align: center;
 }
 
-.connection-info--connected {
-  color: #4fb185;
+.op-mode-select__op-mode {
+  text-transform: capitalize;
 }
 
-.connection-info--disconnected {
-  color: #ed4245;
+.op-mode-select__op-mode--teleoperation {
+  color: #ff7700;
 }
 
-.connection-info > p {
-  padding: 10px;
+.op-mode-select__op-mode--autonomous {
+  color: #4e00e0;
+}
+
+.op-mode-select > button {
+  border: none;
+  color: white;
+  margin: 14px;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  border-radius: 5px;
+  width: 50%;
+}
+
+.op-mode-select--teleoperation > button {
+  background-color: #4e00e0;
+}
+
+.op-mode-select--autonomous > button {
+  background-color: #ff7700;
+}
+
+.op-mode-select--teleoperation > button:hover {
+  cursor: pointer;
+  background-color: #4000d0;
+}
+
+.op-mode-select--autonomous > button:hover {
+  cursor: pointer;
+  background-color: #ea6a00;
+}
+
+.op-mode-select--teleoperation > button:active {
+  cursor: pointer;
+  background-color: #3000c0;
+}
+
+.op-mode-select--autonomous > button:active {
+  cursor: pointer;
+  background-color: #e06000;
 }
