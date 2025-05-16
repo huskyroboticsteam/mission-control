@@ -9,10 +9,15 @@ const jointNames = [
   'wristRoll',
   'hand',
   'handActuator',
-  'drillArm',
-  'ikUp',
-  'ikForward',
+  "drillArm",
+  "drillActuator",
+  "ikUp",
+  "ikForward",
+  "fourBarLinkage",
+  "drillMotor"
 ]
+// drill motor is defined as a joint for now
+// as to not causes the unkown motor/ joint reference
 
 const initialState = jointNames.reduce(
   (state, jointName) => ({

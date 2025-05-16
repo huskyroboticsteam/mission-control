@@ -3,6 +3,7 @@ import {requestDrive, requestTankDrive} from '../driveSlice'
 import {requestJointPower} from '../jointsSlice'
 import {enableIK, visuallyEnableIK} from '../inputSlice'
 import {requestStop} from '../emergencyStopSlice'
+import {requestSciencePower} from '../scienceSlice'
 import {
   messageReceivedFromRover,
   messageRover,
@@ -15,6 +16,7 @@ import {current} from '@reduxjs/toolkit'
  * Middleware that messages the rover in response to user input.
  */
 const inputMiddleware = (store) => (next) => (action) => {
+  console.log(action);
   if (action.type.startsWith('input/')) {
     if (action.type === enableIK.type) {
       store.dispatch(
@@ -98,6 +100,8 @@ function updatePeripherals(
 ) {
   if (mountedPeripheral === 'arm')
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+  else if (mountedPeripheral === 'scienceStation')
+    updateScience(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
 }
 
 function updateArm(
@@ -121,4 +125,22 @@ function updateArm(
   })
 }
 
-export default inputMiddleware
+function updateScience(
+  prevComputedInput,
+  computedInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  Object.keys(computedInput.science).forEach(scienceName => {
+    if (computedInput.science[scienceName] !== prevComputedInput.science[scienceName]
+      || mountedPeripheral !== prevMountedPeripheral) {
+        requestSciencePower({
+          scienceName,
+          power: computedInput.science[scienceName],
+        })
+    }
+  })
+}
+
+export default inputMiddleware;
