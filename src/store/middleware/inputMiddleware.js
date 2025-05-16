@@ -3,6 +3,7 @@ import {requestDrive, requestTankDrive} from '../driveSlice'
 import {requestJointPower} from '../jointsSlice'
 import {enableIK, visuallyEnableIK} from '../inputSlice'
 import {requestStop} from '../emergencyStopSlice'
+import {requestSciencePower} from '../scienceSlice'
 import {
   messageReceivedFromRover,
   messageRover,
@@ -134,7 +135,7 @@ function updateScience(
   Object.keys(computedInput.science).forEach(scienceName => {
     if (computedInput.science[scienceName] !== prevComputedInput.science[scienceName]
       || mountedPeripheral !== prevMountedPeripheral) {
-        dispatch({
+        requestSciencePower({
           scienceName,
           power: computedInput.science[scienceName],
         })
