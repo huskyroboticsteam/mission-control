@@ -208,18 +208,18 @@ function WaypointNav() {
                 Remove
               </button>
               {/* the edit button turns to a cancel button if the point is currently being edited */}
-              {(editingPoint && index == editPointIndex) ? (<button
-                type="button"
-                className="edit-points"
-                onClick={exitEditPointState}>
-                Cancel
-              </button>) : 
-              (<button
-                type="button"
-                className="edit-points"
-                onClick={() => enterEditPointState(index)}>
-                Edit
-              </button>) }
+              {editingPoint && index == editPointIndex ? (
+                <button type="button" className="edit-points" onClick={exitEditPointState}>
+                  Cancel
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="edit-points"
+                  onClick={() => enterEditPointState(index)}>
+                  Edit
+                </button>
+              )}
               <br></br>
               <button
                 hidden={index == 0}
