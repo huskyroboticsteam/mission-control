@@ -30,8 +30,6 @@ function WaypointNav() {
     const newPoints = points.slice()
     const point = [lat, lon]
     newPoints[editPointIndex] = point
-    //newPoints[index][0] = point[0]
-    //newPoints[index][1] = point[1]
     setPoints(newPoints)
     exitEditPointState()
   }
@@ -77,9 +75,10 @@ function WaypointNav() {
     setLon(points[index][1])
   }
 
+  //change the state to adding points and change values to default
   function exitEditPointState() {
     setEditingPoint(false)
-    setEditPointIndex(-1)
+    setEditPointIndex(-1) //just in case, so that no point thinks we're editing it
     setLat(0)
     setLon(0)
   }
