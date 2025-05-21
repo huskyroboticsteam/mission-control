@@ -56,6 +56,7 @@ const initialState = {
     lastSentArmIKState: null,
   },
   emergencyStop: false,
+  triggerHeld: false,
 }
 
 function isLinux() {
@@ -106,9 +107,10 @@ const inputSlice = createSlice({
     gamepadButtonChanged(state, action) {
       const prevState = JSON.parse(JSON.stringify(state))
       const {gamepadName, buttonName, pressed} = action.payload
-      if (buttonName === 'LT' || buttonName === 'RT')
-        // Treat triggers as axes, not buttons.
+      if (buttonName === 'LT' || buttonName === 'RT') {
+        state.triggerHeld = pressed
         return
+      }
       state[gamepadName][buttonName] = pressed
       computeInput(prevState, state, action)
     },
@@ -152,6 +154,11 @@ function computeDriveInput(state, action) {
 
   const driveInput = state.computed.drive
 
+  // Emergency stop is toggled by the space bar.
+  if (action.type === keyPressed.type && action.payload.key === ' ') {
+    state.emergencyStop = !state.emergencyStop
+  }
+
   // Y key or the Y button toggles tank drive.
   if (
     (action.type === keyPressed.type && action.payload.key === 'y') ||
@@ -160,21 +167,29 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === 'Y' &&
       action.payload.pressed)
   ) {
-    driveInput.tank = !driveInput.tank
+    if (driveInput.type === 'normal') {
+      driveInput.tank = !driveInput.tank
+    } else {
+      alert("Can't switch to tank drive when not on normal driveInput type!")
+    }
+  }
+  if (state.triggerHeld) {
+    // Additional function layer binds go here
+  } else {
+    driveInput.straight =
+      -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
+    driveInput.steer =
+      driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
+    driveInput.left =
+      driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
+    driveInput.right =
+      driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
+    driveInput.crab =
+      driveGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
   }
 
-  if (action.type === keyPressed.type && action.payload.key === ' ') {
-    state.emergencyStop = !state.emergencyStop
-  }
-
-  driveInput.straight =
-    -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
-  driveInput.steer =
-    driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
-  driveInput.left =
-    driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
-  driveInput.right =
-    driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
+  driveInput.activeSuspension =
+    getAxisFromButtons(driveGamepad, 'DPadDown', 'DPadUp') + getAxisFromKeys(pressedKeys, 'B', 'M')
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad)
@@ -191,8 +206,8 @@ function computePeripheralInput(prevState, state, action) {
 function computeArmInput(state) {
   const peripheralGamepad = state.peripheralGamepad
   const pressedKeys = state.keyboard.pressedKeys
-
   const armInput = state.computed.arm
+
   armInput.armBase = peripheralGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'A', 'D')
   if (state.inverseKinematics.enabled) {
     armInput.ikForward = -peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
