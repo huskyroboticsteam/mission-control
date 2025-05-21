@@ -11,7 +11,7 @@ function WaypointNav() {
   const [lat, setLat] = useState(0)
   const [lon, setLon] = useState(0)
   const [editingPoint, setEditingPoint] = useState(false)
-  var [editPointIndex, setEditPointIndex] = useState(0);
+  var [editPointIndex, setEditPointIndex] = useState(-1)
   var opMode = useSelector(selectOpMode)
 
   //either adds point if in add point state or edits point if in editing state
@@ -29,15 +29,11 @@ function WaypointNav() {
   function editPoint() {
     const newPoints = points.slice()
     const point = [lat, lon]
-    console.log(point)
     newPoints[editPointIndex] = point
-    console.log(newPoints[editPointIndex])
     //newPoints[index][0] = point[0]
     //newPoints[index][1] = point[1]
     setPoints(newPoints)
-    setLat(0)
-    setLon(0)
-    setEditingPoint(false)
+    exitEditPointState()
   }
 
   function removePoint(index) {
@@ -74,11 +70,18 @@ function WaypointNav() {
   }
 
   //change the state to editing and change the values in the point fill to be the values in the point we're editing
-  function setEditPointState(index) {
+  function enterEditPointState(index) {
     setEditingPoint(true)
     setEditPointIndex(index)
     setLat(points[index][0])
     setLon(points[index][1])
+  }
+
+  function exitEditPointState() {
+    setEditingPoint(false)
+    setEditPointIndex(-1)
+    setLat(0)
+    setLon(0)
   }
 
   function handleSubmit(e) {
@@ -153,9 +156,10 @@ function WaypointNav() {
               Copy from Clipboard
             </button>
           )}
+          {/* The add button changes to an edit point when a point is within an edit state */}
           {submitted ? (
             <button disabled>Add Point</button>
-          ) : (editingPoint ? (
+          ) : editingPoint ? (
             <button type="button" onClick={editPoint}>
               Edit Point {editPointIndex + 1}
             </button>
@@ -163,7 +167,7 @@ function WaypointNav() {
             <button type="button" onClick={addPoint}>
               Add Point
             </button>
-          ))}
+          )}
         </div>
         <div className="waypoint-checkbox">
           <label>
@@ -192,7 +196,9 @@ function WaypointNav() {
       <div className="waypoint-array">
         <ol>
           {points.map((point, index) => (
-            <li key={index} style={{ color: (editingPoint && editPointIndex == index)? 'red' : 'white' }}>
+            <li
+              key={index}
+              style={{color: editingPoint && editPointIndex == index ? 'red' : 'white'}}>
               <p>
                 lat: {point[0]}
                 <br></br>
@@ -201,9 +207,34 @@ function WaypointNav() {
               <button type="button" className="remove-points" onClick={() => removePoint(index)}>
                 Remove
               </button>
-              <button type="button" className="edit-points" onClick={() => setEditPointState(index)}>Edit</button>
-              <button hidden={index == 0} type="button" className="move-points" onClick={() => movePointUp(index)}>Move Up</button>
-              <button hidden={index == points.length - 1} type="button" className="move-points" onClick={() => movePointDown(index)}>Move Down</button>
+              {/* the edit button turns to a cancel button if the point is currently being edited */}
+              {(editingPoint && index == editPointIndex) ? (<button
+                type="button"
+                className="edit-points"
+                onClick={exitEditPointState}>
+                Cancel
+              </button>) : 
+              (<button
+                type="button"
+                className="edit-points"
+                onClick={() => enterEditPointState(index)}>
+                Edit
+              </button>) }
+              <br></br>
+              <button
+                hidden={index == 0}
+                type="button"
+                className="move-points"
+                onClick={() => movePointUp(index)}>
+                Move Up
+              </button>
+              <button
+                hidden={index == points.length - 1}
+                type="button"
+                className="move-points"
+                onClick={() => movePointDown(index)}>
+                Move Down
+              </button>
             </li>
           ))}
         </ol>
