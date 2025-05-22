@@ -33,7 +33,7 @@
 }
 
 /* Enabled Buttons */
-.waypoint-select>button {
+.waypoint-select > button {
   background-color: #4fb185;
   border: none;
   color: white;
@@ -48,7 +48,7 @@
 }
 
 /* Disabled Buttons */
-.waypoint-select>button:disabled {
+.waypoint-select > button:disabled {
   background-color: #343836;
   border: none;
   color: white;
@@ -62,10 +62,10 @@
   cursor: not-allowed;
 }
 
-.waypoint-select>button:hover {
+.waypoint-select > button:hover {
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
 }
 
-.waypoint-select>.unset-waypoint-button {
+.waypoint-select > .unset-waypoint-button {
   background-color: #ed4245;
 }
