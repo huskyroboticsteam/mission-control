@@ -87,7 +87,7 @@ function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
 
 const TARGET_CIRCLE_OFFSET = 42.5;  // how many degrees the target "circle" needs to be offset
 const Compass = () => {
-  const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
+  const { orientW, orientX, orientY, orientZ, lon, lat, alt } = useSelector(selectRoverPosition)
 
   let roll
   let pitch
