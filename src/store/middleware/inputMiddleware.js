@@ -98,36 +98,51 @@ function updatePeripherals(
 ) {
   console.log("mounted: ", mountedPeripheral)
   console.log("prevComputedInput:", prevComputedInput)
-  console.log("computedInnput:", computedInput)
-  
-  const peripheralMapping = { // lazySusanPosition is undefined here
-    arm: computedInput.arm,
-    scienceStation: computedInput.science,
-  }
+  console.log("computedInput:", computedInput)
 
-  const prevPeripheralInput = prevComputedInput[mountedPeripheral]
-  const currentPeripheralInput = peripheralMapping[mountedPeripheral]
-
-  console.log("currentPeripheralInput:", currentPeripheralInput)
-  if (currentPeripheralInput) {
-
-    console.log("peripheral")
-    Object.keys(currentPeripheralInput).forEach((jointName) => {
-      console.log(jointName)
-      if (
-        currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
-        mountedPeripheral !== prevMountedPeripheral
-      ) {
-        console.log(`dispatch power for: ${jointName}: ${currentPeripheralInput[jointName]}`)
-        dispatch(
-          requestJointPower({
-            jointName,
-            power: currentPeripheralInput[jointName],
-          })
-        )
-      }
-    })
+  if (mountedPeripheral === 'arm') {
+    updatePeripheral(
+      prevComputedInput.arm,
+      computedInput.arm,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    );
+  } else if (mountedPeripheral === 'scienceStation') {
+    updatePeripheral(
+      prevComputedInput.science,
+      computedInput.science,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    );
   }
 }
+
+function updatePeripheral(
+  prevPeripheralInput,
+  currentPeripheralInput,
+  prevMountedPeripheral,
+  mountedPeripheral,
+  dispatch
+) {
+  if (!currentPeripheralInput) return;
+
+  Object.keys(currentPeripheralInput).forEach((jointName) => {
+    if (
+      currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
+      mountedPeripheral !== prevMountedPeripheral
+    ) {
+      console.log(`dispatch power for: ${jointName}: ${currentPeripheralInput[jointName]}`);
+      dispatch(
+        requestJointPower({
+          jointName,
+          power: currentPeripheralInput[jointName],
+        })
+      );
+    }
+  });
+}
+
 
 export default inputMiddleware
