@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux'
 import React, {useState} from 'react'
 import {selectRoverPosition} from '../../store/telemetrySlice'
-import {selectPoints} from '../../store/waypointNavSlice'
+import {selectRoverStatus} from '../../store/navStatusSlice'
 import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
 
@@ -20,14 +20,15 @@ function sanitize(num, decimals) {
 
 function NavigationStatus() {
   const {lon, lat} = useSelector(selectRoverPosition)
-  const targetPoints = useSelector(selectPoints)
-  const targetLatitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][0]) : null
-  const targetLongitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][1]) : null
+  const {currTarget, relativeDistance, roverStatus} = useeSelector(selectRoverStatus)
+  //const targetPoints = useSelector(selectPoints)
+  //const targetLatitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][0]) : null
+  //const targetLongitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][1]) : null
 
   const getNavigationStatus = () => {
     // Guard against null or undefined values
     //Also guards against the value of 0. Unlikely to be an issue but it is of note
-    if (!lon || !lat || !targetLatitude || !targetLongitude) {
+    if (!lon || !lat || !currTarget.lat || !currTarget.lon) {
       return {
         status: 'unknown',
         distance: null,
@@ -35,7 +36,23 @@ function NavigationStatus() {
       }
     }
 
-    const distance = calculateDistance(lat, lon, targetLatitude, targetLongitude)
+    //set color
+    let color = 'red';
+    if (roverStatus == 'Reached'){
+      color = 'green'
+    } else if (roverStatus == 'Approaching') {
+      color = 'yellow'
+    } else {
+      color = 'red'
+    }
+
+    //return navigation status
+    return {
+        status: roverStatus,
+        distance: relativeDistance,
+        color
+      }
+    /*const distance = calculateDistance(lat, lon, targetLatitude, targetLongitude)
 
     if (distance <= POSITION_THRESHOLD) {
       //NOTE: There are plans to update the data the rover sends to include the target point and the naviagion status. As such, most of this
@@ -75,7 +92,7 @@ function NavigationStatus() {
         distance,
         color: 'red',
       }
-    }
+    }*/
   }
 
   const navStatus = getNavigationStatus()
@@ -94,7 +111,7 @@ function NavigationStatus() {
             Current: ({sanitize(lat, 6)}, {sanitize(lon, 6)})
           </div>
           <div>
-            Target: ({sanitize(targetLatitude, 6)}, {sanitize(targetLongitude, 6)})
+            Target: ({sanitize(currTarget.lat, 6)}, {sanitize(currTarget.lon, 6)})
           </div>
         </div>
       </div>
