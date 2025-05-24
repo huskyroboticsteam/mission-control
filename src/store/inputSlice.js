@@ -50,6 +50,7 @@ const initialState = {
     science: {
       lazySusanPosition: 0,
       drillMotor: 0,
+      drillActuator: 0,
     },
   },
   inverseKinematics: {

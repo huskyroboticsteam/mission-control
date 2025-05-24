@@ -125,14 +125,21 @@ function updateArm(
 
 function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
   if (computedInput.science.drillMotor !== prevComputedInput.science.drillMotor) {
-    const power = computedInput.science.drillEnabled ? 1 : 0
+    const power = computedInput.science.drillMotor ? 1 : 0
     dispatch(
       requestJointPower({
         jointName: 'drillMotor',
         power: computedInput.science.drillMotor,
       })
     )
+    dispatch(
+      requestJointPower({
+        jointName: 'drillActuator',
+        power: computedInput.science.drillMotor ? 1 : 0,
+      })
+    )
   }
 }
+
 
 export default inputMiddleware

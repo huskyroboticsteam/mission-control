@@ -33,30 +33,30 @@
   width: 100%;
 }
 
-.enable-drill-button--enabled > button {
+.enable-drill-button--disabled > button {
   background-color: #4fb185;
 }
 
-.enable-drill-button--disabled > button {
+.enable-drill-button--enabled > button {
   background-color: #ed4245;
-}
-
-.enable-drill-button--enabled > button:hover {
-  cursor: pointer;
-  background-color: #3ea074;
 }
 
 .enable-drill-button--disabled > button:hover {
   cursor: pointer;
+  background-color: #3ea074;
+}
+
+.enable-drill-button--enabled > button:hover {
+  cursor: pointer;
   background-color: #dc3134;
 }
 
-.enable-drill-button--enabled > button:active {
+.enable-drill-button--disabled > button:active {
   cursor: pointer;
   background-color: #2d8f63;
 }
 
-.enable-drill-button--disabled > button:active {
+.enable-drill-button--enabled > button:active {
   cursor: pointer;
   background-color: #cb2023;
 }
