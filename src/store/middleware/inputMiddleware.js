@@ -141,5 +141,4 @@ function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
   }
 }
 
-
 export default inputMiddleware
