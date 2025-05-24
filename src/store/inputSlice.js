@@ -52,7 +52,8 @@ const initialState = {
       fourBarLinkage: 0,
       drillActuator: 0,
       drillMotor: 0,
-      requestPos: false
+      requestPos: false,
+      speed: 0.333
     }
   },
   inverseKinematics: {
@@ -268,6 +269,18 @@ function computeScienceInput(prevState, state) {
 
   if(!scienceInput.requestPos) {
     scienceInput.fourBarLinkage = getAxisFromKeys(pressedKeys, "C", "V") * getPrecisionMultiplier(pressedKeys, peripheralGamepad);
+    if(pressedKeys.includes("1")) {
+      // Slow speed
+      scienceInput.speed = 1/3;
+    }
+    else if(pressedKeys.includes("2")) {
+      // Medium speed
+      scienceInput.speed = 2/3;
+    }
+    else if(pressedKeys.includes("3")) {
+      // Fast speed
+      scienceInput.speed = 1;
+    }
   } 
   else {
     // get pos to toggle

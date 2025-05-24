@@ -34,9 +34,10 @@ function updateScience(
 ) {
   Object.keys(computedInput.science).forEach(field => {
     // simple arm is going too far
-    
+    console.log("print out speed here: " + computedInput.science["speed"])
     if ((computedInput.science[field] !== prevComputedInput.science[field]
-      || mountedPeripheral !== prevMountedPeripheral) && Number.isInteger(computedInput.science[field])) {
+      || mountedPeripheral !== prevMountedPeripheral) && Number.isInteger(computedInput.science[field])
+      && field != "speed") {
       if(computedInput.science.requestPos) {
         console.log(computedInput.science[field]);
           dispatch(requestJointPosition({
@@ -45,10 +46,10 @@ function updateScience(
           }));
       }
       else if (Object.keys(selectAllJointNames).find(element => field.str === element.str) !== null) {
-        console.log(field)
+        
           dispatch(requestJointPower({
             jointName: field,
-            power: computedInput.science[field]
+            power: (computedInput.science[field] * computedInput.science["speed"])
           }));
       }
     }
