@@ -37,7 +37,7 @@
 
 .enable-motors-button--enabled > button:active {
   cursor: pointer;
-  background-color: #ed4245; 
+  background-color: #ed4245;
 }
 
 .enable-motors--disabled > button:active {

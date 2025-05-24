@@ -34,11 +34,11 @@
 }
 
 .enable-drill-button--enabled > button {
-  background-color: #4fb185; 
+  background-color: #4fb185;
 }
 
 .enable-drill-button--disabled > button {
-  background-color: #ed4245; 
+  background-color: #ed4245;
 }
 
 .enable-drill-button--enabled > button:hover {
@@ -58,5 +58,5 @@
 
 .enable-drill-button--disabled > button:active {
   cursor: pointer;
-  background-color: #cb2023; 
+  background-color: #cb2023;
 }
