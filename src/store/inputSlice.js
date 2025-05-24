@@ -264,7 +264,7 @@ function computeScienceInput(prevState, state, action) {
     scienceInput.lazySusanPosition =
       (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
   const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
-  state.computed.science.drillActuator = drillActuatorState;
+  state.computed.science.drillActuator = drillActuatorState
 }
 function getActuatorStatusFromKeys(pressedKeys, negative, positive) {
   let status = 0

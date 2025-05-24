@@ -143,7 +143,7 @@ function updateDrillActuator(prevComputedInput, computedInput, dispatch) {
         jointName: 'drillActuator',
         power: computedInput.science.drillActuator,
       })
-  )
+    )
 }
 
 export default inputMiddleware
