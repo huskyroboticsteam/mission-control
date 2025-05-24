@@ -96,28 +96,46 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === 'arm')
-    updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+  if (mountedPeripheral === 'arm') {
+    updatePeripheral(
+      prevComputedInput.arm,
+      computedInput.arm,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
+  } else if (mountedPeripheral === 'scienceStation') {
+    updatePeripheral(
+      prevComputedInput.science,
+      computedInput.science,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
+  }
 }
 
-function updateArm(
-  prevComputedInput,
-  computedInput,
+function updatePeripheral(
+  prevPeripheralInput,
+  currentPeripheralInput,
   prevMountedPeripheral,
   mountedPeripheral,
   dispatch
 ) {
-  Object.keys(computedInput.arm).forEach((jointName) => {
+  if (!currentPeripheralInput) return
+
+  Object.keys(currentPeripheralInput).forEach((jointName) => {
     if (
-      computedInput.arm[jointName] !== prevComputedInput.arm[jointName] ||
+      currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
       mountedPeripheral !== prevMountedPeripheral
-    )
+    ) {
       dispatch(
         requestJointPower({
-          jointName,
-          power: computedInput.arm[jointName],
+          jointName: jointName,
+          power: currentPeripheralInput[jointName],
         })
       )
+    }
   })
 }
 
