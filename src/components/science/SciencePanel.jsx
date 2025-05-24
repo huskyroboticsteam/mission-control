@@ -2,7 +2,7 @@ import React from 'react'
 import CameraStream from '../camera/CameraStream'
 import './SciencePanel.css'
 import {useSelector, useDispatch} from 'react-redux'
-import {selectDrillMotor, toggleDrillMotor} from '../../store/inputSlice'
+import {selectDrillMotor, toggleDrillMotor } from '../../store/inputSlice'
 
 function ArmDexterityPanel() {
   const dispatch = useDispatch()

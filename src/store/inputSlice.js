@@ -263,6 +263,14 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition =
       (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
+  const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
+  state.computed.science.drillActuator = drillActuatorState;
+}
+function getActuatorStatusFromKeys(pressedKeys, negative, positive) {
+  let status = 0
+  if (pressedKeys.includes(negative)) status = -1
+  if (pressedKeys.includes(positive)) status = 1
+  return status
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
