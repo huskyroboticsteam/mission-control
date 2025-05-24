@@ -34,29 +34,29 @@
 }
 
 .enable-drill-button--enabled > button {
-  background-color: #ed4245; /* Red for enabled */
+  background-color: #4fb185; 
 }
 
 .enable-drill-button--disabled > button {
-  background-color: #4fb185; /* Green for disabled */
+  background-color: #ed4245; 
 }
 
 .enable-drill-button--enabled > button:hover {
   cursor: pointer;
-  background-color: #dc3134;
+  background-color: #3ea074;
 }
 
 .enable-drill-button--disabled > button:hover {
   cursor: pointer;
-  background-color: #3ea074;
+  background-color: #dc3134;
 }
 
 .enable-drill-button--enabled > button:active {
   cursor: pointer;
-  background-color: #cb2023;
+  background-color: #2d8f63;
 }
 
 .enable-drill-button--disabled > button:active {
   cursor: pointer;
-  background-color: #2d8f63;
+  background-color: #cb2023; 
 }
