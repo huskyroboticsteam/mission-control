@@ -12,6 +12,7 @@ const jointNames = [
   'drillArm',
   'ikUp',
   'ikForward',
+  'lazySusanPosition',
 ]
 
 const initialState = jointNames.reduce(

@@ -96,10 +96,6 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  console.log("mounted: ", mountedPeripheral)
-  console.log("prevComputedInput:", prevComputedInput)
-  console.log("computedInput:", computedInput)
-
   if (mountedPeripheral === 'arm') {
     updatePeripheral(
       prevComputedInput.arm,
@@ -107,7 +103,7 @@ function updatePeripherals(
       prevMountedPeripheral,
       mountedPeripheral,
       dispatch
-    );
+    )
   } else if (mountedPeripheral === 'scienceStation') {
     updatePeripheral(
       prevComputedInput.science,
@@ -115,7 +111,7 @@ function updatePeripherals(
       prevMountedPeripheral,
       mountedPeripheral,
       dispatch
-    );
+    )
   }
 }
 
@@ -126,23 +122,21 @@ function updatePeripheral(
   mountedPeripheral,
   dispatch
 ) {
-  if (!currentPeripheralInput) return;
+  if (!currentPeripheralInput) return
 
   Object.keys(currentPeripheralInput).forEach((jointName) => {
     if (
       currentPeripheralInput[jointName] !== prevPeripheralInput[jointName] ||
       mountedPeripheral !== prevMountedPeripheral
     ) {
-      console.log(`dispatch power for: ${jointName}: ${currentPeripheralInput[jointName]}`);
       dispatch(
         requestJointPower({
-          jointName,
+          jointName: jointName,
           power: currentPeripheralInput[jointName],
         })
-      );
+      )
     }
-  });
+  })
 }
-
 
 export default inputMiddleware
