@@ -267,7 +267,7 @@ function computeScienceInput(prevState, state) {
   }
 
   if(!scienceInput.requestPos) {
-    scienceInput.fourBarLinkage = getAxisFromKeys(pressedKeys, "C", "V");
+    scienceInput.fourBarLinkage = getAxisFromKeys(pressedKeys, "C", "V") * getPrecisionMultiplier(pressedKeys, peripheralGamepad);
   } 
   else {
     // get pos to toggle
