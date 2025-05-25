@@ -53,6 +53,7 @@ const initialState = {
       drillActuator: 0,
       drillMotor: 0,
       requestPos: false,
+      requestLock: false,
       speed: 1/3
     }
   },
