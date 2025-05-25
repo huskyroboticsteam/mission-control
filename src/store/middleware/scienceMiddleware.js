@@ -8,8 +8,8 @@ import { Computer, ComputerOutlined } from "@mui/icons-material";
  * Middleware that messages the rover in response to user input.
  */
 
-// var delay = 800;
-// var lastCalled = 0;
+var delay = 500;
+var lastCalled = 0;
 
 const scienceMiddleware = (store) => (next) => (action) => {
       const prevComputedInput = store.getState().input.computed;
@@ -39,9 +39,10 @@ function updateScience(
   Object.keys(computedInput.science).forEach(field => {
     // simple arm is going too far
     if (((computedInput.science[field] !== prevComputedInput.science[field]
-      || mountedPeripheral !== prevMountedPeripheral/* || (field === "fourBarLinkage") && lastCalled >= (delay - Date.now())*/)) && Number.isInteger(computedInput.science[field])
+      || mountedPeripheral !== prevMountedPeripheral || ((field === "fourBarLinkage") && delay <= (Date.now() - lastCalled)))) && Number.isInteger(computedInput.science[field])
       && field != "speed") {
-      // lastCalled = Date.now();
+      console.log("update")
+      lastCalled = Date.now();
       if(computedInput.science.requestPos) {
           dispatch(requestJointPosition({
             jointName: field,
