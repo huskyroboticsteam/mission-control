@@ -64,7 +64,6 @@ const Compass = () => {
   const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
 
   return (
-
     <div className="compass-container">
       <div className="info">
         <table>
@@ -96,7 +95,6 @@ const Compass = () => {
           </tbody>
         </table>
       </div>
-      <div class="scaled">
       <div className="compass">
         <div className="compass-parts">
           <div
@@ -108,7 +106,6 @@ const Compass = () => {
           <div className="compass__label compass__label--west">W</div>
           <div className="compass__label compass__label--east">E</div>
         </div>
-      </div>
       </div>
     </div>
   )
