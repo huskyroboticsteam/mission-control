@@ -53,7 +53,7 @@ const initialState = {
       drillActuator: 0,
       drillMotor: 0,
       requestPos: false,
-      speed: 0.333
+      speed: 1/3
     }
   },
   inverseKinematics: {
@@ -349,6 +349,8 @@ export const {
   enableIK,
   visuallyEnableIK,
 } = inputSlice.actions
+
+export const getSpeed = (state) =>  Math.floor(state.input.computed.science["speed"] * 100);
 
 export const selectInputDeviceIsConnected = (deviceName) => (state) =>
   state.input[deviceName].isConnected
