@@ -5,7 +5,9 @@ import {getSpeed} from '../../store/inputSlice'
 
 function ScienceStatus() {
   const speed = useSelector(getSpeed)
-  return <b>Current linkage speed: {speed}%</b> 
+  return (
+  <p>Current linkage speed:  <br /> {speed}%</p>
+  )
 
 }
 
