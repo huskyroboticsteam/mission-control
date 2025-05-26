@@ -97,9 +97,10 @@ function updatePeripherals(
   mountedPeripheral,
   dispatch
 ) {
-  if (mountedPeripheral === 'arm')
+  if (mountedPeripheral === 'arm') {
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-  else if (mountedPeripheral === 'scienceStation')
+  }
+  else if (mountedPeripheral === 'scienceStation') {
     updateScience(
       prevComputedInput,
       computedInput,
@@ -107,6 +108,9 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     )
+  }
+  updateDrillMotor(prevComputedInput, computedInput, dispatch)
+  updateDrillActuator(prevComputedInput, computedInput, dispatch)
 }
 
 function updateArm(
@@ -150,6 +154,30 @@ function updateScience(
       )
     }
   })
+}
+
+function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
+  if (computedInput.science.drillMotor !== prevComputedInput.science.drillMotor) {
+    const power = computedInput.science.drillMotor ? 1 : 0
+    dispatch(
+      requestJointPower({
+        jointName: 'drillMotor',
+        power: computedInput.science.drillMotor,
+      })
+    )
+  }
+}
+
+function updateDrillActuator(prevComputedInput, computedInput, dispatch) {
+  if (computedInput.science.drillActuator !== prevComputedInput.science.drillActuator) {
+    console.log('[Middleware] Sending drillActuator command:', computedInput.science.drillActuator)
+    dispatch(
+      requestJointPower({
+        jointName: 'drillActuator',
+        power: computedInput.science.drillActuator,
+      })
+    )
+  }
 }
 
 export default inputMiddleware
