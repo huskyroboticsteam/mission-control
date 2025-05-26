@@ -142,9 +142,11 @@ function updateScience(
   dispatch
 ) {
   Object.keys(computedInput.science).forEach((scienceName) => {
+
     if (
-      computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
-      mountedPeripheral !== prevMountedPeripheral
+      (computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
+      mountedPeripheral !== prevMountedPeripheral) && (scienceName !== 'drillMotor' && 
+      scienceName !== 'drillActuator')
     ) {
       dispatch(
         requestSciencePower({
