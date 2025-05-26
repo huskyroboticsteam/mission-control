@@ -50,8 +50,6 @@ const initialState = {
     science: {
       // lazySusanPosition: 0,
       fourBarLinkage: 0,
-      drillActuator: 0,
-      drillMotor: 0,
       requestPos: false,
       requestLock: false,
       speed: 1 / 3,
@@ -265,7 +263,6 @@ function computeScienceInput(prevState, state) {
   // Toggle from setting pos to not toggling pos
   if (pressedKeys.includes('/')) {
     scienceInput.requestPos = !scienceInput.requestPos
-    console.log('toggle!')
   }
 
   if (!scienceInput.requestPos) {
@@ -295,9 +292,6 @@ function computeScienceInput(prevState, state) {
       scienceInput.fourBarLinkage = 90
     }
   }
-
-  scienceInput.drillActuator = getAxisFromKeys(pressedKeys, 'S', 'W')
-  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, 'B', scienceInput.drillMotor)
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {

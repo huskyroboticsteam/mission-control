@@ -49,7 +49,6 @@ function updateScience(
       Number.isInteger(computedInput.science[field]) &&
       field != 'speed'
     ) {
-      console.log('update')
       lastCalled = Date.now()
       if (computedInput.science.requestPos) {
         dispatch(

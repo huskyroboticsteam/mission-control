@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-const scienceNames = ['fourBarLinkage', 'drillActuator', 'drillMotor', 'positionRequest']
+const scienceNames = ['fourBarLinkage', 'positionRequest']
 
 // List of all joints that are able to request positions
 const posRequestValidJoints = ['fourBarLinkage']
