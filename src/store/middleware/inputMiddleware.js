@@ -145,7 +145,8 @@ function updateScience(
       (computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
         mountedPeripheral !== prevMountedPeripheral) &&
       scienceName !== 'drillMotor' &&
-      scienceName !== 'drillActuator'
+      scienceName !== 'drillActuator' &&
+      scienceName !== 'speed'
     ) {
       dispatch(
         requestSciencePower({
