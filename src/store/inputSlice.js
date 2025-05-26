@@ -48,7 +48,7 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      // lazySusanPosition: 0,
+      lazySusanPosition: 0,
       fourBarLinkage: 0,
       requestPos: false,
       requestLock: false,

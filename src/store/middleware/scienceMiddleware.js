@@ -5,9 +5,6 @@ import {
   requestJointPosition,
   selectAllJointNames,
 } from '../jointsSlice'
-import {} from /*, selectAllMotorNames*/ '../motorsSlice'
-import {getPosRequstValidJoints} from '../scienceSlice'
-import {Computer, ComputerOutlined} from '@mui/icons-material'
 
 /**
  * Middleware that messages the rover in response to user input.
@@ -41,7 +38,6 @@ function updateScience(
   dispatch
 ) {
   Object.keys(computedInput.science).forEach((field) => {
-    // simple arm is going too far
     if (
       (computedInput.science[field] !== prevComputedInput.science[field] ||
         mountedPeripheral !== prevMountedPeripheral ||

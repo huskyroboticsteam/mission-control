@@ -7,8 +7,6 @@ const jointNames = [
   'forearm',
   'wristPitch',
   'wristRoll',
-  'hand',
-  'handActuator',
   'ikUp',
   'ikForward',
   'fourBarLinkage',

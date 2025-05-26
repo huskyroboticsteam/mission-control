@@ -34,6 +34,6 @@ export const {requestSciencePower, requestSciencePosition, sciencePositionReport
 export const selectAllScienceNames = (state) => Object.keys(state.sciences)
 export const selectScienceCurrentPosition = (scienceName) => (state) =>
   state.sciences[scienceName].currentPosition
-export const getPosRequstValidJoints = posRequestValidJoints
+export const getPosRequestValidJoints = posRequestValidJoints
 
 export default scienceSlice.reducer

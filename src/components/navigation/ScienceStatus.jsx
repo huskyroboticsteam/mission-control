@@ -1,5 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux'
-import React, {useState, useEffect} from 'react'
+import {useSelector} from 'react-redux'
 import {getSpeed} from '../../store/inputSlice'
 
 function ScienceStatus() {
