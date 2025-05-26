@@ -35,7 +35,7 @@ export const SERVOS: {
     servoNum: 1,
     type: ServoType.Positional,
     limits: {
-      hi: 120,  // redo once lever is fixed
+      hi: 120, // redo once lever is fixed
       lo: 65,
     },
   },
@@ -50,7 +50,8 @@ export const SERVOS: {
   filter: {
     servoNum: 3,
     type: ServoType.Positional,
-    limits: { // redo once they fix filter servo cxn
+    limits: {
+      // redo once they fix filter servo cxn
       hi: 0,
       lo: 180,
     },
