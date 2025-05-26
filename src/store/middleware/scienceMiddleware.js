@@ -43,8 +43,9 @@ function updateScience(
         mountedPeripheral !== prevMountedPeripheral ||
         (field === 'fourBarLinkage' && delay <= Date.now() - lastCalled)) &&
       Number.isInteger(computedInput.science[field]) &&
-      field != 'speed' && (field !== 'drillMotor' && 
-      field !== 'drillActuator')
+      field != 'speed' &&
+      field !== 'drillMotor' &&
+      field !== 'drillActuator'
     ) {
       lastCalled = Date.now()
       if (computedInput.science.requestPos) {
