@@ -49,6 +49,8 @@ const initialState = {
     },
     science: {
       lazySusanPosition: 0,
+      drillMotor: 0,
+      drillActuator: 0,
     },
   },
   inverseKinematics: {
@@ -115,11 +117,18 @@ const inputSlice = createSlice({
       computeInput(prevState, state, action)
     },
 
+    toggleDrillMotor(state) {
+      state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 : 1
+    },
+
     keyPressed(state, action) {
       const prevState = JSON.parse(JSON.stringify(state))
       const key = action.payload.key.toUpperCase()
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key)
+      }
+      if (key === 'B') {
+        state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 : 1
       }
       computeInput(prevState, state, action)
     },
@@ -255,6 +264,15 @@ function computeScienceInput(prevState, state, action) {
   if (lazySusanAxis !== prevLazySusanAxis)
     scienceInput.lazySusanPosition =
       (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
+  const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
+  state.computed.science.drillActuator = drillActuatorState
+}
+
+function getActuatorStatusFromKeys(pressedKeys, negative, positive) {
+  let status = 0
+  if (pressedKeys.includes(negative)) status = -1
+  if (pressedKeys.includes(positive)) status = 1
+  return status
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -294,6 +312,7 @@ export const {
   keyReleased,
   enableIK,
   visuallyEnableIK,
+  toggleDrillMotor,
 } = inputSlice.actions
 
 export const selectInputDeviceIsConnected = (deviceName) => (state) =>
@@ -301,4 +320,5 @@ export const selectInputDeviceIsConnected = (deviceName) => (state) =>
 export const selectDriveGamepad = (state) => state.input.driveGamepad
 export const selectPeripheralGamepad = (state) => state.input.peripheralGamepad
 export const selectInverseKinematicsEnabled = (state) => state.input.inverseKinematics.enabled
+export const selectDrillMotor = (state) => state.input.computed.science.drillMotor
 export default inputSlice.reducer
