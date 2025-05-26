@@ -51,7 +51,6 @@ const initialState = {
       lazySusanPosition: 0,
       fourBarLinkage: 0,
       requestPos: false,
-      requestLock: false,
       speed: 1 / 3,
       drillMotor: 0,
       drillActuator: 0,
