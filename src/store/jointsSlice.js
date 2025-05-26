@@ -11,7 +11,7 @@ const jointNames = [
   'handActuator',
   'ikUp',
   'ikForward',
-  'fourBarLinkage'
+  'fourBarLinkage',
 ]
 
 const initialState = jointNames.reduce(
