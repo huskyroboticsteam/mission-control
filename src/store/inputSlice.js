@@ -54,8 +54,8 @@ const initialState = {
       drillMotor: 0,
       requestPos: false,
       requestLock: false,
-      speed: 1/3
-    }
+      speed: 1 / 3,
+    },
   },
   inverseKinematics: {
     enabled: false,
@@ -150,8 +150,8 @@ const inputSlice = createSlice({
 })
 
 function computeInput(prevState, state, action) {
-  computeDriveInput(state, action);
-  computePeripheralInput(prevState, state, action);
+  computeDriveInput(state, action)
+  computePeripheralInput(prevState, state, action)
 }
 
 function computeDriveInput(state, action) {
@@ -198,10 +198,10 @@ function computeDriveInput(state, action) {
     getAxisFromButtons(driveGamepad, 'DPadDown', 'DPadUp') + getAxisFromKeys(pressedKeys, 'B', 'M')
 
   // Apply precision controls and clamp.
-  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true);
-  ["straight", "crab", "steer", "left", "right"].forEach(
-    axis => driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis])
-  );
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true)
+  ;['straight', 'crab', 'steer', 'left', 'right'].forEach(
+    (axis) => (driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis]))
+  )
 }
 
 function computePeripheralInput(prevState, state) {
@@ -263,44 +263,41 @@ function computeScienceInput(prevState, state) {
       (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
 
   // Toggle from setting pos to not toggling pos
-  if(pressedKeys.includes("/")) {
-    scienceInput.requestPos = !scienceInput.requestPos;
-    console.log("toggle!");
+  if (pressedKeys.includes('/')) {
+    scienceInput.requestPos = !scienceInput.requestPos
+    console.log('toggle!')
   }
 
-  if(!scienceInput.requestPos) {
-    scienceInput.fourBarLinkage = getAxisFromKeys(pressedKeys, "C", "V") * getPrecisionMultiplier(pressedKeys, peripheralGamepad);
-    if(pressedKeys.includes("1")) {
+  if (!scienceInput.requestPos) {
+    scienceInput.fourBarLinkage =
+      getAxisFromKeys(pressedKeys, 'C', 'V') *
+      getPrecisionMultiplier(pressedKeys, peripheralGamepad)
+    if (pressedKeys.includes('1')) {
       // Slow speed
-      scienceInput.speed = 1/3;
-    }
-    else if(pressedKeys.includes("2")) {
+      scienceInput.speed = 1 / 3
+    } else if (pressedKeys.includes('2')) {
       // Medium speed
-      scienceInput.speed = 2/3;
-    }
-    else if(pressedKeys.includes("3")) {
+      scienceInput.speed = 2 / 3
+    } else if (pressedKeys.includes('3')) {
       // Fast speed
-      scienceInput.speed = 1;
+      scienceInput.speed = 1
     }
-  } 
-  else {
+  } else {
     // get pos to toggle
-    if(pressedKeys.includes("1")) {
+    if (pressedKeys.includes('1')) {
       // 30 degrees
-      scienceInput.fourBarLinkage = 30;
-    }
-    else if(pressedKeys.includes("2")) {
+      scienceInput.fourBarLinkage = 30
+    } else if (pressedKeys.includes('2')) {
       // 60 degrees
-      scienceInput.fourBarLinkage = 60;
-    }
-    else if(pressedKeys.includes("3")) {
+      scienceInput.fourBarLinkage = 60
+    } else if (pressedKeys.includes('3')) {
       // 90 degrees
-      scienceInput.fourBarLinkage = 90;
+      scienceInput.fourBarLinkage = 90
     }
   }
 
-  scienceInput.drillActuator = getAxisFromKeys(pressedKeys, "S", "W")
-  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, "B", scienceInput.drillMotor);
+  scienceInput.drillActuator = getAxisFromKeys(pressedKeys, 'S', 'W')
+  scienceInput.drillMotor = toggleKey(prevPressedKeys, pressedKeys, 'B', scienceInput.drillMotor)
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -318,13 +315,12 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
 }
 
 function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
-  if ((!prevPressedKeys.includes(key)) && pressedKeys.includes(key)) {
-    if(currState == 0) return -1;
-    else return 0;
+  if (!prevPressedKeys.includes(key) && pressedKeys.includes(key)) {
+    if (currState == 0) return -1
+    else return 0
   }
-  return currState;
+  return currState
 }
-
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
   let multiplier = 1
@@ -351,7 +347,7 @@ export const {
   visuallyEnableIK,
 } = inputSlice.actions
 
-export const getSpeed = (state) =>  Math.floor(state.input.computed.science["speed"] * 100);
+export const getSpeed = (state) => Math.floor(state.input.computed.science['speed'] * 100)
 
 export const selectInputDeviceIsConnected = (deviceName) => (state) =>
   state.input[deviceName].isConnected

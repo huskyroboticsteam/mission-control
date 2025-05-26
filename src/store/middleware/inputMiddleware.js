@@ -100,7 +100,13 @@ function updatePeripherals(
   if (mountedPeripheral === 'arm')
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
   else if (mountedPeripheral === 'scienceStation')
-    updateScience(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
+    updateScience(
+      prevComputedInput,
+      computedInput,
+      prevMountedPeripheral,
+      mountedPeripheral,
+      dispatch
+    )
 }
 
 function updateArm(
@@ -131,15 +137,17 @@ function updateScience(
   mountedPeripheral,
   dispatch
 ) {
-  Object.keys(computedInput.science).forEach(scienceName => {
-    if (computedInput.science[scienceName] !== prevComputedInput.science[scienceName]
-      || mountedPeripheral !== prevMountedPeripheral) {
-        requestSciencePower({
-          scienceName,
-          power: computedInput.science[scienceName],
-        })
+  Object.keys(computedInput.science).forEach((scienceName) => {
+    if (
+      computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
+      mountedPeripheral !== prevMountedPeripheral
+    ) {
+      requestSciencePower({
+        scienceName,
+        power: computedInput.science[scienceName],
+      })
     }
   })
 }
 
-export default inputMiddleware;
+export default inputMiddleware
