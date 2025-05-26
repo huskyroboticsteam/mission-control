@@ -142,10 +142,12 @@ function updateScience(
       computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
       mountedPeripheral !== prevMountedPeripheral
     ) {
-      requestSciencePower({
-        scienceName,
-        power: computedInput.science[scienceName],
-      })
+      dispatch(
+        requestSciencePower({
+          scienceName,
+          power: computedInput.science[scienceName],
+        })
+      )
     }
   })
 }
