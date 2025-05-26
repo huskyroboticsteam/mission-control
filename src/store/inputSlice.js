@@ -266,6 +266,7 @@ function computeScienceInput(prevState, state, action) {
   const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
   state.computed.science.drillActuator = drillActuatorState
 }
+
 function getActuatorStatusFromKeys(pressedKeys, negative, positive) {
   let status = 0
   if (pressedKeys.includes(negative)) status = -1

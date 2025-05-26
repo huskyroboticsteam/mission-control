@@ -137,13 +137,18 @@ function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
 }
 
 function updateDrillActuator(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.science.drillActuator !== prevComputedInput.science.drillActuator)
+  if (computedInput.science.drillActuator !== prevComputedInput.science.drillActuator) {
+    console.log(
+      '[Middleware] Sending drillActuator command:',
+      computedInput.science.drillActuator
+    );
     dispatch(
       requestJointPower({
         jointName: 'drillActuator',
         power: computedInput.science.drillActuator,
       })
-    )
+    );
+  }
 }
 
 export default inputMiddleware
