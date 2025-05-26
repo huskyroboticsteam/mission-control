@@ -1,4 +1,3 @@
-import React from 'react'
 import CameraStream from '../camera/CameraStream'
 import './SciencePanel.css'
 import {useSelector, useDispatch} from 'react-redux'
