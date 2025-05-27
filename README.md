@@ -272,13 +272,13 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 {
   type: "cameraStreamOpenRequest",
-  camera: string,
+  camera: number,
   fps: number
 }
 ```
 
 ### Parameters
-- `camera` - the name of the camera: `mast|hand|wrist`
+- `camera` - the ID of the camera as an integer
 - `fps` - the frame rate of the camera stream as an integer
 
 
@@ -290,12 +290,12 @@ Sent from Mission Control to instruct the rover server to stop providing a camer
 ```
 {
   type: "cameraStreamCloseRequest",
-  camera: string
+  camera: number
 }
 ```
 
 ### Parameters
-- `camera` - the name of the camera: `mast|hand|wrist`
+- `camera` - the ID of the camera as an integer
 
 ## Camera Stream Report
 ### Description
@@ -305,13 +305,13 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ```
 {
   type: "cameraStreamReport",
-  camera: string,
+  camera: number,
   data: string | null
 }
 ```
 
 ### Parameters
-- `camera` - the name of the camera: `mast|hand|wrist`
+- `camera` - the ID of the camera as an integer
 - `data` - the raw h264 frame data, or `null` if no data is available
 
 ## Camera Frame Request
@@ -322,12 +322,12 @@ Sent from Mission Control to instruct the rover server to send a Camera Frame Re
 ```
 {
   type: "cameraFrameRequest",
-  camera: string
+  camera: number
 }
 ```
 
 ### Parameters
-- `camera` - the name of the camera: `mast|hand|wrist`
+- `camera` - the ID of the camera as an integer
 
 ## Camera Frame Report
 ### Description
@@ -337,13 +337,13 @@ Sent from the rover server to inform Mission Control of a full resolution lossle
 ```
 {
   type: "cameraFrameReport",
-  camera: string,
+  camera: number,
   data: string
 }
 ```
 
 ### Parameters
-- `camera` - the name of the camera
+- `camera` - the ID of the camera as an integer
 - `data` - the image, base64 encoded
 
 
