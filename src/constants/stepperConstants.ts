@@ -14,18 +14,18 @@ export const STEPPERS: {
 } = {
   plunger: {
     stepperNum: 6,
-    hold: true
+    hold: true,
   },
   cuvetteLock: {
-    stepperNum: 2
+    stepperNum: 2,
   },
   lazySusan: {
-    stepperNum: 3
+    stepperNum: 3,
   },
   judgesSample: {
-    stepperNum: 5
+    stepperNum: 5,
   },
   mastCamera: {
-    stepperNum: 1
-  }
+    stepperNum: 1,
+  },
 }
