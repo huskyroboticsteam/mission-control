@@ -10,9 +10,6 @@ import {
  * Middleware that messages the rover in response to user input.
  */
 
-var delay = 500
-var lastCalled = 0
-
 const scienceMiddleware = (store) => (next) => (action) => {
   const prevComputedInput = store.getState().input.computed
   const prevMountedPeripheral = selectMountedPeripheral(store.getState())
@@ -40,13 +37,12 @@ function updateScience(
   Object.keys(computedInput.science).forEach((field) => {
     if (
       (computedInput.science[field] !== prevComputedInput.science[field] ||
-        mountedPeripheral !== prevMountedPeripheral ||
-        (field === 'fourBarLinkage' && delay <= Date.now() - lastCalled)) &&
+        mountedPeripheral !== prevMountedPeripheral) &&
       Number.isInteger(computedInput.science[field]) &&
-      field != 'speed' && (field !== 'drillMotor' && 
-      field !== 'drillActuator')
+      field != 'speed' &&
+      field !== 'drillMotor' &&
+      field !== 'drillActuator'
     ) {
-      lastCalled = Date.now()
       if (computedInput.science.requestPos) {
         dispatch(
           requestJointPosition({

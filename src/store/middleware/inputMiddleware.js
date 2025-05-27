@@ -99,8 +99,7 @@ function updatePeripherals(
 ) {
   if (mountedPeripheral === 'arm') {
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-  }
-  else if (mountedPeripheral === 'scienceStation') {
+  } else if (mountedPeripheral === 'scienceStation') {
     updateScience(
       prevComputedInput,
       computedInput,
@@ -142,11 +141,12 @@ function updateScience(
   dispatch
 ) {
   Object.keys(computedInput.science).forEach((scienceName) => {
-
     if (
       (computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
-      mountedPeripheral !== prevMountedPeripheral) && (scienceName !== 'drillMotor' && 
-      scienceName !== 'drillActuator')
+        mountedPeripheral !== prevMountedPeripheral) &&
+      scienceName !== 'drillMotor' &&
+      scienceName !== 'drillActuator' &&
+      scienceName !== 'speed'
     ) {
       dispatch(
         requestSciencePower({
