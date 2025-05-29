@@ -7,6 +7,7 @@ function ArmDexterityPanel() {
   return (
     <div className="arm-dexterity-panel">
       <CameraStream cameraName="hand" />
+      <CameraStream cameraName="wrist" />
       <RoverModel />
     </div>
   )

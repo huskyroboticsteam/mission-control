@@ -25,17 +25,23 @@ export const SERVOS: {
     servoNum: number
     type: ServoType
     limits?: {hi: number; lo: number}
+    range?: {min: number, dead: number, max: number}
   }
 } = {
   microscope: {
     servoNum: 0,
     type: ServoType.Continuous,
+    range: {
+      min: 60,
+      dead: 80,
+      max: 100,
+    }
   },
   syringe: {
     servoNum: 1,
     type: ServoType.Positional,
     limits: {
-      hi: 120,  // redo once lever is fixed
+      hi: 120,
       lo: 65,
     },
   },
@@ -50,7 +56,8 @@ export const SERVOS: {
   filter: {
     servoNum: 3,
     type: ServoType.Positional,
-    limits: { // redo once they fix filter servo cxn
+    limits: {
+      // redo once they fix filter servo cxn
       hi: 0,
       lo: 180,
     },

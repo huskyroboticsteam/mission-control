@@ -5,7 +5,6 @@ const initialState = Object.keys(SERVOS).reduce(
   (state, servoName) => ({
     ...state,
     [servoName]: {
-      type: SERVOS[servoName as keyof typeof SERVOS].type,
       requestedPosition: null,
       currentPosition: null,
     },

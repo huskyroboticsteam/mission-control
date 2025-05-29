@@ -14,9 +14,9 @@ function NavigationPanel() {
       <CameraStream cameraName="mast" />
       <CameraStream cameraName="hand" />
       <Compass />
+      <CameraStream cameraName="wrist" />
       <OpModeSelect />
       <WaypointNav />
-      {tank ? <div>Tank Drive</div> : <div>Normal Drive</div>}
     </div>
   )
 }

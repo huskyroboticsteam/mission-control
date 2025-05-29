@@ -1,7 +1,13 @@
 import {useDispatch, useSelector} from 'react-redux'
-import React from 'react'
-import {selectAllServoNames, selectServoCurrentPosition, requestServoPosition} from '../../store/servoSlice.js'
+import React, { useState } from 'react'
+import {
+  selectAllServoNames,
+  selectServoCurrentPosition,
+  requestServoPosition,
+} from '../../store/servoSlice.js'
 import camelCaseToTitle from '../../util/camelCaseToTitle.js'
+import { SERVOS, ServoType } from '../../constants/servoConstants.js'
+import './Servo.css'
 
 function Servos() {
   const dispatch = useDispatch()
@@ -9,48 +15,54 @@ function Servos() {
 
   return (
     <div>
-      <table>
+      <table id='servo-table'>
         <thead>
           <tr>
-            <th>Servo</th>
-            <th>Position</th>
+            {servoNames.map((servo) => (
+              <th>{camelCaseToTitle(servo)}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {servoNames.map((servoName) => (
-            <ServoData servoName={servoName} key={servoName} />
-          ))}
+          <tr>
+            {servoNames.map((servo) => (
+              <td key={servo}>
+                <ServoControls servoName={servo} key={servo} />
+              </td>
+            ))}
+          </tr>
         </tbody>
       </table>
-      <button onClick={() => {
-        dispatch(
-          requestServoPosition({
-            servoName: "cuvette",
-            position: 160
-          })
-        )
-      }}>Up</button>
-      <button onClick={() => {
-        dispatch(
-          requestServoPosition({
-            servoName: "cuvette",
-            position: 85
-          })
-        )
-      }}>Down</button>
     </div>
   )
 }
 
-function ServoData({servoName}) {
-  const position = useSelector(selectServoCurrentPosition(servoName))
-  const servoTitle = camelCaseToTitle(servoName)
+function ServoControls({servoName}) {
+  // const position = useSelector(selectServoCurrentPosition(servoName))
+  const servo = SERVOS[servoName as keyof typeof SERVOS]
+  const hi = servo.type == ServoType.Positional ? servo.limits.hi : servo.range.max
+  const lo = servo.type == ServoType.Positional ? servo.limits.lo : servo.range.min
 
+  const [input, setInput] = useState((lo + hi) / 2)
+
+  const handleInput: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault()
+    requestServoPosition({servoName, input})
+    console.log(e.target)
+  }
+
+  // Put lambda functions in here to actually call servo position requests (handle inputs?)
   return (
-    <tr>
-      <td>{servoTitle}</td>
-      <td>{position != null ? position : 'N/A'}</td>
-    </tr>
+    <div className={`servo-control-col ${servoName}`} key={servoName}>
+      <button className='servo-control-hi' onClick={() => requestServoPosition({servoName, hi})}>{hi}</button>
+      {servo.type == ServoType.Positional ?
+        <form onSubmit={handleInput}>
+          <input type='number' step='any' value={input} onChange={(e) => setInput(Number(e.target.value))}/>
+        </form> :
+        <button onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>{servo.range.dead}</button>
+      }
+      <button className='servo-control-lo' onClick={() => requestServoPosition({servoName, lo})}>{lo}</button>
+    </div>
   )
 }
 
