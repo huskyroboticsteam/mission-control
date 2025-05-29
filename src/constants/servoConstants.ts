@@ -23,7 +23,7 @@ export const SERVOS: {
     servoNum: number
     type: ServoType
     limits?: {hi: number; lo: number}
-    range?: {min: number, dead: number, max: number}
+    range?: {min: number; dead: number; max: number}
   }
 } = {
   microscope: {
@@ -33,7 +33,7 @@ export const SERVOS: {
       min: 60,
       dead: 80,
       max: 100,
-    }
+    },
   },
   syringe: {
     servoNum: 3,

@@ -18,7 +18,7 @@
 .servo-control-col {
   display: flex;
   flex-direction: column;
-  
+
   height: 100%;
 }
 
