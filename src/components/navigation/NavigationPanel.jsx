@@ -2,6 +2,7 @@ import Compass from './Compass'
 import OpModeSelect from './OpModeSelect'
 import CameraStream from '../camera/CameraStream'
 import WaypointNav from './WaypointNav'
+import ScienceStatus from './ScienceStatus'
 import './NavigationPanel.css'
 
 function NavigationPanel() {
@@ -12,6 +13,7 @@ function NavigationPanel() {
       <Compass />
       <OpModeSelect />
       <WaypointNav />
+      <ScienceStatus />
     </div>
   )
 }

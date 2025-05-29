@@ -14,6 +14,7 @@ const jointNames = [
   'activeSuspension',
   'ikUp',
   'ikForward',
+  'fourBarLinkage',
 ]
 
 const initialState = jointNames.reduce(
