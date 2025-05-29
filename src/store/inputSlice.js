@@ -184,7 +184,7 @@ function computeDriveInput(state, action) {
     driveInput.straight =
       -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
     driveInput.steer =
-      driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
+      -driveGamepad['RightStickX'] - getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
     driveInput.left =
       driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
     driveInput.right =
