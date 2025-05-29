@@ -7,9 +7,9 @@ export enum ServoNames {
   // Spectrometer Servo
 
   // Plunger Stepper (1):
-  // Mixer Stepper
+  // Cuvette Lock Stepper
   // Lazy Susan Stepper
-  // Spectrometer Lazy Susan Stepper
+  // Judge's Sample Stepper
   // Mast Camera Steppers
 }
 
@@ -17,8 +17,6 @@ export enum ServoType {
   Continuous,
   Positional,
 }
-
-// Microscope calibration servo is the only continuous
 
 export const SERVOS: {
   [S in keyof typeof ServoNames]: {
@@ -38,23 +36,23 @@ export const SERVOS: {
     }
   },
   syringe: {
-    servoNum: 1,
+    servoNum: 3,
     type: ServoType.Positional,
     limits: {
-      hi: 120,
-      lo: 65,
+      hi: 110,
+      lo: 60,
     },
   },
   cuvette: {
     servoNum: 2,
     type: ServoType.Positional,
     limits: {
-      hi: 160,
-      lo: 85,
+      hi: 150,
+      lo: 75,
     },
   },
   filter: {
-    servoNum: 3,
+    servoNum: 1,
     type: ServoType.Positional,
     limits: {
       // redo once they fix filter servo cxn
@@ -66,7 +64,7 @@ export const SERVOS: {
     servoNum: 4,
     type: ServoType.Positional,
     limits: {
-      hi: 110,
+      hi: 105,
       lo: 40,
     },
     // Closed: 40

@@ -23,7 +23,7 @@ const servoSlice = createSlice({
       }
 
       let clampedPos = position
-      if (SERVOS[servoName].limits) {
+      if (SERVOS[servoName].type === ServoType.Positional) {
         const limits = SERVOS[servoName].limits!
         clampedPos = Math.min(Math.max(position, limits.lo), limits.hi)
       }

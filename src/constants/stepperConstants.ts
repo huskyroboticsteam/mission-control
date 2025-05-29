@@ -13,23 +13,19 @@ export const STEPPERS: {
   }
 } = {
   plunger: {
-    stepperNum: 0,
+    stepperNum: 6,
     hold: true,
   },
-  judges: {
-    stepperNum: 0,
-    hold: false,
-  },
-  mast: {
-    stepperNum: 0,
-    hold: false,
-  },
   lock: {
-    stepperNum: 0,
-    hold: false,
+    stepperNum: 2,
   },
   lazySusan: {
-    stepperNum: 0,
-    hold: false,
+    stepperNum: 3,
+  },
+  judges: {
+    stepperNum: 5,
+  },
+  mast: {
+    stepperNum: 1,
   },
 }
