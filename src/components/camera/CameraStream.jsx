@@ -57,19 +57,19 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
   return returnPromise
 }
 
-function CameraStream({cameraName}) {
+function CameraStream({cameraName, cameraID}) {
   const dispatch = useDispatch()
   useEffect(() => {
     // Open the camera stream.
-    dispatch(openCameraStream({cameraName}))
+    dispatch(openCameraStream({cameraID}))
     return () => {
       // Close the camera stream.
-      dispatch(closeCameraStream({cameraName}))
+      dispatch(closeCameraStream({cameraID}))
     }
   }, [cameraName, dispatch])
 
   const roverIsConnected = useSelector(selectRoverIsConnected)
-  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraName))
+  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraID))
   const cameraTitle = camelCaseToTitle(cameraName)
   const [hasRendered, setHasRendered] = useState(false)
   const [hasFrame, setHasFrame] = useState(false)
@@ -96,8 +96,8 @@ function CameraStream({cameraName}) {
   }, [cameraName, cameraTitle, popoutWindow])
 
   const requestDownloadFrame = useCallback(() => {
-    dispatch(requestCameraFrame({cameraName}))
-  }, [cameraName, dispatch])
+    dispatch(requestCameraFrame({cameraID}))
+  }, [cameraID, dispatch])
 
   const drawFrameOnExt = useCallback(
     (window, last_ww, last_wh) => {
@@ -257,6 +257,23 @@ function CameraStream({cameraName}) {
           onClick={requestDownloadFrame}
           disabled={!(hasFrame && roverIsConnected)}>
           Download
+        </button>
+        <button
+          className="camera-stream-download-button"
+          onClick={() => {
+            dispatch(closeCameraStream({cameraID}))
+            setHasFrame(false)
+          }}
+          disabled={!(hasFrame && roverIsConnected)}>
+          Off
+        </button>
+        <button
+          className="camera-stream-download-button"
+          onClick={() => {
+            dispatch(openCameraStream({cameraID}))
+          }}
+          disabled={!(!hasFrame && roverIsConnected)}>
+          On
         </button>
       </div>
     </div>
