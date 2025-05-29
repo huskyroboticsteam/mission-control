@@ -179,11 +179,7 @@ function computeDriveInput(state, action) {
       action.payload.buttonName === 'Y' &&
       action.payload.pressed)
   ) {
-    if (driveInput.type === 'normal') {
-      driveInput.tank = !driveInput.tank
-    } else {
-      alert("Can't switch to tank drive when not on normal driveInput type!")
-    }
+    driveInput.tank = !driveInput.tank
   }
   if (state.triggerHeld) {
     // Additional function layer binds go here
