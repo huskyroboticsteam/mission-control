@@ -1,9 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux'
-<<<<<<< HEAD
 import React, { useState } from 'react'
-=======
-import React from 'react'
->>>>>>> 338d3d59332e9f205788e622ee069c191debbe89
 import {
   selectAllServoNames,
   selectServoCurrentPosition,
