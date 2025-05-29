@@ -12,7 +12,7 @@ const initialState = Object.keys(STEPPERS).reduce(
 )
 
 const stepperSlice = createSlice({
-  name: 'tepper',
+  name: 'stepper',
   initialState,
   reducers: {
     requestStepperTurnAngle(state, action) {
@@ -24,6 +24,6 @@ const stepperSlice = createSlice({
 
 export const {requestStepperTurnAngle} = stepperSlice.actions
 
-export const selectAllStepperNames = (state) => Object.keys(state.servo)
+export const selectAllStepperNames = (state) => Object.keys(state.stepper)
 
 export default stepperSlice.reducer

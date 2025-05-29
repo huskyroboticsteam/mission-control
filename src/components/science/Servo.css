@@ -1,6 +1,6 @@
 #servo-table {
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   border-collapse: collapse;
   /* border: 1px solid white */
 }
@@ -22,8 +22,12 @@
   height: 100%;
 }
 
-button .servo-pos {
-  display: flex;
-  min-width: 50pt;
-  min-height: 100pt;
+.servo-input {
+  font-size: 12pt;
+  max-width: 50pt;
+  text-align: center;
+}
+
+.servo-control {
+  font-size: 12pt;
 }

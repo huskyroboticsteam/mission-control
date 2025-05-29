@@ -43,23 +43,27 @@ function ServoControls({servoName}) {
   const hi = servo.type == ServoType.Positional ? servo.limits.hi : servo.range.max
   const lo = servo.type == ServoType.Positional ? servo.limits.lo : servo.range.min
 
+  const dispatch = useDispatch()
+
   const [input, setInput] = useState((lo + hi) / 2)
 
   const handleInput: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
-    requestServoPosition({servoName, input})
-    console.log(e.target)
+    dispatch(requestServoPosition({servoName, position: input}))
   }
 
   // Put lambda functions in here to actually call servo position requests (handle inputs?)
   return (
     <div className={`servo-control-col ${servoName}`} key={servoName}>
-      <button className="servo-control-hi" onClick={() => requestServoPosition({servoName, hi})}>
+      <button className="servo-control hi" onClick={() => {
+        dispatch(requestServoPosition({servoName, position: hi}))
+      }}>
         {hi}
       </button>
       {servo.type == ServoType.Positional ? (
         <form onSubmit={handleInput}>
           <input
+            className='servo-input'
             type="number"
             step="any"
             value={input}
@@ -67,11 +71,13 @@ function ServoControls({servoName}) {
           />
         </form>
       ) : (
-        <button onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>
+        <button className='servo-control dead' onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>
           {servo.range.dead}
         </button>
       )}
-      <button className="servo-control-lo" onClick={() => requestServoPosition({servoName, lo})}>
+      <button className="servo-control lo" onClick={() => {
+        dispatch(requestServoPosition({servoName, position: lo}))
+      }}>
         {lo}
       </button>
     </div>

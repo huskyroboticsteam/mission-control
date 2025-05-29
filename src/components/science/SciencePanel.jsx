@@ -1,5 +1,6 @@
 import CameraStream from '../camera/CameraStream'
 import Servos from './Servos'
+import Steppers from './Steppers'
 
 import './SciencePanel.css'
 import {useSelector, useDispatch} from 'react-redux'
@@ -23,7 +24,10 @@ function ArmDexterityPanel() {
       <CameraStream cameraName="microscope" cameraID={500} />
       <CameraStream cameraName="drill" cameraID={540} />
       <CameraStream cameraName="box" cameraID={520} />
-      <Servos />
+      <div style={{"flexDirection": "column"}}>
+        <Servos />
+        <Steppers />
+      </div>
       <div className={className}>
         <button onClick={handleClick}>{text}</button>
       </div>

@@ -27,16 +27,16 @@ export const SERVOS: {
   }
 } = {
   microscope: {
-    servoNum: 0,
+    servoNum: 5,
     type: ServoType.Continuous,
     range: {
       min: 60,
-      dead: 80,
-      max: 100,
+      dead: 90,
+      max: 120,
     },
   },
   syringe: {
-    servoNum: 3,
+    servoNum: 8,
     type: ServoType.Positional,
     limits: {
       hi: 110,
@@ -44,15 +44,15 @@ export const SERVOS: {
     },
   },
   cuvette: {
-    servoNum: 2,
+    servoNum: 4,
     type: ServoType.Positional,
     limits: {
-      hi: 150,
-      lo: 75,
+      hi: 160,
+      lo: 82,
     },
   },
   filter: {
-    servoNum: 1,
+    servoNum: 8,
     type: ServoType.Positional,
     limits: {
       // redo once they fix filter servo cxn
@@ -61,15 +61,15 @@ export const SERVOS: {
     },
   },
   soilBox: {
-    servoNum: 4,
+    servoNum: 6,
     type: ServoType.Positional,
     limits: {
-      hi: 105,
-      lo: 40,
+      hi: 50,
+      lo: 0,
     },
-    // Closed: 40
-    // First open: 65
-    // Second: 80
-    // Third: 95+ // dbl check after soil sensor is positioned correctly
+    // Closed: 50
+    // First open: 35
+    // Second: 18
+    // Third: 0
   },
 }
