@@ -24,7 +24,7 @@ function ArmDexterityPanel() {
       <CameraStream cameraName="microscope" cameraID={500} />
       <CameraStream cameraName="drill" cameraID={540} />
       <CameraStream cameraName="box" cameraID={520} />
-      <div style={{"flexDirection": "column"}}>
+      <div style={{flexDirection: 'column'}}>
         <Servos />
         <Steppers />
       </div>

@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import React, {useState} from 'react'
 
 import camelCaseToTitle from '../../util/camelCaseToTitle.js'
-import { requestStepperTurnAngle, selectAllStepperNames } from '../../store/stepperSlice.js'
+import {requestStepperTurnAngle, selectAllStepperNames} from '../../store/stepperSlice.js'
 
 function Steppers() {
   const stepperNames = useSelector(selectAllStepperNames)
@@ -35,7 +35,7 @@ function StepperControls({stepperName}) {
       <td>
         <form onSubmit={handleInput}>
           <input
-            className='stepper-input'
+            className="stepper-input"
             type="number"
             step="any"
             value={input}

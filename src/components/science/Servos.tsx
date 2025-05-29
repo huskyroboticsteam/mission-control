@@ -55,15 +55,17 @@ function ServoControls({servoName}) {
   // Put lambda functions in here to actually call servo position requests (handle inputs?)
   return (
     <div className={`servo-control-col ${servoName}`} key={servoName}>
-      <button className="servo-control hi" onClick={() => {
-        dispatch(requestServoPosition({servoName, position: hi}))
-      }}>
+      <button
+        className="servo-control hi"
+        onClick={() => {
+          dispatch(requestServoPosition({servoName, position: hi}))
+        }}>
         {hi}
       </button>
       {servo.type == ServoType.Positional ? (
         <form onSubmit={handleInput}>
           <input
-            className='servo-input'
+            className="servo-input"
             type="number"
             step="any"
             value={input}
@@ -71,13 +73,17 @@ function ServoControls({servoName}) {
           />
         </form>
       ) : (
-        <button className='servo-control dead' onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>
+        <button
+          className="servo-control dead"
+          onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>
           {servo.range.dead}
         </button>
       )}
-      <button className="servo-control lo" onClick={() => {
-        dispatch(requestServoPosition({servoName, position: lo}))
-      }}>
+      <button
+        className="servo-control lo"
+        onClick={() => {
+          dispatch(requestServoPosition({servoName, position: lo}))
+        }}>
         {lo}
       </button>
     </div>
