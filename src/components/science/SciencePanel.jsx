@@ -17,11 +17,9 @@ function ArmDexterityPanel() {
 
   return (
     <div className="science-panel">
-      {/* <CameraStream cameraName="mast" cameraID={40} /> */}
-      {/* <CameraStream cameraName="pano" /> */}
-      {/* <CameraStream cameraName="drill" /> */}
-      {/* <CameraStream cameraName="microscope" cameraID={500} /> */}
-      {/* <CameraStream cameraName="drill" cameraID={540} /> */}
+      <CameraStream cameraName="mast" cameraID={40} />
+      <CameraStream cameraName="microscope" cameraID={500} />
+      <CameraStream cameraName="drill" cameraID={540} />
       <CameraStream cameraName="box" cameraID={520} />
       <div className={className}>
         <button onClick={handleClick}>{text}</button>
