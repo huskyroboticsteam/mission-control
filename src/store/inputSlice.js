@@ -130,9 +130,6 @@ const inputSlice = createSlice({
       if (!state.keyboard.pressedKeys.includes(key)) {
         state.keyboard.pressedKeys.push(key)
       }
-      if (key === 'B') {
-        state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 : 1
-      }
       computeInput(prevState, state, action)
     },
 
@@ -192,16 +189,11 @@ function computeDriveInput(state, action) {
       driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
     driveInput.right =
       driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
-    driveInput.crab =
-      driveGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
   }
-
-  driveInput.activeSuspension =
-    getAxisFromButtons(driveGamepad, 'DPadDown', 'DPadUp') + getAxisFromKeys(pressedKeys, 'B', 'M')
 
   // Apply precision controls and clamp.
   const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true)
-  ;['straight', 'crab', 'steer', 'left', 'right'].forEach(
+  ;['straight', 'steer', 'left', 'right'].forEach(
     (axis) => (driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis]))
   )
 }
