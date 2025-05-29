@@ -1,0 +1,29 @@
+#servo-table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  /* border: 1px solid white */
+}
+/* 
+#servo-table > thead {
+  display: flex;
+  flex-direction: row;
+} */
+/* 
+#servo-table th {
+  display: flex;
+  flex: 1
+} */
+
+.servo-control-col {
+  display: flex;
+  flex-direction: column;
+  
+  height: 100%;
+}
+
+button .servo-pos {
+  display: flex;
+  min-width: 50pt;
+  min-height: 100pt;
+}
