@@ -1,12 +1,12 @@
 import {useDispatch, useSelector} from 'react-redux'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {
   selectAllServoNames,
   selectServoCurrentPosition,
   requestServoPosition,
 } from '../../store/servoSlice.js'
 import camelCaseToTitle from '../../util/camelCaseToTitle.js'
-import { SERVOS, ServoType } from '../../constants/servoConstants.js'
+import {SERVOS, ServoType} from '../../constants/servoConstants.js'
 import './Servo.css'
 
 function Servos() {
@@ -15,7 +15,7 @@ function Servos() {
 
   return (
     <div>
-      <table id='servo-table'>
+      <table id="servo-table">
         <thead>
           <tr>
             {servoNames.map((servo) => (
@@ -54,14 +54,26 @@ function ServoControls({servoName}) {
   // Put lambda functions in here to actually call servo position requests (handle inputs?)
   return (
     <div className={`servo-control-col ${servoName}`} key={servoName}>
-      <button className='servo-control-hi' onClick={() => requestServoPosition({servoName, hi})}>{hi}</button>
-      {servo.type == ServoType.Positional ?
+      <button className="servo-control-hi" onClick={() => requestServoPosition({servoName, hi})}>
+        {hi}
+      </button>
+      {servo.type == ServoType.Positional ? (
         <form onSubmit={handleInput}>
-          <input type='number' step='any' value={input} onChange={(e) => setInput(Number(e.target.value))}/>
-        </form> :
-        <button onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>{servo.range.dead}</button>
-      }
-      <button className='servo-control-lo' onClick={() => requestServoPosition({servoName, lo})}>{lo}</button>
+          <input
+            type="number"
+            step="any"
+            value={input}
+            onChange={(e) => setInput(Number(e.target.value))}
+          />
+        </form>
+      ) : (
+        <button onClick={() => requestServoPosition({servoName, position: servo.range.dead})}>
+          {servo.range.dead}
+        </button>
+      )}
+      <button className="servo-control-lo" onClick={() => requestServoPosition({servoName, lo})}>
+        {lo}
+      </button>
     </div>
   )
 }
