@@ -107,9 +107,9 @@ function updatePeripherals(
       mountedPeripheral,
       dispatch
     )
+    updateDrillMotor(prevComputedInput, computedInput, dispatch)
+    updateDrillActuator(prevComputedInput, computedInput, dispatch)
   }
-  updateDrillMotor(prevComputedInput, computedInput, dispatch)
-  updateDrillActuator(prevComputedInput, computedInput, dispatch)
 }
 
 function updateArm(
@@ -123,25 +123,14 @@ function updateArm(
     if (
       computedInput.arm[jointName] !== prevComputedInput.arm[jointName] ||
       mountedPeripheral !== prevMountedPeripheral
-    )
-      if (jointName === "handActuator") {
-        messageRover()
-        store.dispatch(
-          messageRover({
-            message: {
-              type: 'jointPowerRequest',
-              joint: jointName,
-              power,
-            },
-          })
-        )
-      }
+    ) {
       dispatch(
         requestJointPower({
           jointName,
           power: computedInput.arm[jointName],
         })
       )
+    }
   })
 }
 

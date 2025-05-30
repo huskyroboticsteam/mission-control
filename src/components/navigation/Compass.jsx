@@ -72,7 +72,7 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
  * @param radius radius of the planet in km (default is Earth: 6,371km).
  * @return The distance in km.
  */
-function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
+export function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
   const DEGREES_TO_RADIANS = Math.PI / 180
   lati *= DEGREES_TO_RADIANS
   loni *= DEGREES_TO_RADIANS

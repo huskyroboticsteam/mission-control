@@ -48,7 +48,6 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      lazySusanPosition: 0,
       fourBarLinkage: 0,
       requestPos: false,
       speed: 1 / 3,
@@ -95,7 +94,7 @@ const inputSlice = createSlice({
         state[gamepadName]['DPadRight'] = value > 0
       } else if (
         isLinux() &&
-        (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
+      (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
         value !== 0.0
       ) {
         // bug in linux, trigger values keep jumping to 0.
@@ -184,7 +183,7 @@ function computeDriveInput(state, action) {
     driveInput.straight =
       -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
     driveInput.steer =
-      -driveGamepad['RightStickX'] - getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
+      driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
     driveInput.left =
       driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
     driveInput.right =
@@ -222,7 +221,7 @@ function computeArmInput(state) {
   }
   armInput.forearm = peripheralGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'F', 'H')
   armInput.wristPitch =
-    -getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
+    getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
     getAxisFromKeys(pressedKeys, 'K', 'I')
   armInput.wristRoll =
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
@@ -247,14 +246,6 @@ function computeScienceInput(prevState, state) {
   const prevPressedKeys = prevState.keyboard.pressedKeys
   const pressedKeys = state.keyboard.pressedKeys
   const scienceInput = state.computed.science
-  const prevLazySusanAxis =
-    getAxisFromButtons(prevPeripheralGamepad, 'LB', 'RB') +
-    getAxisFromKeys(prevPressedKeys, 'A', 'D')
-  const lazySusanAxis =
-    getAxisFromButtons(peripheralGamepad, 'LB', 'RB') + getAxisFromKeys(pressedKeys, 'A', 'D')
-  if (lazySusanAxis !== prevLazySusanAxis)
-    scienceInput.lazySusanPosition =
-      (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
 
   // Toggle from setting pos to not toggling pos
   if (pressedKeys.includes('/')) {
