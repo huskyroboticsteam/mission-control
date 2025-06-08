@@ -10,7 +10,6 @@ import {SERVOS, ServoType} from '../../constants/servoConstants.js'
 import './Servo.css'
 
 function Servos() {
-  const dispatch = useDispatch()
   const servoNames = useSelector(selectAllServoNames)
 
   return (
