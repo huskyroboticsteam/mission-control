@@ -279,15 +279,9 @@ function computeScienceInput(prevState, state) {
       scienceInput.fourBarLinkage = 90
     }
   }
-  const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
-  state.computed.science.drillActuator = drillActuatorState
-}
 
-function getActuatorStatusFromKeys(pressedKeys, negative, positive) {
-  let status = 0
-  if (pressedKeys.includes(negative)) status = -1
-  if (pressedKeys.includes(positive)) status = 1
-  return status
+  state.computed.science.drillMotor = toggleKey(prevPressedKeys, pressedKeys, 'B', state.computed.science.drillMotor)
+  state.computed.science.drillActuator = getAxisFromKeys(pressedKeys, 'N', 'P')
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {

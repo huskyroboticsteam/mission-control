@@ -35,9 +35,7 @@ const jointsSlice = createSlice({
     requestJointPower(state, action) {
       const {jointName, power} = action.payload
       const joint = state[jointName]
-      if (joint) {
-        joint.requestedPower = power
-      }
+      joint.requestedPower = power
     },
 
     requestJointPosition(state, action) {
