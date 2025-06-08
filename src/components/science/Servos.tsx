@@ -1,9 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux'
 import React, {useState} from 'react'
-import {
-  selectAllServoNames,
-  requestServoPosition,
-} from '../../store/servoSlice.js'
+import {selectAllServoNames, requestServoPosition} from '../../store/servoSlice.js'
 import camelCaseToTitle from '../../util/camelCaseToTitle.js'
 import {SERVOS, ServoType} from '../../constants/servoConstants.js'
 import './Servo.css'
