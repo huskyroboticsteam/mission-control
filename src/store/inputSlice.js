@@ -280,7 +280,12 @@ function computeScienceInput(prevState, state) {
     }
   }
 
-  state.computed.science.drillMotor = toggleKey(prevPressedKeys, pressedKeys, 'B', state.computed.science.drillMotor)
+  state.computed.science.drillMotor = toggleKey(
+    prevPressedKeys,
+    pressedKeys,
+    'B',
+    state.computed.science.drillMotor
+  )
   state.computed.science.drillActuator = getAxisFromKeys(pressedKeys, 'N', 'P')
 }
 
