@@ -3,7 +3,7 @@ import {selectRoverPosition} from '../../store/telemetrySlice'
 import {selectLatitude, selectLongitude} from '../../store/waypointNavSlice'
 import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
-import { convertCoordsToDistance } from './Compass'
+import {convertCoordsToDistance} from './Compass'
 
 function sanitize(num, decimals) {
   if (num == null) {
@@ -31,7 +31,7 @@ function NavigationStatus() {
       }
     }
 
-    const distance = convertCoordsToDistance(lat, lon, targetLatitude, targetLongitude) * 1000;
+    const distance = convertCoordsToDistance(lat, lon, targetLatitude, targetLongitude) * 1000
 
     if (distance <= POSITION_THRESHOLD) {
       return {

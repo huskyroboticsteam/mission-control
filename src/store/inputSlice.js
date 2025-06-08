@@ -94,7 +94,7 @@ const inputSlice = createSlice({
         state[gamepadName]['DPadRight'] = value > 0
       } else if (
         isLinux() &&
-      (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
+        (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
         value !== 0.0
       ) {
         // bug in linux, trigger values keep jumping to 0.
