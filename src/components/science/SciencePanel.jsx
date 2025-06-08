@@ -6,7 +6,7 @@ import './SciencePanel.css'
 import {useSelector, useDispatch} from 'react-redux'
 import {selectDrillMotor, toggleDrillMotor} from '../../store/inputSlice'
 
-function ArmDexterityPanel() {
+function SciencePanel() {
   const dispatch = useDispatch()
   const isDrillOn = useSelector(selectDrillMotor)
 
@@ -35,4 +35,4 @@ function ArmDexterityPanel() {
   )
 }
 
-export default ArmDexterityPanel
+export default SciencePanel

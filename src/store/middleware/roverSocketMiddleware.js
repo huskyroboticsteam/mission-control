@@ -58,7 +58,6 @@ const roverSocketMiddleware = () => {
       case messageRover.type: {
         if (socket && socket.readyState === WebSocket.OPEN)
           socket.send(JSON.stringify(action.payload.message))
-        else console.log(JSON.stringify(action.payload.message))
         break
       }
 
