@@ -39,9 +39,7 @@ function updateScience(
       (computedInput.science[field] !== prevComputedInput.science[field] ||
         mountedPeripheral !== prevMountedPeripheral) &&
       Number.isInteger(computedInput.science[field]) &&
-      field != 'speed' &&
-      field !== 'drillMotor' &&
-      field !== 'drillActuator'
+      field != 'speed'
     ) {
       if (computedInput.science.requestPos) {
         dispatch(
