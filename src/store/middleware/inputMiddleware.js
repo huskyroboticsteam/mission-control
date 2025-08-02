@@ -144,8 +144,6 @@ function updateScience(
     if (
       (computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
         mountedPeripheral !== prevMountedPeripheral) &&
-      scienceName !== 'drillMotor' &&
-      scienceName !== 'drillActuator' &&
       scienceName !== 'speed'
     ) {
       dispatch(
@@ -156,30 +154,6 @@ function updateScience(
       )
     }
   })
-}
-
-function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.science.drillMotor !== prevComputedInput.science.drillMotor) {
-    const power = computedInput.science.drillMotor ? 1 : 0
-    dispatch(
-      requestJointPower({
-        jointName: 'drillMotor',
-        power: computedInput.science.drillMotor,
-      })
-    )
-  }
-}
-
-function updateDrillActuator(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.science.drillActuator !== prevComputedInput.science.drillActuator) {
-    console.log('[Middleware] Sending drillActuator command:', computedInput.science.drillActuator)
-    dispatch(
-      requestJointPower({
-        jointName: 'drillActuator',
-        power: computedInput.science.drillActuator,
-      })
-    )
-  }
 }
 
 export default inputMiddleware

@@ -297,6 +297,7 @@ function computeScienceInput(prevState, state) {
     }
   }
   const drillActuatorState = getActuatorStatusFromKeys(pressedKeys, 'N', 'P')
+  console.log(drillActuatorState)
   state.computed.science.drillActuator = drillActuatorState
 }
 
