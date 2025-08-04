@@ -47,14 +47,13 @@ configure the mappings yourself with `jstest-gtk` or `jscal`.
 2. Run `npm start` to start the React server. Mission Control will open in your web browser shortly.
 
 ## Controls
-
 The rover can be operated through Mission Control with either a keyboard or two gamepads. The first gamepad provides controls for driving the rover. The second gamepad provides controls for operating the rover's arm. The control bindings are detailed below.
 ![Standard drive controls](/src/components/help/standardDriveControls.png)
 ![Tank drive controls](/src/components/help/tankDriveControls.png)
 ![Armo controls](/src/components/help/armControls.png)
 ![Keyboard controls](/src/components/help/keyboardControls.png)
 
-## Messages (`v2024.2.0`)
+## Messages (`v2025.1.0`)
 The JSON objects sent between Mission Control and the rover server are termed *messages*. Each message has a type property and a number of additional parameters depending on the type. The usage of each type of message is detailed below.
 
 ## Mounted Peripheral Report
@@ -65,7 +64,7 @@ Sent from the rover server to inform Mission Control of the peripheral currently
 ```
 {
   type: "mountedPeripheralReport",
-  peripheral: "arm" | null
+  peripheral: "arm" | "science" | null
 }
 ```
 
@@ -144,7 +143,7 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
   power: number
 }
 ```
@@ -161,7 +160,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "drillArm" | "ikForward" | "ikUp",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
   position: number
 }
 ```
@@ -178,7 +177,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "drillArm",
+  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
   position: number
 }
 ```
@@ -404,20 +403,3 @@ Sent from the rover server to inform Mission Control of an ellipse representing 
 - `radiusX` - the radius of the ellipse along the rover's x-axis before the rotation is applied
 - `radiusY` - the radius of the ellipse along the rover's y-axis before the rotation is applied
 - `rotation` - how many radians counterclockwise the ellipse is rotated
-
-## Lidar Data Report
-### Description
-Sent from the rover server to inform Mission Control of data provided by the rover's lidar sensor.
-
-### Syntax
-```
-{
-  type: "lidarReport",
-  points: { x: number, y: number }[]
-}
-```
-
-### Parameters
-- `points` - an array of points in cartesian coordinates read by the lidar sensor
-- `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
-- `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover

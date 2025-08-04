@@ -1,21 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {CAMERAS} from '../constants/cameraConstants'
 
-const cameraNames = ['mast', 'hand', 'wrist', 'rand', 'pano', 'drill', 'box', 'microscope']
-const cameraNameToID = {
-  mast: 40,
-  hand: 20,
-  wrist: 30,
-  rand: 50,
-  pano: 110,
-  drill: 540,
-  box: 520,
-  microscope: 500,
-}
-
-const initialState = cameraNames.reduce(
-  (state, cameraName) => ({
+const initialState = CAMERAS.reduce(
+  (state, camera) => ({
     ...state,
-    [cameraNameToID[cameraName]]: {
+    [camera.id]: {
       isStreaming: false,
       frameData: null,
     },
@@ -38,6 +27,7 @@ const camerasSlice = createSlice({
       state[cameraID].frameData = null
     },
 
+    // No state needs to be updated here
     requestCameraFrame() {},
 
     cameraStreamDataReportReceived(state, action) {

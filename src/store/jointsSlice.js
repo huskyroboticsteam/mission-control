@@ -9,11 +9,8 @@ const jointNames = [
   'wristRoll',
   'hand',
   'handActuator',
-  'drillActuator',
-  'drillMotor',
   'ikUp',
   'ikForward',
-  'fourBarLinkage',
 ]
 
 const initialState = jointNames.reduce(
