@@ -1,7 +1,7 @@
 export enum CameraNames {
   mast,
   hand,
-  wrist
+  wrist,
 }
 
 export const CAMERAS: {
@@ -10,12 +10,12 @@ export const CAMERAS: {
   }
 } = {
   mast: {
-    id: 40
+    id: 40,
   },
   hand: {
     id: 20,
   },
   wrist: {
-    id: 30
-  }
+    id: 30,
+  },
 }

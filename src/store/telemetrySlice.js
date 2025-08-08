@@ -23,7 +23,7 @@ const telemetrySlice = createSlice({
       state.orientZ = orientZ
       state.lon = lon
       state.lat = lat
-      state.alt = alt + 4470
+      state.alt = alt
       state.recency = recency
     },
   },
