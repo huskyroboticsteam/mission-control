@@ -1,10 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {CAMERAS} from '../constants/cameraConstants'
 
-const initialState = CAMERAS.reduce(
-  (state, camera) => ({
+const initialState = Object.values(CAMERAS).reduce(
+  (state, cam) => ({
     ...state,
-    [camera.id]: {
+    [cam.id]: {
       isStreaming: false,
       frameData: null,
     },
