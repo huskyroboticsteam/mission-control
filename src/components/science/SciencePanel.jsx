@@ -10,7 +10,7 @@ function SciencePanel() {
   const dispatch = useDispatch()
   const isDrillOn = useSelector(selectDrillMotor)
 
-const handleClick = () => {
+  const handleClick = () => {
     dispatch(toggleDrillMotor())
   }
 
