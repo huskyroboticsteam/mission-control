@@ -227,11 +227,12 @@ function computeArmInput(state) {
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
     getAxisFromKeys(pressedKeys, 'U', 'O')
   armInput.hand =
-    peripheralGamepad['LeftTrigger'] -
-    peripheralGamepad['RightTrigger'] +
+    getAxisFromButtons(peripheralGamepad, 'B', 'A') +
+    // peripheralGamepad['LeftTrigger'] -
+    // peripheralGamepad['RightTrigger'] +
     getAxisFromKeys(pressedKeys, 'J', 'L')
-  armInput.handActuator =
-    getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
+  // armInput.handActuator =
+  //   getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad)
