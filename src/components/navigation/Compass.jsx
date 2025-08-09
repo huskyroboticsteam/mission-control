@@ -48,7 +48,7 @@ function sanitize(num, decimals) {
  * @param lonf longitude of ending point in degrees.
  * @return The heading of the ending point relative to North (CW is +) in degrees.
  */
-function convertCoordsToHeading(lati, loni, latf, lonf) {
+export function convertCoordsToHeading(lati, loni, latf, lonf) {
   const DEGREES_TO_RADIANS = Math.PI / 180
   lati *= DEGREES_TO_RADIANS
   loni *= DEGREES_TO_RADIANS
