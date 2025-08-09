@@ -10,7 +10,7 @@ function SciencePanel() {
   const dispatch = useDispatch()
   const isDrillOn = useSelector(selectDrillMotor)
 
-  const handleClick = () => {
+const handleClick = () => {
     dispatch(toggleDrillMotor())
   }
 
@@ -21,16 +21,8 @@ function SciencePanel() {
   return (
     <div className="science-panel">
       <CameraStream cameraName="mast" cameraID={40} />
-      <CameraStream cameraName="microscope" cameraID={500} />
-      <CameraStream cameraName="drill" cameraID={540} />
-      <CameraStream cameraName="box" cameraID={520} />
-      <div style={{flexDirection: 'column'}}>
-        <Servos />
-        <Steppers />
-      </div>
-      <div className={className}>
-        <button onClick={handleClick}>{text}</button>
-      </div>
+      <CameraStream cameraName="hand" cameraID={20} />
+      <CameraStream cameraName="wrist" cameraID={30} />
     </div>
   )
 }

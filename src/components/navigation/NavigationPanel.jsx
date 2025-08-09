@@ -3,7 +3,6 @@ import Compass from './Compass'
 import './NavigationPanel.css'
 import OpModeSelect from './OpModeSelect'
 import WaypointNav from './WaypointNav'
-import ScienceStatus from './ScienceStatus'
 
 function NavigationPanel() {
   return (
@@ -15,7 +14,6 @@ function NavigationPanel() {
       <CameraStream cameraName="wrist" cameraID={30} />
       <OpModeSelect />
       <WaypointNav />
-      <ScienceStatus />
     </div>
   )
 }
