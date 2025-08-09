@@ -48,7 +48,7 @@ function sanitize(num, decimals) {
  * @param lonf longitude of ending point in degrees.
  * @return The heading of the ending point relative to North (CW is +) in degrees.
  */
-function convertCoordsToHeading(lati, loni, latf, lonf) {
+export function convertCoordsToHeading(lati, loni, latf, lonf) {
   const DEGREES_TO_RADIANS = Math.PI / 180
   lati *= DEGREES_TO_RADIANS
   loni *= DEGREES_TO_RADIANS
@@ -72,7 +72,7 @@ function convertCoordsToHeading(lati, loni, latf, lonf) {
  * @param radius radius of the planet in km (default is Earth: 6,371km).
  * @return The distance in km.
  */
-function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
+export function convertCoordsToDistance(lati, loni, latf, lonf, radius = 6371) {
   const DEGREES_TO_RADIANS = Math.PI / 180
   lati *= DEGREES_TO_RADIANS
   loni *= DEGREES_TO_RADIANS
