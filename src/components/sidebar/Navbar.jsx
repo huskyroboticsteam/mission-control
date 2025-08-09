@@ -42,7 +42,11 @@ function Navbar() {
         </li>
 
         <li>
-          <NavLink to="/calc" className={({isActive}) => {isActive ? 'active' : 'inactive'}}>
+          <NavLink
+            to="/calc"
+            className={({isActive}) => {
+              isActive ? 'active' : 'inactive'
+            }}>
             <CalcIcon fontSize="large" className="navbar__icon" />
             Calculate
           </NavLink>
