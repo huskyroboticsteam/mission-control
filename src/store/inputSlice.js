@@ -227,7 +227,7 @@ function computeArmInput(state) {
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
     getAxisFromKeys(pressedKeys, 'U', 'O')
   armInput.hand =
-    getAxisFromButtons(peripheralGamepad, 'B', 'A') +
+    getAxisFromButtons(peripheralGamepad, 'A', 'B') +
     // peripheralGamepad['LeftTrigger'] -
     // peripheralGamepad['RightTrigger'] +
     getAxisFromKeys(pressedKeys, 'J', 'L')
