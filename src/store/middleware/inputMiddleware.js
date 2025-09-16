@@ -21,7 +21,7 @@ const inputMiddleware = (store) => (next) => (action) => {
       store.dispatch(
         messageRover({
           message: {
-            type: 'requestArmIKEnabled',
+            type: 'armIKRequest',
             enabled: action.payload.enable,
           },
         })
