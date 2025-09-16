@@ -1,38 +1,40 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {CAMERAS} from '../constants/cameraConstants'
+import {Cameras} from '../constants/cameraConstants'
 
-const initialState = Object.values(CAMERAS).reduce(
-  (state, cam) => ({
-    ...state,
-    [cam.id]: {
-      isStreaming: false,
-      frameData: null,
-    },
-  }),
-  {}
-)
+const initialState = Object.values(Cameras)
+  .filter((c) => isNaN(Number(c)))
+  .reduce(
+    (state, camera) => ({
+      ...state,
+      [camera]: {
+        isStreaming: false,
+        frameData: null,
+      },
+    }),
+    {}
+  )
 
 const camerasSlice = createSlice({
   name: 'cameras',
   initialState,
   reducers: {
     openCameraStream(state, action) {
-      const {cameraID} = action.payload
-      state[cameraID].isStreaming = true
+      const {camera} = action.payload
+      state[camera].isStreaming = true
     },
 
     closeCameraStream(state, action) {
-      const {cameraID} = action.payload
-      state[cameraID].isStreaming = false
-      state[cameraID].frameData = null
+      const {camera} = action.payload
+      state[camera].isStreaming = false
+      state[camera].frameData = null
     },
 
     // No state needs to be updated here
     requestCameraFrame() {},
 
     cameraStreamDataReportReceived(state, action) {
-      const {cameraID, frameData} = action.payload
-      if (state[cameraID].isStreaming) state[cameraID].frameData = frameData
+      const {camera, frameData} = action.payload
+      if (state[camera].isStreaming) state[camera].frameData = frameData
     },
   },
 })
@@ -45,8 +47,7 @@ export const {
 } = camerasSlice.actions
 
 export const selectAllCameraNames = (state) => Object.keys(state.cameras)
-export const selectCameraIsStreaming = (cameraID) => (state) => state.cameras[cameraID].isStreaming
-export const selectCameraStreamFrameData = (cameraID) => (state) =>
-  state.cameras[cameraID].frameData
+export const selectCameraIsStreaming = (camera) => (state) => state.cameras[camera].isStreaming
+export const selectCameraStreamFrameData = (camera) => (state) => state.cameras[camera].frameData
 
 export default camerasSlice.reducer

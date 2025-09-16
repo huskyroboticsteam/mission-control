@@ -25,7 +25,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
         messageRover({
           message: {
             type: 'cameraStreamOpenRequest',
-            camera: Number(action.payload.cameraID),
+            camera: action.payload.camera,
             fps: 20, // default to 20
           },
         })
@@ -38,7 +38,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
         messageRover({
           message: {
             type: 'cameraStreamCloseRequest',
-            camera: Number(action.payload.cameraID),
+            camera: action.payload.camera,
           },
         })
       )
@@ -50,7 +50,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
         messageRover({
           message: {
             type: 'cameraFrameRequest',
-            camera: Number(action.payload.cameraID),
+            camera: action.payload.camera,
           },
         })
       )
@@ -61,14 +61,13 @@ const camerasMiddleware = (store) => (next) => (action) => {
       // Inform the rover of camera streams we would like to receive when we
       // connect.
       const cameras = store.getState().cameras
-      Object.keys(cameras).forEach((cameraID) => {
-        const camera = cameras[cameraID]
-        if (camera.isStreaming) {
+      Object.keys(cameras).forEach((camera) => {
+        if (cameras[camera].isStreaming) {
           store.dispatch(
             messageRover({
               message: {
                 type: 'cameraStreamOpenRequest',
-                camera: Number(cameraID),
+                camera: camera,
                 fps: 20, // default to 20
               },
             })
@@ -80,12 +79,11 @@ const camerasMiddleware = (store) => (next) => (action) => {
 
     case roverDisconnected.type: {
       const cameras = store.getState().cameras
-      Object.keys(cameras).forEach((cameraID) => {
-        const camera = cameras[cameraID]
-        if (camera.isStreaming && camera.frameData !== null) {
+      Object.keys(cameras).forEach((camera) => {
+        if (cameras[camera].isStreaming && cameras[camera].frameData !== null) {
           store.dispatch(
             cameraStreamDataReportReceived({
-              cameraName: cameraID,
+              camera: camera,
               frameData: null,
             })
           )
@@ -99,7 +97,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
       if (message.type === 'cameraStreamReport') {
         store.dispatch(
           cameraStreamDataReportReceived({
-            cameraID: message.camera,
+            camera: message.camera,
             frameData: message.data,
           })
         )
@@ -113,7 +111,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
           .replace(':', '_')
           .substring(0, 19)
 
-        link.download = `camera${message.camera}-${timeString}.jpg`
+        link.download = `${camelCaseToTitle(message.camera)}-${timeString}.jpg`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)

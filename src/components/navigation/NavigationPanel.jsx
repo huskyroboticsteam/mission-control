@@ -8,11 +8,10 @@ import WaypointNav from './WaypointNav'
 function NavigationPanel() {
   return (
     <div className="navigation-panel">
-      <CameraStream cameraName="mast" cameraID={40} />
-      <CameraStream cameraName="hand" cameraID={20} />
-
+      <CameraStream camera="mast" />
+      <CameraStream camera="hand" />
       <Compass />
-      <CameraStream cameraName="wrist" cameraID={30} />
+      <CameraStream camera="wrist" />
       {/* <OpModeSelect /> */}
       <WaypointList />
       <WaypointNav />
