@@ -185,9 +185,9 @@ function computeDriveInput(state, action) {
     driveInput.steer =
       driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
     driveInput.left =
-      driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
+      -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
     driveInput.right =
-      driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
+      -driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
   }
 
   // Apply precision controls and clamp.
@@ -227,11 +227,12 @@ function computeArmInput(state) {
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
     getAxisFromKeys(pressedKeys, 'U', 'O')
   armInput.hand =
-    peripheralGamepad['LeftTrigger'] -
-    peripheralGamepad['RightTrigger'] +
+    getAxisFromButtons(peripheralGamepad, 'A', 'B') +
+    // peripheralGamepad['LeftTrigger'] -
+    // peripheralGamepad['RightTrigger'] +
     getAxisFromKeys(pressedKeys, 'J', 'L')
   armInput.handActuator =
-    getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
+    getAxisFromButtons(peripheralGamepad, 'Y', 'X') + getAxisFromKeys(pressedKeys, ',', '.')
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad)

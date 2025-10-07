@@ -20,9 +20,9 @@ function SciencePanel() {
 
   return (
     <div className="science-panel">
-      <CameraStream cameraName="mast" cameraID={40} />
-      <CameraStream cameraName="hand" cameraID={20} />
-      <CameraStream cameraName="wrist" cameraID={30} />
+      <CameraStream camera="mast" />
+      <CameraStream camera="hand" />
+      <CameraStream camera="wrist" />
     </div>
   )
 }

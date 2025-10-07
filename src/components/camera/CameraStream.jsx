@@ -57,20 +57,20 @@ async function createPopOutWindow(cameraTitle, cameraName, unloadCallback, downl
   return returnPromise
 }
 
-function CameraStream({cameraName, cameraID}) {
+function CameraStream({camera}) {
   const dispatch = useDispatch()
   useEffect(() => {
     // Open the camera stream.
-    dispatch(openCameraStream({cameraID}))
+    dispatch(openCameraStream({camera}))
     return () => {
       // Close the camera stream.
-      dispatch(closeCameraStream({cameraID}))
+      dispatch(closeCameraStream({camera}))
     }
-  }, [cameraName, dispatch])
+  }, [camera, dispatch])
 
   const roverIsConnected = useSelector(selectRoverIsConnected)
-  const frameDataArray = useSelector(selectCameraStreamFrameData(cameraID))
-  const cameraTitle = camelCaseToTitle(cameraName)
+  const frameDataArray = useSelector(selectCameraStreamFrameData(camera))
+  const cameraTitle = camelCaseToTitle(camera)
   const [hasRendered, setHasRendered] = useState(false)
   const [hasFrame, setHasFrame] = useState(false)
 
@@ -86,18 +86,18 @@ function CameraStream({cameraName, cameraID}) {
     return (
       <video
         style={{opacity: popoutWindow ? '0' : '1'}}
-        id={`${cameraName}-player`}
+        id={`${camera}-player`}
         className="video-tag"
         muted
         autoPlay
         preload="auto"
         alt={`${cameraTitle} stream`}></video>
     )
-  }, [cameraName, cameraTitle, popoutWindow])
+  }, [camera, cameraTitle, popoutWindow])
 
   const requestDownloadFrame = useCallback(() => {
-    dispatch(requestCameraFrame({cameraID}))
-  }, [cameraID, dispatch])
+    dispatch(requestCameraFrame({camera}))
+  }, [camera, dispatch])
 
   const drawFrameOnExt = useCallback(
     (window, last_ww, last_wh) => {
@@ -152,7 +152,7 @@ function CameraStream({cameraName, cameraID}) {
       let video = document.getElementById(vidTag.props.id)
       let {popout, canvas, context, aspectRatio} = await createPopOutWindow(
         cameraTitle,
-        cameraName,
+        camera,
         () => setPopoutWindow(null),
         requestDownloadFrame
       )
@@ -164,12 +164,12 @@ function CameraStream({cameraName, cameraID}) {
         drawFrameOnExt(popout, 0, 0)
       })
     }
-  }, [popoutWindow, cameraTitle, cameraName, drawFrameOnExt, vidTag])
+  }, [popoutWindow, cameraTitle, camera, drawFrameOnExt, vidTag])
 
   const jmuxer = useMemo(() => {
-    if (hasRendered && cameraName) {
+    if (hasRendered && camera) {
       return new JMuxer({
-        node: `${cameraName}-player`,
+        node: `${camera}-player`,
         mode: 'video',
         flushingTime: 0,
         maxDelay: 50,
@@ -184,7 +184,7 @@ function CameraStream({cameraName, cameraID}) {
       })
     }
     return null
-  }, [cameraName, hasRendered])
+  }, [camera, hasRendered])
 
   useEffect(() => {
     if (frameDataArray && vidTag && jmuxer) {
@@ -210,12 +210,12 @@ function CameraStream({cameraName, cameraID}) {
         }
       }
       setAspectRatio(
-        document.querySelector(`#${cameraName}-player`).videoHeight /
-          document.querySelector(`#${cameraName}-player`).videoWidth
+        document.querySelector(`#${camera}-player`).videoHeight /
+          document.querySelector(`#${camera}-player`).videoWidth
       )
       setLastFrameTime(currentTime) // current time in ms
     }
-  }, [cameraName, frameDataArray, popoutWindow, vidTag])
+  }, [camera, frameDataArray, popoutWindow, vidTag])
 
   useEffect(() => {
     return () => {
@@ -261,7 +261,7 @@ function CameraStream({cameraName, cameraID}) {
         <button
           className="camera-stream-download-button"
           onClick={() => {
-            dispatch(closeCameraStream({cameraID}))
+            dispatch(closeCameraStream({camera}))
             setHasFrame(false)
           }}
           disabled={!(hasFrame && roverIsConnected)}>
@@ -270,7 +270,7 @@ function CameraStream({cameraName, cameraID}) {
         <button
           className="camera-stream-download-button"
           onClick={() => {
-            dispatch(openCameraStream({cameraID}))
+            dispatch(openCameraStream({camera}))
           }}
           disabled={!(!hasFrame && roverIsConnected)}>
           On

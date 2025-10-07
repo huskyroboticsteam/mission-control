@@ -143,14 +143,14 @@ Sent from Mission Control to instruct the rover server to make a joint move with
 ```
 {
   type: "jointPowerRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
+  joint: string,
   power: number
 }
 ```
 
 ### Parameters
 - `joint` - the name of the joint
-- `power` - the requested power in [-1, 1]
+- `power` - the requested power in [-1.0, 1.0]
 
 ## Joint Position Request
 ### Description
@@ -160,7 +160,7 @@ Sent from Mission Control to instruct the rover server to make a joint move to a
 ```
 {
   type: "jointPositionRequest",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
+  joint: string,
   position: number
 }
 ```
@@ -177,7 +177,7 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 ```
 {
   type: "jointPositionReport",
-  joint: "armBase" | "shoulder" | "elbow" | "forearm" | "wristPitch" | "wristRoll" | "hand" | "handActuator" | "ikForward" | "ikUp",
+  joint: string,
   position: number
 }
 ```
@@ -186,14 +186,14 @@ Sent from the rover server to inform Mission Control of a joint's current positi
 - `joint` - the name of the joint
 - `position` - the current position in degrees
 
-## Request Arm IK Enabled
+## Arm IK Request
 ### Description
-Sent from Mission Control to instruct the rover to enable or disable inverse kinematics.  This packet is not guaranteed to enable/disable IK. An `armIKEnabledReport` packet will be sent immediately after the `requestArmIKEnabled` is processed by the rover, and this can be used to know if IK was successfully enabled/disabled. 
+Sent from Mission Control to instruct the rover to enable or disable inverse kinematics.  This packet is not guaranteed to enable/disable IK. An `armIKEnabledReport` packet will be sent immediately after the `armIKRequest` is processed by the rover, and this can be used to know if IK was successfully enabled/disabled. 
 
 ### Syntax
 ```
 {
-  type: "requestArmIKEnabled",
+  type: "armIKRequest",
   enabled: boolean
 }
 ```
@@ -215,25 +215,6 @@ Sent from the rover to inform Mission Control whether or not the Rover has enabl
 
 ### Parameters
 - `enabled` - whether or not inverse kinematics for the arm is enabled
-
-## Motor Status Report
-### Description
-Sent from the rover server to inform Mission Control of a motor's status.
-
-### Syntax
-```
-{
-  type: "motorStatusReport",
-  motor: string,
-  power: number | null,
-  position: number | null,
-}
-```
-
-### Parameters
-- `motor` - the name of the motor
-- `power` - the current power of the motor, or `null` if unavailable
-- `position` - the current position of the motor in degrees, or `null` if unavailable
 
 ## Rover Position Report
 ### Description
@@ -271,13 +252,13 @@ Sent from Mission Control to instruct the rover server to begin providing a came
 ```
 {
   type: "cameraStreamOpenRequest",
-  camera: number,
+  camera: string,
   fps: number
 }
 ```
 
 ### Parameters
-- `camera` - the ID of the camera as an integer
+- `camera` - the name of the camera
 - `fps` - the frame rate of the camera stream as an integer
 
 
@@ -289,12 +270,12 @@ Sent from Mission Control to instruct the rover server to stop providing a camer
 ```
 {
   type: "cameraStreamCloseRequest",
-  camera: number
+  camera: string
 }
 ```
 
 ### Parameters
-- `camera` - the ID of the camera as an integer
+- `camera` - the name of the camera
 
 ## Camera Stream Report
 ### Description
@@ -304,13 +285,13 @@ Sent from the rover server to inform Mission Control of a single frame of a came
 ```
 {
   type: "cameraStreamReport",
-  camera: number,
+  camera: string,
   data: string | null
 }
 ```
 
 ### Parameters
-- `camera` - the ID of the camera as an integer
+- `camera` - the name of the camera
 - `data` - the raw h264 frame data, or `null` if no data is available
 
 ## Camera Frame Request
@@ -321,12 +302,12 @@ Sent from Mission Control to instruct the rover server to send a Camera Frame Re
 ```
 {
   type: "cameraFrameRequest",
-  camera: number
+  camera: string
 }
 ```
 
 ### Parameters
-- `camera` - the ID of the camera as an integer
+- `camera` - the name of the camera
 
 ## Camera Frame Report
 ### Description
@@ -336,13 +317,13 @@ Sent from the rover server to inform Mission Control of a full resolution lossle
 ```
 {
   type: "cameraFrameReport",
-  camera: number,
+  camera: string,
   data: string
 }
 ```
 
 ### Parameters
-- `camera` - the ID of the camera as an integer
+- `camera` - the name of the camera
 - `data` - the image, base64 encoded
 
 
@@ -366,40 +347,3 @@ Sent from Mission Control to instruct the rover to navigate to the next waypoint
 - `longitude` - the longitude of the waypoint in degrees
 - `isApproximate` - denotes whether the location is an approximate location (See section 1.e.v [URC Rules](https://urc.marssociety.org/home/requirements-guidelines))
 - `isGate` - denotes whether the location is a gate (two posts the rover must pass between)
-
-## Autonomous Planned Path Report
-### Description
-Sent from the rover server to inform Mission Control of the currently planned autonomous path for plan visualization.
-
-### Syntax
-```
-{
-  type: "autonomousPlannedPathReport",
-  path: { x: number, y: number, heading: number }[]
-}
-```
-
-### Parameters
-- `path` - an array of points in cartesian coordinates that make up the planned path, where points with adjacent indices are connected by an edge
-- `x` - the x-coordinate of a point in meters relative to the rover's position, where positive means in front of the rover and negative means behind the rover
-- `y` - the y-coordinate of a point in meters relative to the rover's position, where positive means left of the rover and negative means right of the rover
-- `heading` - the planned heading of the rover at a point, measured in radians counterclockwise from the rover's x-axis
-
-## Pose Confidence Report
-### Description
-Sent from the rover server to inform Mission Control of an ellipse representing the 95% confidence interval for the rover's true position. This ellipse will be displayed in the Plan Viz.
-
-### Syntax
-```
-{
-  type: "poseConfidenceReport",
-  radiusX: number,
-  radiusY: number,
-  rotation: number
-}
-```
-
-### Parameters
-- `radiusX` - the radius of the ellipse along the rover's x-axis before the rotation is applied
-- `radiusY` - the radius of the ellipse along the rover's y-axis before the rotation is applied
-- `rotation` - how many radians counterclockwise the ellipse is rotated
