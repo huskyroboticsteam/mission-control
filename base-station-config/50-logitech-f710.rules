@@ -1,0 +1,1 @@
+ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21f", RUN+="/bin/bash /etc/udev/rules.d/f710-setup.sh"

@@ -1,0 +1,46 @@
+.enable-motors-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid gray;
+}
+
+.enable-motors-button > button {
+  display: block;
+  border: none;
+  color: white;
+  margin: 14px;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.enable-motors-button--enabled > button {
+  background-color: #ed4245;
+}
+
+.enable-motors-button--disabled > button {
+  background-color: #4fb185;
+}
+
+.enable-motors-button--enabled > button:hover {
+  cursor: pointer;
+  background-color: #dc3134;
+}
+
+.enable-motors-button--disabled > button:hover {
+  cursor: pointer;
+  background-color: #3ea074;
+}
+
+.enable-motors-button--enabled > button:active {
+  cursor: pointer;
+  background-color: #cb2023;
+}
+
+.enable-motors--disabled > button:active {
+  cursor: pointer;
+  background-color: #2d8f63;
+}

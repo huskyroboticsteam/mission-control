@@ -1,0 +1,123 @@
+.compass-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.compass {
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.compass-parts {
+  width: 200px;
+  height: 200px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.compass__needle {
+  width: 5px;
+  height: 45%;
+  position: absolute;
+  top: 25%;
+  left: 48%;
+  border-radius: 100% 100% 0 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.compass__needle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 5px;
+  height: 8px;
+  background-color: black;
+}
+
+.compass__needle--green {
+  background-color: #4caf50;
+}
+
+.compass__needle--yellow {
+  background-color: #ffc107;
+}
+
+.compass__needle--red {
+  background-color: #f44336;
+}
+
+.compass__label {
+  position: absolute;
+  font-size: 12px;
+  color: #333;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.compass__label--north {
+  font-size: 20px;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compass__label--south {
+  font-size: 20px;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compass__label--west {
+  font-size: 20px;
+  left: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.compass__label--east {
+  font-size: 20px;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.compass__outer-ring {
+  position: absolute;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  border: 5px solid #333;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.compass__outer-ring.green {
+  border-color: green;
+}
+
+.compass__outer-ring.yellow {
+  border-color: yellow;
+}
+
+.compass__outer-ring.red {
+  border-color: red;
+}
+
+.info {
+  color: #f5f5f5;
+  font-size: calc(5px + 1vmax);
+  font-family: monospace;
+  text-align: left;
+}

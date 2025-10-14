@@ -1,0 +1,9 @@
+.telemetry-panel {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}

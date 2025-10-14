@@ -1,0 +1,22 @@
+.connection-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  padding: 5px 10px 5px 5px;
+  border-top: 1px solid gray;
+  font-size: large;
+  text-align: center;
+}
+
+.connection-info--connected {
+  color: #4fb185;
+}
+
+.connection-info--disconnected {
+  color: #ed4245;
+}
+
+.connection-info > p {
+  padding: 10px;
+}
