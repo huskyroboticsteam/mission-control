@@ -507,8 +507,13 @@ function Map() {
       </div>
 
       {pins.map((pin, i) => {
+<<<<<<< HEAD
         const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
         const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
+=======
+        const colorOptions = ['#e6194b', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6'];
+        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length]);
+>>>>>>> 25f2086 (renamed/cleaned some liens)
         return (
           <Entity
             key={pin.id}
