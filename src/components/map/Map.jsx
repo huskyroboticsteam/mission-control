@@ -115,17 +115,6 @@ function Map() {
     setCameraKey(k => k + 1);
   }
 
-  /*
-  function handleUseTelemetry() {
-    setUseManual(false);
-    if (typeof lon === 'number' && typeof lat === 'number') {
-      setCameraTarget({ lon, lat, alt: 1500 });
-      setCameraKey(k => k + 1);
-    }
-  }
-<button onClick={handleUseTelemetry} style={{ height: 34 }}>Use Telemetry</button>
-  */
-
   return (
     <Viewer
       style={{ overflow: "hidden" }}
@@ -176,8 +165,8 @@ function Map() {
 
       {/* Render dropped pins */}
       {pins.map((pin, i) => {
-        const rainbow = ['#e6194b', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6'];
-        const col = Color.fromCssColorString(rainbow[i % rainbow.length]);
+        const colorOptions = ['#e6194b', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6'];
+        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length]);
         return (
           <Entity key={pin.id} position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)} name={pin.label}>
             <PointGraphics color={col} pixelSize={14} outlineColor={Color.WHITE} outlineWidth={2} />
