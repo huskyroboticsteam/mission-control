@@ -9,10 +9,10 @@ import robotModel from "../../../assets/Dozer.glb"
 Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
 
 function Map() {
-  //const lat = useSelector(selectRoverLatitude);
-   const lat = 47.655548;
-  // const lon = useSelector(selectRoverLongitude);
-   const lon = -122.303200;
+  const lat = useSelector(selectRoverLatitude);
+  // const lat = 47.655548;
+  const lon = useSelector(selectRoverLongitude);
+  // const lon = -122.303200;
   const heading = useSelector(selectRoverHeading);
   const yaw = useSelector(selectRoverYaw);
 
