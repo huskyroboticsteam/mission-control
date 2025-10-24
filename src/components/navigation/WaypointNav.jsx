@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import React, {useState, useEffect} from 'react'
 import {requestWaypointNav, selectLongitude} from '../../store/waypointNavSlice'
 import {selectOpMode} from '../../store/opModeSlice'
+import {selectRoverIsConnected} from '../../store/roverSocketSlice'
 import './WaypointNav.css'
 
 function WaypointNav() {
@@ -85,11 +86,13 @@ function WaypointNav() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    const form = e.target
-    const formData = new FormData(form)
-    const formJson = Object.fromEntries(formData.entries())
-    setSubmitted(true)
-    dispatch(requestWaypointNav(formJson))
+    if (roverIsConnected) {
+      const form = e.target
+      const formData = new FormData(form)
+      const formJson = Object.fromEntries(formData.entries())
+      setSubmitted(true)
+      dispatch(requestWaypointNav(formJson))
+    }
     points.length = 0
   }
 
@@ -120,6 +123,10 @@ function WaypointNav() {
       setSubmitted(false)
     }
   }, [opMode])
+
+  useEffect(() => {
+    setIsWaypointSet(storedLat != null && storedLon != null)
+  }, [storedLat, storedLon])
 
   return (
     <div className="waypoint-nav">

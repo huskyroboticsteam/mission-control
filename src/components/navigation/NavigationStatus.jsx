@@ -4,8 +4,7 @@ import {selectRoverPosition} from '../../store/telemetrySlice'
 import {selectRoverStatus} from '../../store/navStatusSlice'
 import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
-
-//MAJOR ISSUE: CONSTANTS ARE IN METERS BUT CURRENT DATA IS IN LATITUDE/LONGITUDE.
+import {convertCoordsToDistance} from './Compass'
 
 function sanitize(num, decimals) {
   if (num == null) {

@@ -20,10 +20,15 @@ const waypointNavSlice = createSlice({
       state.isApproximate = !!isApproximate
       state.isGate = !!isGate
     },
+    setWaypointPosition(state, action) {
+      const {latitude, longitude} = action.payload
+      state.latitude = typeof latitude == 'string' ? Number.parseFloat(latitude) : latitude
+      state.longitude = typeof longitude == 'string' ? Number.parseFloat(longitude) : longitude
+    },
   },
 })
 
-export const {requestWaypointNav} = waypointNavSlice.actions
+export const {requestWaypointNav, setWaypointPosition} = waypointNavSlice.actions
 
 export const selectLatitude = (state) => state.waypointNav.latitude
 export const selectLongitude = (state) => state.waypointNav.longitude

@@ -1,5 +1,4 @@
-import {motorStatusReportReceived, enableMotors} from '../motorsSlice'
-import {messageReceivedFromRover} from '../roverSocketSlice'
+import {enableMotors} from '../motorsSlice'
 import {requestDrive} from '../driveSlice'
 import {requestJointPower, selectAllJointNames} from '../jointsSlice'
 import {enableIK} from '../inputSlice'
@@ -9,22 +8,6 @@ import {enableIK} from '../inputSlice'
  */
 const motorsMiddleware = (store) => (next) => (action) => {
   switch (action.type) {
-    case messageReceivedFromRover.type: {
-      const result = next(action)
-      const {message} = action.payload
-      if (message.type === 'motorStatusReport') {
-        const {motor: motorName, power, position} = message
-        store.dispatch(
-          motorStatusReportReceived({
-            motorName,
-            power,
-            position,
-          })
-        )
-      }
-      return result
-    }
-
     case enableMotors.type: {
       const {enabled} = action.payload
       // send ik packet with false

@@ -1,14 +1,30 @@
 import CameraStream from '../camera/CameraStream'
+import Servos from './Servos'
+import Steppers from './Steppers'
 
 import './SciencePanel.css'
+import {useSelector, useDispatch} from 'react-redux'
+import {selectDrillMotor, toggleDrillMotor} from '../../store/inputSlice'
 
-function ArmDexterityPanel() {
+function SciencePanel() {
+  const dispatch = useDispatch()
+  const isDrillOn = useSelector(selectDrillMotor)
+
+  const handleClick = () => {
+    dispatch(toggleDrillMotor())
+  }
+
+  const className =
+    'enable-drill-button enable-drill-button--' + (isDrillOn ? 'enabled' : 'disabled')
+  const text = isDrillOn ? 'Turn off Drill' : 'Turn on Drill'
+
   return (
     <div className="science-panel">
-      <CameraStream cameraName="pano" />
-      <CameraStream cameraName="drill" />
+      <CameraStream camera="mast" />
+      <CameraStream camera="hand" />
+      <CameraStream camera="wrist" />
     </div>
   )
 }
 
-export default ArmDexterityPanel
+export default SciencePanel

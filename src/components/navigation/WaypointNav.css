@@ -47,13 +47,14 @@
   background-color: #4fb185;
   border: none;
   color: white;
-  margin: 14px;
-  padding: 20px;
+  margin: 7px;
+  padding: 10px;
   display: block;
-  font-size: 35px;
+  font-size: 25px;
   font-weight: 600;
   border-radius: 5px;
   width: 50%;
+  cursor: pointer;
 }
 
 /* Disabled Buttons */
@@ -61,17 +62,17 @@
   background-color: #343836;
   border: none;
   color: white;
-  margin: 14px;
-  padding: 20px;
+  margin: 7px;
+  padding: 10px;
   display: block;
-  font-size: 35px;
+  font-size: 25px;
   font-weight: 600;
   border-radius: 5px;
   width: 50%;
+  cursor: not-allowed;
 }
 
 .waypoint-select > button:hover {
-  cursor: pointer;
   background-color: linear-gradient(rgb(0 0 0/40%) 0 0);
 }
 
