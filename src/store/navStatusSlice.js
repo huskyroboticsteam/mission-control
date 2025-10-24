@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
-  currTarget,
-  relativeDistance,
-  roverStatus
+  currTarget: null,
+  relativeDistance: null,
+  roverStatus: null,
 }
 
 const navStatusSlice = createSlice({

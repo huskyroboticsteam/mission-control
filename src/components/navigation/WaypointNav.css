@@ -3,7 +3,8 @@
   flex-direction: row;
   align-items: center;
   margin-top: 70px;
-  grid-column: 2 / span 2;
+  /* grid-column: 2 / span 2; */
+  border: 2px solid white;
 }
 
 .waypoint-select {
@@ -76,9 +77,10 @@
 
 .waypoint-array {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  overflow-y: auto;
 }
 
 .waypoint-array > ol {
@@ -86,6 +88,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 5px;
+    overflow-y: auto; 
 }
 
 .waypoint-array > li {

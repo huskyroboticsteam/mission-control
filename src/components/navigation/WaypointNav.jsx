@@ -130,7 +130,7 @@ function WaypointNav() {
           <label htmlFor="latitude">Latitude</label>
           {submitted ? (
             <input disabled value={lat} onChange={(e) => e} />
-          ) : (
+          ) : ( 
             <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} />
           )}
           <label htmlFor="longitude">Longitude</label>
@@ -193,15 +193,17 @@ function WaypointNav() {
         )}
       </form>
       <div className="waypoint-array">
+        <div>
+          <h3>Waypoint Points:</h3>
+          
+        </div>
         <ol>
           {points.map((point, index) => (
             <li
               key={index}
               style={{color: editingPoint && editPointIndex == index ? 'red' : 'white'}}>
               <p>
-                lat: {point[0]}
-                <br></br>
-                lon: {point[1]}
+                ({point[0]}, {point[1]})
               </p>
               <button type="button" className="remove-points" onClick={() => removePoint(index)}>
                 Remove

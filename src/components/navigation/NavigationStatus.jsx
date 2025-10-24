@@ -20,15 +20,15 @@ function sanitize(num, decimals) {
 
 function NavigationStatus() {
   const {lon, lat} = useSelector(selectRoverPosition)
-  const {currTarget, relativeDistance, roverStatus} = useeSelector(selectRoverStatus)
+  const {currTarget, relativeDistance, roverStatus} = useSelector(selectRoverStatus)
   //const targetPoints = useSelector(selectPoints)
   //const targetLatitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][0]) : null
   //const targetLongitude = Array.isArray(targetPoints[0]) ? parseFloat(targetPoints[0][1]) : null
 
   const getNavigationStatus = () => {
     // Guard against null or undefined values
-    //Also guards against the value of 0. Unlikely to be an issue but it is of note
-    if (!lon || !lat || !currTarget.lat || !currTarget.lon) {
+    // Also guards against the value of 0. Unlikely to be an issue but it is of note
+    if (lon == null || lat == null || !currTarget || !currTarget.lat || !currTarget.lon) {
       return {
         status: 'unknown',
         distance: null,
@@ -105,13 +105,13 @@ function NavigationStatus() {
           Status:{' '}
           <span className={`nav-status__label--${navStatus.color}`}>{navStatus.status}</span>
         </div>
-        <div>Distance: {navStatus.distance ? navStatus.distance.toFixed(6) : 'N/A'}</div>
+        <div>Distance: {navStatus.distance != null ? navStatus.distance.toFixed(6) : 'N/A'}</div>
         <div className="nav-status__coordinates">
           <div>
             Current: ({sanitize(lat, 6)}, {sanitize(lon, 6)})
           </div>
           <div>
-            Target: ({sanitize(currTarget.lat, 6)}, {sanitize(currTarget.lon, 6)})
+            Target: ({sanitize(currTarget?.lat, 6)}, {sanitize(currTarget?.lon, 6)})
           </div>
         </div>
       </div>
