@@ -5,6 +5,7 @@ import NavigationPanel from '../navigation/NavigationPanel'
 import ArmDexterityPanel from '../armDexterity/ArmDexterityPanel'
 import SciencePanel from '../science/SciencePanel'
 import Calculator from '../navigation/Calculator'
+import MapPanel from '../map/MapPanel'
 import './PanelContainer.css'
 
 function PanelContainer() {
@@ -24,6 +25,9 @@ function PanelContainer() {
         <Route path="/calc" element={<Calculator />} />
 
         <Route path="/help" element={<HelpPanel />} />
+
+        <Route path="/map" element={<MapPanel />} />
+        
       </Routes>
     </div>
   )
