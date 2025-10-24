@@ -41,6 +41,8 @@ function Map() {
   // selected pins for deletion (store ids in a Set)
   const [selectedPins, setSelectedPins] = React.useState(new Set());
 
+  
+
   // Use ArcGIS World Imagery for satellite/sensor-backed tiles (satellite view)
   const imageryProvider = new ArcGisMapServerImageryProvider({
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
@@ -82,7 +84,6 @@ function Map() {
     setUseManual(true);
     setCameraTarget({ lon: parsedLon, lat: parsedLat, alt: 1500 });
     setCameraKey(k => k + 1);
-    // add a dropped pin at this coordinate
     const id = pinIdRef.current++;
     setPins(prev => [...prev, { id, lon: parsedLon, lat: parsedLat, label: `Pin ${id}` }]);
   }
@@ -126,8 +127,11 @@ function Map() {
       imageryProvider={imageryProvider}
       ref={viewerRef}
     >
+      {/* Add the local imagery layers */}
+      
       {/* Center camera on the current lon/lat once the Cesium Viewer is ready */}
       {/** When the underlying cesiumElement becomes available, set the camera view. */}
+      
       <div style={{ position: 'absolute', right: 12, bottom: 12, zIndex: 999, background: 'rgba(255,255,255,0.95)', padding: 10, borderRadius: 6, boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
