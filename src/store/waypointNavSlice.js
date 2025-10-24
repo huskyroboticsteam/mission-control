@@ -16,9 +16,16 @@ const waypointNavSlice = createSlice({
       const {latitude, longitude, points, isApproximate, isGate} = action.payload
       state.latitude = typeof latitude == 'string' ? Number.parseFloat(latitude) : latitude
       state.longitude = typeof longitude == 'string' ? Number.parseFloat(longitude) : longitude
-      state.points = JSON.parse(points)
+      const nextPoints = Array.isArray(points)
+        ? points
+        : JSON.parse(points ?? '[]')
+      state.points = nextPoints.map((point) => (Array.isArray(point) ? [...point] : point))
       state.isApproximate = !!isApproximate
       state.isGate = !!isGate
+    },
+    setPoints(state, action) {
+      const payload = Array.isArray(action.payload) ? action.payload : []
+      state.points = payload.map((point) => (Array.isArray(point) ? [...point] : point))
     },
     setWaypointPosition(state, action) {
       const {latitude, longitude} = action.payload
@@ -28,7 +35,7 @@ const waypointNavSlice = createSlice({
   },
 })
 
-export const {requestWaypointNav, setWaypointPosition} = waypointNavSlice.actions
+export const {requestWaypointNav, setWaypointPosition, setPoints} = waypointNavSlice.actions
 
 export const selectLatitude = (state) => state.waypointNav.latitude
 export const selectLongitude = (state) => state.waypointNav.longitude
