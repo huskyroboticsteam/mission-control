@@ -9,8 +9,6 @@ import robotModel from "../../../assets/Dozer.glb"
 Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
 
 function Map() {
-  // Use telemetry latitude/longitude when available. Fall back to a reasonable default so
-  // the viewer has an initial center during development.
   const telemetryLat = useSelector(selectRoverLatitude);
   const telemetryLon = useSelector(selectRoverLongitude);
   const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548;
@@ -18,21 +16,16 @@ function Map() {
   const heading = useSelector(selectRoverHeading);
   const yaw = useSelector(selectRoverYaw);
 
-  // Ref to access the underlying Cesium Viewer so we can control the camera
   const viewerRef = React.useRef(null);
   const didSetCamera = React.useRef(false);
 
-  // UI state for manual coordinate input
-  // use string inputs so typing doesn't produce NaN; parse on Set Pin
   const [manualLatInput, setManualLatInput] = React.useState("47.6061");
   const [manualLonInput, setManualLonInput] = React.useState("-122.3328");
 
-  // numeric parsed values used for the Entity position / camera
   const [manualLat, setManualLat] = React.useState(47.6061);
   const [manualLon, setManualLon] = React.useState(-122.3328);
   const [useManual, setUseManual] = React.useState(false);
 
-  // camera fly-to trigger state
   const [cameraTarget, setCameraTarget] = React.useState(null);
   const [cameraKey, setCameraKey] = React.useState(0);
 
@@ -48,7 +41,7 @@ function Map() {
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
   });
 
-  // Map tiles framework: 16 entries with bounds provided by the user.
+
   const [mapTiles, setMapTiles] = React.useState(() => {
     return [
       { id: 0, name: 'Map 1', url: '/map-images/1.png', bounds: { west: -122.3113, south: 47.6571, east: -122.3087, north: 47.6589 } },
@@ -70,7 +63,6 @@ function Map() {
     ];
   });
 
-  // Helper to set bounds for a tile at runtime. bounds = { west, south, east, north }
   function setTileBounds(index, bounds) {
     if (typeof index !== 'number' || index < 0 || index >= 16) return;
     setMapTiles(prev => {
@@ -80,10 +72,8 @@ function Map() {
     });
   }
 
-  // Expose a couple of dev helpers on window for quick testing in the browser console.
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
-    // setTileBounds(index, {west, south, east, north}) - zero-based index
     window.setTileBounds = setTileBounds;
     // set active map index manually: setActiveMapIndex(0)
     window.setActiveMapIndex = (i) => setActiveMapIndex(i);
@@ -97,9 +87,6 @@ function Map() {
   const [activeMapIndex, setActiveMapIndex] = React.useState(null);
   const [autoSelectMap, setAutoSelectMap] = React.useState(true);
 
-  // Memoized imagery provider for the active local map. Creating providers can throw
-  // if bounds are invalid; wrap in try/catch and return null on failure so the app
-  // doesn't crash and we can log the error to the console for debugging.
   const activeLocalProvider = React.useMemo(() => {
     try {
       if (activeMapIndex === null) return null;
@@ -108,7 +95,7 @@ function Map() {
       const { west, south, east, north } = tile.bounds;
       // validate numeric
       if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
-        console.error('Invalid bounds for tile', activeMapIndex, tile.bounds);
+        console.error('Invalid', activeMapIndex, tile.bounds);
         return null;
       }
       return new SingleTileImageryProvider({
@@ -116,7 +103,7 @@ function Map() {
         rectangle: Rectangle.fromDegrees(west, south, east, north),
       });
     } catch (err) {
-      console.error('Failed to create SingleTileImageryProvider for active map', activeMapIndex, err);
+      console.error('Failed', activeMapIndex, err);
       return null;
     }
   }, [activeMapIndex, mapTiles]);
@@ -126,9 +113,8 @@ function Map() {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
     for (let i = 0; i < mapTiles.length; i++) {
       const t = mapTiles[i];
-      if (!t.bounds) continue; // skip until you provide bounds
+      if (!t.bounds) continue; 
       const { west, south, east, north } = t.bounds;
-      // simple AABB check in degrees
       if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i;
     }
     return null;
@@ -149,8 +135,6 @@ function Map() {
     -118.998927, 47.999277,
     -118.998257, 47.998970,
   ]);
-
-  // Fly the camera when viewer becomes available or when manual/telemetry mode changes
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
