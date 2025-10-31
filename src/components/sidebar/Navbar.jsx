@@ -5,6 +5,8 @@ import ScienceIcon from '@mui/icons-material/Science'
 import TelemetryIcon from '@mui/icons-material/Info'
 import HelpIcon from '@mui/icons-material/Help'
 import CalcIcon from '@mui/icons-material/Calculate'
+import MapIcon from '@mui/icons-material/Map'
+
 import './Navbar.css'
 
 function Navbar() {
@@ -58,6 +60,13 @@ function Navbar() {
             Help
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/map" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
+            <MapIcon fontSize="large" className="navbar__icon" />
+            Map
+          </NavLink>
+        </li>
+
       </ul>
     </nav>
   )

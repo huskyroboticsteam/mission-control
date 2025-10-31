@@ -374,7 +374,7 @@ function Map() {
     setManualLonInput(pin.lon.toString())
     setUseManual(true)
   }
-
+  
   return (
     <Viewer
       style={{overflow: 'hidden'}}
@@ -434,24 +434,11 @@ function Map() {
               style={{width: 160, height: 30, padding: 6, fontSize: 14}}
             />
           </div>
-          <div style={{display: 'flex', gap: 6}}>
-            <button onClick={handleSetPin} style={{height: 34}}>
-              Set Pin
-            </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <input value={manualLonInput} onChange={e => setManualLonInput(e.target.value)} style={{ width: 160, height: 30, padding: 6, fontSize: 14 }} />
           </div>
-          <div style={{display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8}}>
-            <select
-              value={activeMapIndex ?? ''}
-              onChange={(e) =>
-                setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))
-              }>
-              <option value="">(none)</option>
-              {mapTiles.map((t, idx) => (
-                <option key={t.id} value={idx}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button onClick={handleSetPin} style={{ height: 34 }}>Set Pin</button>
           </div>
         </div>
         <div style={{marginTop: 8, maxWidth: 420}}>

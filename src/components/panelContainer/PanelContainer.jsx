@@ -27,7 +27,7 @@ function PanelContainer() {
         <Route path="/help" element={<HelpPanel />} />
 
         <Route path="/map" element={<MapPanel />} />
-        
+
       </Routes>
     </div>
   )
