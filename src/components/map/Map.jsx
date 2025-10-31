@@ -14,7 +14,6 @@ function Map() {
   const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548;
   const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.303200;
   const heading = useSelector(selectRoverHeading);
-  const yaw = useSelector(selectRoverYaw);
 
   const viewerRef = React.useRef(null);
   const didSetCamera = React.useRef(false);
@@ -29,14 +28,11 @@ function Map() {
   const [cameraTarget, setCameraTarget] = React.useState(null);
   const [cameraKey, setCameraKey] = React.useState(0);
 
-  // dropped pins (allows multiple pins)
   const [pins, setPins] = React.useState([]);
   const pinIdRef = React.useRef(1);
   
-  // selected pins for deletion (store ids in a Set)
   const [selectedPins, setSelectedPins] = React.useState(new Set());
 
-  // Use ArcGIS World Imagery for satellite/sensor-backed tiles (satellite view)
   const imageryProvider = new ArcGisMapServerImageryProvider({
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
   });
@@ -83,7 +79,6 @@ function Map() {
     };
   }, [setTileBounds]);
 
-  // Active map selection and auto-select toggle
   const [activeMapIndex, setActiveMapIndex] = React.useState(null);
   const [autoSelectMap, setAutoSelectMap] = React.useState(true);
 
@@ -93,7 +88,7 @@ function Map() {
       const tile = mapTiles[activeMapIndex];
       if (!tile || !tile.bounds) return null;
       const { west, south, east, north } = tile.bounds;
-      // validate numeric
+
       if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
         console.error('Invalid', activeMapIndex, tile.bounds);
         return null;
@@ -108,7 +103,6 @@ function Map() {
     }
   }, [activeMapIndex, mapTiles]);
 
-  // chooseMap: return index of the map tile that contains the provided lat/lon, or null
   function chooseMap(latDeg, lonDeg) {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
     for (let i = 0; i < mapTiles.length; i++) {
@@ -120,7 +114,6 @@ function Map() {
     return null;
   }
 
-  // Auto-select map when rover moves (or manual coord is used)
   React.useEffect(() => {
     if (!autoSelectMap) return;
     const currentLat = useManual ? manualLat : lat;
@@ -128,6 +121,7 @@ function Map() {
     const idx = chooseMap(currentLat, currentLon);
     if (idx !== activeMapIndex) setActiveMapIndex(idx);
   }, [lat, lon, useManual, manualLat, manualLon, autoSelectMap, mapTiles, activeMapIndex]);
+
   const positions = Cartesian3.fromDegreesArray([
     -119, 48,
     -118.9998, 48,
@@ -135,6 +129,7 @@ function Map() {
     -118.998927, 47.999277,
     -118.998257, 47.998970,
   ]);
+
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
@@ -206,13 +201,9 @@ function Map() {
       imageryProvider={imageryProvider}
       ref={viewerRef}
     >
-        {/* If an active local map is selected and has bounds, render it on top */}
         {activeLocalProvider ? (
           <ImageryLayer imageryProvider={activeLocalProvider} />
         ) : null}
-      
-      {/* Center camera on the current lon/lat once the Cesium Viewer is ready */}
-      {/** When the underlying cesiumElement becomes available, set the camera view. */}
       
       <div style={{ position: 'absolute', right: 12, bottom: 12, zIndex: 999, background: 'rgba(255,255,255,0.95)', padding: 10, borderRadius: 6, boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
@@ -234,12 +225,13 @@ function Map() {
               ))}
             </select>
           </div>
-          {activeMapIndex !== null && !activeLocalProvider ? (
-            <div style={{ color: '#b00', fontSize: 12, marginTop: 6 }}>Local map selected but unavailable (check bounds/filename or console for errors)</div>
+          {activeMapIndex !== null && localProviderError ? (
+            <div style={{ color: '#b00', fontSize: 12, marginTop: 6 }}>Local map error: {localProviderError}</div>
+          ) : activeMapIndex !== null && !localProvider ? (
+            <div style={{ color: '#666', fontSize: 12, marginTop: 6 }}>Loading local map...</div>
           ) : null}
         </div>
 
-        {/* Recent pins list (up to 5 latest) */}
         <div style={{ marginTop: 8, maxWidth: 420 }}>
           <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Recent pins</div>
           {pins.slice(-5).reverse().map(pin => (
@@ -261,9 +253,8 @@ function Map() {
         <CameraFlyTo key={cameraKey} destination={Cartesian3.fromDegrees(cameraTarget.lon, cameraTarget.lat, cameraTarget.alt)} duration={1.2} />
       )}
 
-      {/* Render dropped pins */}
       {pins.map((pin, i) => {
-        const colorOptions = ['#e6194b', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6'];
+        const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6'];
         const col = Color.fromCssColorString(colorOptions[i % colorOptions.length]);
         return (
           <Entity key={pin.id} position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)} name={pin.label}>
