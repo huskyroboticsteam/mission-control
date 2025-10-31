@@ -80,9 +80,46 @@ function Map() {
     });
   }
 
+  // Expose a couple of dev helpers on window for quick testing in the browser console.
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // setTileBounds(index, {west, south, east, north}) - zero-based index
+    window.setTileBounds = setTileBounds;
+    // set active map index manually: setActiveMapIndex(0)
+    window.setActiveMapIndex = (i) => setActiveMapIndex(i);
+    return () => {
+      try { delete window.setTileBounds; } catch (e) {}
+      try { delete window.setActiveMapIndex; } catch (e) {}
+    };
+  }, [setTileBounds]);
+
   // Active map selection and auto-select toggle
   const [activeMapIndex, setActiveMapIndex] = React.useState(null);
   const [autoSelectMap, setAutoSelectMap] = React.useState(true);
+
+  // Memoized imagery provider for the active local map. Creating providers can throw
+  // if bounds are invalid; wrap in try/catch and return null on failure so the app
+  // doesn't crash and we can log the error to the console for debugging.
+  const activeLocalProvider = React.useMemo(() => {
+    try {
+      if (activeMapIndex === null) return null;
+      const tile = mapTiles[activeMapIndex];
+      if (!tile || !tile.bounds) return null;
+      const { west, south, east, north } = tile.bounds;
+      // validate numeric
+      if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
+        console.error('Invalid bounds for tile', activeMapIndex, tile.bounds);
+        return null;
+      }
+      return new SingleTileImageryProvider({
+        url: tile.url,
+        rectangle: Rectangle.fromDegrees(west, south, east, north),
+      });
+    } catch (err) {
+      console.error('Failed to create SingleTileImageryProvider for active map', activeMapIndex, err);
+      return null;
+    }
+  }, [activeMapIndex, mapTiles]);
 
   // chooseMap: return index of the map tile that contains the provided lat/lon, or null
   function chooseMap(latDeg, lonDeg) {
@@ -186,18 +223,8 @@ function Map() {
       ref={viewerRef}
     >
         {/* If an active local map is selected and has bounds, render it on top */}
-        {activeMapIndex !== null && mapTiles[activeMapIndex] && mapTiles[activeMapIndex].bounds ? (
-          <ImageryLayer
-            imageryProvider={new SingleTileImageryProvider({
-              url: mapTiles[activeMapIndex].url,
-              rectangle: Rectangle.fromDegrees(
-                mapTiles[activeMapIndex].bounds.west,
-                mapTiles[activeMapIndex].bounds.south,
-                mapTiles[activeMapIndex].bounds.east,
-                mapTiles[activeMapIndex].bounds.north
-              ),
-            })}
-          />
+        {activeLocalProvider ? (
+          <ImageryLayer imageryProvider={activeLocalProvider} />
         ) : null}
       
       {/* Center camera on the current lon/lat once the Cesium Viewer is ready */}
@@ -215,7 +242,7 @@ function Map() {
             <button onClick={handleSetPin} style={{ height: 34 }}>Set Pin</button>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
-            <label style={{ fontSize: 12 }}><input type="checkbox" checked={autoSelectMap} onChange={(e) => setAutoSelectMap(e.target.checked)} /> Auto-select map</label>
+            <label style={{ fontSize: 12, color: "#000000" }}><input type="checkbox" checked={autoSelectMap} onChange={(e) => setAutoSelectMap(e.target.checked)} /> Auto-select map</label>
             <select value={activeMapIndex ?? ''} onChange={(e) => setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))}>
               <option value="">(none)</option>
               {mapTiles.map((t, idx) => (
@@ -223,6 +250,9 @@ function Map() {
               ))}
             </select>
           </div>
+          {activeMapIndex !== null && !activeLocalProvider ? (
+            <div style={{ color: '#b00', fontSize: 12, marginTop: 6 }}>Local map selected but unavailable (check bounds/filename or console for errors)</div>
+          ) : null}
         </div>
 
         {/* Recent pins list (up to 5 latest) */}
