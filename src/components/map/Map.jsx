@@ -1,6 +1,6 @@
 import React from "react";
 import { Viewer, Globe, Scene, Primitive, Cesium3DTileset, Entity, PointGraphics, LabelGraphics, ImageryLayer, Polyline, PolylineGraphics, BillboardGraphics, ModelGraphics, CameraFlyTo } from "resium";
-import { IonResource, CesiumTerrainProvider, Cartesian3, Ion, ArcGisMapServerImageryProvider, OpenStreetMapImageryProvider, Color } from "cesium";
+import { IonResource, CesiumTerrainProvider, Cartesian3, Ion, ArcGisMapServerImageryProvider, OpenStreetMapImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
 import { useSelector } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude, selectRoverYaw, selectRoverHeading } from "../../store/telemetrySlice";
 import { radians } from '@math.gl/core';
@@ -9,10 +9,12 @@ import robotModel from "../../../assets/Dozer.glb"
 Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
 
 function Map() {
-  //const lat = useSelector(selectRoverLatitude);
-  const lat = 47.655548;
-  // const lon = useSelector(selectRoverLongitude);
-  const lon = -122.303200;
+  // Use telemetry latitude/longitude when available. Fall back to a reasonable default so
+  // the viewer has an initial center during development.
+  const telemetryLat = useSelector(selectRoverLatitude);
+  const telemetryLon = useSelector(selectRoverLongitude);
+  const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548;
+  const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.303200;
   const heading = useSelector(selectRoverHeading);
   const yaw = useSelector(selectRoverYaw);
 
@@ -41,12 +43,68 @@ function Map() {
   // selected pins for deletion (store ids in a Set)
   const [selectedPins, setSelectedPins] = React.useState(new Set());
 
-  
-
   // Use ArcGIS World Imagery for satellite/sensor-backed tiles (satellite view)
   const imageryProvider = new ArcGisMapServerImageryProvider({
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
   });
+
+  // Map tiles framework: 16 entries with bounds provided by the user.
+  const [mapTiles, setMapTiles] = React.useState(() => {
+    return [
+      { id: 0, name: 'Map 1', url: '/map-images/1.png', bounds: { west: -122.3113, south: 47.6571, east: -122.3087, north: 47.6589 } },
+      { id: 1, name: 'Map 2', url: '/map-images/2.png', bounds: { west: -122.3087, south: 47.6571, east: -122.3061, north: 47.6589 } },
+      { id: 2, name: 'Map 3', url: '/map-images/3.png', bounds: { west: -122.3061, south: 47.6571, east: -122.3035, north: 47.6589 } },
+      { id: 3, name: 'Map 4', url: '/map-images/4.png', bounds: { west: -122.3035, south: 47.6571, east: -122.3009, north: 47.6589 } },
+      { id: 4, name: 'Map 5', url: '/map-images/5.png', bounds: { west: -122.3113, south: 47.6553, east: -122.3087, north: 47.6571 } },
+      { id: 5, name: 'Map 6', url: '/map-images/6.png', bounds: { west: -122.3087, south: 47.6553, east: -122.3061, north: 47.6571 } },
+      { id: 6, name: 'Map 7', url: '/map-images/7.png', bounds: { west: -122.3061, south: 47.6553, east: -122.3035, north: 47.6571 } },
+      { id: 7, name: 'Map 8', url: '/map-images/8.png', bounds: { west: -122.3035, south: 47.6553, east: -122.3009, north: 47.6571 } },
+      { id: 8, name: 'Map 9', url: '/map-images/9.png', bounds: { west: -122.3113, south: 47.65359, east: -122.3087, north: 47.6553 } },
+      { id: 9, name: 'Map 10', url: '/map-images/10.png', bounds: { west: -122.3087, south: 47.65359, east: -122.3061, north: 47.6553 } },
+      { id: 10, name: 'Map 11', url: '/map-images/11.png', bounds: { west: -122.3061, south: 47.65359, east: -122.3035, north: 47.6553 } },
+      { id: 11, name: 'Map 12', url: '/map-images/12.png', bounds: { west: -122.3035, south: 47.65359, east: -122.3009, north: 47.6553 } },
+      { id: 12, name: 'Map 13', url: '/map-images/13.png', bounds: { west: -122.3113, south: 47.65174, east: -122.3087, north: 47.65359 } },
+      { id: 13, name: 'Map 14', url: '/map-images/14.png', bounds: { west: -122.3087, south: 47.65174, east: -122.3061, north: 47.65359 } },
+      { id: 14, name: 'Map 15', url: '/map-images/15.png', bounds: { west: -122.3061, south: 47.65174, east: -122.3035, north: 47.65359 } },
+      { id: 15, name: 'Map 16', url: '/map-images/16.png', bounds: { west: -122.3035, south: 47.65174, east: -122.3009, north: 47.65359 } },
+    ];
+  });
+
+  // Helper to set bounds for a tile at runtime. bounds = { west, south, east, north }
+  function setTileBounds(index, bounds) {
+    if (typeof index !== 'number' || index < 0 || index >= 16) return;
+    setMapTiles(prev => {
+      const next = prev.slice();
+      next[index] = { ...next[index], bounds };
+      return next;
+    });
+  }
+
+  // Active map selection and auto-select toggle
+  const [activeMapIndex, setActiveMapIndex] = React.useState(null);
+  const [autoSelectMap, setAutoSelectMap] = React.useState(true);
+
+  // chooseMap: return index of the map tile that contains the provided lat/lon, or null
+  function chooseMap(latDeg, lonDeg) {
+    if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
+    for (let i = 0; i < mapTiles.length; i++) {
+      const t = mapTiles[i];
+      if (!t.bounds) continue; // skip until you provide bounds
+      const { west, south, east, north } = t.bounds;
+      // simple AABB check in degrees
+      if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i;
+    }
+    return null;
+  }
+
+  // Auto-select map when rover moves (or manual coord is used)
+  React.useEffect(() => {
+    if (!autoSelectMap) return;
+    const currentLat = useManual ? manualLat : lat;
+    const currentLon = useManual ? manualLon : lon;
+    const idx = chooseMap(currentLat, currentLon);
+    if (idx !== activeMapIndex) setActiveMapIndex(idx);
+  }, [lat, lon, useManual, manualLat, manualLon, autoSelectMap, mapTiles, activeMapIndex]);
   const positions = Cartesian3.fromDegreesArray([
     -119, 48,
     -118.9998, 48,
@@ -115,7 +173,7 @@ function Map() {
     setCameraTarget({ lon: pin.lon, lat: pin.lat, alt: 1500 });
     setCameraKey(k => k + 1);
   }
-
+  
   return (
     <Viewer
       style={{ overflow: "hidden" }}
@@ -127,7 +185,20 @@ function Map() {
       imageryProvider={imageryProvider}
       ref={viewerRef}
     >
-      {/* Add the local imagery layers */}
+        {/* If an active local map is selected and has bounds, render it on top */}
+        {activeMapIndex !== null && mapTiles[activeMapIndex] && mapTiles[activeMapIndex].bounds ? (
+          <ImageryLayer
+            imageryProvider={new SingleTileImageryProvider({
+              url: mapTiles[activeMapIndex].url,
+              rectangle: Rectangle.fromDegrees(
+                mapTiles[activeMapIndex].bounds.west,
+                mapTiles[activeMapIndex].bounds.south,
+                mapTiles[activeMapIndex].bounds.east,
+                mapTiles[activeMapIndex].bounds.north
+              ),
+            })}
+          />
+        ) : null}
       
       {/* Center camera on the current lon/lat once the Cesium Viewer is ready */}
       {/** When the underlying cesiumElement becomes available, set the camera view. */}
@@ -142,6 +213,15 @@ function Map() {
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             <button onClick={handleSetPin} style={{ height: 34 }}>Set Pin</button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
+            <label style={{ fontSize: 12 }}><input type="checkbox" checked={autoSelectMap} onChange={(e) => setAutoSelectMap(e.target.checked)} /> Auto-select map</label>
+            <select value={activeMapIndex ?? ''} onChange={(e) => setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))}>
+              <option value="">(none)</option>
+              {mapTiles.map((t, idx) => (
+                <option key={t.id} value={idx}>{t.name}</option>
+              ))}
+            </select>
           </div>
         </div>
 
