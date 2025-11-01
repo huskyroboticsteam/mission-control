@@ -108,29 +108,48 @@ const camerasMiddleware = (store) => (next) => (action) => {
           })
         )
       } else if (message.type === 'cameraFrameReport' && message.data !== '') {
+        console.log(message)
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
-
+  
         // Fits the telemetry(position/gps) data into exif metadata
         let gpsIfd = {}
 
+        // put altitude
+        gpsIfd[piexif.GPSIFD.GPSAltitude] = message.alt
+        console.log(gpsIfd[piexif.GPSIFD.GPSAltitude])
+        
+        // converts & puts latitude data (decimal --> dms)
         const lat = Math.abs(message.lat)
         const latRef = message.lat >= 0 ? 'N' : 'S'
         gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
+
+        
+        const degreesLat = Math.floor(lat) // takes integer value of lat
+        const minutesLat = Math.floor((lat-degreesLat) * 60) // takes decimal value of lat then * 60
+        const secondsLat = (((lat-degreesLat)*60)%1) * 60
+
         gpsIfd[piexif.GPSIFD.GPSLatitude] = [
-          [Math.floor(lat), 1],
-          [Math.floor((lat % 1) * 60), 1],
-          [Math.floor(((lat * 60) % 1) * 60), 1],
+          [degreesLat, 1],
+          [minutesLat, 1],
+          [secondsLat*1000000, 1000000], // increases precision shown
         ]
 
         const lon = Math.abs(message.lon)
         const lonRef = message.lon >= 0 ? 'E' : 'W'
         gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
+        
+        // converts & puts longitude data (decimal --> dms)
+        const degreesLon = Math.floor(lon) // takes integer value of lon
+        const minutesLon = Math.floor((lon-degreesLon) * 60) // takes decimal value of lon then * 60
+        const secondsLon = (((lon-degreesLon)*60)%1) * 60
+
         gpsIfd[piexif.GPSIFD.GPSLongitude] = [
-          [Math.floor(lon), 1],
-          [Math.floor((lon % 1) * 60), 1],
-          [Math.floor(((lon * 60) % 1) * 60), 1],
+          [degreesLon, 1],
+          [minutesLon, 1],
+          [secondsLon*1000000, 1000000], // increases precision shown
         ]
+
 
         gpsIfd[piexif.GPSIFD.GPSDateStamp] = new Date()
           .toISOString()
@@ -144,8 +163,10 @@ const camerasMiddleware = (store) => (next) => (action) => {
         ]
 
         // add heading
+        //gpsIfd[piexif.GPSIFD.GPSImgDirection] = message.heading
 
         const exifObj = {GPS: gpsIfd}
+        console.log(exifObj)
         const exifBytes = piexif.dump(exifObj)
         out = piexif.insert(exifBytes, jpegData)
 
