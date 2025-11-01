@@ -92,15 +92,13 @@ const inputSlice = createSlice({
       } else if (axisName === 'DPadX') {
         state[gamepadName]['DPadLeft'] = value < 0
         state[gamepadName]['DPadRight'] = value > 0
-      } else if (
-        isLinux() &&
-        (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
-        value !== 0.0
-      ) {
+      } else if (isLinux() && (axisName === 'LeftTrigger' || axisName === 'RightTrigger')) {
         // bug in linux, trigger values keep jumping to 0.
         // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
         // TODO: fix this? Why is this happening? Bug in react-gamepad??
-        state[gamepadName][axisName] = (value + 1) / 2.0
+        if (value !== 0.0) {
+          state[gamepadName][axisName] = (value + 1) / 2.0
+        }
       } else {
         let scaledValue = value * Math.abs(value)
         state[gamepadName][axisName] = scaledValue
@@ -153,7 +151,7 @@ const inputSlice = createSlice({
 
 function computeInput(prevState, state, action) {
   computeDriveInput(state, action)
-  computePeripheralInput(prevState, state, action)
+  computePeripheralInput(prevState, state)
 }
 
 function computeDriveInput(state, action) {
@@ -227,9 +225,9 @@ function computeArmInput(state) {
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
     getAxisFromKeys(pressedKeys, 'U', 'O')
   armInput.hand =
-    getAxisFromButtons(peripheralGamepad, 'A', 'B') +
-    // peripheralGamepad['LeftTrigger'] -
-    // peripheralGamepad['RightTrigger'] +
+    // getAxisFromButtons(peripheralGamepad, 'A', 'B') +
+    peripheralGamepad['LeftTrigger'] -
+    peripheralGamepad['RightTrigger'] +
     getAxisFromKeys(pressedKeys, 'J', 'L')
   armInput.handActuator =
     getAxisFromButtons(peripheralGamepad, 'Y', 'X') + getAxisFromKeys(pressedKeys, ',', '.')
