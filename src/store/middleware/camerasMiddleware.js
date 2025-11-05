@@ -15,6 +15,7 @@ import camelCaseToTitle from '../../util/camelCaseToTitle'
 import {selectRoverPosition} from '../../store/telemetrySlice'
 import {piexif} from 'piexifjs'
 import {useSelector} from 'react-redux'
+import {Quaternion, Euler, Vector3} from '@math.gl/core'
 
 /**
  * Middleware that handles requesting and receiving camera streams from the
@@ -115,19 +116,18 @@ const camerasMiddleware = (store) => (next) => (action) => {
         // Fits the telemetry(position/gps) data into exif metadata
         let gpsIfd = {}
 
-        // put altitude
-        gpsIfd[piexif.GPSIFD.GPSAltitude] = message.alt
-        console.log(gpsIfd[piexif.GPSIFD.GPSAltitude])
-        
+        // put altitude, max precision to prevent pack error @ tallest point in Earth
+        gpsIfd[piexif.GPSIFD.GPSAltitude] = [message.alt * 100000, 100000] 
+
         // converts & puts latitude data (decimal --> dms)
         const lat = Math.abs(message.lat)
         const latRef = message.lat >= 0 ? 'N' : 'S'
         gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
 
         
-        const degreesLat = Math.floor(lat) // takes integer value of lat
-        const minutesLat = Math.floor((lat-degreesLat) * 60) // takes decimal value of lat then * 60
-        const secondsLat = (((lat-degreesLat)*60)%1) * 60
+        let degreesLat = Math.floor(lat) // takes integer value of lat
+        let minutesLat = Math.floor((lat-degreesLat) * 60) // takes decimal value of lat then * 60
+        let secondsLat = (((lat-degreesLat)*60)%1) * 60
 
         gpsIfd[piexif.GPSIFD.GPSLatitude] = [
           [degreesLat, 1],
@@ -140,9 +140,9 @@ const camerasMiddleware = (store) => (next) => (action) => {
         gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
         
         // converts & puts longitude data (decimal --> dms)
-        const degreesLon = Math.floor(lon) // takes integer value of lon
-        const minutesLon = Math.floor((lon-degreesLon) * 60) // takes decimal value of lon then * 60
-        const secondsLon = (((lon-degreesLon)*60)%1) * 60
+        let degreesLon = Math.floor(lon) // takes integer value of lon
+        let minutesLon = Math.floor((lon-degreesLon) * 60) // takes decimal value of lon then * 60
+        let secondsLon = (((lon-degreesLon)*60)%1) * 60
 
         gpsIfd[piexif.GPSIFD.GPSLongitude] = [
           [degreesLon, 1],
@@ -162,8 +162,24 @@ const camerasMiddleware = (store) => (next) => (action) => {
           [new Date().getUTCSeconds(), 1],
         ]
 
-        // add heading
-        //gpsIfd[piexif.GPSIFD.GPSImgDirection] = message.heading
+        // Heading
+        const orientX = message.orientX
+        const orientY = message.orientY
+        const orientZ = message.orientZ
+        const orientW = message.orientW
+        let quat = new Quaternion(orientX, orientY, orientZ, orientW)
+        let rpy = new Euler().fromQuaternion(quat, Euler.ZYX)
+        let yaw = Math.round((rpy.yaw * 180) / Math.PI)
+        let heading = yaw != null ? -yaw : undefined 
+
+        // heading is from -180 to 180 but to format it into metadata, has 
+        // to be 0 --> 360 so we remap the negative values of heading 
+        if (heading < 0) {
+          heading +=360 
+        }
+        
+        gpsIfd[piexif.GPSIFD.GPSImgDirection] = [heading, 1]
+        gpsIfd[piexif.GPSIFD.GPSImgDirectionRef] = "M" //magnetic north
 
         const exifObj = {GPS: gpsIfd}
         console.log(exifObj)
