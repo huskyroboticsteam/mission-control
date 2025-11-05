@@ -82,54 +82,138 @@ function Map() {
   const [activeMapIndex, setActiveMapIndex] = React.useState(null);
   const [autoSelectMap, setAutoSelectMap] = React.useState(true);
 
-  const activeLocalProvider = React.useMemo(() => {
-    try {
-      if (activeMapIndex === null) return null;
-      const tile = mapTiles[activeMapIndex];
-      if (!tile || !tile.bounds) return null;
-      let { west, south, east, north } = tile.bounds;
+  const [activeLocalProvider, setActiveLocalProvider] = React.useState(null);
+  const [localProviderError, setLocalProviderError] = React.useState(null);
 
-      if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
-        console.error('Invalid', activeMapIndex, tile.bounds);
-        return null;
+  React.useEffect(() => {
+    let mounted = true;
+    async function createProviderAsync() {
+      try {
+        setLocalProviderError(null);
+        setActiveLocalProvider(null);
+
+        if (activeMapIndex === null) return;
+        const tile = mapTiles[activeMapIndex];
+        if (!tile || !tile.bounds) return;
+
+        let { west, south, east, north } = tile.bounds;
+        if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
+          const msg = `Invalid bounds for tile ${activeMapIndex}`;
+          console.error(msg, tile.bounds);
+          setLocalProviderError(msg);
+          return;
+        }
+
+        const MIN_DEGREES = 1e-5;
+        const minLon = Math.min(west, east);
+        const maxLon = Math.max(west, east);
+        const minLat = Math.min(south, north);
+        const maxLat = Math.max(south, north);
+
+        if (Math.abs(maxLon - minLon) < MIN_DEGREES) {
+          const center = (minLon + maxLon) / 2;
+          west = center - MIN_DEGREES / 2;
+          east = center + MIN_DEGREES / 2;
+        } else {
+          west = minLon; east = maxLon;
+        }
+
+        if (Math.abs(maxLat - minLat) < MIN_DEGREES) {
+          const center = (minLat + maxLat) / 2;
+          south = center - MIN_DEGREES / 2;
+          north = center + MIN_DEGREES / 2;
+        } else {
+          south = minLat; north = maxLat;
+        }
+
+        const origin = (typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : '';
+        const absUrl = origin + (tile.url && tile.url.startsWith('/') ? tile.url : ('/' + (tile.url || '')));
+        console.debug('Attempting to load local map image', absUrl, { west, south, east, north });
+
+        let resp = null;
+        try {
+          resp = await fetch(absUrl, { method: 'GET', mode: 'cors' });
+        } catch (err) {
+          console.warn('Fetch error for', absUrl, err);
+          resp = null;
+        }
+
+        if (!resp || !resp.ok) {
+          const statusText = resp ? `${resp.status} ${resp.statusText}` : 'network/error';
+          const msg = `Image fetch failed: ${statusText}`;
+          console.error(msg, absUrl);
+          if (!mounted) return;
+          setLocalProviderError(msg);
+          return;
+        }
+
+        const contentType = resp.headers.get('content-type') || '';
+        if (!contentType.startsWith('image')) {
+          const msg = `Unexpected content-type: ${contentType}`;
+          console.error(msg, absUrl);
+          if (!mounted) return;
+          setLocalProviderError(msg);
+          return;
+        }
+
+        if (!mounted) return;
+
+        const blob = await resp.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        const loadPromise = new Promise((resolve, reject) => {
+          img.onload = () => resolve();
+          img.onerror = (e) => reject(new Error('Local image failed to load: ' + e));
+        });
+        img.src = blobUrl;
+        try {
+          await loadPromise;
+        } catch (err) {
+          const msg = String(err);
+          console.error('Image load failed for', blobUrl, err);
+          if (!mounted) return;
+          setLocalProviderError(msg);
+          URL.revokeObjectURL(blobUrl);
+          return;
+        }
+
+        if (!mounted) {
+          URL.revokeObjectURL(blobUrl);
+          return;
+        }
+
+        const tileWidth = img.naturalWidth || undefined;
+        const tileHeight = img.naturalHeight || undefined;
+        URL.revokeObjectURL(blobUrl);
+
+        try {
+          const provider = new SingleTileImageryProvider({
+            url: absUrl,
+            rectangle: Rectangle.fromDegrees(west, south, east, north),
+            tileWidth,
+            tileHeight,
+          });
+          setActiveLocalProvider(provider);
+        } catch (err) {
+          console.error('Failed to create local provider', err, err?.message, err?.stack);
+          if (!mounted) return;
+          setLocalProviderError(String(err));
+        }
+      } catch (err) {
+        console.error('Failed to create local provider', err);
+        if (!mounted) return;
+        setLocalProviderError(String(err));
       }
-
-      // Normalize ordering and guard against degenerate (zero-area) rectangles.
-      const MIN_DEGREES = 1e-5; // ~1.1 m at equator
-      const minLon = Math.min(west, east);
-      const maxLon = Math.max(west, east);
-      const minLat = Math.min(south, north);
-      const maxLat = Math.max(south, north);
-
-      if (Math.abs(maxLon - minLon) < MIN_DEGREES) {
-        const center = (minLon + maxLon) / 2;
-        west = center - MIN_DEGREES / 2;
-        east = center + MIN_DEGREES / 2;
-      } else {
-        west = minLon; east = maxLon;
-      }
-
-      if (Math.abs(maxLat - minLat) < MIN_DEGREES) {
-        const center = (minLat + maxLat) / 2;
-        south = center - MIN_DEGREES / 2;
-        north = center + MIN_DEGREES / 2;
-      } else {
-        south = minLat; north = maxLat;
-      }
-
-      return new SingleTileImageryProvider({
-        url: tile.url,
-        rectangle: Rectangle.fromDegrees(west, south, east, north),
-      });
-    } catch (err) {
-      console.error('Failed', activeMapIndex, err);
-      return null;
     }
+
+    createProviderAsync();
+    return () => { mounted = false; };
   }, [activeMapIndex, mapTiles]);
 
   function chooseMap(latDeg, lonDeg) {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
-    // allow tiny epsilon tolerance so points on the exact edge still match
     const eps = 1e-6;
     for (let i = 0; i < mapTiles.length; i++) {
       const t = mapTiles[i];
