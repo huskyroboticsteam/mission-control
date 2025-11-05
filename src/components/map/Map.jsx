@@ -87,12 +87,36 @@ function Map() {
       if (activeMapIndex === null) return null;
       const tile = mapTiles[activeMapIndex];
       if (!tile || !tile.bounds) return null;
-      const { west, south, east, north } = tile.bounds;
+      let { west, south, east, north } = tile.bounds;
 
       if ([west, south, east, north].some(v => typeof v !== 'number' || Number.isNaN(v))) {
         console.error('Invalid', activeMapIndex, tile.bounds);
         return null;
       }
+
+      // Normalize ordering and guard against degenerate (zero-area) rectangles.
+      const MIN_DEGREES = 1e-5; // ~1.1 m at equator
+      const minLon = Math.min(west, east);
+      const maxLon = Math.max(west, east);
+      const minLat = Math.min(south, north);
+      const maxLat = Math.max(south, north);
+
+      if (Math.abs(maxLon - minLon) < MIN_DEGREES) {
+        const center = (minLon + maxLon) / 2;
+        west = center - MIN_DEGREES / 2;
+        east = center + MIN_DEGREES / 2;
+      } else {
+        west = minLon; east = maxLon;
+      }
+
+      if (Math.abs(maxLat - minLat) < MIN_DEGREES) {
+        const center = (minLat + maxLat) / 2;
+        south = center - MIN_DEGREES / 2;
+        north = center + MIN_DEGREES / 2;
+      } else {
+        south = minLat; north = maxLat;
+      }
+
       return new SingleTileImageryProvider({
         url: tile.url,
         rectangle: Rectangle.fromDegrees(west, south, east, north),
@@ -105,11 +129,13 @@ function Map() {
 
   function chooseMap(latDeg, lonDeg) {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
+    // allow tiny epsilon tolerance so points on the exact edge still match
+    const eps = 1e-6;
     for (let i = 0; i < mapTiles.length; i++) {
       const t = mapTiles[i];
-      if (!t.bounds) continue; 
+      if (!t.bounds) continue;
       const { west, south, east, north } = t.bounds;
-      if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i;
+      if (lonDeg >= (west - eps) && lonDeg <= (east + eps) && latDeg >= (south - eps) && latDeg <= (north + eps)) return i;
     }
     return null;
   }
@@ -225,10 +251,8 @@ function Map() {
               ))}
             </select>
           </div>
-          {activeMapIndex !== null && localProviderError ? (
-            <div style={{ color: '#b00', fontSize: 12, marginTop: 6 }}>Local map error: {localProviderError}</div>
-          ) : activeMapIndex !== null && !localProvider ? (
-            <div style={{ color: '#666', fontSize: 12, marginTop: 6 }}>Loading local map...</div>
+          {activeMapIndex !== null && !activeLocalProvider ? (
+            <div style={{ color: '#b00', fontSize: 12, marginTop: 6 }}>Local map selected but unavailable (check filename/console)</div>
           ) : null}
         </div>
 
