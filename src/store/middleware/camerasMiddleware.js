@@ -112,44 +112,42 @@ const camerasMiddleware = (store) => (next) => (action) => {
         console.log(message)
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
-  
+
         // Fits the telemetry(position/gps) data into exif metadata
         let gpsIfd = {}
 
         // put altitude, max precision to prevent pack error @ tallest point in Earth
-        gpsIfd[piexif.GPSIFD.GPSAltitude] = [message.alt * 100000, 100000] 
+        gpsIfd[piexif.GPSIFD.GPSAltitude] = [message.alt * 100000, 100000]
 
         // converts & puts latitude data (decimal --> dms)
         const lat = Math.abs(message.lat)
         const latRef = message.lat >= 0 ? 'N' : 'S'
         gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
 
-        
         let degreesLat = Math.floor(lat) // takes integer value of lat
-        let minutesLat = Math.floor((lat-degreesLat) * 60) // takes decimal value of lat then * 60
-        let secondsLat = (((lat-degreesLat)*60)%1) * 60
+        let minutesLat = Math.floor((lat - degreesLat) * 60) // takes decimal value of lat then * 60
+        let secondsLat = (((lat - degreesLat) * 60) % 1) * 60
 
         gpsIfd[piexif.GPSIFD.GPSLatitude] = [
           [degreesLat, 1],
           [minutesLat, 1],
-          [secondsLat*1000000, 1000000], // increases precision shown
+          [secondsLat * 1000000, 1000000], // increases precision shown
         ]
 
         const lon = Math.abs(message.lon)
         const lonRef = message.lon >= 0 ? 'E' : 'W'
         gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
-        
+
         // converts & puts longitude data (decimal --> dms)
         let degreesLon = Math.floor(lon) // takes integer value of lon
-        let minutesLon = Math.floor((lon-degreesLon) * 60) // takes decimal value of lon then * 60
-        let secondsLon = (((lon-degreesLon)*60)%1) * 60
+        let minutesLon = Math.floor((lon - degreesLon) * 60) // takes decimal value of lon then * 60
+        let secondsLon = (((lon - degreesLon) * 60) % 1) * 60
 
         gpsIfd[piexif.GPSIFD.GPSLongitude] = [
           [degreesLon, 1],
           [minutesLon, 1],
-          [secondsLon*1000000, 1000000], // increases precision shown
+          [secondsLon * 1000000, 1000000], // increases precision shown
         ]
-
 
         gpsIfd[piexif.GPSIFD.GPSDateStamp] = new Date()
           .toISOString()
@@ -170,16 +168,16 @@ const camerasMiddleware = (store) => (next) => (action) => {
         let quat = new Quaternion(orientX, orientY, orientZ, orientW)
         let rpy = new Euler().fromQuaternion(quat, Euler.ZYX)
         let yaw = Math.round((rpy.yaw * 180) / Math.PI)
-        let heading = yaw != null ? -yaw : undefined 
+        let heading = yaw != null ? -yaw : undefined
 
-        // heading is from -180 to 180 but to format it into metadata, has 
-        // to be 0 --> 360 so we remap the negative values of heading 
+        // heading is from -180 to 180 but to format it into metadata, has
+        // to be 0 --> 360 so we remap the negative values of heading
         if (heading < 0) {
-          heading +=360 
+          heading += 360
         }
-        
+
         gpsIfd[piexif.GPSIFD.GPSImgDirection] = [heading, 1]
-        gpsIfd[piexif.GPSIFD.GPSImgDirectionRef] = "M" //magnetic north
+        gpsIfd[piexif.GPSIFD.GPSImgDirectionRef] = 'M' //magnetic north
 
         const exifObj = {GPS: gpsIfd}
         console.log(exifObj)
