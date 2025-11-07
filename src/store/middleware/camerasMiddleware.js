@@ -11,11 +11,8 @@ import {
   roverDisconnected,
 } from '../roverSocketSlice'
 import camelCaseToTitle from '../../util/camelCaseToTitle'
-
-import {selectRoverPosition} from '../../store/telemetrySlice'
 import {piexif} from 'piexifjs'
-import {useSelector} from 'react-redux'
-import {Quaternion, Euler, Vector3} from '@math.gl/core'
+import {Quaternion, Euler} from '@math.gl/core'
 
 /**
  * Middleware that handles requesting and receiving camera streams from the
@@ -109,7 +106,6 @@ const camerasMiddleware = (store) => (next) => (action) => {
           })
         )
       } else if (message.type === 'cameraFrameReport' && message.data !== '') {
-        console.log(message)
         let jpegData = `data:image/jpeg;base64,${message.data}`
         let out = jpegData
 
@@ -180,7 +176,6 @@ const camerasMiddleware = (store) => (next) => (action) => {
         gpsIfd[piexif.GPSIFD.GPSImgDirectionRef] = 'M' //magnetic north
 
         const exifObj = {GPS: gpsIfd}
-        console.log(exifObj)
         const exifBytes = piexif.dump(exifObj)
         out = piexif.insert(exifBytes, jpegData)
 
