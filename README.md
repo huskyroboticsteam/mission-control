@@ -337,8 +337,6 @@ Sent from Mission Control to instruct the rover to navigate to the next waypoint
   type: "waypointNavRequest",
   latitude: number,
   longitude: number,
-  isApproximate: boolean,
-  isGate: boolean
 }
 ```
 

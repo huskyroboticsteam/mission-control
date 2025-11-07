@@ -13,7 +13,7 @@ function NavigationPanel() {
       <Compass />
       <CameraStream camera="wrist" />
       {/* <OpModeSelect /> */}
-      <WaypointList />
+      {/* <WaypointList /> */}
       <WaypointNav />
     </div>
   )

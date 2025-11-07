@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 import {selectRoverPosition} from '../../store/telemetrySlice'
-import {selectLongitude, selectLatitude} from '../../store/waypointNavSlice'
+import {selectPoints} from '../../store/waypointNavSlice'
 import './Compass.css'
 import {Quaternion, Euler, Vector3, clamp} from '@math.gl/core'
 import * as Quat from 'gl-matrix/quat'
@@ -117,8 +117,10 @@ const Compass = () => {
 
   const [targetHeading, setTargetHeading] = useState(null)
   const [targetDistance, setTargetDistance] = useState(null)
-  const targetLongitude = useSelector(selectLongitude)
-  const targetLatitude = useSelector(selectLatitude)
+  const waypointPoints = useSelector(selectPoints)
+  const targetPoint = Array.isArray(waypointPoints?.[0]) ? waypointPoints[0] : null
+  const targetLatitude = targetPoint ? targetPoint[0] : null
+  const targetLongitude = targetPoint ? targetPoint[1] : null
 
   /**
    * Method to create text for the target distance indiciator
