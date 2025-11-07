@@ -34,7 +34,7 @@
 
 .submit-row {
   display: flex;
-  justify-content: stretch;
+  justify-content: flex-start;
   width: 100%;
   align-items: center;
 }

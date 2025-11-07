@@ -36,8 +36,8 @@ function NavigationStatus() {
     }
 
     //set color
-    let color = 'red';
-    if (roverStatus == 'Reached'){
+    let color = 'red'
+    if (roverStatus == 'Reached') {
       color = 'green'
     } else if (roverStatus == 'Approaching') {
       color = 'yellow'
@@ -47,10 +47,10 @@ function NavigationStatus() {
 
     //return navigation status
     return {
-        status: roverStatus,
-        distance: relativeDistance,
-        color
-      }
+      status: roverStatus,
+      distance: relativeDistance,
+      color,
+    }
     /*const distance = calculateDistance(lat, lon, targetLatitude, targetLongitude)
 
     if (distance <= POSITION_THRESHOLD) {

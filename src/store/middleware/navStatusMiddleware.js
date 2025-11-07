@@ -11,7 +11,7 @@ const navStatusMiddleware = (store) => (next) => (action) => {
         roverStatusReportReceived({
           currTarget,
           relativeDistance,
-          roverStatus
+          roverStatus,
         })
       )
     }

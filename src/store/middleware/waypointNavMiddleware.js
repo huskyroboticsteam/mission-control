@@ -10,11 +10,7 @@ const waypointNavMiddleware = (store) => (next) => (action) => {
         messageRover({
           message: {
             type: 'waypointNavRequest',
-            latitude: store.getState().waypointNav.latitude,
-            longitude: store.getState().waypointNav.longitude,
             points: store.getState().waypointNav.points,
-            isApproximate: store.getState().waypointNav.isApproximate,
-            isGate: store.getState().waypointNav.isGate,
           },
         })
       )

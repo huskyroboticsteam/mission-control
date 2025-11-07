@@ -1,16 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux'
-import React, { useState, useEffect } from 'react'
-import { requestWaypointNav, setPoints, selectPoints } from '../../store/waypointNavSlice'
-import { selectOpMode } from '../../store/opModeSlice'
-import { selectRoverIsConnected } from '../../store/roverSocketSlice'
+import {useDispatch, useSelector} from 'react-redux'
+import React, {useState, useEffect} from 'react'
+import {requestWaypointNav, setPoints, selectPoints} from '../../store/waypointNavSlice'
+import {selectOpMode} from '../../store/opModeSlice'
+import {selectRoverIsConnected} from '../../store/roverSocketSlice'
 import './WaypointNav.css'
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste'
+import EditIcon from '@mui/icons-material/Edit'
+import AddIcon from '@mui/icons-material/Add'
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 
 function WaypointNav() {
   const dispatch = useDispatch()
@@ -26,15 +26,31 @@ function WaypointNav() {
 
   //either adds point if in add point state or edits point if in editing state
   function addPoint() {
-    const newPoints = [...points.map((point) => [...point]), [lat, lon]]
+    const parsedLat = Number.parseFloat(lat)
+    const parsedLon = Number.parseFloat(lon)
+
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
+      alert('Please enter valid latitude and longitude values before adding a waypoint.')
+      return
+    }
+
+    const newPoints = [...points.map((point) => [...point]), [parsedLat, parsedLon]]
     dispatch(setPoints(newPoints))
     setLat(0)
     setLon(0)
   }
 
   function editPoint() {
+    const parsedLat = Number.parseFloat(lat)
+    const parsedLon = Number.parseFloat(lon)
+
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
+      alert('Please enter valid latitude and longitude values before saving a waypoint.')
+      return
+    }
+
     const newPoints = points.map((point, index) =>
-      index === editPointIndex ? [lat, lon] : [...point]
+      index === editPointIndex ? [parsedLat, parsedLon] : [...point]
     )
     dispatch(setPoints(newPoints))
     exitEditPointState()
@@ -82,16 +98,21 @@ function WaypointNav() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (roverIsConnected) {
-      const form = e.target
-      const formData = new FormData(form)
-      const formJson = Object.fromEntries(formData.entries())
-      setSubmitted(true)
-      dispatch(requestWaypointNav(formJson))
-      dispatch(setPoints([]))
-      setLat(0)
-      setLon(0)
+    if (!roverIsConnected) {
+      return
     }
+
+    if (points.length === 0) {
+      alert('Please add at least one waypoint before submitting.')
+      return
+    }
+
+    const requestPoints = points.map((point) => [...point])
+
+    setSubmitted(true)
+    dispatch(requestWaypointNav({points: requestPoints}))
+    exitEditPointState()
+    dispatch(setPoints([]))
   }
 
   function grabFromClipboard() {
@@ -135,37 +156,39 @@ function WaypointNav() {
       <form method="post" onSubmit={handleSubmit} className="waypoint-select">
         <div className="waypoint-select__params">
           <div className="lat-lon-row">
-            <div className='input-group'>
+            <div className="input-group">
               <label htmlFor="latitude">Latitude</label>
               {submitted ? (
                 <input disabled value={lat} onChange={(e) => e} />
               ) : (
-                <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} />
+                <input
+                  type="number"
+                  step="any"
+                  value={lat}
+                  onChange={(e) => setLat(e.target.value)}
+                />
               )}
             </div>
-            <div className='input-group'>
+            <div className="input-group">
               <label htmlFor="longitude">Longitude</label>
               {submitted ? (
                 <input disabled value={lon} onChange={(e) => e} />
               ) : (
-                <input type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} />
+                <input
+                  type="number"
+                  step="any"
+                  value={lon}
+                  onChange={(e) => setLon(e.target.value)}
+                />
               )}
             </div>
-            {/* temp note: currently sends first value of points in latitude and longitude for testing, eventually want to switch to
-            only using the points array. */}
-            <input type="hidden" value={points.length > 0 ? points[0][0] : 0} name="latitude"></input>
-            <input
-              type="hidden"
-              value={points.length > 0 ? points[0][1] : 0}
-              name="longitude"></input>
-            <input type="hidden" value={JSON.stringify(points)} name="points"></input>
           </div>
 
-          <div className='button-row'>
+          <div className="button-row">
             {/* COPY FROM CLIPBOARD BUTTON */}
             {submitted ? (
               <button disabled className="icon-button" aria-label="Clipboard disabled">
-                <ContentPasteIcon fontSize="small" style={{ marginRight: 6 }} />
+                <ContentPasteIcon fontSize="small" style={{marginRight: 6}} />
               </button>
             ) : (
               <button type="button" onClick={grabFromClipboard} className="icon-button">
@@ -191,9 +214,13 @@ function WaypointNav() {
         </div>
         <div className="submit-row">
           {opMode === 'autonomous' && !submitted ? (
-            <button type="submit" className="go-button">Go</button>
+            <button type="submit" className="go-button">
+              Go
+            </button>
           ) : (
-            <button disabled className="go-button">Go</button>
+            <button disabled className="go-button">
+              Go
+            </button>
           )}
         </div>
       </form>
