@@ -233,50 +233,16 @@ function Map() {
         </div>
 
         <div style={{ marginTop: 8, maxWidth: 420 }}>
-          <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Pins</div>
-          <div style={{ 
-            maxHeight: '300px', 
-            overflowY: 'auto', 
-            marginBottom: 8,
-            paddingRight: 8,
-            /* Scrollbar styling */
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#888 #f1f1f1',
-            '&::-webkit-scrollbar': {
-              width: '8px',
-            },
-            '&::-webkit-scrollbar-track': {
-              background: '#f1f1f1',
-              borderRadius: '4px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: '#888',
-              borderRadius: '4px',
-            }
-          }}>
-            {[...pins].reverse().map(pin => (
-              <div key={pin.id} style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 8, 
-                marginBottom: 4,
-                backgroundColor: selectedPins.includes(pin.id) ? 'rgba(0,0,0,0.05)' : 'transparent',
-                padding: '4px',
-                borderRadius: '4px'
-              }}>
-                <input type="checkbox" 
-                  checked={selectedPins.includes(pin.id)} 
-                  onChange={() => toggleSelectPin(pin.id)} 
-                />
-                <div style={{ flex: 1, fontSize: 13, color: "#000000" }}>
-                  {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
-                </div>
-                <button onClick={() => flyToPin(pin)} style={{ height: 28 }}>Fly</button>
-                <button onClick={() => deletePin(pin.id)} style={{ height: 28 }}>Delete</button>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Recent pins</div>
+          {[...pins].slice(-5).reverse().map(pin => (
+            <div key={pin.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4}}>
+              <input type="checkbox" checked={selectedPins.includes(pin.id)} onChange={() => toggleSelectPin(pin.id)} />
+              <div style={{ flex: 1, fontSize: 13, color: "#000000" }}>{pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}</div>
+              <button onClick={() => flyToPin(pin)} style={{ height: 28 }}>Fly</button>
+              <button onClick={() => deletePin(pin.id)} style={{ height: 28 }}>Delete</button>
+            </div>
+          ))}
+          <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
             <button onClick={clearSelectedPins} style={{ height: 32 }}>Clear Selected</button>
           </div>
         </div>
