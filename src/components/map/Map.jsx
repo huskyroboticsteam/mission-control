@@ -1,6 +1,6 @@
 import React from "react";
-import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics, CameraFlyTo } from "resium";
-import { IonResource, CesiumTerrainProvider, Cartesian3, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
+import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics } from "resium";
+import { Cartesian3, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
 import { useSelector, useDispatch } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude, selectRoverHeading } from "../../store/telemetrySlice";
 import { addPin, removePin, togglePinSelection, clearSelectedPins, selectAllPins, selectSelectedPins } from "../../store/mapSlice";
@@ -16,7 +16,6 @@ function Map() {
   const heading = useSelector(selectRoverHeading);
 
   const viewerRef = React.useRef(null);
-  const didSetCamera = React.useRef(false);
 
   const [manualLatInput, setManualLatInput] = React.useState("47.6061");
   const [manualLonInput, setManualLonInput] = React.useState("-122.3328");
@@ -25,8 +24,7 @@ function Map() {
   const [manualLon, setManualLon] = React.useState(-122.3328);
   const [useManual, setUseManual] = React.useState(false);
 
-  const [cameraTarget, setCameraTarget] = React.useState(null);
-  const [cameraKey, setCameraKey] = React.useState(0);
+  
 
   const dispatch = useDispatch();
   const pins = useSelector(selectAllPins);
@@ -169,8 +167,7 @@ function Map() {
     setManualLat(parsedLat);
     setManualLon(parsedLon);
     setUseManual(true);
-    setCameraTarget({ lon: parsedLon, lat: parsedLat, alt: 1500 });
-    setCameraKey(k => k + 1);
+    
     
     dispatch(addPin({ lat: parsedLat, lon: parsedLon }));
   }
@@ -179,7 +176,7 @@ function Map() {
     dispatch(togglePinSelection({ pinId: id }));
   }
 
-  function clearSelectedPins() {
+  function handleClearSelectedPins() {
     dispatch(clearSelectedPins());
   }
 
@@ -191,8 +188,6 @@ function Map() {
     setManualLat(pin.lat);
     setManualLon(pin.lon);
     setUseManual(true);
-    setCameraTarget({ lon: pin.lon, lat: pin.lat, alt: 1500 });
-    setCameraKey(k => k + 1);
   }
   
   return (
@@ -202,7 +197,6 @@ function Map() {
       timeline={false}
       animation={false}
       fullscreenButton={false}
-      homeButton={false}
       imageryProvider={imageryProvider}
       ref={viewerRef}
     >
@@ -243,15 +237,12 @@ function Map() {
             </div>
           ))}
           <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-            <button onClick={clearSelectedPins} style={{ height: 32 }}>Clear Selected</button>
+            <button onClick={handleClearSelectedPins} style={{ height: 32 }}>Clear Selected</button>
           </div>
         </div>
       </div>
       
 
-      {cameraTarget && (
-        <CameraFlyTo key={cameraKey} destination={Cartesian3.fromDegrees(cameraTarget.lon, cameraTarget.lat, cameraTarget.alt)} duration={1.2} />
-      )}
 
       {pins.map((pin, i) => {
         const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6'];
