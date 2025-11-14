@@ -26,10 +26,6 @@
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.17.0",
     "resium": "^1.17.2",
-<<<<<<< HEAD
-=======
-    "serve": "^14.2.5",
->>>>>>> satellite-maps
     "stream": "0.0.2",
     "three": "^0.158.0",
     "typescript": "^5.3.3",

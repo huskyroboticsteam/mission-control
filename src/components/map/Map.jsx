@@ -1,42 +1,14 @@
 import React from "react";
-<<<<<<< HEAD
-import { Viewer, Globe, Scene, Primitive, Cesium3DTileset, Entity, PointGraphics, ImageryLayer, Polyline, PolylineGraphics, BillboardGraphics, ModelGraphics } from "resium";
-import { IonResource, CesiumTerrainProvider, Cartesian3, Ion, ArcGisMapServerImageryProvider, OpenStreetMapImageryProvider } from "cesium";
-import { useSelector } from "react-redux";
-import { selectRoverLatitude, selectRoverLongitude, selectRoverYaw, selectRoverHeading } from "../../store/telemetrySlice";
-import { radians } from '@math.gl/core';
-=======
 import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics, CameraFlyTo } from "resium";
 import { IonResource, CesiumTerrainProvider, Cartesian3, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
 import { useSelector, useDispatch } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude, selectRoverHeading } from "../../store/telemetrySlice";
 import { addPin, removePin, togglePinSelection, clearSelectedPins, selectAllPins, selectSelectedPins } from "../../store/mapSlice";
->>>>>>> satellite-maps
 
 import robotModel from "../../../assets/Dozer.glb"
 Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
 
 function Map() {
-<<<<<<< HEAD
-  const lat = useSelector(selectRoverLatitude);
-  // const lat = 47.655548;
-  const lon = useSelector(selectRoverLongitude);
-  // const lon = -122.303200;
-  const heading = useSelector(selectRoverHeading);
-  const yaw = useSelector(selectRoverYaw);
-
-  const imageryProvider = new OpenStreetMapImageryProvider({
-    url: "https://tile.openstreetmap.org/",
-  });
-  const positions = Cartesian3.fromDegreesArray([
-    -119, 48,
-    -118.9998, 48,
-    -118.999022, 47.999330,
-    -118.998927, 47.999277,
-    -118.998257, 47.998970,
-  ]);
-
-=======
   const telemetryLat = useSelector(selectRoverLatitude);
   const telemetryLon = useSelector(selectRoverLongitude);
   const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548;
@@ -222,7 +194,6 @@ function Map() {
     setCameraKey(k => k + 1);
   }
   
->>>>>>> satellite-maps
   return (
     <Viewer
       style={{ overflow: "hidden" }}
@@ -232,14 +203,6 @@ function Map() {
       fullscreenButton={false}
       homeButton={false}
       imageryProvider={imageryProvider}
-<<<<<<< HEAD
-      onReady={() => setViewerReady(true)}
-    >
-      <Entity
-        name="Rover"
-        position={Cartesian3.fromDegrees(lon, lat, 0)}
-        description={"Lat: " + lat.toFixed(7) + "°, Lon: " + lon.toFixed(7) + "°, Heading: " + heading.toFixed(0) + "°"}
-=======
       ref={viewerRef}
     >
         {activeLocalProvider ? (
@@ -305,7 +268,6 @@ function Map() {
         name="Rover"
         position={Cartesian3.fromDegrees(useManual ? manualLon : lon, useManual ? manualLat : lat, 0)}
         description={"Lat: " + (useManual ? manualLat : lat).toFixed(7) + "°, Lon: " + (useManual ? manualLon : lon).toFixed(7) + "°, Heading: " + heading.toFixed(0) + "°"}
->>>>>>> satellite-maps
         selected
         tracked
       >
@@ -314,20 +276,6 @@ function Map() {
             maximumScale={0.01}
           />
       </Entity>
-<<<<<<< HEAD
-      <Entity
-        name="Path 1"
-        description={"Example description :)"}
-      >
-        <PolylineGraphics
-          show={true}
-          width={10}
-          positions={positions}
-          clampToGround={true}
-        />
-      </Entity>
-=======
->>>>>>> satellite-maps
     </Viewer>
   );
 }

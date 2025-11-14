@@ -10,10 +10,7 @@ import motorsReducer from './motorsSlice'
 import camerasReducer from './camerasSlice'
 import telemetryReducer from './telemetrySlice'
 import waypointNavReducer from './waypointNavSlice'
-<<<<<<< HEAD
-=======
 import mapReducer from './mapSlice'
->>>>>>> satellite-maps
 import roverSocketMiddleware from './middleware/roverSocketMiddleware'
 import peripheralsMiddleware from './middleware/peripheralsMiddleware'
 import emergencyStopMiddleware from './middleware/emergencyStopMiddleware'
@@ -39,10 +36,7 @@ export default configureStore({
     cameras: camerasReducer,
     telemetry: telemetryReducer,
     waypointNav: waypointNavReducer,
-<<<<<<< HEAD
-=======
     map: mapReducer,
->>>>>>> satellite-maps
   },
 
   middleware: (getDefaultMiddleware) =>
