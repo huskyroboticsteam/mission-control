@@ -190,12 +190,6 @@ function Map() {
   }
 
   function flyToPin(pin) {
-    // Move rover to this pin by switching to manual coordinates
-    setManualLat(pin.lat);
-    setManualLon(pin.lon);
-    setUseManual(true);
-
-    // Also move the camera to the pin
     setCameraTarget({ lon: pin.lon, lat: pin.lat, alt: 1500 });
     setCameraKey(k => k + 1);
   }
