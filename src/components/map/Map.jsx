@@ -190,6 +190,8 @@ function Map() {
   }
 
   function flyToPin(pin) {
+    setManualLat(pin.lat);
+    SetManualLon(pin.lon);
     setCameraTarget({ lon: pin.lon, lat: pin.lat, alt: 1500 });
     setCameraKey(k => k + 1);
   }
