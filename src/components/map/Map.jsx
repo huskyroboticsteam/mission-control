@@ -59,7 +59,6 @@ function Map() {
   });
 
   const [activeMapIndex, setActiveMapIndex] = React.useState(null);
-  const [autoSelectMap, setAutoSelectMap] = React.useState(true);
   const [activeLocalProvider, setActiveLocalProvider] = React.useState(null);
 
   React.useEffect(() => {
@@ -142,12 +141,11 @@ function Map() {
   }
 
   React.useEffect(() => {
-    if (!autoSelectMap) return;
     const currentLat = useManual ? manualLat : lat;
     const currentLon = useManual ? manualLon : lon;
     const idx = chooseMap(currentLat, currentLon);
     if (idx !== activeMapIndex) setActiveMapIndex(idx);
-  }, [lat, lon, useManual, manualLat, manualLon, autoSelectMap, mapTiles, activeMapIndex]);
+  }, [lat, lon, useManual, manualLat, manualLon, mapTiles, activeMapIndex]);
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
@@ -191,7 +189,8 @@ function Map() {
 
   function flyToPin(pin) {
     setManualLat(pin.lat);
-    SetManualLon(pin.lon);
+    setManualLon(pin.lon);
+    setUseManual(true);
     setCameraTarget({ lon: pin.lon, lat: pin.lat, alt: 1500 });
     setCameraKey(k => k + 1);
   }
@@ -223,7 +222,6 @@ function Map() {
             <button onClick={handleSetPin} style={{ height: 34 }}>Set Pin</button>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
-            <label style={{ fontSize: 12, color: "#000000" }}><input type="checkbox" checked={autoSelectMap} onChange={(e) => setAutoSelectMap(e.target.checked)} /> Auto-select map</label>
             <select value={activeMapIndex ?? ''} onChange={(e) => setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))}>
               <option value="">(none)</option>
               {mapTiles.map((t, idx) => (
