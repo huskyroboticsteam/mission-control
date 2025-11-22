@@ -16,6 +16,7 @@ function Map() {
   const heading = useSelector(selectRoverHeading);
 
   const viewerRef = React.useRef(null);
+  const rightClickHandlerRef = React.useRef(null);
 
   const [manualLatInput, setManualLatInput] = React.useState("47.6061");
   const [manualLonInput, setManualLonInput] = React.useState("-122.3328");
@@ -25,8 +26,6 @@ function Map() {
   const [useManual, setUseManual] = React.useState(false);
   
   const [lastPickedCoord, setLastPickedCoord] = React.useState(null);
-
-  
 
   const dispatch = useDispatch();
   const pins = useSelector(selectAllPins);
@@ -96,31 +95,49 @@ function Map() {
 
       const origin = window?.location?.origin || '';
       const absUrl = origin + (tile.url?.startsWith('/') ? tile.url : `/${tile.url}`);
-      const resp = await fetch(absUrl, { method: 'GET', mode: 'cors' });
-      console.log('Creating provider', absUrl, { west, south, east, north });
-      if (!resp?.ok || !mounted) return;
+      console.log('[Map] Fetching local tile', absUrl);
+      let resp;
+      try {
+        resp = await fetch(absUrl, { method: 'GET', mode: 'cors' });
+      } catch (e) {
+        console.warn('[Map] fetch failed for', absUrl, e);
+        return;
+      }
+      if (!resp?.ok) {
+        console.warn('[Map] non-OK response', resp?.status, resp?.statusText);
+        return;
+      }
+      if (!mounted) return;
 
       const blob = await resp.blob();
       const blobUrl = URL.createObjectURL(blob);
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      
+      let loaded = false;
       try {
         await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
+          img.onload = () => { loaded = true; resolve(); };
+          img.onerror = (err) => reject(err);
           img.src = blobUrl;
         });
-        
-        if (!mounted) return;
-        
-      const provider = new SingleTileImageryProvider({
-        url: absUrl,
-        rectangle: Rectangle.fromDegrees(west, south, east, north),
-      });
-      setActiveLocalProvider(provider);
-      } finally {
-        URL.revokeObjectURL(blobUrl);
+      } catch (e) {
+        console.warn('[Map] image load failed', absUrl, e);
+      }
+      const tileWidth = loaded ? img.naturalWidth : undefined;
+      const tileHeight = loaded ? img.naturalHeight : undefined;
+      URL.revokeObjectURL(blobUrl);
+      if (!mounted) return;
+      try {
+        const provider = new SingleTileImageryProvider({
+          url: absUrl,
+          rectangle: Rectangle.fromDegrees(west, south, east, north),
+          tileWidth,
+          tileHeight,
+        });
+        console.log('[Map] Local imagery provider created', { tileWidth, tileHeight, bounds: { west, south, east, north } });
+        setActiveLocalProvider(provider);
+      } catch (e) {
+        console.error('[Map] Failed creating SingleTileImageryProvider', e);
       }
     }
 
@@ -160,25 +177,44 @@ function Map() {
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
-    if (!viewer) return;
+    if (!viewer) {
+      return;
+    }
+    if (rightClickHandlerRef.current) {
+      return;
+    }
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const handler = new ScreenSpaceEventHandler(viewer.canvas);
+    rightClickHandlerRef.current = handler;
+    console.log('[Map] RIGHT_CLICK handler attached');
     handler.setInputAction((movement) => {
       const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid);
       if (!cartesian) return;
       const cartographic = ellipsoid.cartesianToCartographic(cartesian);
       const lonDeg = CesiumMath.toDegrees(cartographic.longitude);
       const latDeg = CesiumMath.toDegrees(cartographic.latitude);
+      const camPos = viewer.camera.positionWC;
+      const surfacePos = ellipsoid.scaleToGeodeticSurface(camPos);
+      let distance = 0;
+      if (surfacePos) {
+        distance = Cartesian3.distance(camPos, surfacePos);
+      }
       setManualLat(latDeg);
       setManualLon(lonDeg);
       setUseManual(true);
       dispatch(addPin({ lat: latDeg, lon: lonDeg }));
-      setLastPickedCoord({ lat: latDeg, lon: lonDeg, t: Date.now() });
+      setLastPickedCoord({ lat: latDeg, lon: lonDeg, distance, t: Date.now() });
     }, ScreenSpaceEventType.RIGHT_CLICK);
+  });
+
+  React.useEffect(() => {
     return () => {
-      handler.destroy();
+      if (rightClickHandlerRef.current) {
+        rightClickHandlerRef.current.destroy();
+        rightClickHandlerRef.current = null;
+      }
     };
-  }, [dispatch]);
+  }, []);
 
   function handleSetPin() {
     const parsedLat = parseFloat(manualLatInput);
@@ -260,6 +296,11 @@ function Map() {
               color: '#000'
             }}>
               Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}°
+              {typeof lastPickedCoord.distance === 'number' && (
+                <span style={{ marginLeft: 6 }}>
+                  (≈ {Math.round(lastPickedCoord.distance)} m alt)
+                </span>
+              )}
             </div>
           )}
           <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Recent pins</div>
