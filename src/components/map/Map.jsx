@@ -1,6 +1,6 @@
 import React from "react";
 import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics } from "resium";
-import { Cartesian3, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
+import { Cartesian3, Cartesian2, Math as CesiumMath, ScreenSpaceEventHandler, ScreenSpaceEventType, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
 import { useSelector, useDispatch } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude, selectRoverHeading } from "../../store/telemetrySlice";
 import { addPin, removePin, togglePinSelection, clearSelectedPins, selectAllPins, selectSelectedPins } from "../../store/mapSlice";
@@ -23,6 +23,8 @@ function Map() {
   const [manualLat, setManualLat] = React.useState(47.6061);
   const [manualLon, setManualLon] = React.useState(-122.3328);
   const [useManual, setUseManual] = React.useState(false);
+  
+  const [lastPickedCoord, setLastPickedCoord] = React.useState(null);
 
   
 
@@ -95,6 +97,7 @@ function Map() {
       const origin = window?.location?.origin || '';
       const absUrl = origin + (tile.url?.startsWith('/') ? tile.url : `/${tile.url}`);
       const resp = await fetch(absUrl, { method: 'GET', mode: 'cors' });
+      console.log('Creating provider', absUrl, { west, south, east, north });
       if (!resp?.ok || !mounted) return;
 
       const blob = await resp.blob();
@@ -111,13 +114,11 @@ function Map() {
         
         if (!mounted) return;
         
-        const provider = new SingleTileImageryProvider({
-          url: absUrl,
-          rectangle: Rectangle.fromDegrees(west, south, east, north),
-          tileWidth: img.naturalWidth,
-          tileHeight: img.naturalHeight,
-        });
-        setActiveLocalProvider(provider);
+      const provider = new SingleTileImageryProvider({
+        url: absUrl,
+        rectangle: Rectangle.fromDegrees(west, south, east, north),
+      });
+      setActiveLocalProvider(provider);
       } finally {
         URL.revokeObjectURL(blobUrl);
       }
@@ -143,7 +144,7 @@ function Map() {
     const currentLon = useManual ? manualLon : lon;
     const idx = chooseMap(currentLat, currentLon);
     if (idx !== activeMapIndex) setActiveMapIndex(idx);
-  }, [lat, lon, useManual, manualLat, manualLon, mapTiles, activeMapIndex]);
+  }, [lat, lon, useManual, manualLat, manualLon, mapTiles]);
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
@@ -156,6 +157,28 @@ function Map() {
       viewer.camera.flyTo({ destination: Cartesian3.fromDegrees(centerLon, centerLat, 1500), duration: 1.2 });
     }
   }, [useManual, manualLat, manualLon, lat, lon]);
+
+  React.useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+    const ellipsoid = viewer.scene.globe.ellipsoid;
+    const handler = new ScreenSpaceEventHandler(viewer.canvas);
+    handler.setInputAction((movement) => {
+      const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid);
+      if (!cartesian) return;
+      const cartographic = ellipsoid.cartesianToCartographic(cartesian);
+      const lonDeg = CesiumMath.toDegrees(cartographic.longitude);
+      const latDeg = CesiumMath.toDegrees(cartographic.latitude);
+      setManualLat(latDeg);
+      setManualLon(lonDeg);
+      setUseManual(true);
+      dispatch(addPin({ lat: latDeg, lon: lonDeg }));
+      setLastPickedCoord({ lat: latDeg, lon: lonDeg, t: Date.now() });
+    }, ScreenSpaceEventType.RIGHT_CLICK);
+    return () => {
+      handler.destroy();
+    };
+  }, [dispatch]);
 
   function handleSetPin() {
     const parsedLat = parseFloat(manualLatInput);
@@ -227,6 +250,18 @@ function Map() {
         </div>
 
         <div style={{ marginTop: 8, maxWidth: 420 }}>
+          {lastPickedCoord && (
+            <div style={{
+              fontSize: 12,
+              marginBottom: 8,
+              padding: '6px 8px',
+              background: 'rgba(0,0,0,0.05)',
+              borderRadius: 4,
+              color: '#000'
+            }}>
+              Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}°
+            </div>
+          )}
           <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Recent pins</div>
           {[...pins].slice(-5).reverse().map(pin => (
             <div key={pin.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4}}>
