@@ -173,7 +173,7 @@ function Map() {
     if (typeof centerLon === 'number' && typeof centerLat === 'number' && !Number.isNaN(centerLon) && !Number.isNaN(centerLat)) {
       viewer.camera.flyTo({ destination: Cartesian3.fromDegrees(centerLon, centerLat, 1500), duration: 1.2 });
     }
-  }, [useManual, manualLat, manualLon, lat, lon]);
+  }, [viewerRef, useManual, manualLat, manualLon, lat, lon]);
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
