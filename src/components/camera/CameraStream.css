@@ -19,7 +19,7 @@
 }
 
 .camera-stream-fps {
-  color: red;
+  color: green;
   position: absolute;
   top: 10px;
   left: 10px;
