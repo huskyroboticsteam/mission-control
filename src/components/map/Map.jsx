@@ -1,6 +1,6 @@
 import React from "react";
 import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics } from "resium";
-import { Cartesian3, Math as CesiumMath, ScreenSpaceEventHandler, ScreenSpaceEventType, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
+import { Cartesian3, Cartesian2, Math as CesiumMath, ScreenSpaceEventHandler, ScreenSpaceEventType, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
 import { useSelector, useDispatch } from "react-redux";
 import { selectRoverLatitude, selectRoverLongitude, selectRoverHeading } from "../../store/telemetrySlice";
 import { addPin, removePin, togglePinSelection, clearSelectedPins, selectAllPins, selectSelectedPins } from "../../store/mapSlice";
