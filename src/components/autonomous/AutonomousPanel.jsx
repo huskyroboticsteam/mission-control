@@ -1,8 +1,8 @@
-import Map from "../map/Map";
-import OpModeSelect from "./OpModeSelect";
-import WaypointNav from "./WaypointNav";
-import CameraStream from "../camera/CameraStream";
-import "./AutonomousPanel.css";
+import Map from '../map/Map'
+import OpModeSelect from './OpModeSelect'
+import WaypointNav from './WaypointNav'
+import CameraStream from '../camera/CameraStream'
+import './AutonomousPanel.css'
 
 function AutonomousPanel() {
   return (
@@ -10,10 +10,10 @@ function AutonomousPanel() {
       <Map />
       <OpModeSelect />
       <WaypointNav />
-      <CameraStream cameraName={"front"} />
-      <CameraStream cameraName={"rear"} />
+      <CameraStream cameraName={'front'} />
+      <CameraStream cameraName={'rear'} />
     </div>
-  );
+  )
 }
 
-export default AutonomousPanel;
+export default AutonomousPanel

@@ -1,350 +1,550 @@
-import React from "react";
-import { Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics } from "resium";
-import { Cartesian3, Cartesian2, Math as CesiumMath, ScreenSpaceEventHandler, ScreenSpaceEventType, Ion, ArcGisMapServerImageryProvider, Color, SingleTileImageryProvider, Rectangle } from "cesium";
-import { useSelector, useDispatch } from "react-redux";
-import { selectRoverLatitude, selectRoverLongitude, selectRoverHeading } from "../../store/telemetrySlice";
-import { addPin, removePin, togglePinSelection, clearSelectedPins, selectAllPins, selectSelectedPins } from "../../store/mapSlice";
+import React from 'react'
+import {Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics} from 'resium'
+import {
+  Cartesian3,
+  Cartesian2,
+  Math as CesiumMath,
+  ScreenSpaceEventHandler,
+  ScreenSpaceEventType,
+  Ion,
+  ArcGisMapServerImageryProvider,
+  Color,
+  SingleTileImageryProvider,
+  Rectangle,
+} from 'cesium'
+import {useSelector, useDispatch} from 'react-redux'
+import {
+  selectRoverLatitude,
+  selectRoverLongitude,
+  selectRoverHeading,
+} from '../../store/telemetrySlice'
+import {
+  addPin,
+  removePin,
+  togglePinSelection,
+  clearSelectedPins,
+  selectAllPins,
+  selectSelectedPins,
+} from '../../store/mapSlice'
 
-import robotModel from "../../../assets/Dozer.glb"
-Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
+import robotModel from '../../../assets/Dozer.glb'
+Ion.defaultAccessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg'
 
 function Map() {
-  const telemetryLat = useSelector(selectRoverLatitude);
-  const telemetryLon = useSelector(selectRoverLongitude);
-  const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548;
-  const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.303200;
-  const heading = useSelector(selectRoverHeading);
+  const telemetryLat = useSelector(selectRoverLatitude)
+  const telemetryLon = useSelector(selectRoverLongitude)
+  const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548
+  const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.3032
+  const heading = useSelector(selectRoverHeading)
 
-  const viewerRef = React.useRef(null);
-  const rightClickHandlerRef = React.useRef(null);
+  const viewerRef = React.useRef(null)
+  const rightClickHandlerRef = React.useRef(null)
 
-  const [manualLatInput, setManualLatInput] = React.useState("47.6061");
-  const [manualLonInput, setManualLonInput] = React.useState("-122.3328");
+  const [manualLatInput, setManualLatInput] = React.useState('47.6061')
+  const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
 
-  const [manualLat, setManualLat] = React.useState(47.6061);
-  const [manualLon, setManualLon] = React.useState(-122.3328);
-  const [useManual, setUseManual] = React.useState(false);
-  
-  const [lastPickedCoord, setLastPickedCoord] = React.useState(null);
+  const [manualLat, setManualLat] = React.useState(47.6061)
+  const [manualLon, setManualLon] = React.useState(-122.3328)
+  const [useManual, setUseManual] = React.useState(false)
 
-  const dispatch = useDispatch();
-  const pins = useSelector(selectAllPins);
-  const selectedPins = useSelector(selectSelectedPins);
+  const [lastPickedCoord, setLastPickedCoord] = React.useState(null)
+  const [errorMessage, setErrorMessage] = React.useState(null)
+
+  const dispatch = useDispatch()
+  const pins = useSelector(selectAllPins)
+  const selectedPins = useSelector(selectSelectedPins)
 
   const imageryProvider = new ArcGisMapServerImageryProvider({
-    url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-  });
-
+    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+  })
 
   const [mapTiles, setMapTiles] = React.useState(() => {
     return [
-      { id: 0, name: 'Map 1', url: '/map-images/1.png', bounds: { west: -122.3113, south: 47.6571, east: -122.3087, north: 47.6589 } },
-      { id: 1, name: 'Map 2', url: '/map-images/2.png', bounds: { west: -122.3087, south: 47.6571, east: -122.3061, north: 47.6589 } },
-      { id: 2, name: 'Map 3', url: '/map-images/3.png', bounds: { west: -122.3061, south: 47.6571, east: -122.3035, north: 47.6589 } },
-      { id: 3, name: 'Map 4', url: '/map-images/4.png', bounds: { west: -122.3035, south: 47.6571, east: -122.3009, north: 47.6589 } },
-      { id: 4, name: 'Map 5', url: '/map-images/5.png', bounds: { west: -122.3113, south: 47.6553, east: -122.3087, north: 47.6571 } },
-      { id: 5, name: 'Map 6', url: '/map-images/6.png', bounds: { west: -122.3087, south: 47.6553, east: -122.3061, north: 47.6571 } },
-      { id: 6, name: 'Map 7', url: '/map-images/7.png', bounds: { west: -122.3061, south: 47.6553, east: -122.3035, north: 47.6571 } },
-      { id: 7, name: 'Map 8', url: '/map-images/8.png', bounds: { west: -122.3035, south: 47.6553, east: -122.3009, north: 47.6571 } },
-      { id: 8, name: 'Map 9', url: '/map-images/9.png', bounds: { west: -122.3113, south: 47.65359, east: -122.3087, north: 47.6553 } },
-      { id: 9, name: 'Map 10', url: '/map-images/10.png', bounds: { west: -122.3087, south: 47.65359, east: -122.3061, north: 47.6553 } },
-      { id: 10, name: 'Map 11', url: '/map-images/11.png', bounds: { west: -122.3061, south: 47.65359, east: -122.3035, north: 47.6553 } },
-      { id: 11, name: 'Map 12', url: '/map-images/12.png', bounds: { west: -122.3035, south: 47.65359, east: -122.3009, north: 47.6553 } },
-      { id: 12, name: 'Map 13', url: '/map-images/13.png', bounds: { west: -122.3113, south: 47.65174, east: -122.3087, north: 47.65359 } },
-      { id: 13, name: 'Map 14', url: '/map-images/14.png', bounds: { west: -122.3087, south: 47.65174, east: -122.3061, north: 47.65359 } },
-      { id: 14, name: 'Map 15', url: '/map-images/15.png', bounds: { west: -122.3061, south: 47.65174, east: -122.3035, north: 47.65359 } },
-      { id: 15, name: 'Map 16', url: '/map-images/16.png', bounds: { west: -122.3035, south: 47.65174, east: -122.3009, north: 47.65359 } },
-    ];
-  });
+      {
+        id: 0,
+        name: 'Map 1',
+        url: '/map-images/1.png',
+        bounds: {west: -122.3113, south: 47.6571, east: -122.3087, north: 47.6589},
+      },
+      {
+        id: 1,
+        name: 'Map 2',
+        url: '/map-images/2.png',
+        bounds: {west: -122.3087, south: 47.6571, east: -122.3061, north: 47.6589},
+      },
+      {
+        id: 2,
+        name: 'Map 3',
+        url: '/map-images/3.png',
+        bounds: {west: -122.3061, south: 47.6571, east: -122.3035, north: 47.6589},
+      },
+      {
+        id: 3,
+        name: 'Map 4',
+        url: '/map-images/4.png',
+        bounds: {west: -122.3035, south: 47.6571, east: -122.3009, north: 47.6589},
+      },
+      {
+        id: 4,
+        name: 'Map 5',
+        url: '/map-images/5.png',
+        bounds: {west: -122.3113, south: 47.6553, east: -122.3087, north: 47.6571},
+      },
+      {
+        id: 5,
+        name: 'Map 6',
+        url: '/map-images/6.png',
+        bounds: {west: -122.3087, south: 47.6553, east: -122.3061, north: 47.6571},
+      },
+      {
+        id: 6,
+        name: 'Map 7',
+        url: '/map-images/7.png',
+        bounds: {west: -122.3061, south: 47.6553, east: -122.3035, north: 47.6571},
+      },
+      {
+        id: 7,
+        name: 'Map 8',
+        url: '/map-images/8.png',
+        bounds: {west: -122.3035, south: 47.6553, east: -122.3009, north: 47.6571},
+      },
+      {
+        id: 8,
+        name: 'Map 9',
+        url: '/map-images/9.png',
+        bounds: {west: -122.3113, south: 47.65359, east: -122.3087, north: 47.6553},
+      },
+      {
+        id: 9,
+        name: 'Map 10',
+        url: '/map-images/10.png',
+        bounds: {west: -122.3087, south: 47.65359, east: -122.3061, north: 47.6553},
+      },
+      {
+        id: 10,
+        name: 'Map 11',
+        url: '/map-images/11.png',
+        bounds: {west: -122.3061, south: 47.65359, east: -122.3035, north: 47.6553},
+      },
+      {
+        id: 11,
+        name: 'Map 12',
+        url: '/map-images/12.png',
+        bounds: {west: -122.3035, south: 47.65359, east: -122.3009, north: 47.6553},
+      },
+      {
+        id: 12,
+        name: 'Map 13',
+        url: '/map-images/13.png',
+        bounds: {west: -122.3113, south: 47.65174, east: -122.3087, north: 47.65359},
+      },
+      {
+        id: 13,
+        name: 'Map 14',
+        url: '/map-images/14.png',
+        bounds: {west: -122.3087, south: 47.65174, east: -122.3061, north: 47.65359},
+      },
+      {
+        id: 14,
+        name: 'Map 15',
+        url: '/map-images/15.png',
+        bounds: {west: -122.3061, south: 47.65174, east: -122.3035, north: 47.65359},
+      },
+      {
+        id: 15,
+        name: 'Map 16',
+        url: '/map-images/16.png',
+        bounds: {west: -122.3035, south: 47.65174, east: -122.3009, north: 47.65359},
+      },
+    ]
+  })
 
-  const [activeMapIndex, setActiveMapIndex] = React.useState(null);
-  const [activeLocalProvider, setActiveLocalProvider] = React.useState(null);
+  const [activeMapIndex, setActiveMapIndex] = React.useState(null)
+  const [activeLocalProvider, setActiveLocalProvider] = React.useState(null)
 
   React.useEffect(() => {
-    let mounted = true;
+    let mounted = true
     async function createProviderAsync() {
-      setActiveLocalProvider(null);
-      if (activeMapIndex === null) return;
-      
-      const tile = mapTiles[activeMapIndex];
-      if (!tile?.bounds) return;
+      setActiveLocalProvider(null)
+      if (activeMapIndex === null) return
 
-      let { west, south, east, north } = tile.bounds;
-      const MIN_DEGREES = 1e-5;
-      
-      const minLon = Math.min(west, east);
-      const maxLon = Math.max(west, east);
-      const minLat = Math.min(south, north);
-      const maxLat = Math.max(south, north);
+      const tile = mapTiles[activeMapIndex]
+      if (!tile?.bounds) return
+
+      let {west, south, east, north} = tile.bounds
+      const MIN_DEGREES = 1e-5
+
+      const minLon = Math.min(west, east)
+      const maxLon = Math.max(west, east)
+      const minLat = Math.min(south, north)
+      const maxLat = Math.max(south, north)
 
       if (Math.abs(maxLon - minLon) < MIN_DEGREES) {
-        const center = (minLon + maxLon) / 2;
-        west = center - MIN_DEGREES / 2;
-        east = center + MIN_DEGREES / 2;
+        const center = (minLon + maxLon) / 2
+        west = center - MIN_DEGREES / 2
+        east = center + MIN_DEGREES / 2
       } else {
-        west = minLon; east = maxLon;
+        west = minLon
+        east = maxLon
       }
 
       if (Math.abs(maxLat - minLat) < MIN_DEGREES) {
-        const center = (minLat + maxLat) / 2;
-        south = center - MIN_DEGREES / 2;
-        north = center + MIN_DEGREES / 2;
+        const center = (minLat + maxLat) / 2
+        south = center - MIN_DEGREES / 2
+        north = center + MIN_DEGREES / 2
       } else {
-        south = minLat; north = maxLat;
+        south = minLat
+        north = maxLat
       }
 
-      const origin = window?.location?.origin || '';
-      const absUrl = origin + (tile.url?.startsWith('/') ? tile.url : `/${tile.url}`);
-      console.log('[Map] Fetching local tile', absUrl);
-      let resp;
+      const origin = window?.location?.origin || ''
+      const absUrl = origin + (tile.url?.startsWith('/') ? tile.url : `/${tile.url}`)
+      console.log('[Map] Fetching local tile', absUrl)
+      let resp
       try {
-        resp = await fetch(absUrl, { method: 'GET', mode: 'cors' });
+        resp = await fetch(absUrl, {method: 'GET', mode: 'cors'})
       } catch (e) {
-        console.warn('[Map] fetch failed for', absUrl, e);
-        return;
+        console.warn('[Map] fetch failed for', absUrl, e)
+        return
       }
       if (!resp?.ok) {
-        console.warn('[Map] non-OK response', resp?.status, resp?.statusText);
-        return;
+        console.warn('[Map] non-OK response', resp?.status, resp?.statusText)
+        return
       }
-      if (!mounted) return;
+      if (!mounted) return
 
-      const blob = await resp.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      let loaded = false;
+      const blob = await resp.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      let loaded = false
       try {
         await new Promise((resolve, reject) => {
-          img.onload = () => { loaded = true; resolve(); };
-          img.onerror = (err) => reject(err);
-          img.src = blobUrl;
-        });
+          img.onload = () => {
+            loaded = true
+            resolve()
+          }
+          img.onerror = (err) => reject(err)
+          img.src = blobUrl
+        })
       } catch (e) {
-        console.warn('[Map] image load failed', absUrl, e);
+        console.warn('[Map] image load failed', absUrl, e)
       }
-      const tileWidth = loaded ? img.naturalWidth : undefined;
-      const tileHeight = loaded ? img.naturalHeight : undefined;
-      URL.revokeObjectURL(blobUrl);
-      if (!mounted) return;
+      const tileWidth = loaded ? img.naturalWidth : undefined
+      const tileHeight = loaded ? img.naturalHeight : undefined
+      URL.revokeObjectURL(blobUrl)
+      if (!mounted) return
       try {
         const provider = new SingleTileImageryProvider({
           url: absUrl,
           rectangle: Rectangle.fromDegrees(west, south, east, north),
           tileWidth,
           tileHeight,
-        });
-        console.log('[Map] Local imagery provider created', { tileWidth, tileHeight, bounds: { west, south, east, north } });
-        setActiveLocalProvider(provider);
+        })
+        console.log('[Map] Local imagery provider created', {
+          tileWidth,
+          tileHeight,
+          bounds: {west, south, east, north},
+        })
+        setActiveLocalProvider(provider)
       } catch (e) {
-        console.error('[Map] Failed creating SingleTileImageryProvider', e);
+        console.error('[Map] Failed creating SingleTileImageryProvider', e)
       }
     }
 
-    createProviderAsync();
-    return () => { mounted = false; };
-  }, [activeMapIndex, mapTiles]);
-
-  function chooseMap(latDeg, lonDeg) {
-    if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null;
-    for (let i = 0; i < mapTiles.length; i++) {
-      const t = mapTiles[i];
-      if (!t.bounds) continue;
-      const { west, south, east, north } = t.bounds;
-      if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i;
+    createProviderAsync()
+    return () => {
+      mounted = false
     }
-    return null;
-  }
+  }, [activeMapIndex, mapTiles])
+
+  const chooseMap = React.useCallback(
+    (latDeg, lonDeg) => {
+      if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null
+      for (let i = 0; i < mapTiles.length; i++) {
+        const t = mapTiles[i]
+        if (!t.bounds) continue
+        const {west, south, east, north} = t.bounds
+        if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i
+      }
+      return null
+    },
+    [mapTiles]
+  )
 
   React.useEffect(() => {
-    const currentLat = useManual ? manualLat : lat;
-    const currentLon = useManual ? manualLon : lon;
-    const idx = chooseMap(currentLat, currentLon);
-    if (idx !== activeMapIndex) setActiveMapIndex(idx);
-  }, [lat, lon, useManual, manualLat, manualLon, mapTiles]);
+    const currentLat = useManual ? manualLat : lat
+    const currentLon = useManual ? manualLon : lon
+    const idx = chooseMap(currentLat, currentLon)
+    if (idx !== activeMapIndex) setActiveMapIndex(idx)
+  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex]))
 
   React.useEffect(() => {
-    const viewer = viewerRef.current?.cesiumElement;
-    if (!viewer) return;
+    const viewer = viewerRef.current?.cesiumElement
+    if (!viewer) return
 
-    const centerLon = useManual ? manualLon : lon;
-    const centerLat = useManual ? manualLat : lat;
+    const centerLon = useManual ? manualLon : lon
+    const centerLat = useManual ? manualLat : lat
 
-    if (typeof centerLon === 'number' && typeof centerLat === 'number' && !Number.isNaN(centerLon) && !Number.isNaN(centerLat)) {
-      viewer.camera.flyTo({ destination: Cartesian3.fromDegrees(centerLon, centerLat, 1500), duration: 1.2 });
+    if (
+      typeof centerLon === 'number' &&
+      typeof centerLat === 'number' &&
+      !Number.isNaN(centerLon) &&
+      !Number.isNaN(centerLat)
+    ) {
+      viewer.camera.flyTo({
+        destination: Cartesian3.fromDegrees(centerLon, centerLat, 1500),
+        duration: 1.2,
+      })
     }
-  }, [viewerRef, useManual, manualLat, manualLon, lat, lon]);
+  }, [viewerRef, useManual, manualLat, manualLon, lat, lon])
 
   React.useEffect(() => {
-    const viewer = viewerRef.current?.cesiumElement;
+    const viewer = viewerRef.current?.cesiumElement
     if (!viewer) {
-      return;
+      return
     }
     if (rightClickHandlerRef.current) {
-      return;
+      return
     }
-    const ellipsoid = viewer.scene.globe.ellipsoid;
-    const handler = new ScreenSpaceEventHandler(viewer.canvas);
-    rightClickHandlerRef.current = handler;
-    console.log('[Map] RIGHT_CLICK handler attached');
+    const ellipsoid = viewer.scene.globe.ellipsoid
+    const handler = new ScreenSpaceEventHandler(viewer.canvas)
+    rightClickHandlerRef.current = handler
+    console.log('[Map] RIGHT_CLICK handler attached')
     handler.setInputAction((movement) => {
-      const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid);
-      if (!cartesian) return;
-      const cartographic = ellipsoid.cartesianToCartographic(cartesian);
-      const lonDeg = CesiumMath.toDegrees(cartographic.longitude);
-      const latDeg = CesiumMath.toDegrees(cartographic.latitude);
-      const camPos = viewer.camera.positionWC;
-      const surfacePos = ellipsoid.scaleToGeodeticSurface(camPos);
-      let distance = 0;
+      const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid)
+      if (!cartesian) return
+      const cartographic = ellipsoid.cartesianToCartographic(cartesian)
+      const lonDeg = CesiumMath.toDegrees(cartographic.longitude)
+      const latDeg = CesiumMath.toDegrees(cartographic.latitude)
+      const camPos = viewer.camera.positionWC
+      const surfacePos = ellipsoid.scaleToGeodeticSurface(camPos)
+      let distance = 0
       if (surfacePos) {
-        distance = Cartesian3.distance(camPos, surfacePos);
+        distance = Cartesian3.distance(camPos, surfacePos)
       }
-      setManualLat(latDeg);
-      setManualLon(lonDeg);
-      setUseManual(true);
-      dispatch(addPin({ lat: latDeg, lon: lonDeg }));
-      setLastPickedCoord({ lat: latDeg, lon: lonDeg, distance, t: Date.now() });
-    }, ScreenSpaceEventType.RIGHT_CLICK);
-  });
+      setManualLat(latDeg)
+      setManualLon(lonDeg)
+      setUseManual(true)
+      dispatch(addPin({lat: latDeg, lon: lonDeg}))
+      setLastPickedCoord({lat: latDeg, lon: lonDeg, distance, t: Date.now()})
+    }, ScreenSpaceEventType.RIGHT_CLICK)
+  })
 
   React.useEffect(() => {
     return () => {
       if (rightClickHandlerRef.current) {
-        rightClickHandlerRef.current.destroy();
-        rightClickHandlerRef.current = null;
+        rightClickHandlerRef.current.destroy()
+        rightClickHandlerRef.current = null
       }
-    };
-  }, []);
+    }
+  }, [])
 
   function handleSetPin() {
-    const parsedLat = parseFloat(manualLatInput);
-    const parsedLon = parseFloat(manualLonInput);
+    const parsedLat = parseFloat(manualLatInput)
+    const parsedLon = parseFloat(manualLonInput)
     if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
-      alert('Please enter valid numeric latitude and longitude');
-      return;
+      setErrorMessage('Please enter valid numeric latitude and longitude')
+      setTimeout(() => setErrorMessage(null), 5000)
+      return
     }
-    setManualLat(parsedLat);
-    setManualLon(parsedLon);
-    setUseManual(true);
-    
-    
-    dispatch(addPin({ lat: parsedLat, lon: parsedLon }));
+    setErrorMessage(null)
+    setManualLat(parsedLat)
+    setManualLon(parsedLon)
+    setUseManual(true)
+
+    dispatch(addPin({lat: parsedLat, lon: parsedLon}))
   }
 
   function toggleSelectPin(id) {
-    dispatch(togglePinSelection({ pinId: id }));
+    dispatch(togglePinSelection({pinId: id}))
   }
 
   function handleClearSelectedPins() {
-    dispatch(clearSelectedPins());
+    dispatch(clearSelectedPins())
   }
 
   function deletePin(id) {
-    dispatch(removePin({ pinId: id }));
+    dispatch(removePin({pinId: id}))
   }
 
   function flyToPin(pin) {
-    setManualLat(pin.lat);
-    setManualLon(pin.lon);
-    setUseManual(true);
+    setManualLat(pin.lat)
+    setManualLon(pin.lon)
+    setUseManual(true)
   }
-  
+
   return (
     <Viewer
-      style={{ overflow: "hidden" }}
+      style={{overflow: 'hidden'}}
       geocoder={false}
       timeline={false}
       animation={false}
       fullscreenButton={false}
       imageryProvider={imageryProvider}
-      ref={viewerRef}
-    >
-        {activeLocalProvider ? (
-          <ImageryLayer imageryProvider={activeLocalProvider} />
-        ) : null}
-      
-      <div style={{ position: 'absolute', right: 12, bottom: 12, zIndex: 999, background: 'rgba(255,255,255,0.95)', padding: 10, borderRadius: 6, boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <input value={manualLatInput} onChange={e => setManualLatInput(e.target.value)} style={{ width: 160, height: 30, padding: 6, fontSize: 14 }} />
+      ref={viewerRef}>
+      {activeLocalProvider ? <ImageryLayer imageryProvider={activeLocalProvider} /> : null}
+
+      <div
+        style={{
+          position: 'absolute',
+          right: 12,
+          bottom: 12,
+          zIndex: 999,
+          background: 'rgba(255,255,255,0.95)',
+          padding: 10,
+          borderRadius: 6,
+          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+        }}>        {errorMessage && (
+          <div
+            style={{
+              marginBottom: 8,
+              padding: '8px 12px',
+              background: '#fee',
+              border: '1px solid #fcc',
+              borderRadius: 4,
+              color: '#c00',
+              fontSize: 13,
+            }}>
+            {errorMessage}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <input value={manualLonInput} onChange={e => setManualLonInput(e.target.value)} style={{ width: 160, height: 30, padding: 6, fontSize: 14 }} />
+        )}        <div
+          style={{
+            display: 'flex',
+            gap: 8,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-end',
+          }}>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+            <input
+              value={manualLatInput}
+              onChange={(e) => setManualLatInput(e.target.value)}
+              style={{width: 160, height: 30, padding: 6, fontSize: 14}}
+            />
           </div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <button onClick={handleSetPin} style={{ height: 34 }}>Set Pin</button>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+            <input
+              value={manualLonInput}
+              onChange={(e) => setManualLonInput(e.target.value)}
+              style={{width: 160, height: 30, padding: 6, fontSize: 14}}
+            />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
-            <select value={activeMapIndex ?? ''} onChange={(e) => setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))}>
+          <div style={{display: 'flex', gap: 6}}>
+            <button onClick={handleSetPin} style={{height: 34}}>
+              Set Pin
+            </button>
+          </div>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8}}>
+            <select
+              value={activeMapIndex ?? ''}
+              onChange={(e) =>
+                setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))
+              }>
               <option value="">(none)</option>
               {mapTiles.map((t, idx) => (
-                <option key={t.id} value={idx}>{t.name}</option>
+                <option key={t.id} value={idx}>
+                  {t.name}
+                </option>
               ))}
             </select>
           </div>
-
         </div>
 
-        <div style={{ marginTop: 8, maxWidth: 420 }}>
+        <div style={{marginTop: 8, maxWidth: 420}}>
           {lastPickedCoord && (
-            <div style={{
-              fontSize: 12,
-              marginBottom: 8,
-              padding: '6px 8px',
-              background: 'rgba(0,0,0,0.05)',
-              borderRadius: 4,
-              color: '#000'
-            }}>
+            <div
+              style={{
+                fontSize: 12,
+                marginBottom: 8,
+                padding: '6px 8px',
+                background: 'rgba(0,0,0,0.05)',
+                borderRadius: 4,
+                color: '#000',
+              }}>
               Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}°
               {typeof lastPickedCoord.distance === 'number' && (
-                <span style={{ marginLeft: 6 }}>
+                <span style={{marginLeft: 6}}>
                   (≈ {Math.round(lastPickedCoord.distance)} m alt)
                 </span>
               )}
             </div>
           )}
-          <div style={{ fontSize: 12, marginBottom: 6, color: "#000000"}}>Recent pins</div>
-          {[...pins].slice(-5).reverse().map(pin => (
-            <div key={pin.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4}}>
-              <input type="checkbox" checked={selectedPins.includes(pin.id)} onChange={() => toggleSelectPin(pin.id)} />
-              <div style={{ flex: 1, fontSize: 13, color: "#000000" }}>{pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}</div>
-              <button onClick={() => flyToPin(pin)} style={{ height: 28 }}>Fly</button>
-              <button onClick={() => deletePin(pin.id)} style={{ height: 28 }}>Delete</button>
-            </div>
-          ))}
-          <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-            <button onClick={handleClearSelectedPins} style={{ height: 32 }}>Clear Selected</button>
+          <div style={{fontSize: 12, marginBottom: 6, color: '#000000'}}>Recent pins</div>
+          {[...pins]
+            .slice(-5)
+            .reverse()
+            .map((pin) => (
+              <div
+                key={pin.id}
+                style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4}}>
+                <input
+                  type="checkbox"
+                  checked={selectedPins.includes(pin.id)}
+                  onChange={() => toggleSelectPin(pin.id)}
+                />
+                <div style={{flex: 1, fontSize: 13, color: '#000000'}}>
+                  {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
+                </div>
+                <button onClick={() => flyToPin(pin)} style={{height: 28}}>
+                  Fly
+                </button>
+                <button onClick={() => deletePin(pin.id)} style={{height: 28}}>
+                  Delete
+                </button>
+              </div>
+            ))}
+          <div style={{display: 'flex', gap: 8, marginTop: 6}}>
+            <button onClick={handleClearSelectedPins} style={{height: 32}}>
+              Clear Selected
+            </button>
           </div>
         </div>
       </div>
-      
-
 
       {pins.map((pin, i) => {
-        const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6'];
-        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length]);
+        const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
+        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
         return (
-          <Entity key={pin.id} position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)} name={pin.label}>
+          <Entity
+            key={pin.id}
+            position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)}
+            name={pin.label}>
             <PointGraphics color={col} pixelSize={14} outlineColor={Color.WHITE} outlineWidth={2} />
-            <LabelGraphics text={pin.label} font="14px sans-serif" fillColor={Color.WHITE} style={0} pixelOffset={{ x: 12, y: -12 }} />
+            <LabelGraphics
+              text={pin.label}
+              font="14px sans-serif"
+              fillColor={Color.WHITE}
+              style={0}
+              pixelOffset={{x: 12, y: -12}}
+            />
           </Entity>
-        );
+        )
       })}
 
       <Entity
         name="Rover"
-        position={Cartesian3.fromDegrees(useManual ? manualLon : lon, useManual ? manualLat : lat, 0)}
-        description={"Lat: " + (useManual ? manualLat : lat).toFixed(7) + "°, Lon: " + (useManual ? manualLon : lon).toFixed(7) + "°, Heading: " + heading.toFixed(0) + "°"}
+        position={Cartesian3.fromDegrees(
+          useManual ? manualLon : lon,
+          useManual ? manualLat : lat,
+          0
+        )}
+        description={
+          'Lat: ' +
+          (useManual ? manualLat : lat).toFixed(7) +
+          '°, Lon: ' +
+          (useManual ? manualLon : lon).toFixed(7) +
+          '°, Heading: ' +
+          heading.toFixed(0) +
+          '°'
+        }
         selected
-        tracked
-      >
-          <ModelGraphics 
-            uri={robotModel}  
-            maximumScale={0.01}
-          />
+        tracked>
+        <ModelGraphics uri={robotModel} maximumScale={0.01} />
       </Entity>
     </Viewer>
-  );
+  )
 }
 
-export default Map;
+export default Map
