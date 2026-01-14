@@ -39,6 +39,11 @@ function WaypointNav() {
     dispatch(setPoints(newPoints))
     setLat(0)
     setLon(0)
+    
+    // Reset submitted state to allow starting a new trip
+    if (submitted) {
+      setSubmitted(false)
+    }
   }
 
   function editPoint() {
@@ -62,7 +67,6 @@ function WaypointNav() {
     const newPoints = points.filter((_, i) => i !== index)
     dispatch(setPoints(newPoints))
     
-    // Handle editing state
     if (editingPoint) {
       if (editPointIndex === index) {
         // We're deleting the point being edited, exit edit mode
@@ -241,6 +245,16 @@ function WaypointNav() {
               Go
             </button>
           )}
+          {/* circle path button added*/}
+          {opMode === 'autonomous' && !submitted ? (
+            <button type="button" className="go-button">
+              Circle Path
+            </button>
+          ) : (
+            <button disabled className="go-button">
+              Circle Path
+            </button>
+          )}
         </div>
       </form>
       <div className="waypoint-array">
@@ -286,7 +300,7 @@ function WaypointNav() {
                           <EditIcon fontSize="small" />
                         </button>
                       )}
-                      {/* delete button added 1/13 */}
+                      {/* delete button added */}
                       <button
                         type="button"
                         className="icon-button"
@@ -294,7 +308,7 @@ function WaypointNav() {
                         disabled={submitted}>
                         <DeleteForeverIcon fontSize="small" />
                       </button>
-                      {/*delete button added 1/13*/}
+                      {/*delete button added*/}
                       <button
                         type="button"
                         className="icon-button"

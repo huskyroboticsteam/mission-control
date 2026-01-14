@@ -37,6 +37,7 @@
   justify-content: flex-start;
   width: 100%;
   align-items: center;
+  gap: 12px;
 }
 
 .lat-lon-row {
