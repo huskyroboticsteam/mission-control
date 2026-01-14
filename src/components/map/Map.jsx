@@ -2,7 +2,6 @@ import React from 'react'
 import {Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics} from 'resium'
 import {
   Cartesian3,
-  Cartesian2,
   Math as CesiumMath,
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
@@ -31,7 +30,7 @@ const cesiumIonAccessToken = import.meta?.env?.VITE_CESIUM_ION_ACCESS_TOKEN
 if (cesiumIonAccessToken) {
   Ion.defaultAccessToken = cesiumIonAccessToken
 } else {
-  // Token is missing; ensure VITE_CESIUM_ION_ACCESS_TOKEN is defined in your Vite env files
+  // Token is missing
   console.warn(
     'Cesium Ion access token is not set. Define VITE_CESIUM_ION_ACCESS_TOKEN in your environment.'
   )
@@ -509,10 +508,6 @@ function Map() {
       {pins.map((pin, i) => {
         const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
         const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
-=======
-        const colorOptions = ['#e6194b', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6'];
-        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length]);
->>>>>>> 25f2086 (renamed/cleaned some liens)
         return (
           <Entity
             key={pin.id}
