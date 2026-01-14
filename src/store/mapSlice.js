@@ -6,13 +6,13 @@ try {
   if (typeof localStorage !== 'undefined') {
     const raw = localStorage.getItem('pins')
     savedPins = raw ? JSON.parse(raw) : []
-    
+
     // Validate that savedPins is an array
     if (!Array.isArray(savedPins)) {
       console.warn('Loaded pins data is not an array, resetting to empty array')
       savedPins = []
     }
-    
+
     const nextRaw = localStorage.getItem('nextPinId')
     if (nextRaw) {
       const parsed = parseInt(nextRaw, 10)
@@ -44,7 +44,7 @@ const mapSlice = createSlice({
   reducers: {
     addPin(state, action) {
       const {lat, lon, label} = action.payload
-      
+
       // Validate latitude and longitude ranges
       if (typeof lat !== 'number' || typeof lon !== 'number') {
         console.error('Invalid pin coordinates: lat and lon must be numbers')
@@ -58,7 +58,7 @@ const mapSlice = createSlice({
         console.error(`Invalid longitude: ${lon}. Must be between -180 and 180`)
         return
       }
-      
+
       const pin = {
         id: state.nextPinId,
         lat,

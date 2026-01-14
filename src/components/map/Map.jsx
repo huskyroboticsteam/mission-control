@@ -27,9 +27,13 @@ import {
   selectSelectedPins,
 } from '../../store/mapSlice'
 
-import robotModel from '../../../assets/Dozer.glb'
-Ion.defaultAccessToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg'
+const cesiumIonAccessToken = import.meta?.env?.VITE_CESIUM_ION_ACCESS_TOKEN;  
+if (cesiumIonAccessToken) {  
+  Ion.defaultAccessToken = cesiumIonAccessToken;  
+} else {  
+  // Token is missing; ensure VITE_CESIUM_ION_ACCESS_TOKEN is defined in your Vite env files  
+  console.warn("Cesium Ion access token is not set. Define VITE_CESIUM_ION_ACCESS_TOKEN in your environment.");  
+}  
 
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
@@ -43,9 +47,6 @@ function Map() {
 
   const [manualLatInput, setManualLatInput] = React.useState('47.6061')
   const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
-
-  const [manualLat, setManualLat] = React.useState(47.6061)
-  const [manualLon, setManualLon] = React.useState(-122.3328)
   const [useManual, setUseManual] = React.useState(false)
 
   const [lastPickedCoord, setLastPickedCoord] = React.useState(null)
@@ -59,7 +60,7 @@ function Map() {
     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
   })
 
-  const [mapTiles, setMapTiles] = React.useState(() => {
+  const [mapTiles] = React.useState(() => {
     return [
       {
         id: 0,
@@ -274,18 +275,18 @@ function Map() {
   )
 
   React.useEffect(() => {
-    const currentLat = useManual ? manualLat : lat
-    const currentLon = useManual ? manualLon : lon
+    const currentLat = useManual ? parseFloat(manualLatInput) : lat
+    const currentLon = useManual ? parseFloat(manualLonInput) : lon
     const idx = chooseMap(currentLat, currentLon)
     if (idx !== activeMapIndex) setActiveMapIndex(idx)
-  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex]))
+  }, [lat, lon, useManual, manualLatInput, manualLonInput, chooseMap, activeMapIndex])
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
     if (!viewer) return
 
-    const centerLon = useManual ? manualLon : lon
-    const centerLat = useManual ? manualLat : lat
+    const centerLon = useManual ? parseFloat(manualLonInput) : lon
+    const centerLat = useManual ? parseFloat(manualLatInput) : lat
 
     if (
       typeof centerLon === 'number' &&
@@ -298,7 +299,7 @@ function Map() {
         duration: 1.2,
       })
     }
-  }, [viewerRef, useManual, manualLat, manualLon, lat, lon])
+  }, [viewerRef, useManual, manualLatInput, manualLonInput, lat, lon])
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
@@ -324,8 +325,8 @@ function Map() {
       if (surfacePos) {
         distance = Cartesian3.distance(camPos, surfacePos)
       }
-      setManualLat(latDeg)
-      setManualLon(lonDeg)
+      setManualLatInput(latDeg.toString())
+      setManualLonInput(lonDeg.toString())
       setUseManual(true)
       dispatch(addPin({lat: latDeg, lon: lonDeg}))
       setLastPickedCoord({lat: latDeg, lon: lonDeg, distance, t: Date.now()})
@@ -350,8 +351,6 @@ function Map() {
       return
     }
     setErrorMessage(null)
-    setManualLat(parsedLat)
-    setManualLon(parsedLon)
     setUseManual(true)
 
     dispatch(addPin({lat: parsedLat, lon: parsedLon}))
@@ -370,8 +369,8 @@ function Map() {
   }
 
   function flyToPin(pin) {
-    setManualLat(pin.lat)
-    setManualLon(pin.lon)
+    setManualLatInput(pin.lat.toString())
+    setManualLonInput(pin.lon.toString())
     setUseManual(true)
   }
 
@@ -396,7 +395,9 @@ function Map() {
           padding: 10,
           borderRadius: 6,
           boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-        }}>        {errorMessage && (
+        }}>
+        {' '}
+        {errorMessage && (
           <div
             style={{
               marginBottom: 8,
@@ -409,7 +410,8 @@ function Map() {
             }}>
             {errorMessage}
           </div>
-        )}        <div
+        )}{' '}
+        <div
           style={{
             display: 'flex',
             gap: 8,
@@ -451,7 +453,6 @@ function Map() {
             </select>
           </div>
         </div>
-
         <div style={{marginTop: 8, maxWidth: 420}}>
           {lastPickedCoord && (
             <div
@@ -526,15 +527,15 @@ function Map() {
       <Entity
         name="Rover"
         position={Cartesian3.fromDegrees(
-          useManual ? manualLon : lon,
-          useManual ? manualLat : lat,
+          useManual ? parseFloat(manualLonInput) : lon,
+          useManual ? parseFloat(manualLatInput) : lat,
           0
         )}
         description={
           'Lat: ' +
-          (useManual ? manualLat : lat).toFixed(7) +
+          (useManual ? parseFloat(manualLatInput) : lat).toFixed(7) +
           '°, Lon: ' +
-          (useManual ? manualLon : lon).toFixed(7) +
+          (useManual ? parseFloat(manualLonInput) : lon).toFixed(7) +
           '°, Heading: ' +
           heading.toFixed(0) +
           '°'
