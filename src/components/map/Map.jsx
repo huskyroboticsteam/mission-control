@@ -27,13 +27,15 @@ import {
   selectSelectedPins,
 } from '../../store/mapSlice'
 
-const cesiumIonAccessToken = import.meta?.env?.VITE_CESIUM_ION_ACCESS_TOKEN;  
-if (cesiumIonAccessToken) {  
-  Ion.defaultAccessToken = cesiumIonAccessToken;  
-} else {  
-  // Token is missing; ensure VITE_CESIUM_ION_ACCESS_TOKEN is defined in your Vite env files  
-  console.warn("Cesium Ion access token is not set. Define VITE_CESIUM_ION_ACCESS_TOKEN in your environment.");  
-}  
+const cesiumIonAccessToken = import.meta?.env?.VITE_CESIUM_ION_ACCESS_TOKEN
+if (cesiumIonAccessToken) {
+  Ion.defaultAccessToken = cesiumIonAccessToken
+} else {
+  // Token is missing; ensure VITE_CESIUM_ION_ACCESS_TOKEN is defined in your Vite env files
+  console.warn(
+    'Cesium Ion access token is not set. Define VITE_CESIUM_ION_ACCESS_TOKEN in your environment.'
+  )
+}
 
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
