@@ -11,6 +11,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function WaypointNav() {
   const dispatch = useDispatch()
@@ -54,6 +55,24 @@ function WaypointNav() {
     )
     dispatch(setPoints(newPoints))
     exitEditPointState()
+  }
+
+  //delete point at index 
+  function deletePoint(index) {
+    const newPoints = points.filter((_, i) => i !== index)
+    dispatch(setPoints(newPoints))
+    
+    // Handle editing state
+    if (editingPoint) {
+      if (editPointIndex === index) {
+        // We're deleting the point being edited, exit edit mode
+        exitEditPointState()
+      } else if (editPointIndex > index) {
+        // We're deleting a point before the one being edited, adjust the index
+        setEditPointIndex(editPointIndex - 1)
+      }
+      // If editPointIndex < index, no adjustment needed
+    }
   }
 
   //move point by swapping values of the point at index & point one above
@@ -267,6 +286,15 @@ function WaypointNav() {
                           <EditIcon fontSize="small" />
                         </button>
                       )}
+                      {/* delete button added 1/13 */}
+                      <button
+                        type="button"
+                        className="icon-button"
+                        onClick={() => deletePoint(index)}
+                        disabled={submitted}>
+                        <DeleteForeverIcon fontSize="small" />
+                      </button>
+                      {/*delete button added 1/13*/}
                       <button
                         type="button"
                         className="icon-button"
