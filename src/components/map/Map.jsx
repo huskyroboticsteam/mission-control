@@ -507,7 +507,6 @@ function Map() {
       </div>
 
       {pins.map((pin, i) => {
-<<<<<<< HEAD
         const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
         const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
 =======
