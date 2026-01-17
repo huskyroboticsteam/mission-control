@@ -2,6 +2,7 @@ import {enableMotors} from '../motorsSlice'
 import {requestDrive} from '../driveSlice'
 import {requestJointPower, selectAllJointNames} from '../jointsSlice'
 import {enableIK} from '../inputSlice'
+import {  messageReceivedFromRover} from '../roverSocketSlice'
 
 /**
  * Middleware that handles receiving motor telemetry.
@@ -32,6 +33,14 @@ const motorsMiddleware = (store) => (next) => (action) => {
       }
       return next(action)
     }
+
+    case messageReceivedFromRover.type:
+      const {message} = action.payload  
+      if (message.type === 'LimitAlert') {
+        const {motorLim} = message
+        console.log("test" + message)
+        console.log(str.toString())
+      }
 
     default:
       break
