@@ -66,7 +66,6 @@ function Navbar() {
             Map
           </NavLink>
         </li>
-
       </ul>
     </nav>
   )
