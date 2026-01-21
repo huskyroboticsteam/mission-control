@@ -68,6 +68,27 @@
   box-sizing: border-box;
 }
 
+.circlepath-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.circlepath-row .input-group {
+  flex: 0 1 160px;
+}
+
+.circlepath-row .go-button {
+  width: auto;
+  min-width: 0;
+  white-space: nowrap;
+  font-size: 14px;
+  padding: 4px 10px;
+}
+
 .button-row {
   display: flex;
   flex-direction: row;
@@ -79,6 +100,14 @@
 
 .button-row .icon-button {
   min-width: 40px;
+}
+
+.button-row .go-button {
+  width: auto;
+  min-width: 0;
+  white-space: nowrap;
+  font-size: 14px;
+  padding: 4px 10px;
 }
 
 .waypoint-checkbox {

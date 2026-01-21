@@ -20,6 +20,7 @@ function WaypointNav() {
   const points = useSelector(selectPoints) || []
   const [lat, setLat] = useState(0)
   const [lon, setLon] = useState(0)
+  const [radius, setRadius] = useState(0)
   const [editingPoint, setEditingPoint] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [editPointIndex, setEditPointIndex] = useState(-1)
@@ -29,16 +30,18 @@ function WaypointNav() {
   function addPoint() {
     const parsedLat = Number.parseFloat(lat)
     const parsedLon = Number.parseFloat(lon)
+    const parsedRadius = Number.parseFloat(radius)
 
-    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
-      alert('Please enter valid latitude and longitude values before adding a waypoint.')
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon) || Number.isNaN(parsedRadius)) {
+      alert('Please enter valid latitude, longitude, and radius values before adding a waypoint.')
       return
     }
 
-    const newPoints = [...points.map((point) => [...point]), [parsedLat, parsedLon]]
+    const newPoints = [...points.map((point) => [...point]), [parsedLat, parsedLon, parsedRadius]]
     dispatch(setPoints(newPoints))
     setLat(0)
     setLon(0)
+    setRadius(0)
     
     // Reset submitted state to allow starting a new trip
     if (submitted) {
@@ -49,14 +52,15 @@ function WaypointNav() {
   function editPoint() {
     const parsedLat = Number.parseFloat(lat)
     const parsedLon = Number.parseFloat(lon)
+    const parsedRadius = Number.parseFloat(radius)
 
-    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon)) {
-      alert('Please enter valid latitude and longitude values before saving a waypoint.')
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLon) || Number.isNaN(parsedRadius)) {
+      alert('Please enter valid latitude, longitude, and radius values before saving a waypoint.')
       return
     }
 
     const newPoints = points.map((point, index) =>
-      index === editPointIndex ? [parsedLat, parsedLon] : [...point]
+      index === editPointIndex ? [parsedLat, parsedLon, parsedRadius] : [...point]
     )
     dispatch(setPoints(newPoints))
     exitEditPointState()
@@ -109,14 +113,16 @@ function WaypointNav() {
     setEditPointIndex(index)
     setLat(points[index][0])
     setLon(points[index][1])
+    setRadius(points[index][2])
   }
 
   //change the state to adding points and change values to default
   function exitEditPointState() {
     setEditingPoint(false)
-    setEditPointIndex(-1) //just in case, so that no point thinks we're editing it
+    setEditPointIndex(-1) //reset index
     setLat(0)
     setLon(0)
+    setRadius(0)
   }
 
   function handleSubmit(e) {
@@ -178,6 +184,7 @@ function WaypointNav() {
       {/* only here to create a parent element for the form and the point list */}
       <form method="post" onSubmit={handleSubmit} className="waypoint-select">
         <div className="waypoint-select__params">
+
           <div className="lat-lon-row">
             <div className="input-group">
               <label htmlFor="latitude">Latitude</label>
@@ -207,6 +214,33 @@ function WaypointNav() {
             </div>
           </div>
 
+          <div className="circlepath-row">
+            <div className="input-group">
+              <label htmlFor="radius">Radius</label>
+              {submitted ? (
+                <input disabled value={radius} onChange={(e) => e} />
+              ) : (
+                <input
+                  type="number"
+                  step="any"
+                  value={radius}
+                  onChange={(e) => setRadius(e.target.value)}
+                />
+              )}
+            </div>
+              
+            {/* circle path button added*/}
+            {opMode === 'autonomous' && !submitted ? (
+            <button type="button" className="go-button">
+              Circle Path
+            </button>
+            ) : (
+            <button disabled className="go-button">
+              Circle Path
+            </button>
+            )}
+          </div>
+
           <div className="button-row">
             {/* COPY FROM CLIPBOARD BUTTON */}
             {submitted ? (
@@ -233,30 +267,22 @@ function WaypointNav() {
                 <AddIcon fontSize="small" />
               </button>
             )}
-          </div>
-        </div>
-        <div className="submit-row">
-          {opMode === 'autonomous' && !submitted ? (
+
+            {/* Go Button */}
+            {opMode === 'autonomous' && !submitted ? (
             <button type="submit" className="go-button">
               Go
             </button>
-          ) : (
-            <button disabled className="go-button">
-              Go
-            </button>
-          )}
-          {/* circle path button added*/}
-          {opMode === 'autonomous' && !submitted ? (
-            <button type="button" className="go-button">
-              Circle Path
-            </button>
-          ) : (
-            <button disabled className="go-button">
-              Circle Path
-            </button>
-          )}
+            ) : (
+              <button disabled className="go-button">
+                Go
+              </button>
+            )}
+          </div>
+
         </div>
       </form>
+
       <div className="waypoint-array">
         <div className="waypoint-array__header">
           <span>Waypoints</span>

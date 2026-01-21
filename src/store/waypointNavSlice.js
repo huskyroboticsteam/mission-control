@@ -7,12 +7,13 @@ const normalizePoint = (point) => {
 
   const lat = Number.parseFloat(point[0])
   const lon = Number.parseFloat(point[1])
+  const radius = Number.parseFloat(point[2] || 0)
 
-  if (Number.isNaN(lat) || Number.isNaN(lon)) {
+  if (Number.isNaN(lat) || Number.isNaN(lon) || Number.isNaN(radius)) {
     return null
   }
 
-  return [lat, lon]
+  return [lat, lon, radius]
 }
 
 const initialState = {
