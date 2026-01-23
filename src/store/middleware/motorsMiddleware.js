@@ -1,4 +1,4 @@
-import {enableMotors} from '../motorsSlice'
+import {enableMotors, limitSwitchTriggered} from '../motorsSlice'
 import {requestDrive} from '../driveSlice'
 import {requestJointPower, selectAllJointNames} from '../jointsSlice'
 import {enableIK} from '../inputSlice'
@@ -37,9 +37,9 @@ const motorsMiddleware = (store) => (next) => (action) => {
     case messageReceivedFromRover.type:
       const {message} = action.payload  
       if (message.type === 'LimitAlert') {
-        const {motorLim} = message
-        console.log("test" + message)
-        console.log(str.toString())
+        console.log("test" + message.motor)
+        store.dispatch(limitSwitchTriggered(
+          {limitSwitchTriggeredName: message.motor}))
       }
 
     default:
