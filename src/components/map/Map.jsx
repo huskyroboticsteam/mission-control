@@ -37,6 +37,41 @@ if (cesiumIonAccessToken) {
   )
 }
 
+// Error Boundary for Viewer component
+class ViewerErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {hasError: false}
+  }
+
+  static getDerivedStateFromError(error) {
+    return {hasError: true}
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[Map] Viewer Error Boundary caught:', error)
+    console.error('[Map] Error stack:', error?.stack)
+    console.error('[Map] Component stack:', errorInfo?.componentStack)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          className="map-viewer"
+          style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{textAlign: 'center', color: '#c00', padding: '20px'}}>
+            <h3>Map Viewer Error</h3>
+            <p>Failed to initialize Cesium map viewer. Please refresh the page.</p>
+          </div>
+        </div>
+      )
+    }
+
+    return this.props.children
+  }
+}
+
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
   const telemetryLon = useSelector(selectRoverLongitude)
@@ -50,10 +85,27 @@ function Map() {
   const [manualLatInput, setManualLatInput] = React.useState('47.6061')
   const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
   const [useManual, setUseManual] = React.useState(false)
+  const [cesiumReady, setCesiumReady] = React.useState(false)
 
   const [lastPickedCoord, setLastPickedCoord] = React.useState(null)
   const [errorMessage, setErrorMessage] = React.useState(null)
   const [viewerError, setViewerError] = React.useState(null)
+  const [viewerKey, setViewerKey] = React.useState(0)
+
+  // Ensure Cesium is initialized
+  React.useEffect(() => {
+    setCesiumReady(true)
+  }, [])
+
+  const handleViewerError = React.useCallback((error) => {
+    console.error('[Map] Viewer error:', error)
+    setViewerError('Failed to render map viewer: ' + (error?.message || 'Unknown error'))
+    // Retry after 2 seconds
+    setTimeout(() => {
+      setViewerKey((k) => k + 1)
+      setViewerError(null)
+    }, 2000)
+  }, [])
 
   const dispatch = useDispatch()
   const pins = useSelector(selectAllPins)
@@ -383,7 +435,9 @@ function Map() {
 
   if (viewerError) {
     return (
-      <div className="map-viewer" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <div
+        className="map-viewer"
+        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         <div style={{textAlign: 'center', color: '#c00', padding: '20px'}}>
           <h3>Map Error</h3>
           <p>{viewerError}</p>
@@ -393,131 +447,160 @@ function Map() {
     )
   }
 
-  return (
-    <Viewer
-      className="map-viewer"
-      geocoder={false}
-      timeline={false}
-      animation={false}
-      fullscreenButton={false}
-      imageryProvider={imageryProvider}
-      ref={viewerRef}
-      onRenderError={(error) => {
-        console.error('[Map] Viewer render error:', error)
-        setViewerError('Failed to render map viewer')
-      }}>
-      {activeLocalProvider ? <ImageryLayer imageryProvider={activeLocalProvider} /> : null}
-
-      <div className="map-controls">
-        {errorMessage && <div className="map-error">{errorMessage}</div>}
-
-        <div className="map-input-row">
-          <div className="map-input-wrapper">
-            <input
-              placeholder="Latitude"
-              value={manualLatInput}
-              onChange={(e) => setManualLatInput(e.target.value)}
-              className="map-input"
-            />
-          </div>
-          <div className="map-input-wrapper">
-            <input
-              placeholder="Longitude"
-              value={manualLonInput}
-              onChange={(e) => setManualLonInput(e.target.value)}
-              className="map-input"
-            />
-          </div>
-          <div className="map-button-wrapper">
-            <button onClick={handleSetPin} className="map-button">
-              Set Pin
-            </button>
-          </div>
-        </div>
-
-        <div className="map-pins-section">
-          {lastPickedCoord && (
-            <div className="map-last-click">
-              Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}
-              °
-              {typeof lastPickedCoord.distance === 'number' && (
-                <span style={{marginLeft: 6}}>
-                  (≈ {Math.round(lastPickedCoord.distance)} m alt)
-                </span>
-              )}
-            </div>
-          )}
-          <div className="map-pins-title">Recent pins</div>
-          {[...pins]
-            .slice(-5)
-            .reverse()
-            .map((pin) => (
-              <div key={pin.id} className="map-pin-item">
-                <input
-                  type="checkbox"
-                  checked={selectedPins.includes(pin.id)}
-                  onChange={() => toggleSelectPin(pin.id)}
-                />
-                <div className="map-pin-info">
-                  {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
-                </div>
-                <button onClick={() => flyToPin(pin)} className="map-pin-button">
-                  Fly
-                </button>
-                <button onClick={() => deletePin(pin.id)} className="map-pin-button">
-                  Delete
-                </button>
-              </div>
-            ))}
-          <div className="map-clear-button-wrapper">
-            <button onClick={handleClearSelectedPins} className="map-clear-button">
-              Clear Selected
-            </button>
-          </div>
+  if (!cesiumReady) {
+    return (
+      <div
+        className="map-viewer"
+        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{textAlign: 'center', color: '#666', padding: '20px'}}>
+          <p>Loading map...</p>
         </div>
       </div>
+    )
+  }
 
-      {pins.map((pin, i) => {
-        const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
-        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
-        return (
-          <Entity
-            key={pin.id}
-            position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)}
-            name={pin.label}>
-            <PointGraphics color={col} pixelSize={14} outlineColor={Color.WHITE} outlineWidth={2} />
-            <LabelGraphics
-              text={pin.label}
-              font="14px sans-serif"
-              fillColor={Color.WHITE}
-              style={0}
-              pixelOffset={new Cartesian2(12, -12)}
-            />
-          </Entity>
-        )
-      })}
+  return (
+    <ViewerErrorBoundary>
+      <Viewer
+        className="map-viewer"
+        geocoder={false}
+        timeline={false}
+        animation={false}
+        fullscreenButton={false}
+        imageryProvider={imageryProvider}
+        ref={viewerRef}
+        onRenderError={(error) => {
+          console.error('[Map] Viewer render error:', error)
+          console.error('[Map] Error details:', {
+            message: error?.message,
+            stack: error?.stack,
+            name: error?.name,
+          })
+          setViewerError('Failed to render map viewer: ' + (error?.message || 'Unknown error'))
+        }}>
+        {activeLocalProvider ? <ImageryLayer imageryProvider={activeLocalProvider} /> : null}
 
-      <Entity
-        name="Rover"
-        position={Cartesian3.fromDegrees(
-          useManual ? parseFloat(manualLonInput) : lon,
-          useManual ? parseFloat(manualLatInput) : lat,
-          0
-        )}
-        description={
-          'Lat: ' +
-          (useManual ? parseFloat(manualLatInput) : lat).toFixed(7) +
-          '°, Lon: ' +
-          (useManual ? parseFloat(manualLonInput) : lon).toFixed(7) +
-          '°, Heading: ' +
-          heading.toFixed(0) +
-          '°'
-        }
-        selected
-        tracked>
-        <PointGraphics color={Color.RED} pixelSize={20} outlineColor={Color.WHITE} outlineWidth={3} />
-      </Entity>
-    </Viewer>
+        <div className="map-controls">
+          {errorMessage && <div className="map-error">{errorMessage}</div>}
+
+          <div className="map-input-row">
+            <div className="map-input-wrapper">
+              <input
+                placeholder="Latitude"
+                value={manualLatInput}
+                onChange={(e) => setManualLatInput(e.target.value)}
+                className="map-input"
+              />
+            </div>
+            <div className="map-input-wrapper">
+              <input
+                placeholder="Longitude"
+                value={manualLonInput}
+                onChange={(e) => setManualLonInput(e.target.value)}
+                className="map-input"
+              />
+            </div>
+            <div className="map-button-wrapper">
+              <button onClick={handleSetPin} className="map-button">
+                Set Pin
+              </button>
+            </div>
+          </div>
+
+          <div className="map-pins-section">
+            {lastPickedCoord && (
+              <div className="map-last-click">
+                Last right-click: {lastPickedCoord.lat.toFixed(6)}°,{' '}
+                {lastPickedCoord.lon.toFixed(6)}°
+                {typeof lastPickedCoord.distance === 'number' && (
+                  <span style={{marginLeft: 6}}>
+                    (≈ {Math.round(lastPickedCoord.distance)} m alt)
+                  </span>
+                )}
+              </div>
+            )}
+            <div className="map-pins-title">Recent pins</div>
+            {[...pins]
+              .slice(-5)
+              .reverse()
+              .map((pin) => (
+                <div key={pin.id} className="map-pin-item">
+                  <input
+                    type="checkbox"
+                    checked={selectedPins.includes(pin.id)}
+                    onChange={() => toggleSelectPin(pin.id)}
+                  />
+                  <div className="map-pin-info">
+                    {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
+                  </div>
+                  <button onClick={() => flyToPin(pin)} className="map-pin-button">
+                    Fly
+                  </button>
+                  <button onClick={() => deletePin(pin.id)} className="map-pin-button">
+                    Delete
+                  </button>
+                </div>
+              ))}
+            <div className="map-clear-button-wrapper">
+              <button onClick={handleClearSelectedPins} className="map-clear-button">
+                Clear Selected
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {pins.map((pin, i) => {
+          const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
+          const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
+          return (
+            <Entity
+              key={pin.id}
+              position={Cartesian3.fromDegrees(pin.lon, pin.lat, 0)}
+              name={pin.label}>
+              <PointGraphics
+                color={col}
+                pixelSize={14}
+                outlineColor={Color.WHITE}
+                outlineWidth={2}
+              />
+              <LabelGraphics
+                text={pin.label}
+                font="14px sans-serif"
+                fillColor={Color.WHITE}
+                style={0}
+                pixelOffset={new Cartesian2(12, -12)}
+              />
+            </Entity>
+          )
+        })}
+
+        <Entity
+          name="Rover"
+          position={Cartesian3.fromDegrees(
+            useManual ? parseFloat(manualLonInput) : lon,
+            useManual ? parseFloat(manualLatInput) : lat,
+            0
+          )}
+          description={
+            'Lat: ' +
+            (useManual ? parseFloat(manualLatInput) : lat).toFixed(7) +
+            '°, Lon: ' +
+            (useManual ? parseFloat(manualLonInput) : lon).toFixed(7) +
+            '°, Heading: ' +
+            heading.toFixed(0) +
+            '°'
+          }
+          selected
+          tracked>
+          <PointGraphics
+            color={Color.RED}
+            pixelSize={20}
+            outlineColor={Color.WHITE}
+            outlineWidth={3}
+          />
+        </Entity>
+      </Viewer>
+    </ViewerErrorBoundary>
   )
 }
 

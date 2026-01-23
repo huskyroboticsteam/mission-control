@@ -58,7 +58,7 @@
     ]
   },
   "devDependencies": {
-    "prettier": "3.7.4",
+    "prettier": "^3.7.4",
     "vite-plugin-cesium": "^1.2.22"
   }
 }
