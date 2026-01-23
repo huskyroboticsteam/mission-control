@@ -37,41 +37,6 @@ if (cesiumIonAccessToken) {
   )
 }
 
-// Error Boundary for Viewer component
-class ViewerErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {hasError: false}
-  }
-
-  static getDerivedStateFromError(error) {
-    return {hasError: true}
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('[Map] Viewer Error Boundary caught:', error)
-    console.error('[Map] Error stack:', error?.stack)
-    console.error('[Map] Component stack:', errorInfo?.componentStack)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div
-          className="map-viewer"
-          style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <div style={{textAlign: 'center', color: '#c00', padding: '20px'}}>
-            <h3>Map Viewer Error</h3>
-            <p>Failed to initialize Cesium map viewer. Please refresh the page.</p>
-          </div>
-        </div>
-      )
-    }
-
-    return this.props.children
-  }
-}
-
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
   const telemetryLon = useSelector(selectRoverLongitude)
@@ -85,27 +50,10 @@ function Map() {
   const [manualLatInput, setManualLatInput] = React.useState('47.6061')
   const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
   const [useManual, setUseManual] = React.useState(false)
-  const [cesiumReady, setCesiumReady] = React.useState(false)
 
   const [lastPickedCoord, setLastPickedCoord] = React.useState(null)
   const [errorMessage, setErrorMessage] = React.useState(null)
   const [viewerError, setViewerError] = React.useState(null)
-  const [viewerKey, setViewerKey] = React.useState(0)
-
-  // Ensure Cesium is initialized
-  React.useEffect(() => {
-    setCesiumReady(true)
-  }, [])
-
-  const handleViewerError = React.useCallback((error) => {
-    console.error('[Map] Viewer error:', error)
-    setViewerError('Failed to render map viewer: ' + (error?.message || 'Unknown error'))
-    // Retry after 2 seconds
-    setTimeout(() => {
-      setViewerKey((k) => k + 1)
-      setViewerError(null)
-    }, 2000)
-  }, [])
 
   const dispatch = useDispatch()
   const pins = useSelector(selectAllPins)
