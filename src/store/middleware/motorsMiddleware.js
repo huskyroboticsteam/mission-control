@@ -36,10 +36,11 @@ const motorsMiddleware = (store) => (next) => (action) => {
 
     case messageReceivedFromRover.type:
       const {message} = action.payload  
-      if (message.type === 'LimitAlert') {
-        console.log("test" + message.motor)
+      if (message.type === 'LimitUpdate') {
         store.dispatch(limitSwitchTriggered(
-          {limitSwitchTriggeredName: message.motor}))
+          {limitSwitchTriggeredName: message.motor,
+            limitSwitchStatus: message.status
+          }))
       }
 
     default:

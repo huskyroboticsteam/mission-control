@@ -22,21 +22,21 @@ const motorSlice = createSlice({
       state.motorsEnabled = enabled
     },
     limitSwitchTriggered(state, action) {
-      const {limitSwitchTriggeredName} = action.payload // Should always be true
+      const {limitSwitchTriggeredName, limitSwitchStatus} = action.payload // Should always be true
       switch (limitSwitchTriggeredName) {
 
         // Different cases as shown in Resurgence/src/world_interface/data.h
         case "armBase":
-          state.limitSwitches.armLimitSwitchStatus = true;
+          state.limitSwitches.armLimitSwitchStatus = limitSwitchStatus;
           break;
         case "shoulder":
-          state.limitSwitches.shoulderLimitSwitchStatus = true;
+          state.limitSwitches.shoulderLimitSwitchStatus = limitSwitchStatus;
           break;
         case "elbow":
-          state.limitSwitches.elbowLimitSwitchStatus = true;
+          state.limitSwitches.elbowLimitSwitchStatus = limitSwitchStatus;
           break;
         case "forearm":
-          state.limitSwitches.forearmLimitSwitchStatus = true;
+          state.limitSwitches.forearmLimitSwitchStatus = limitSwitchStatus;
           break;
       }
     }
