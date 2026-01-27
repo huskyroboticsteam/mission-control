@@ -33,9 +33,9 @@ const telemetrySlice = createSlice({
 export const {roverPositionReportReceived} = telemetrySlice.actions
 export const selectRoverPosition = (state) => state.telemetry
 export const selectRoverLatitude = (state) =>
-  state.telemetry.lat == null ? 0 : state.telemetry.lat
+  state.telemetry.lat === null ? 0 : state.telemetry.lat
 export const selectRoverLongitude = (state) =>
-  state.telemetry.lon == null ? 0 : state.telemetry.lon
+  state.telemetry.lon === null ? 0 : state.telemetry.lon
 function selectRoverQuaternion(state) {
   return new Quaternion(
     state.telemetry.orientX,

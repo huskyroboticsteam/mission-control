@@ -2,7 +2,6 @@ import React from 'react'
 import {Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics} from 'resium'
 import {
   Cartesian3,
-  Cartesian2,
   Math as CesiumMath,
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
@@ -26,10 +25,10 @@ import {
   selectAllPins,
   selectSelectedPins,
 } from '../../store/mapSlice'
+import './Map.css'
 
 import robotModel from '../../../assets/Dozer.glb'
-Ion.defaultAccessToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg'
+Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
 
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
@@ -59,7 +58,7 @@ function Map() {
     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
   })
 
-  const [mapTiles, setMapTiles] = React.useState(() => {
+  const [mapTiles] = React.useState(() => {
     return [
       {
         id: 0,
@@ -278,7 +277,7 @@ function Map() {
     const currentLon = useManual ? manualLon : lon
     const idx = chooseMap(currentLat, currentLon)
     if (idx !== activeMapIndex) setActiveMapIndex(idx)
-  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex]))
+  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex, mapTiles])
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
@@ -377,7 +376,7 @@ function Map() {
 
   return (
     <Viewer
-      style={{overflow: 'hidden'}}
+      className="map-viewer"
       geocoder={false}
       timeline={false}
       animation={false}
@@ -386,57 +385,29 @@ function Map() {
       ref={viewerRef}>
       {activeLocalProvider ? <ImageryLayer imageryProvider={activeLocalProvider} /> : null}
 
-      <div
-        style={{
-          position: 'absolute',
-          right: 12,
-          bottom: 12,
-          zIndex: 999,
-          background: 'rgba(255,255,255,0.95)',
-          padding: 10,
-          borderRadius: 6,
-          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-        }}>        {errorMessage && (
-          <div
-            style={{
-              marginBottom: 8,
-              padding: '8px 12px',
-              background: '#fee',
-              border: '1px solid #fcc',
-              borderRadius: 4,
-              color: '#c00',
-              fontSize: 13,
-            }}>
-            {errorMessage}
-          </div>
-        )}        <div
-          style={{
-            display: 'flex',
-            gap: 8,
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            justifyContent: 'flex-end',
-          }}>
-          <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+      <div className="map-controls">
+        {errorMessage && <div className="map-error">{errorMessage}</div>}
+        <div className="map-input-row">
+          <div className="map-input-wrapper">
             <input
               value={manualLatInput}
               onChange={(e) => setManualLatInput(e.target.value)}
-              style={{width: 160, height: 30, padding: 6, fontSize: 14}}
+              className="map-input"
             />
           </div>
-          <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+          <div className="map-input-wrapper">
             <input
               value={manualLonInput}
               onChange={(e) => setManualLonInput(e.target.value)}
-              style={{width: 160, height: 30, padding: 6, fontSize: 14}}
+              className="map-input"
             />
           </div>
-          <div style={{display: 'flex', gap: 6}}>
-            <button onClick={handleSetPin} style={{height: 34}}>
+          <div className="map-button-wrapper">
+            <button onClick={handleSetPin} className="map-button">
               Set Pin
             </button>
           </div>
-          <div style={{display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8}}>
+          <div className="map-select-wrapper">
             <select
               value={activeMapIndex ?? ''}
               onChange={(e) =>
@@ -452,17 +423,9 @@ function Map() {
           </div>
         </div>
 
-        <div style={{marginTop: 8, maxWidth: 420}}>
+        <div className="map-pins-section">
           {lastPickedCoord && (
-            <div
-              style={{
-                fontSize: 12,
-                marginBottom: 8,
-                padding: '6px 8px',
-                background: 'rgba(0,0,0,0.05)',
-                borderRadius: 4,
-                color: '#000',
-              }}>
+            <div className="map-last-click">
               Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}°
               {typeof lastPickedCoord.distance === 'number' && (
                 <span style={{marginLeft: 6}}>
@@ -471,32 +434,30 @@ function Map() {
               )}
             </div>
           )}
-          <div style={{fontSize: 12, marginBottom: 6, color: '#000000'}}>Recent pins</div>
+          <div className="map-pins-title">Recent pins</div>
           {[...pins]
             .slice(-5)
             .reverse()
             .map((pin) => (
-              <div
-                key={pin.id}
-                style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4}}>
+              <div key={pin.id} className="map-pin-item">
                 <input
                   type="checkbox"
                   checked={selectedPins.includes(pin.id)}
                   onChange={() => toggleSelectPin(pin.id)}
                 />
-                <div style={{flex: 1, fontSize: 13, color: '#000000'}}>
+                <div className="map-pin-info">
                   {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
                 </div>
-                <button onClick={() => flyToPin(pin)} style={{height: 28}}>
+                <button onClick={() => flyToPin(pin)} className="map-pin-button">
                   Fly
                 </button>
-                <button onClick={() => deletePin(pin.id)} style={{height: 28}}>
+                <button onClick={() => deletePin(pin.id)} className="map-pin-button">
                   Delete
                 </button>
               </div>
             ))}
-          <div style={{display: 'flex', gap: 8, marginTop: 6}}>
-            <button onClick={handleClearSelectedPins} style={{height: 32}}>
+          <div className="map-clear-button-wrapper">
+            <button onClick={handleClearSelectedPins} className="map-clear-button">
               Clear Selected
             </button>
           </div>
