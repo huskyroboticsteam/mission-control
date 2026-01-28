@@ -2,12 +2,7 @@ import CameraStream from '../camera/CameraStream'
 import Compass from './Compass'
 import './NavigationPanel.css'
 import WaypointNav from './WaypointNav'
-
-async function fire() {
-  const text = await fetch('http://0.0.0.0:8000/api/ubnt/sta')
-  const json = await text.json()
-  console.log(json)
-}
+import NetworkStats from './NetworkStats.tsx'
 
 function NavigationPanel() {
   return (
@@ -16,8 +11,8 @@ function NavigationPanel() {
       <CameraStream camera="hand" />
       <Compass />
       <CameraStream camera="wrist" />
-      <button onClick={fire}>hit me</button>
       <WaypointNav />
+      <NetworkStats />
     </div>
   )
 }
