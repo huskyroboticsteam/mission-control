@@ -1,16 +1,19 @@
-import Compass from './Compass'
-import OpModeSelect from './OpModeSelect'
 import CameraStream from '../camera/CameraStream'
-import WaypointNav from './WaypointNav'
+import Compass from './Compass'
 import './NavigationPanel.css'
+import OpModeSelect from './OpModeSelect'
+import WaypointList from './WaypointList'
+import WaypointNav from './WaypointNav'
 
 function NavigationPanel() {
   return (
     <div className="navigation-panel">
-      <CameraStream cameraName="mast" />
-      <CameraStream cameraName="hand" />
+      <CameraStream camera="mast" />
+      <CameraStream camera="hand" />
       <Compass />
-      <OpModeSelect />
+      <CameraStream camera="wrist" />
+      {/* <OpModeSelect /> */}
+      <WaypointList />
       <WaypointNav />
     </div>
   )

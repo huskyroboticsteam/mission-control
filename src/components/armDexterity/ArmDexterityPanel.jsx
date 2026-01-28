@@ -6,7 +6,8 @@ import './ArmDexterityPanel.css'
 function ArmDexterityPanel() {
   return (
     <div className="arm-dexterity-panel">
-      <CameraStream cameraName="hand" />
+      <CameraStream camera="hand" />
+      <CameraStream camera="wrist" />
       <RoverModel />
     </div>
   )

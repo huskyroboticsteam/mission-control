@@ -48,7 +48,11 @@ const initialState = {
       ikForward: 0,
     },
     science: {
-      lazySusanPosition: 0,
+      fourBarLinkage: 0,
+      requestPos: false,
+      speed: 1 / 3,
+      drillMotor: 0,
+      drillActuator: 0,
     },
   },
   inverseKinematics: {
@@ -56,6 +60,7 @@ const initialState = {
     lastSentArmIKState: null,
   },
   emergencyStop: false,
+  triggerHeld: false,
 }
 
 function isLinux() {
@@ -87,15 +92,13 @@ const inputSlice = createSlice({
       } else if (axisName === 'DPadX') {
         state[gamepadName]['DPadLeft'] = value < 0
         state[gamepadName]['DPadRight'] = value > 0
-      } else if (
-        isLinux() &&
-        (axisName === 'LeftTrigger' || axisName === 'RightTrigger') &&
-        value !== 0.0
-      ) {
+      } else if (isLinux() && (axisName === 'LeftTrigger' || axisName === 'RightTrigger')) {
         // bug in linux, trigger values keep jumping to 0.
         // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
         // TODO: fix this? Why is this happening? Bug in react-gamepad??
-        state[gamepadName][axisName] = (value + 1) / 2.0
+        if (value !== 0.0) {
+          state[gamepadName][axisName] = (value + 1) / 2.0
+        }
       } else {
         let scaledValue = value * Math.abs(value)
         state[gamepadName][axisName] = scaledValue
@@ -106,11 +109,16 @@ const inputSlice = createSlice({
     gamepadButtonChanged(state, action) {
       const prevState = JSON.parse(JSON.stringify(state))
       const {gamepadName, buttonName, pressed} = action.payload
-      if (buttonName === 'LT' || buttonName === 'RT')
-        // Treat triggers as axes, not buttons.
+      if (buttonName === 'LT' || buttonName === 'RT') {
+        state.triggerHeld = pressed
         return
+      }
       state[gamepadName][buttonName] = pressed
       computeInput(prevState, state, action)
+    },
+
+    toggleDrillMotor(state) {
+      state.computed.science.drillMotor = state.computed.science.drillMotor === 1 ? 0 : 1
     },
 
     keyPressed(state, action) {
@@ -143,7 +151,7 @@ const inputSlice = createSlice({
 
 function computeInput(prevState, state, action) {
   computeDriveInput(state, action)
-  computePeripheralInput(prevState, state, action)
+  computePeripheralInput(prevState, state)
 }
 
 function computeDriveInput(state, action) {
@@ -151,6 +159,11 @@ function computeDriveInput(state, action) {
   const pressedKeys = state.keyboard.pressedKeys
 
   const driveInput = state.computed.drive
+
+  // Emergency stop is toggled by the space bar.
+  if (action.type === keyPressed.type && action.payload.key === ' ') {
+    state.emergencyStop = !state.emergencyStop
+  }
 
   // Y key or the Y button toggles tank drive.
   if (
@@ -162,37 +175,36 @@ function computeDriveInput(state, action) {
   ) {
     driveInput.tank = !driveInput.tank
   }
-
-  if (action.type === keyPressed.type && action.payload.key === ' ') {
-    state.emergencyStop = !state.emergencyStop
+  if (state.triggerHeld) {
+    // Additional function layer binds go here
+  } else {
+    driveInput.straight =
+      -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
+    driveInput.steer =
+      driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
+    driveInput.left =
+      -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
+    driveInput.right =
+      -driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
   }
 
-  driveInput.straight =
-    -driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWUP')
-  driveInput.steer =
-    driveGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'ARROWLEFT', 'ARROWRIGHT')
-  driveInput.left =
-    driveGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'ARROWDOWN', 'ARROWLEFT')
-  driveInput.right =
-    driveGamepad['RightStickY'] + getAxisFromKeys(pressedKeys, 'ARROWRIGHT', 'ARROWUP')
-
   // Apply precision controls and clamp.
-  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad)
-  ;['straight', 'crab', 'steer', 'left', 'right'].forEach(
+  const drivePrecisionMultiplier = getPrecisionMultiplier(pressedKeys, driveGamepad, true)
+  ;['straight', 'steer', 'left', 'right'].forEach(
     (axis) => (driveInput[axis] = clamp1(drivePrecisionMultiplier * driveInput[axis]))
   )
 }
 
-function computePeripheralInput(prevState, state, action) {
+function computePeripheralInput(prevState, state) {
   computeArmInput(state)
-  computeScienceInput(prevState, state, action)
+  computeScienceInput(prevState, state)
 }
 
 function computeArmInput(state) {
   const peripheralGamepad = state.peripheralGamepad
   const pressedKeys = state.keyboard.pressedKeys
-
   const armInput = state.computed.arm
+
   armInput.armBase = peripheralGamepad['LeftStickX'] + getAxisFromKeys(pressedKeys, 'A', 'D')
   if (state.inverseKinematics.enabled) {
     armInput.ikForward = -peripheralGamepad['LeftStickY'] + getAxisFromKeys(pressedKeys, 'S', 'W')
@@ -207,17 +219,18 @@ function computeArmInput(state) {
   }
   armInput.forearm = peripheralGamepad['RightStickX'] + getAxisFromKeys(pressedKeys, 'F', 'H')
   armInput.wristPitch =
-    -getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
+    getAxisFromButtons(peripheralGamepad, 'DPadDown', 'DPadUp') +
     getAxisFromKeys(pressedKeys, 'K', 'I')
   armInput.wristRoll =
     getAxisFromButtons(peripheralGamepad, 'DPadLeft', 'DPadRight') +
     getAxisFromKeys(pressedKeys, 'U', 'O')
   armInput.hand =
+    // getAxisFromButtons(peripheralGamepad, 'A', 'B') +
     peripheralGamepad['LeftTrigger'] -
     peripheralGamepad['RightTrigger'] +
     getAxisFromKeys(pressedKeys, 'J', 'L')
   armInput.handActuator =
-    getAxisFromButtons(peripheralGamepad, 'B', 'A') + getAxisFromKeys(pressedKeys, ',', '.')
+    getAxisFromButtons(peripheralGamepad, 'Y', 'X') + getAxisFromKeys(pressedKeys, ',', '.')
 
   // Apply precision controls and clamp.
   const armPrecisionMultiplier = getPrecisionMultiplier(pressedKeys, peripheralGamepad)
@@ -226,20 +239,53 @@ function computeArmInput(state) {
   )
 }
 
-function computeScienceInput(prevState, state, action) {
+function computeScienceInput(prevState, state) {
   const prevPeripheralGamepad = prevState.peripheralGamepad
   const peripheralGamepad = state.peripheralGamepad
   const prevPressedKeys = prevState.keyboard.pressedKeys
   const pressedKeys = state.keyboard.pressedKeys
   const scienceInput = state.computed.science
-  const prevLazySusanAxis =
-    getAxisFromButtons(prevPeripheralGamepad, 'LB', 'RB') +
-    getAxisFromKeys(prevPressedKeys, 'A', 'D')
-  const lazySusanAxis =
-    getAxisFromButtons(peripheralGamepad, 'LB', 'RB') + getAxisFromKeys(pressedKeys, 'A', 'D')
-  if (lazySusanAxis !== prevLazySusanAxis)
-    scienceInput.lazySusanPosition =
-      (((scienceInput.lazySusanPosition + lazySusanAxis) % 6) + 6) % 6
+
+  // Toggle from setting pos to not toggling pos
+  if (pressedKeys.includes('/')) {
+    scienceInput.requestPos = !scienceInput.requestPos
+  }
+
+  if (!scienceInput.requestPos) {
+    scienceInput.fourBarLinkage =
+      getAxisFromKeys(pressedKeys, 'C', 'V') *
+      getPrecisionMultiplier(pressedKeys, peripheralGamepad)
+    if (pressedKeys.includes('1')) {
+      // Slow speed
+      scienceInput.speed = 1 / 3
+    } else if (pressedKeys.includes('2')) {
+      // Medium speed
+      scienceInput.speed = 2 / 3
+    } else if (pressedKeys.includes('3')) {
+      // Fast speed
+      scienceInput.speed = 1
+    }
+  } else {
+    // get pos to toggle
+    if (pressedKeys.includes('1')) {
+      // 30 degrees
+      scienceInput.fourBarLinkage = 30
+    } else if (pressedKeys.includes('2')) {
+      // 60 degrees
+      scienceInput.fourBarLinkage = 60
+    } else if (pressedKeys.includes('3')) {
+      // 90 degrees
+      scienceInput.fourBarLinkage = 90
+    }
+  }
+
+  state.computed.science.drillMotor = toggleKey(
+    prevPressedKeys,
+    pressedKeys,
+    'B',
+    state.computed.science.drillMotor
+  )
+  state.computed.science.drillActuator = getAxisFromKeys(pressedKeys, 'N', 'P')
 }
 
 function getAxisFromButtons(gamepad, negativeButton, positiveButton) {
@@ -254,6 +300,14 @@ function getAxisFromKeys(pressedKeys, negativeKey, positiveKey) {
   if (pressedKeys.includes(negativeKey)) axis--
   if (pressedKeys.includes(positiveKey)) axis++
   return axis
+}
+
+function toggleKey(prevPressedKeys, pressedKeys, key, currState) {
+  if (!prevPressedKeys.includes(key) && pressedKeys.includes(key)) {
+    if (currState == 0) return -1
+    else return 0
+  }
+  return currState
 }
 
 function getPrecisionMultiplier(pressedKeys, gamepad) {
@@ -279,11 +333,15 @@ export const {
   keyReleased,
   enableIK,
   visuallyEnableIK,
+  toggleDrillMotor,
 } = inputSlice.actions
+
+export const getSpeed = (state) => Math.floor(state.input.computed.science['speed'] * 100)
 
 export const selectInputDeviceIsConnected = (deviceName) => (state) =>
   state.input[deviceName].isConnected
 export const selectDriveGamepad = (state) => state.input.driveGamepad
 export const selectPeripheralGamepad = (state) => state.input.peripheralGamepad
 export const selectInverseKinematicsEnabled = (state) => state.input.inverseKinematics.enabled
+export const selectDrillMotor = (state) => state.input.computed.science.drillMotor
 export default inputSlice.reducer
