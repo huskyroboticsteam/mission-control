@@ -28,7 +28,8 @@ import {
 import './Map.css'
 
 import robotModel from '../../../assets/Dozer.glb'
-Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg";
+ Ion.defaultAccessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg'
 
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
@@ -406,20 +407,6 @@ function Map() {
             <button onClick={handleSetPin} className="map-button">
               Set Pin
             </button>
-          </div>
-          <div className="map-select-wrapper">
-            <select
-              value={activeMapIndex ?? ''}
-              onChange={(e) =>
-                setActiveMapIndex(e.target.value === '' ? null : parseInt(e.target.value))
-              }>
-              <option value="">(none)</option>
-              {mapTiles.map((t, idx) => (
-                <option key={t.id} value={idx}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
