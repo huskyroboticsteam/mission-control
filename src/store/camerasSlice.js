@@ -1,38 +1,40 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {Cameras} from '../constants/cameraConstants'
 
-const cameraNames = ['mast', 'hand', 'wrist', 'pano', 'drill']
-
-const initialState = cameraNames.reduce(
-  (state, cameraName) => ({
-    ...state,
-    [cameraName]: {
-      isStreaming: false,
-      frameData: null,
-    },
-  }),
-  {}
-)
+const initialState = Object.values(Cameras)
+  .filter((c) => isNaN(Number(c)))
+  .reduce(
+    (state, camera) => ({
+      ...state,
+      [camera]: {
+        isStreaming: false,
+        frameData: null,
+      },
+    }),
+    {}
+  )
 
 const camerasSlice = createSlice({
   name: 'cameras',
   initialState,
   reducers: {
     openCameraStream(state, action) {
-      const {cameraName} = action.payload
-      state[cameraName].isStreaming = true
+      const {camera} = action.payload
+      state[camera].isStreaming = true
     },
 
     closeCameraStream(state, action) {
-      const {cameraName} = action.payload
-      state[cameraName].isStreaming = false
-      state[cameraName].frameData = null
+      const {camera} = action.payload
+      state[camera].isStreaming = false
+      state[camera].frameData = null
     },
 
+    // No state needs to be updated here
     requestCameraFrame() {},
 
     cameraStreamDataReportReceived(state, action) {
-      const {cameraName, frameData} = action.payload
-      if (state[cameraName].isStreaming) state[cameraName].frameData = frameData
+      const {camera, frameData} = action.payload
+      if (state[camera].isStreaming) state[camera].frameData = frameData
     },
   },
 })
@@ -45,9 +47,7 @@ export const {
 } = camerasSlice.actions
 
 export const selectAllCameraNames = (state) => Object.keys(state.cameras)
-export const selectCameraIsStreamming = (cameraName) => (state) =>
-  state.cameras[cameraName].isStreaming
-export const selectCameraStreamFrameData = (cameraName) => (state) =>
-  state.cameras[cameraName].frameData
+export const selectCameraIsStreaming = (camera) => (state) => state.cameras[camera].isStreaming
+export const selectCameraStreamFrameData = (camera) => (state) => state.cameras[camera].frameData
 
 export default camerasSlice.reducer
