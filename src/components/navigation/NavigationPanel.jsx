@@ -1,9 +1,13 @@
 import CameraStream from '../camera/CameraStream'
 import Compass from './Compass'
 import './NavigationPanel.css'
-import OpModeSelect from './OpModeSelect'
-import WaypointList from './WaypointList'
 import WaypointNav from './WaypointNav'
+
+async function fire() {
+  const text = await fetch('http://0.0.0.0:8000/api/ubnt/sta')
+  const json = await text.json()
+  console.log(json)
+}
 
 function NavigationPanel() {
   return (
@@ -12,8 +16,7 @@ function NavigationPanel() {
       <CameraStream camera="hand" />
       <Compass />
       <CameraStream camera="wrist" />
-      {/* <OpModeSelect /> */}
-      <WaypointList />
+      <button onClick={fire}>hit me</button>
       <WaypointNav />
     </div>
   )
