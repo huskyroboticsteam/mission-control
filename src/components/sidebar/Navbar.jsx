@@ -28,27 +28,9 @@ function Navbar() {
         </li>
 
         <li>
-          <NavLink to="/science" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
-            <ScienceIcon fontSize="large" className="navbar__icon" />
-            Science
-          </NavLink>
-        </li>
-
-        <li>
           <NavLink to="/telemetry" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
             <TelemetryIcon fontSize="large" className="navbar__icon" />
             Telemetry
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/calc"
-            className={({isActive}) => {
-              isActive ? 'active' : 'inactive'
-            }}>
-            <CalcIcon fontSize="large" className="navbar__icon" />
-            Calculate
           </NavLink>
         </li>
 
