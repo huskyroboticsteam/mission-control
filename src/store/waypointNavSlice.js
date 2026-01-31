@@ -1,10 +1,22 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+const normalizePoint = (point) => {
+  if (!Array.isArray(point) || point.length < 2) {
+    return null
+  }
+
+  const lat = Number.parseFloat(point[0])
+  const lon = Number.parseFloat(point[1])
+
+  if (Number.isNaN(lat) || Number.isNaN(lon)) {
+    return null
+  }
+
+  return [lat, lon]
+}
+
 const initialState = {
-  latitude: null,
-  longitude: null,
-  isApproximate: false,
-  isGate: false,
+  points: [],
 }
 
 const waypointNavSlice = createSlice({
@@ -12,23 +24,21 @@ const waypointNavSlice = createSlice({
   initialState,
   reducers: {
     requestWaypointNav(state, action) {
-      const {isApproximate, isGate} = action.payload
-      state.isApproximate = !!isApproximate
-      state.isGate = !!isGate
+      const rawPoints = action.payload?.points ?? []
+      const nextPoints = Array.isArray(rawPoints) ? rawPoints : []
+      state.points = nextPoints
+        .map((point) => normalizePoint(point))
+        .filter((point) => point !== null)
     },
-    setWaypointPosition(state, action) {
-      const {latitude, longitude} = action.payload
-      state.latitude = typeof latitude == 'string' ? Number.parseFloat(latitude) : latitude
-      state.longitude = typeof longitude == 'string' ? Number.parseFloat(longitude) : longitude
+    setPoints(state, action) {
+      const payload = Array.isArray(action.payload) ? action.payload : []
+      state.points = payload.map((point) => normalizePoint(point)).filter((point) => point !== null)
     },
   },
 })
 
-export const {requestWaypointNav, setWaypointPosition} = waypointNavSlice.actions
+export const {requestWaypointNav, setPoints} = waypointNavSlice.actions
 
-export const selectLatitude = (state) => state.waypointNav.latitude
-export const selectLongitude = (state) => state.waypointNav.longitude
-export const selectIsApproximate = (state) => state.waypointNav.isApproximate
-export const selectIsGate = (state) => state.waypointNav.isGate
+export const selectPoints = (state) => state.waypointNav.points
 
 export default waypointNavSlice.reducer
