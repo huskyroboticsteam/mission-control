@@ -214,7 +214,7 @@ function WaypointNav() {
             </div>
           </div>
 
-          <div className="circlepath-row">
+          <div className="radius-row">
             <div className="input-group">
               <label htmlFor="radius">Radius</label>
               {submitted ? (
@@ -228,17 +228,6 @@ function WaypointNav() {
                 />
               )}
             </div>
-              
-            {/* circle path button added*/}
-            {opMode === 'autonomous' && !submitted ? (
-            <button type="button" className="go-button">
-              Circle Path
-            </button>
-            ) : (
-            <button disabled className="go-button">
-              Circle Path
-            </button>
-            )}
           </div>
 
           <div className="button-row">
@@ -268,15 +257,26 @@ function WaypointNav() {
               </button>
             )}
 
-            {/* Go Button */}
+            {/* Start Button */}
             {opMode === 'autonomous' && !submitted ? (
             <button type="submit" className="go-button">
-              Go
+              Start
             </button>
             ) : (
               <button disabled className="go-button">
-                Go
+                Start
               </button>
+            )}
+
+            {/* circle path button added*/}
+            {opMode === 'autonomous' && !submitted ? (
+            <button type="button" className="go-button">
+              Circle Path
+            </button>
+            ) : (
+            <button disabled className="go-button">
+              Circle Path
+            </button>
             )}
           </div>
 
