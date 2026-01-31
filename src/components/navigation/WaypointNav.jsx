@@ -24,6 +24,9 @@ function WaypointNav() {
   const [editingPoint, setEditingPoint] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [editPointIndex, setEditPointIndex] = useState(-1)
+  const [circlePathEnabled, setCirclePathEnabled] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [selectedTag, setSelectedTag] = useState('Task Type')
   const opMode = useSelector(selectOpMode)
 
   //either adds point if in add point state or edits point if in editing state
@@ -73,13 +76,10 @@ function WaypointNav() {
     
     if (editingPoint) {
       if (editPointIndex === index) {
-        // We're deleting the point being edited, exit edit mode
         exitEditPointState()
       } else if (editPointIndex > index) {
-        // We're deleting a point before the one being edited, adjust the index
         setEditPointIndex(editPointIndex - 1)
       }
-      // If editPointIndex < index, no adjustment needed
     }
   }
 
@@ -148,10 +148,13 @@ function WaypointNav() {
     navigator.clipboard
       .readText()
       .then((text) => {
-        // Matches coordinates in the form of (-)*(.*), (-)*(.*)
-        // where * are numbers and () are optional, e.g. -0.2, 0
-        if (text.match('-?\\d+\\.?\\d*, -?\\d+\\.?\\d*')) {
-          const [lat, lon] = text.split(', ', 2)
+        // Trim whitespace and match coordinates in various formats
+        // Matches: lat, lon OR lat,lon with optional spaces
+        const trimmedText = text.trim()
+        const match = trimmedText.match(/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/)
+        
+        if (match) {
+          const [, lat, lon] = match
           setLat(lat)
           setLon(lon)
         } else {
@@ -214,23 +217,77 @@ function WaypointNav() {
             </div>
           </div>
 
-          <div className="radius-row">
-            <div className="input-group">
-              <label htmlFor="radius">Radius</label>
-              {submitted ? (
-                <input disabled value={radius} onChange={(e) => e} />
-              ) : (
-                <input
-                  type="number"
-                  step="any"
-                  value={radius}
-                  onChange={(e) => setRadius(e.target.value)}
-                />
-              )}
+          {circlePathEnabled && (
+            <div className="circle-path-row">
+              <div className="input-group">
+                <label htmlFor="radius">Radius</label>
+                {submitted ? (
+                  <input disabled value={radius} onChange={(e) => e} />
+                ) : (
+                  <input
+                    type="number"
+                    step="any"
+                    value={radius}
+                    onChange={(e) => setRadius(e.target.value)}
+                  />
+                )}
+              </div>
+
+              <div className="task-type">
+                <div className="task-type-header">
+                  <span>{selectedTag || "Task Type"}</span>
+                  <button
+                    type="button"
+                    className="task-type-toggle"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    disabled={submitted}
+                    aria-expanded={dropdownOpen}>
+                    {dropdownOpen ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+                  </button>
+                </div>
+                {dropdownOpen && (
+                  <div className="dropdown-content">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTag('tag 1')
+                        setDropdownOpen(false)
+                      }}>
+                      tag 1
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTag('tag 2')
+                        setDropdownOpen(false)
+                      }}>
+                      tag 2
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="button-row">
+            {/* Circle Path Toggle */}
+            <div className="circle-path-toggle">
+              <label htmlFor="circlePathToggle" className="toggle-label">
+                Circle Path
+              </label>
+              <label className="toggle-switch">
+                <input 
+                  type="checkbox" 
+                  id="circlePathToggle"
+                  checked={circlePathEnabled}
+                  onChange={(e) => setCirclePathEnabled(e.target.checked)}
+                  //disabled={submitted || opMode !== 'autonomous'
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
+
             {/* COPY FROM CLIPBOARD BUTTON */}
             {submitted ? (
               <button disabled className="icon-button" aria-label="Clipboard disabled">
@@ -242,7 +299,6 @@ function WaypointNav() {
               </button>
             )}
 
-            {/* ADD / EDIT POINT BUTTON */}
             {submitted ? (
               <button disabled className="icon-button" aria-label="Add disabled">
                 <AddIcon fontSize="small" />
@@ -266,17 +322,6 @@ function WaypointNav() {
               <button disabled className="go-button">
                 Start
               </button>
-            )}
-
-            {/* circle path button added*/}
-            {opMode === 'autonomous' && !submitted ? (
-            <button type="button" className="go-button">
-              Circle Path
-            </button>
-            ) : (
-            <button disabled className="go-button">
-              Circle Path
-            </button>
             )}
           </div>
 
