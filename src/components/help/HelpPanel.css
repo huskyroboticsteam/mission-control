@@ -18,3 +18,8 @@
   border-radius: 15px;
   -webkit-user-drag: none;
 }
+
+.gamepad-1 {
+  width: 400px;
+  height: 200px;
+}
