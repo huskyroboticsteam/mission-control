@@ -25,12 +25,11 @@ import {
   selectAllPins,
   selectSelectedPins,
 } from '../../store/mapSlice'
+import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from './MapConsts'
 import './Map.css'
 
 import robotModel from '../../../assets/Dozer.glb'
 Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_ACCESS_TOKEN
-//  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NjAyNDE4MS03YzQ5LTQ3YWEtYTA3NS0xZmNlMmMzNjA4MDAiLCJpZCI6MTgwNDExLCJpYXQiOjE3MDA4MDYzODF9.wQNIlvboVB7Zo5qVFUXj2jUMfJRrK_zdvBEp2INt1Kg'
-
 
 function Map() {
   const telemetryLat = useSelector(selectRoverLatitude)
@@ -56,110 +55,13 @@ function Map() {
   const pins = useSelector(selectAllPins)
   const selectedPins = useSelector(selectSelectedPins)
 
-  const imageryProvider = new ArcGisMapServerImageryProvider({
-    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-  })
-
-  const [mapTiles] = React.useState(() => {
-    return [
-      {
-        id: 0,
-        name: 'Map 1',
-        url: '/map-images/1.png',
-        bounds: {west: -122.3113, south: 47.6571, east: -122.3087, north: 47.6589},
-      },
-      {
-        id: 1,
-        name: 'Map 2',
-        url: '/map-images/2.png',
-        bounds: {west: -122.3087, south: 47.6571, east: -122.3061, north: 47.6589},
-      },
-      {
-        id: 2,
-        name: 'Map 3',
-        url: '/map-images/3.png',
-        bounds: {west: -122.3061, south: 47.6571, east: -122.3035, north: 47.6589},
-      },
-      {
-        id: 3,
-        name: 'Map 4',
-        url: '/map-images/4.png',
-        bounds: {west: -122.3035, south: 47.6571, east: -122.3009, north: 47.6589},
-      },
-      {
-        id: 4,
-        name: 'Map 5',
-        url: '/map-images/5.png',
-        bounds: {west: -122.3113, south: 47.6553, east: -122.3087, north: 47.6571},
-      },
-      {
-        id: 5,
-        name: 'Map 6',
-        url: '/map-images/6.png',
-        bounds: {west: -122.3087, south: 47.6553, east: -122.3061, north: 47.6571},
-      },
-      {
-        id: 6,
-        name: 'Map 7',
-        url: '/map-images/7.png',
-        bounds: {west: -122.3061, south: 47.6553, east: -122.3035, north: 47.6571},
-      },
-      {
-        id: 7,
-        name: 'Map 8',
-        url: '/map-images/8.png',
-        bounds: {west: -122.3035, south: 47.6553, east: -122.3009, north: 47.6571},
-      },
-      {
-        id: 8,
-        name: 'Map 9',
-        url: '/map-images/9.png',
-        bounds: {west: -122.3113, south: 47.65359, east: -122.3087, north: 47.6553},
-      },
-      {
-        id: 9,
-        name: 'Map 10',
-        url: '/map-images/10.png',
-        bounds: {west: -122.3087, south: 47.65359, east: -122.3061, north: 47.6553},
-      },
-      {
-        id: 10,
-        name: 'Map 11',
-        url: '/map-images/11.png',
-        bounds: {west: -122.3061, south: 47.65359, east: -122.3035, north: 47.6553},
-      },
-      {
-        id: 11,
-        name: 'Map 12',
-        url: '/map-images/12.png',
-        bounds: {west: -122.3035, south: 47.65359, east: -122.3009, north: 47.6553},
-      },
-      {
-        id: 12,
-        name: 'Map 13',
-        url: '/map-images/13.png',
-        bounds: {west: -122.3113, south: 47.65174, east: -122.3087, north: 47.65359},
-      },
-      {
-        id: 13,
-        name: 'Map 14',
-        url: '/map-images/14.png',
-        bounds: {west: -122.3087, south: 47.65174, east: -122.3061, north: 47.65359},
-      },
-      {
-        id: 14,
-        name: 'Map 15',
-        url: '/map-images/15.png',
-        bounds: {west: -122.3061, south: 47.65174, east: -122.3035, north: 47.65359},
-      },
-      {
-        id: 15,
-        name: 'Map 16',
-        url: '/map-images/16.png',
-        bounds: {west: -122.3035, south: 47.65174, east: -122.3009, north: 47.65359},
-      },
-    ]
-  })
+  const imageryProvider = React.useMemo(
+    () =>
+      new ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+      }),
+    []
+  )
 
   const [activeMapIndex, setActiveMapIndex] = React.useState(null)
   const [activeLocalProvider, setActiveLocalProvider] = React.useState(null)
@@ -170,11 +72,10 @@ function Map() {
       setActiveLocalProvider(null)
       if (activeMapIndex === null) return
 
-      const tile = mapTiles[activeMapIndex]
+      const tile = MAP_TILES[activeMapIndex]
       if (!tile?.bounds) return
 
       let {west, south, east, north} = tile.bounds
-      const MIN_DEGREES = 1e-5
 
       const minLon = Math.min(west, east)
       const maxLon = Math.max(west, east)
@@ -258,28 +159,25 @@ function Map() {
     return () => {
       mounted = false
     }
-  }, [activeMapIndex, mapTiles])
+  }, [activeMapIndex])
 
-  const chooseMap = React.useCallback(
-    (latDeg, lonDeg) => {
-      if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null
-      for (let i = 0; i < mapTiles.length; i++) {
-        const t = mapTiles[i]
-        if (!t.bounds) continue
-        const {west, south, east, north} = t.bounds
-        if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i
-      }
-      return null
-    },
-    [mapTiles]
-  )
+  const chooseMap = React.useCallback((latDeg, lonDeg) => {
+    if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null
+    for (let i = 0; i < MAP_TILES.length; i++) {
+      const t = MAP_TILES[i]
+      if (!t.bounds) continue
+      const {west, south, east, north} = t.bounds
+      if (lonDeg >= west && lonDeg <= east && latDeg >= south && latDeg <= north) return i
+    }
+    return null
+  }, [])
 
   React.useEffect(() => {
     const currentLat = useManual ? manualLat : lat
     const currentLon = useManual ? manualLon : lon
     const idx = chooseMap(currentLat, currentLon)
     if (idx !== activeMapIndex) setActiveMapIndex(idx)
-  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex, mapTiles])
+  }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex])
 
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
@@ -304,10 +202,20 @@ function Map() {
   React.useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
     if (!viewer) {
-      return
+      return () => {
+        if (rightClickHandlerRef.current) {
+          rightClickHandlerRef.current.destroy()
+          rightClickHandlerRef.current = null
+        }
+      }
     }
     if (rightClickHandlerRef.current) {
-      return
+      return () => {
+        if (rightClickHandlerRef.current) {
+          rightClickHandlerRef.current.destroy()
+          rightClickHandlerRef.current = null
+        }
+      }
     }
     const ellipsoid = viewer.scene.globe.ellipsoid
     const handler = new ScreenSpaceEventHandler(viewer.canvas)
@@ -331,9 +239,6 @@ function Map() {
       dispatch(addPin({lat: latDeg, lon: lonDeg}))
       setLastPickedCoord({lat: latDeg, lon: lonDeg, distance, t: Date.now()})
     }, ScreenSpaceEventType.RIGHT_CLICK)
-  })
-
-  React.useEffect(() => {
     return () => {
       if (rightClickHandlerRef.current) {
         rightClickHandlerRef.current.destroy()
@@ -416,34 +321,34 @@ function Map() {
             <div className="map-last-click">
               Last right-click: {lastPickedCoord.lat.toFixed(6)}°, {lastPickedCoord.lon.toFixed(6)}°
               {typeof lastPickedCoord.distance === 'number' && (
-                <span style={{marginLeft: 6}}>
-                  (≈ {Math.round(lastPickedCoord.distance)} m alt)
-                </span>
+                <span>(≈ {Math.round(lastPickedCoord.distance)} m alt)</span>
               )}
             </div>
           )}
           <div className="map-pins-title">Recent pins</div>
-          {[...pins]
-            .slice(-5)
-            .reverse()
-            .map((pin) => (
-              <div key={pin.id} className="map-pin-item">
-                <input
-                  type="checkbox"
-                  checked={selectedPins.includes(pin.id)}
-                  onChange={() => toggleSelectPin(pin.id)}
-                />
-                <div className="map-pin-info">
-                  {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
+          <div className="map-pins-list">
+            {[...pins]
+              .slice(-5)
+              .reverse()
+              .map((pin) => (
+                <div key={pin.id} className="map-pin-item">
+                  <input
+                    type="checkbox"
+                    checked={selectedPins.includes(pin.id)}
+                    onChange={() => toggleSelectPin(pin.id)}
+                  />
+                  <div className="map-pin-info">
+                    {pin.label}: {pin.lat.toFixed(6)}, {pin.lon.toFixed(6)}
+                  </div>
+                  <button onClick={() => flyToPin(pin)} className="map-pin-button">
+                    Fly
+                  </button>
+                  <button onClick={() => deletePin(pin.id)} className="map-pin-button">
+                    Delete
+                  </button>
                 </div>
-                <button onClick={() => flyToPin(pin)} className="map-pin-button">
-                  Fly
-                </button>
-                <button onClick={() => deletePin(pin.id)} className="map-pin-button">
-                  Delete
-                </button>
-              </div>
-            ))}
+              ))}
+          </div>
           <div className="map-clear-button-wrapper">
             <button onClick={handleClearSelectedPins} className="map-clear-button">
               Clear Selected
@@ -453,8 +358,7 @@ function Map() {
       </div>
 
       {pins.map((pin, i) => {
-        const colorOptions = ['#e6194b', '#ffe119', '#3cb44b', '#42d4f4', '#911eb4', '#f032e6']
-        const col = Color.fromCssColorString(colorOptions[i % colorOptions.length])
+        const col = Color.fromCssColorString(COLOR_OPTIONS[i % COLOR_OPTIONS.length])
         return (
           <Entity
             key={pin.id}
@@ -465,7 +369,6 @@ function Map() {
               text={pin.label}
               font="14px sans-serif"
               fillColor={Color.WHITE}
-              style={0}
               pixelOffset={{x: 12, y: -12}}
             />
           </Entity>
