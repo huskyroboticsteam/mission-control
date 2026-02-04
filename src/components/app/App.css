@@ -1,6 +1,7 @@
 .app {
   display: flex;
   user-select: none;
+  background: #2c282c;
 }
 
 * {

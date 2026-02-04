@@ -232,24 +232,30 @@ function CameraStream({cameraName, cameraID}) {
 
   return (
     <div className="camera-stream">
-      <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
+      {/* Header row */}
+      <div className="camera-stream-header">
+        <div className="camera-stream-fps">FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}</div>
+
+        <h2 className="camera-stream__camera-name">{cameraTitle}</h2>
+
+        <div className="camera-stream-pop-header">
+          <span
+            className="camera-stream-pop-button"
+            title={`Open "${cameraTitle}" camera stream in a new window.`}
+            onClick={handlePopOut}>
+            {popoutWindow ? 'Merge Window' : 'Pop Out'}
+          </span>
+        </div>
+      </div>
+
       <div className="video-container">{vidTag}</div>
+
       {popoutWindow ? (
         <h3>Stream In External Window</h3>
       ) : (
-        !frameDataArray && <h3>No Stream Available</h3>
+        (!frameDataArray || frameDataArray.length === 0) && <h3>No Stream Available</h3>
       )}
-      <div className="camera-stream-fps">
-        FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}
-      </div>
-      <div className="camera-stream-pop-header">
-        <span
-          className="camera-stream-pop-button"
-          title={`Open "${cameraTitle}" camera stream in a new window.`}
-          onClick={handlePopOut}>
-          {popoutWindow ? 'Merge Window' : 'Pop Out'}
-        </span>
-      </div>
+
       <div className="camera-stream-download-header">
         <button
           className="camera-stream-download-button"

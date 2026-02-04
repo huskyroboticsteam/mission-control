@@ -4,7 +4,7 @@
   border-radius: 8px;
   width: 80%;
   max-width: 400px;
-  background-color: #1a1a1a;
+  background-color: #2c2c2c;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -13,7 +13,7 @@
   font-weight: bold;
   margin-bottom: 15px;
   text-align: center;
-  color: #f5f5f5;
+  color: #ffffff;
 }
 
 .nav-status__content {

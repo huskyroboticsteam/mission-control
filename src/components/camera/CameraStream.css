@@ -1,87 +1,188 @@
+/* ===============================
+   CAMERA STREAM TILE
+   =============================== */
+
 .camera-stream {
-  display: flex;
-  justify-content: center;
   position: relative;
   height: 100%;
-  box-sizing: border-box;
-}
-
-.camera-stream__camera-name {
-  font-size: 30px;
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
-  z-index: 5;
-  text-align: center;
-  color: #cccccc;
-  background-color: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  /* Let the global background show through (your #2C282C page bg) */
+  background: transparent;
 }
 
-.camera-stream-fps {
-  color: red;
+/* ===============================
+   HEADER BAR (FPS / Title / Pop Out)
+   =============================== */
+
+.camera-stream-header {
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 5;
+  right: 10px;
+  z-index: 20;
+
+  /* fixed height so all items align */
+  height: 44px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 10px;
 }
 
-.camera-stream > h3 {
-  position: absolute;
-  top: 35%;
-  font-size: 40px;
-  color: #cccccc;
-  text-align: center;
-  padding: 20px;
+/* All three header "badges" same height */
+.camera-stream__camera-name,
+.camera-stream-fps,
+.camera-stream-pop-header {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+  line-height: 1;
 }
+
+/* Title badge (purple) */
+.camera-stream__camera-name {
+  justify-self: center;
+  margin: 0;
+
+  background: #e6e0ff;
+  color: #000;
+
+  padding: 0 18px;
+  font-size: 34px;
+  font-weight: 800;
+
+  pointer-events: none; /* clicks pass through title */
+}
+
+/* FPS badge (gray) */
+.camera-stream-fps {
+  justify-self: start;
+  margin: 0;
+
+  background: #d9d9d9; /* requested */
+  color: #000;
+
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Pop Out badge (purple) */
+.camera-stream-pop-header {
+  justify-self: end;
+  margin: 0;
+
+  background: #e6e0ff;
+  color: #000;
+
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.camera-stream-pop-button {
+  cursor: pointer;
+  user-select: none;
+}
+
+.camera-stream-pop-button:hover {
+  opacity: 0.85;
+}
+
+/* ===============================
+   VIDEO AREA
+   =============================== */
 
 .video-container {
   position: absolute;
+  inset: 0;
+
   display: flex;
-  height: 100%;
-  width: 100%;
   align-items: center;
   justify-content: center;
 }
 
 .video-tag {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  width: 100%;
-  max-height: 100%;
 }
 
-.camera-stream-pop-header {
-  font-weight: bold;
-  z-index: 5;
+/* ===============================
+   NO STREAM AVAILABLE (taller banner)
+   =============================== */
+
+.camera-stream > h3 {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  text-align: right;
-  margin-top: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+
+  margin: 0;
+
+  width: 92%;
+  max-width: 1000px;
+
+  background: #9f9f9f; /* requested */
+  color: #000;
+
+  /* make it stretch vertically more */
+  min-height: 260px;
+  padding: 40px 24px;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 46px;
+  font-weight: 900;
+  text-align: center;
+  white-space: nowrap;
 }
 
-.camera-stream-pop-button {
-  cursor: pointer;
-  padding-right: 10px;
-}
+/* ===============================
+   BOTTOM RIGHT BUTTONS
+   =============================== */
 
 .camera-stream-download-header {
-  font-weight: bold;
-  z-index: 5;
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
+  bottom: 10px;
+  right: 12px;
+  z-index: 20;
+
+  width: auto;
   text-align: right;
-  margin-bottom: 5px;
 }
 
 .camera-stream-download-button {
-  margin-right: 5px;
+  margin-left: 6px;
+  padding: 4px 10px;
+
+  background: #d9d9d9;
+  color: #000;
+
+  border: 1px solid #666;
+  border-radius: 4px;
+
   cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.camera-stream-download-button:hover {
+  background: #cfcfcf;
 }
 
 .camera-stream-download-button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
