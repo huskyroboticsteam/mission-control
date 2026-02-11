@@ -121,33 +121,31 @@
 
 .camera-stream > h3 {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-
-  margin: 0;
-
-  width: 92%;
-  max-width: 1000px;
-
-  background: #9f9f9f; /* requested */
+  top: 10%;
+  font-size: 40px;
   color: #000;
+  text-align: center;
 
-  /* make it stretch vertically more */
-  min-height: 260px;
-  padding: 40px 24px;
-  border-radius: 12px;
+  /* make it bigger */
+  width: 100%;
+  height: 80%;
+
+  /* center it */
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* box styling */
+  background: #9f9f9f;
+  border-radius: 28px; /* matches telemetry card */
+  padding: 20px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 46px;
-  font-weight: 900;
-  text-align: center;
-  white-space: nowrap;
+  box-sizing: border-box;
 }
+
 
 /* ===============================
    BOTTOM RIGHT BUTTONS

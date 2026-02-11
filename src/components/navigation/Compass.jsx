@@ -147,51 +147,27 @@ const Compass = () => {
 
   return (
     <div className="compass-container">
-      <div className="info">
-        <table>
-          <tbody>
-            <tr>
-              <td>roll:</td>
-              <td>{sanitize(roll)}</td>
-            </tr>
-            <tr>
-              <td>pitch:</td>
-              <td>{sanitize(pitch)}</td>
-            </tr>
-            <tr>
-              <td>heading:</td>
-              <td>{sanitize(heading)}</td>
-            </tr>
-            <tr>
-              <td>latitude:</td>
-              <td>{sanitize(lat, 6)}</td>
-            </tr>
-            <tr>
-              <td>longitude:</td>
-              <td>{sanitize(lon, 6)}</td>
-            </tr>
-            <tr>
-              <td>altitude:</td>
-              <td>{sanitize(alt, 6)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div className="compass">
         <div className="compass-parts">
           {targetHeading != null && targetDistance > CLOSE_DISTANCE && (
             <div
-              className={`target-dot`}
-              style={{transform: `rotate(${targetHeading + TARGET_CIRCLE_OFFSET}deg)`}}></div>
+              className="target-dot"
+              style={{transform: `rotate(${targetHeading + TARGET_CIRCLE_OFFSET}deg)`}}
+            />
           )}
+
           <div
             className={`compass__needle compass__needle--${needleColor}`}
-            style={{transform: `rotate(${heading ?? 0}deg)`}}></div>
+            style={{transform: `rotate(${heading ?? 0}deg)`}}
+          />
+
           <div className={`compass__outer-ring ${needleColor}`}></div>
+
           <div className="compass__label compass__label--north">N</div>
           <div className="compass__label compass__label--south">S</div>
           <div className="compass__label compass__label--west">W</div>
           <div className="compass__label compass__label--east">E</div>
+
           {targetDistance != null && (
             <div className="compass__label compass__label--distance">
               <span className={targetDistance > CLOSE_DISTANCE ? 'target-far' : 'target-close'}>

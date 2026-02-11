@@ -1,8 +1,11 @@
 /* NavigationPanel.css */
 
 .navigation-panel {
+  background: #2C282C;
+  height: 100vh;     /* make sure it fills the screen */
+  width: 100%;
   display: grid;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding: 16px;
   box-sizing: border-box;
@@ -14,7 +17,7 @@
   /* 3 equal columns */
   grid-template-columns: 1fr 1fr 1fr;
 
-  /* Place children by their index (1‑based) */
+  /* Place children by their index (1-based) */
   grid-template-areas:
     "mast hand wrist"
     "coords compass waypoint";

@@ -1,9 +1,8 @@
 import CameraStream from '../camera/CameraStream'
 import Compass from './Compass'
 import './NavigationPanel.css'
-import OpModeSelect from './OpModeSelect'
-import WaypointList from './WaypointList'
 import WaypointNav from './WaypointNav'
+import TelemetryInfo from './TelemetryInfo'
 
 function NavigationPanel() {
   return (
@@ -13,8 +12,8 @@ function NavigationPanel() {
 
       <Compass />
       <CameraStream cameraName="wrist" cameraID={30} />
-      {/* <OpModeSelect /> */}
-      <WaypointList />
+
+      <TelemetryInfo />
       <WaypointNav />
     </div>
   )

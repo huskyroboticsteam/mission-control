@@ -1,7 +1,7 @@
 .app {
   display: flex;
   user-select: none;
-  background: #2c282c;
+  background: #000000;
 }
 
 * {

@@ -1,15 +1,60 @@
+/* ===============================
+   COMPASS PANEL LAYOUT
+   =============================== */
+
 .compass-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  position: relative;     /* anchor for absolute children */
+  width: 100%;
+  height: 100%;           /* must fill the grid cell */
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.compass {
-  display: flex;
-  justify-content: center;
-  z-index: 10;
-  box-sizing: border-box;
+/* PIN INFO TO TOP-LEFT */
+.compass-container .info {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  top: auto !important;
+  z-index: 50 !important;
+
+  margin: 0 !important;
+  padding: 10px 12px !important;
+
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+  text-align: left !important;
+
+  background: rgba(0, 0, 0, 0.35) !important;
+  border-radius: 10px !important;
 }
+
+/* Clean table spacing */
+.compass-container .info table {
+  border-collapse: collapse;
+}
+
+.compass-container .info td {
+  padding: 2px 14px 2px 0;
+}
+
+/* CENTER COMPASS */
+.compass-container .compass {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===============================
+   COMPASS VISUALS (your existing styles)
+   =============================== */
 
 .compass-parts {
   width: 200px;
@@ -21,7 +66,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
 }
 
@@ -46,17 +90,9 @@
   background-color: black;
 }
 
-.compass__needle--green {
-  background-color: #4caf50;
-}
-
-.compass__needle--yellow {
-  background-color: #ffc107;
-}
-
-.compass__needle--red {
-  background-color: #f44336;
-}
+.compass__needle--green { background-color: #4caf50; }
+.compass__needle--yellow { background-color: #ffc107; }
+.compass__needle--red { background-color: #f44336; }
 
 .target-dot {
   background-color: rgba(0, 0, 0, 0);
@@ -77,36 +113,12 @@
   font-size: 12px;
   color: #333;
   font-weight: bold;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
 }
 
-.compass__label--north {
-  font-size: 20px;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.compass__label--south {
-  font-size: 20px;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.compass__label--west {
-  font-size: 20px;
-  left: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.compass__label--east {
-  font-size: 20px;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-}
+.compass__label--north { font-size: 20px; top: 5%; left: 50%; transform: translateX(-50%); }
+.compass__label--south { font-size: 20px; bottom: 5%; left: 50%; transform: translateX(-50%); }
+.compass__label--west  { font-size: 20px; left: 5%; top: 50%; transform: translateY(-50%); }
+.compass__label--east  { font-size: 20px; right: 5%; top: 50%; transform: translateY(-50%); }
 
 .compass__label--distance {
   font-size: 15px;
@@ -126,33 +138,9 @@
   box-sizing: border-box;
 }
 
-.compass__outer-ring.green {
-  border-color: green;
-}
+.compass__outer-ring.green { border-color: green; }
+.compass__outer-ring.yellow { border-color: yellow; }
+.compass__outer-ring.red { border-color: red; }
 
-.compass__outer-ring.yellow {
-  border-color: yellow;
-}
-
-.compass__outer-ring.red {
-  border-color: red;
-}
-
-.target-far {
-  color: red;
-}
-
-.target-close {
-  color: green;
-}
-
-.info {
-  color: #ffffff;
-  font-size: calc(5px + 1vmax);
-  font-family: monospace;
-  text-align: left;
-}
-
-.distance-to-target {
-  color: black;
-}
+.target-far { color: red; }
+.target-close { color: green; }
