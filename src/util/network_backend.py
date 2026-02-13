@@ -5,18 +5,18 @@ import requests
 
 app = FastAPI()
 s = requests.Session()
-BASE = "http://10.42.0.20/"
+BASE = "http://10.42.0.3/"
 
 @app.get("/api/ubnt/sta")
 def sta():
     s.get(BASE + "login.cgi")
     s.post(BASE + "login.cgi", files={
         "username": (None, "ubnt"),
-        "password": (None, "ubnt"),
+        "password": (None, "huskerRubbot3"),
         "uri": (None, "/"),
     })
     r = s.get(BASE + "sta.cgi")
-    return r.json()[0]
+    return r
 
 app.add_middleware(
     CORSMiddleware,
