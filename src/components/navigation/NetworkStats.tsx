@@ -15,8 +15,9 @@ export default function NetworkStats() {
               console.log('Could not fetch network stats: Status ' + resp.status)
               return
             }
-            resp.json().then((json) => {
-              console.log(json)
+            resp.json().then((json_str) => {
+              const json = JSON.parse(json_str)[0]
+
               setNoise(json['noisefloor'])
               setSignal(json['signal'])
               setQuality(json['ccq'])
