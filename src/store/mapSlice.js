@@ -95,10 +95,15 @@ const mapSlice = createSlice({
       localStorage.setItem('pins', JSON.stringify(state.pins))
       localStorage.setItem('nextPinId', state.nextPinId.toString())
     },
+    resetPinCounter(state) {
+      state.nextPinId = 1
+      localStorage.setItem('nextPinId', '1')
+    },
   },
 })
 
-export const {addPin, removePin, togglePinSelection, clearSelectedPins} = mapSlice.actions
+export const {addPin, removePin, togglePinSelection, clearSelectedPins, resetPinCounter} =
+  mapSlice.actions
 
 export const selectAllPins = (state) => state.map.pins
 export const selectSelectedPins = (state) => state.map.selectedPins

@@ -22,6 +22,7 @@ import {
   removePin,
   togglePinSelection,
   clearSelectedPins,
+  resetPinCounter,
   selectAllPins,
   selectSelectedPins,
 } from '../../store/mapSlice'
@@ -281,6 +282,10 @@ function Map() {
     setUseManual(true)
   }
 
+  function handleResetPinCounter() {
+    dispatch(resetPinCounter())
+  }
+
   return (
     <Viewer
       className="map-viewer"
@@ -352,6 +357,9 @@ function Map() {
           <div className="map-clear-button-wrapper">
             <button onClick={handleClearSelectedPins} className="map-clear-button">
               Clear Selected
+            </button>
+            <button onClick={handleResetPinCounter} className="map-clear-button">
+              Reset Counter
             </button>
           </div>
         </div>
