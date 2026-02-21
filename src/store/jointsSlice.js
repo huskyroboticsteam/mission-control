@@ -1,27 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {Joints} from '../constants/jointConstants'
 
-const jointNames = [
-  'armBase',
-  'shoulder',
-  'elbow',
-  'forearm',
-  'wristPitch',
-  'wristRoll',
-  'hand',
-  'handActuator',
-  'ikUp',
-  'ikForward',
-]
-
-const initialState = jointNames.reduce(
-  (state, jointName) => ({
-    ...state,
-    [jointName]: {
-      requestedPower: null,
-      requestedPosition: null,
-      currentPosition: null,
-    },
-  }),
+const initialState = Object.values(Joints)
+  .filter((c) => isNaN(Number(c)))
+  .reduce(
+    (state, jointName) => ({
+      ...state,
+      [jointName]: {
+        requestedPower: null,
+        requestedPosition: null,
+        currentPosition: null,
+      },
+    }),
   {}
 )
 

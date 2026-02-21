@@ -3,7 +3,6 @@ import {requestDrive, requestTankDrive} from '../driveSlice'
 import {requestJointPower} from '../jointsSlice'
 import {enableIK, visuallyEnableIK} from '../inputSlice'
 import {requestStop} from '../emergencyStopSlice'
-import {requestSciencePower} from '../scienceSlice'
 import {
   messageReceivedFromRover,
   messageRover,

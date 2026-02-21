@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {SERVOS, ServoType} from '../constants/servoConstants.js'
+import {ServoNames, SERVOS, ServoType} from '../constants/servoConstants.js'
 
 const initialState = Object.keys(SERVOS).reduce(
   (state, servoName) => ({
@@ -43,7 +43,7 @@ const servoSlice = createSlice({
 export const {requestServoPosition, servoPositionReportReceived} = servoSlice.actions
 
 export const selectAllServoNames = (state) => Object.keys(state.servo)
-export const selectServoCurrentPosition = (servoName) => (state) =>
+export const selectServoCurrentPosition = (servoName: ServoNames) => (state) =>
   state.servo[servoName].currentPosition
 
 export default servoSlice.reducer
