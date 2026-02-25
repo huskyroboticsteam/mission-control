@@ -246,7 +246,7 @@ function Map() {
         rightClickHandlerRef.current = null
       }
     }
-  }, [])
+  })
 
   function handleSetPin() {
     const parsedLat = parseFloat(manualLatInput)
