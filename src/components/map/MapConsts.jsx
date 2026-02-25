@@ -371,4 +371,77 @@ export const MAP_TILES = [
     url: '/map-images/circ/45.png',
     bounds: {west: -112.63442, south: 51.41765, east: -112.63117, north: 51.41883},
   },
+  // Utah tiles (62-73)
+  {
+    id: 62,
+    name: 'Map 62',
+    url: '/map-images/utah/1.png',
+    bounds: {west: -110.78291, south: 38.4209, east: -110.78143, north: 38.42233},
+  },
+  {
+    id: 63,
+    name: 'Map 63',
+    url: '/map-images/utah/2.png',
+    bounds: {west: -110.78143, south: 38.4209, east: -110.77995, north: 38.42233},
+  },
+  {
+    id: 64,
+    name: 'Map 64',
+    url: '/map-images/utah/3.png',
+    bounds: {west: -110.77995, south: 38.4209, east: -110.77847, north: 38.42233},
+  },
+  {
+    id: 65,
+    name: 'Map 65',
+    url: '/map-images/utah/4.png',
+    bounds: {west: -110.77847, south: 38.4209, east: -110.77699, north: 38.42233},
+  },
+  {
+    id: 66,
+    name: 'Map 66',
+    url: '/map-images/utah/5.png',
+    bounds: {west: -110.78291, south: 38.41947, east: -110.78143, north: 38.4209},
+  },
+  {
+    id: 67,
+    name: 'Map 67',
+    url: '/map-images/utah/6.png',
+    bounds: {west: -110.78143, south: 38.41947, east: -110.77995, north: 38.4209},
+  },
+  {
+    id: 68,
+    name: 'Map 68',
+    url: '/map-images/utah/7.png',
+    bounds: {west: -110.77995, south: 38.41947, east: -110.77847, north: 38.4209},
+  },
+  {
+    id: 69,
+    name: 'Map 69',
+    url: '/map-images/utah/8.png',
+    bounds: {west: -110.77847, south: 38.41947, east: -110.77699, north: 38.4209},
+  },
+  {
+    id: 70,
+    name: 'Map 70',
+    url: '/map-images/utah/9.png',
+    bounds: {west: -110.78291, south: 38.41804, east: -110.78143, north: 38.41947},
+  },
+  {
+    id: 71,
+    name: 'Map 71',
+    url: '/map-images/utah/10.png',
+    bounds: {west: -110.78143, south: 38.41804, east: -110.77995, north: 38.41947},
+  },
+  {
+    id: 72,
+    name: 'Map 72',
+    url: '/map-images/utah/11.png',
+    bounds: {west: -110.77995, south: 38.41804, east: -110.77847, north: 38.41947},
+  },
+  {
+    id: 73,
+    name: 'Map 73',
+    url: '/map-images/utah/12.png',
+    bounds: {west: -110.77847, south: 38.41804, east: -110.77699, north: 38.41947},
+  },
 ]
