@@ -5,6 +5,8 @@ export default function NetworkStats() {
   const [noise, setNoise] = useState(0)
   const [signal, setSignal] = useState(0)
   const [quality, setQuality] = useState(0)
+  const [txRate, setTxRate] = useState(0)
+  const [rxRate, setRxRate] = useState(0)
 
   useEffect(() => {
     const id = setInterval(
@@ -21,6 +23,8 @@ export default function NetworkStats() {
               setNoise(json['noisefloor'])
               setSignal(json['signal'])
               setQuality(json['ccq'])
+              setTxRate(json['txrate'])
+              setRxRate(json['rxrate'])
             })
           })
           .catch((err) => {
@@ -33,10 +37,27 @@ export default function NetworkStats() {
   }, [])
 
   return (
-    <div>
-      <div>Signal: {signal} dBm</div>
-      <div>Noise: {noise} dBm</div>
-      <div>Link Quality: {quality}%</div>
+    <div  className="info">
+      <tr>              
+        <td>Signal:</td>
+        <td> {signal} dBm</td>
+      </tr>
+      <tr>              
+        <td>Noise:</td>
+        <td> {noise} dBm</td>
+      </tr>
+      <tr>              
+        <td>Link Quality:  </td>
+        <td>{quality}% </td>
+      </tr>
+      <tr>              
+        <td>Tx:  </td>
+        <td>{txRate} </td>
+      </tr>
+      <tr>              
+        <td>Rx:  </td>
+        <td>{rxRate} </td>
+      </tr>
     </div>
   )
 }
