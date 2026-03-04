@@ -12,7 +12,8 @@ function NavigationPanel() {
       <CameraStream camera="hand" />
       <Compass />
       <CameraStream camera="wrist" />
-      <WaypointList />
+      {/* <OpModeSelect /> */}
+      {/* <WaypointList /> */}
       <WaypointNav />
     </div>
   )
