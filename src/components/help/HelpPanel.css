@@ -68,7 +68,7 @@
   margin-left: 5%;
 }
 
-table {
+.table {
   color: black;
   background-color: white;
   border-collapse: collapse;
@@ -76,13 +76,13 @@ table {
   justify-content: center;
 }
 
-th,
-td {
+.th,
+.td {
   border: 1px solid black;
   padding: 3px;
 }
 
-th {
+.th {
   background-color: #4fb185;
   font-weight: bold;
   color: white;
@@ -95,7 +95,7 @@ th {
   gap: 10px;
 }
 
-b {
+.label {
   font-size: 18px;
   display: flex;
   flex-direction: column;

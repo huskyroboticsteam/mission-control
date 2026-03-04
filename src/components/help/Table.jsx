@@ -92,122 +92,130 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
 
   return (
     <div className="drive-gpad-table">
-      <table>
+      <table className="table">
         <tbody className="axis-table">
           <tr>
-            <th>Axis</th>
-            <td>Left X</td>
-            <td>Left Y</td>
-            <td>Right X</td>
-            <td>Right Y</td>
+            <th className="th">Axis</th>
+            <td className="td">Left X</td>
+            <td className="td">Left Y</td>
+            <td className="td">Right X</td>
+            <td className="td">Right Y</td>
           </tr>
           <tr>
-            <th>Value</th>
-            <td style={{backgroundColor: arrAxis[0] != 0 ? 'yellow' : 'white'}}>{arrAxis[0]}</td>
-            <td style={{backgroundColor: arrAxis[1] != 0 ? 'yellow' : 'white'}}>{arrAxis[1]}</td>
-            <td style={{backgroundColor: arrAxis[2] != 0 ? 'yellow' : 'white'}}>{arrAxis[2]}</td>
-            <td style={{backgroundColor: arrAxis[3] != 0 ? 'yellow' : 'white'}}>{arrAxis[3]}</td>
+            <th className="th">Value</th>
+            <td className="td" style={{backgroundColor: arrAxis[0] != 0 ? 'yellow' : 'white'}}>
+              {arrAxis[0]}
+            </td>
+            <td className="td" style={{backgroundColor: arrAxis[1] != 0 ? 'yellow' : 'white'}}>
+              {arrAxis[1]}
+            </td>
+            <td className="td" style={{backgroundColor: arrAxis[2] != 0 ? 'yellow' : 'white'}}>
+              {arrAxis[2]}
+            </td>
+            <td className="td" style={{backgroundColor: arrAxis[3] != 0 ? 'yellow' : 'white'}}>
+              {arrAxis[3]}
+            </td>
           </tr>
         </tbody>
       </table>
 
       <div className="buttons">
-        <table>
+        <table className="table">
           <thead>
             <tr>
-              <th>Button</th>
-              <th>Action</th>
-              <th>Value</th>
+              <th className="th">Button</th>
+              <th className="th">Action</th>
+              <th className="th">Value</th>
             </tr>
           </thead>
           <tbody className="button-table">
             <tr style={{backgroundColor: arrButton[0] > 0 ? 'yellow' : 'white'}}>
-              <td>A / x</td>
-              <td>{controls[0]}</td>
-              <td>{arrButton[0]}</td>
+              <td className="td">A / x</td>
+              <td className="td">{controls[0]}</td>
+              <td className="td">{arrButton[0]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[1] > 0 ? 'yellow' : 'white'}}>
-              <td>B / ◯</td>
-              <td>{controls[1]}</td>
-              <td>{arrButton[1]}</td>
+              <td className="td">B / ◯</td>
+              <td className="td">{controls[1]}</td>
+              <td className="td">{arrButton[1]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[2] > 0 ? 'yellow' : 'white'}}>
-              <td>X / ▢</td>
-              <td>{controls[2]}</td>
-              <td>{arrButton[2]}</td>
+              <td className="td">X / ▢</td>
+              <td className="td">{controls[2]}</td>
+              <td className="td">{arrButton[2]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[3] > 0 ? 'yellow' : 'white'}}>
-              <td>Y / △</td>
-              <td>{controls[3]}</td>
-              <td>{arrButton[3]}</td>
+              <td className="td">Y / △</td>
+              <td className="td">{controls[3]}</td>
+              <td className="td">{arrButton[3]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[4] > 0 ? 'yellow' : 'white'}}>
-              <td>Left Button</td>
-              <td>{controls[4]}</td>
-              <td>{arrButton[4]}</td>
+              <td className="td">Left Button</td>
+              <td className="td">{controls[4]}</td>
+              <td className="td">{arrButton[4]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[5] > 0 ? 'yellow' : 'white'}}>
-              <td>Right Button</td>
-              <td>{controls[5]}</td>
-              <td>{arrButton[5]}</td>
+              <td className="td">Right Button</td>
+              <td className="td">{controls[5]}</td>
+              <td className="td">{arrButton[5]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[6] > 0 ? 'yellow' : 'white'}}>
-              <td>Left Trigger</td>
-              <td>{controls[6]}</td>
-              <td>{arrButton[6]}</td>
+              <td className="td">Left Trigger</td>
+              <td className="td">{controls[6]}</td>
+              <td className="td">{arrButton[6]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[7] > 0 ? 'yellow' : 'white'}}>
-              <td>Right Trigger</td>
-              <td>{controls[7]}</td>
-              <td>{arrButton[7]}</td>
+              <td className="td">Right Trigger</td>
+              <td className="td">{controls[7]}</td>
+              <td className="td">{arrButton[7]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[8] > 0 ? 'yellow' : 'white'}}>
-              <td>Select</td>
-              <td>{controls[8]}</td>
-              <td>{arrButton[8]}</td>
+              <td className="td">Select</td>
+              <td className="td">{controls[8]}</td>
+              <td className="td">{arrButton[8]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[9] > 0 ? 'yellow' : 'white'}}>
-              <td>Start</td>
-              <td>{controls[9]}</td>
-              <td>{arrButton[9]}</td>
+              <td className="td">Start</td>
+              <td className="td">{controls[9]}</td>
+              <td className="td">{arrButton[9]}</td>
             </tr>
             <tr
               style={{
                 backgroundColor:
                   arrButton[10] > 0 || arrAxis[0] != 0 || arrAxis[1] != 0 ? 'yellow' : 'white',
               }}>
-              <td>Left Joystick</td>
-              <td>{controls[10]}</td>
-              <td>{arrButton[10]}</td>
+              <td className="td">Left Joystick</td>
+              <td className="td">{controls[10]}</td>
+              <td className="td">{arrButton[10]}</td>
             </tr>
             <tr
               style={{
                 backgroundColor:
                   arrButton[11] > 0 || arrAxis[2] != 0 || arrAxis[3] != 0 ? 'yellow' : 'white',
               }}>
-              <td>Right Joystick</td>
-              <td>{controls[11]}</td>
-              <td>{arrButton[11]}</td>
+              <td className="td">Right Joystick</td>
+              <td className="td">{controls[11]}</td>
+              <td className="td">{arrButton[11]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[12] > 0 ? 'yellow' : 'white'}}>
-              <td>D-Pad up</td>
-              <td>{controls[12]}</td>
-              <td>{arrButton[12]}</td>
+              <td className="td">D-Pad up</td>
+              <td className="td">{controls[12]}</td>
+              <td className="td">{arrButton[12]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[13] > 0 ? 'yellow' : 'white'}}>
-              <td>D-Pad down</td>
-              <td>{controls[13]}</td>
-              <td>{arrButton[13]}</td>
+              <td className="td">D-Pad down</td>
+              <td className="td">{controls[13]}</td>
+              <td className="td">{arrButton[13]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[14] > 0 ? 'yellow' : 'white'}}>
-              <td>D-Pad left</td>
-              <td>{controls[14]}</td>
-              <td>{arrButton[14]}</td>
+              <td className="td">D-Pad left</td>
+              <td className="td">{controls[14]}</td>
+              <td className="td">{arrButton[14]}</td>
             </tr>
             <tr style={{backgroundColor: arrButton[15] > 0 ? 'yellow' : 'white'}}>
-              <td>D-Pad right</td>
-              <td>{controls[15]}</td>
-              <td>{arrButton[15]}</td>
+              <td className="td">D-Pad right</td>
+              <td className="td">{controls[15]}</td>
+              <td className="td">{arrButton[15]}</td>
             </tr>
           </tbody>
         </table>

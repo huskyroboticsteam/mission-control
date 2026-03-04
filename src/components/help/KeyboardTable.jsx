@@ -91,12 +91,12 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
 
   return (
     <div className="keyboard-table-container">
-      <table>
+      <table className="table">
         <thead>
           <tr>
-            <th>Key</th>
-            <th>Action</th>
-            <th>Value</th>
+            <th className="th">Key</th>
+            <th className="th">Action</th>
+            <th className="th">Value</th>
           </tr>
         </thead>
         <tbody className="keyboard-table">
@@ -132,79 +132,79 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
           </tr>
         </tbody>
       </table>
-      <table>
+      <table className="table">
         <thead>
           <tr>
-            <th>Key</th>
-            <th>Action</th>
-            <th>Value</th>
+            <th className="th">Key</th>
+            <th className="th">Action</th>
+            <th className="th">Value</th>
           </tr>
         </thead>
         <tbody className="keyboard-table">
           <tr style={{backgroundColor: keys[6] > 0 ? 'yellow' : 'white'}}>
-            <td>Y</td>
-            <td>{controls[4]}</td>
-            <td>{keys[6]}</td>
+            <td className="td">Y</td>
+            <td className="td">{controls[4]}</td>
+            <td className="td">{keys[6]}</td>
           </tr>
           <tr style={{backgroundColor: keys[7] > 0 ? 'yellow' : 'white'}}>
-            <td>W</td>
-            <td>Shoulder/IK Forward</td>
-            <td>{keys[7]}</td>
+            <td className="td">W</td>
+            <td className="td">Shoulder/IK Forward</td>
+            <td className="td">{keys[7]}</td>
           </tr>
           <tr style={{backgroundColor: keys[8] > 0 ? 'yellow' : 'white'}}>
-            <td>A</td>
-            <td>Rotate Arm Base Counterclockwise</td>
-            <td>{keys[8]}</td>
+            <td className="td">A</td>
+            <td className="td">Rotate Arm Base Counterclockwise</td>
+            <td className="td">{keys[8]}</td>
           </tr>
           <tr style={{backgroundColor: keys[9] > 0 ? 'yellow' : 'white'}}>
-            <td>S</td>
-            <td>Shoulder/IK Backward</td>
-            <td>{keys[9]}</td>
+            <td className="td">S</td>
+            <td className="td">Shoulder/IK Backward</td>
+            <td className="td">{keys[9]}</td>
           </tr>
           <tr style={{backgroundColor: keys[10] > 0 ? 'yellow' : 'white'}}>
-            <td>D</td>
-            <td>Rotate Arm Base Clockwise</td>
-            <td>{keys[10]}</td>
+            <td className="td">D</td>
+            <td className="td">Rotate Arm Base Clockwise</td>
+            <td className="td">{keys[10]}</td>
           </tr>
           <tr style={{backgroundColor: keys[11] > 0 ? 'yellow' : 'white'}}>
-            <td>T</td>
-            <td>Elbow Up</td>
-            <td>{keys[11]}</td>
+            <td className="td">T</td>
+            <td className="td">Elbow Up</td>
+            <td className="td">{keys[11]}</td>
           </tr>
           <tr style={{backgroundColor: keys[12] > 0 ? 'yellow' : 'white'}}>
-            <td>G</td>
-            <td>Elbow Down</td>
-            <td>{keys[12]}</td>
+            <td className="td">G</td>
+            <td className="td">Elbow Down</td>
+            <td className="td">{keys[12]}</td>
           </tr>
           <tr style={{backgroundColor: keys[13] > 0 ? 'yellow' : 'white'}}>
-            <td>F</td>
-            <td>Rotate Forearm Clockwise</td>
-            <td>{keys[13]}</td>
+            <td className="td">F</td>
+            <td className="td">Rotate Forearm Clockwise</td>
+            <td className="td">{keys[13]}</td>
           </tr>
           <tr style={{backgroundColor: keys[14] > 0 ? 'yellow' : 'white'}}>
-            <td>H</td>
-            <td>Rotate Forearm Counterclockwise</td>
-            <td>{keys[14]}</td>
+            <td className="td">H</td>
+            <td className="td">Rotate Forearm Counterclockwise</td>
+            <td className="td">{keys[14]}</td>
           </tr>
           <tr style={{backgroundColor: keys[15] > 0 ? 'yellow' : 'white'}}>
-            <td>K</td>
-            <td>Wrist Pitch</td>
-            <td>{keys[15]}</td>
+            <td className="td">K</td>
+            <td className="td">Wrist Pitch</td>
+            <td className="td">{keys[15]}</td>
           </tr>
           <tr style={{backgroundColor: keys[16] > 0 ? 'yellow' : 'white'}}>
-            <td>I</td>
-            <td>Wrist Pitch</td>
-            <td>{keys[16]}</td>
+            <td className="td">I</td>
+            <td className="td">Wrist Pitch</td>
+            <td className="td">{keys[16]}</td>
           </tr>
           <tr style={{backgroundColor: keys[17] > 0 ? 'yellow' : 'white'}}>
-            <td>U</td>
-            <td>Wrist Roll</td>
-            <td>{keys[17]}</td>
+            <td className="td">U</td>
+            <td className="td">Wrist Roll</td>
+            <td className="td">{keys[17]}</td>
           </tr>
           <tr style={{backgroundColor: keys[18] > 0 ? 'yellow' : 'white'}}>
-            <td>O</td>
-            <td>Wrist Roll</td>
-            <td>{keys[18]}</td>
+            <td className="td">O</td>
+            <td className="td">Wrist Roll</td>
+            <td className="td">{keys[18]}</td>
           </tr>
         </tbody>
       </table>

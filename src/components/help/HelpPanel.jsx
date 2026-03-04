@@ -230,7 +230,7 @@ function HelpPanel() {
             setTankDriveEnabled={setTankDriveEnabled}
           />
           <div className="g1-text-wrapper">
-            <b>Driver Gamepad</b>
+            <b className="label">Driver Gamepad</b>
             <div
               className="gamepad-1"
               ref={displayGpad1}
@@ -240,7 +240,7 @@ function HelpPanel() {
         <div className="g2">
           <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
           <div className="g2-text-wrapper">
-            <b>Peripheral Gamepad</b>
+            <b className="label">Peripheral Gamepad</b>
             <div
               className="gamepad-2"
               ref={displayGpad2}
@@ -256,7 +256,7 @@ function HelpPanel() {
           />
         </div>
         <div className="keyboard">
-          <b>Keyboard Controls</b>
+          <b className="label">Keyboard Controls</b>
           <Keyboard />
         </div>
       </div>
