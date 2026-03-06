@@ -3,22 +3,26 @@ import {
   closeCameraStream,
   cameraStreamDataReportReceived,
   requestCameraFrame,
-} from '../camerasSlice'
+} from '../cameraSlice.js'
 import {
   messageReceivedFromRover,
   messageRover,
   roverConnected,
   roverDisconnected,
-} from '../roverSocketSlice'
-import {camelCaseToTitle} from '../../util/camelCaseToTitle'
-import {piexif} from 'piexifjs'
+} from '../roverSocketSlice.js'
+import {camelCaseToTitle} from '../../util/camelCaseToTitle.js'
+import Piexif from 'piexifjs'
 import {Quaternion, Euler} from '@math.gl/core'
+import type {Middleware} from '@reduxjs/toolkit'
+import type {RootState} from '../store.js'
+import {enumKeys} from '../../util/enumKeys.js'
+import {CameraNames} from '../../constants/cameraConstants.js'
 
 /**
  * Middleware that handles requesting and receiving camera streams from the
  * rover.
  */
-const camerasMiddleware = (store) => (next) => (action) => {
+export const cameraMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
   const result = next(action)
 
   switch (action.type) {
@@ -62,8 +66,8 @@ const camerasMiddleware = (store) => (next) => (action) => {
     case roverConnected.type: {
       // Inform the rover of camera streams we would like to receive when we
       // connect.
-      const cameras = store.getState().cameras
-      Object.keys(cameras).forEach((camera) => {
+      const cameras = store.getState().camera
+      enumKeys(CameraNames).forEach((camera) => {
         if (cameras[camera].isStreaming) {
           store.dispatch(
             messageRover({
@@ -80,8 +84,8 @@ const camerasMiddleware = (store) => (next) => (action) => {
     }
 
     case roverDisconnected.type: {
-      const cameras = store.getState().cameras
-      Object.keys(cameras).forEach((camera) => {
+      const cameras = store.getState().camera
+      enumKeys(CameraNames).forEach((camera) => {
         if (cameras[camera].isStreaming && cameras[camera].frameData !== null) {
           store.dispatch(
             cameraStreamDataReportReceived({
@@ -109,21 +113,21 @@ const camerasMiddleware = (store) => (next) => (action) => {
         let out = jpegData
 
         // Fits the telemetry(position/gps) data into exif metadata
-        let gpsIfd = {}
+        let gpsIfd: {[key: number]: any} = {}
 
         // put altitude, max precision to prevent pack error @ tallest point in Earth
-        gpsIfd[piexif.GPSIFD.GPSAltitude] = [message.alt * 100000, 100000]
+        gpsIfd[Piexif.GPSIFD.GPSAltitude] = [message.alt * 100000, 100000]
 
         // converts & puts latitude data (decimal --> dms)
         const lat = Math.abs(message.lat)
         const latRef = message.lat >= 0 ? 'N' : 'S'
-        gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latRef
+        gpsIfd[Piexif.GPSIFD.GPSLatitudeRef] = latRef
 
         let degreesLat = Math.floor(lat) // takes integer value of lat
         let minutesLat = Math.floor((lat - degreesLat) * 60) // takes decimal value of lat then * 60
         let secondsLat = (((lat - degreesLat) * 60) % 1) * 60
 
-        gpsIfd[piexif.GPSIFD.GPSLatitude] = [
+        gpsIfd[Piexif.GPSIFD.GPSLatitude] = [
           [degreesLat, 1],
           [minutesLat, 1],
           [secondsLat * 1000000, 1000000], // increases precision shown
@@ -131,25 +135,25 @@ const camerasMiddleware = (store) => (next) => (action) => {
 
         const lon = Math.abs(message.lon)
         const lonRef = message.lon >= 0 ? 'E' : 'W'
-        gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lonRef
+        gpsIfd[Piexif.GPSIFD.GPSLongitudeRef] = lonRef
 
         // converts & puts longitude data (decimal --> dms)
         let degreesLon = Math.floor(lon) // takes integer value of lon
         let minutesLon = Math.floor((lon - degreesLon) * 60) // takes decimal value of lon then * 60
         let secondsLon = (((lon - degreesLon) * 60) % 1) * 60
 
-        gpsIfd[piexif.GPSIFD.GPSLongitude] = [
+        gpsIfd[Piexif.GPSIFD.GPSLongitude] = [
           [degreesLon, 1],
           [minutesLon, 1],
           [secondsLon * 1000000, 1000000], // increases precision shown
         ]
 
-        gpsIfd[piexif.GPSIFD.GPSDateStamp] = new Date()
+        gpsIfd[Piexif.GPSIFD.GPSDateStamp] = new Date()
           .toISOString()
           .slice(0, 10)
           .replace(/-/g, ':')
 
-        gpsIfd[piexif.GPSIFD.GPSTimeStamp] = [
+        gpsIfd[Piexif.GPSIFD.GPSTimeStamp] = [
           [new Date().getUTCHours(), 1],
           [new Date().getUTCMinutes(), 1],
           [new Date().getUTCSeconds(), 1],
@@ -167,22 +171,22 @@ const camerasMiddleware = (store) => (next) => (action) => {
 
         // heading is from -180 to 180 but to format it into metadata, has
         // to be 0 --> 360 so we remap the negative values of heading
-        if (heading < 0) {
+        if (heading && heading < 0) {
           heading += 360
         }
 
-        gpsIfd[piexif.GPSIFD.GPSImgDirection] = [heading, 1]
-        gpsIfd[piexif.GPSIFD.GPSImgDirectionRef] = 'M' //magnetic north
+        gpsIfd[Piexif.GPSIFD.GPSImgDirection] = [heading, 1]
+        gpsIfd[Piexif.GPSIFD.GPSImgDirectionRef] = 'M' //magnetic north
 
-        const exifObj = {GPS: gpsIfd}
-        const exifBytes = piexif.dump(exifObj)
-        out = piexif.insert(exifBytes, jpegData)
+        const exifObj: Piexif.ExifDict = {GPS: gpsIfd}
+        const exifBytes = Piexif.dump(exifObj)
+        out = Piexif.insert(exifBytes, jpegData)
 
         let link = document.createElement('a')
         link.href = out
         let time = new Date()
         let timezoneOffset = time.getTimezoneOffset() * 60000
-        let timeString = new Date(time - timezoneOffset)
+        let timeString = new Date(time.getTime() - timezoneOffset)
           .toISOString()
           .replace(':', '_')
           .substring(0, 19)
@@ -201,5 +205,3 @@ const camerasMiddleware = (store) => (next) => (action) => {
 
   return result
 }
-
-export default camerasMiddleware

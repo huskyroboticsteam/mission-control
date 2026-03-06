@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.3.3",
+    "@types/piexifjs": "^1.0.0",
     "@types/react-gamepad": "^1.0.6"
   }
 }

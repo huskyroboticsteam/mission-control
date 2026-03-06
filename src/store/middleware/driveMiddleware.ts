@@ -1,11 +1,13 @@
-import {requestDrive, requestTankDrive} from '../driveSlice'
-import {selectMotorsAreEnabled} from '../motorsSlice'
-import {messageRover} from '../roverSocketSlice'
+import type {Middleware} from '@reduxjs/toolkit'
+import {requestDrive, requestTankDrive} from '../driveSlice.js'
+import {selectMotorsAreEnabled} from '../motorSlice.js'
+import {messageRover} from '../roverSocketSlice.js'
+import type {RootState} from '../store.js'
 
 /**
  * Middleware that handles sending drive requests to the rover.
  */
-const driveMiddleware = (store) => (next) => (action) => {
+export const driveMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
   const result = next(action)
 
   switch (action.type) {
@@ -47,5 +49,3 @@ const driveMiddleware = (store) => (next) => (action) => {
 
   return result
 }
-
-export default driveMiddleware

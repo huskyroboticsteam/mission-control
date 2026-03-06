@@ -1,11 +1,17 @@
-import {requestJointPower, requestJointPosition, jointPositionReportReceived} from '../jointsSlice'
-import {selectMotorsAreEnabled} from '../motorsSlice'
-import {messageRover, messageReceivedFromRover} from '../roverSocketSlice'
+import type {Middleware} from '@reduxjs/toolkit'
+import {
+  requestJointPower,
+  requestJointPosition,
+  jointPositionReportReceived,
+} from '../jointSlice.js'
+import {selectMotorsAreEnabled} from '../motorSlice.js'
+import {messageRover, messageReceivedFromRover} from '../roverSocketSlice.js'
+import type {RootState} from '../store.js'
 
 /**
  * Middleware that handles sending and receiving joint data.
  */
-const jointsMiddleware = (store) => (next) => (action) => {
+export const jointMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
   const result = next(action)
 
   switch (action.type) {
@@ -61,5 +67,3 @@ const jointsMiddleware = (store) => (next) => (action) => {
 
   return result
 }
-
-export default jointsMiddleware

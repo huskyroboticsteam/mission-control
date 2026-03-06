@@ -14,7 +14,10 @@ export const peripheralSlice = createSlice({
   name: 'peripheral',
   initialState,
   reducers: {
-    mountedPeripheralReportReceived: (state, action: PayloadAction<{peripheral: Peripheral}>) => {
+    mountedPeripheralReportReceived: (
+      state,
+      action: PayloadAction<{peripheral: Peripheral | null}>
+    ) => {
       state.mountedPeripheral = action.payload.peripheral
     },
   },

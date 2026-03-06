@@ -1,7 +1,9 @@
-import {requestServoPosition, servoPositionReportReceived} from '../servoSlice.js'
+import {requestServoPosition, servoPositionReportReceived, servoSlice} from '../servoSlice.js'
 import {messageRover, messageReceivedFromRover} from '../roverSocketSlice.js'
+import type {Dispatch, Middleware} from '@reduxjs/toolkit'
+import type {RootState} from '../store.js'
 
-const servoMiddleware = (store) => (next) => (action) => {
+export const servoMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
   const result = next(action)
 
   switch (action.type) {
@@ -39,5 +41,3 @@ const servoMiddleware = (store) => (next) => (action) => {
 
   return result
 }
-
-export default servoMiddleware

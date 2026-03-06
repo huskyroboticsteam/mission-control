@@ -1,0 +1,42 @@
+import {enableMotors} from '../motorSlice.js'
+import {requestDrive} from '../driveSlice.js'
+import {requestJointPower} from '../jointSlice.js'
+import type {Middleware} from '@reduxjs/toolkit'
+import type {RootState} from '../store.js'
+import {JointNames} from '../../constants/jointConstants.js'
+import {enumKeys} from '../../util/enumKeys.js'
+
+/**
+ * Middleware that handles receiving motor telemetry.
+ */
+export const motorMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
+  const result = next(action)
+
+  switch (action.type) {
+    case enableMotors.type:
+      const {enabled} = action.payload
+      if (!enabled) {
+        store.dispatch(
+          requestDrive({
+            straight: 0,
+            steer: 0,
+          })
+        )
+
+        enumKeys(JointNames).forEach((jointName) => {
+          store.dispatch(
+            requestJointPower({
+              jointName,
+              power: 0,
+            })
+          )
+        })
+      }
+      break
+
+    default:
+      break
+  }
+
+  return result
+}

@@ -1,12 +1,15 @@
 import {createAction, createSlice} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
+import { ROVER_SERVER_URL } from '../constants/networkConstants.js'
 
 type RoverSocketState = {
+  // readonly socket: WebSocket | null
   readonly isConnected: boolean
   readonly isConnecting: boolean
 }
 
 const initialState: RoverSocketState = {
+  // socket: null
   isConnected: false,
   isConnecting: false,
 }
@@ -25,7 +28,7 @@ export const roverSocketSlice = createSlice({
       state.isConnecting = false
     },
 
-    connectToRover(state) {
+    connectToRover: (state) => {
       state.isConnecting = true
       // Connecting via WebSocket is handled in middleware.
     },
@@ -35,8 +38,9 @@ export const roverSocketSlice = createSlice({
 export const {roverConnected, roverDisconnected, connectToRover} = roverSocketSlice.actions
 // Actions handled by rover socket middleware.
 export const disconnectFromRover = createAction('roverSocket/disconnect')
-export const messageRover = createAction<JSON>('roverSocket/sendMessage')
-export const messageReceivedFromRover = createAction('roverSocket/messageReceived')
+// TODO: Do we want to specify every type of message?
+export const messageRover = createAction<any>('roverSocket/sendMessage')
+export const messageReceivedFromRover = createAction<any>('roverSocket/messageReceived')
 
 export const selectRoverIsConnected = (state: RootState) => state.roverSocket.isConnected
 export const selectRoverIsConnecting = (state: RootState) => state.roverSocket.isConnecting

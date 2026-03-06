@@ -36,7 +36,7 @@ export const camerasSlice = createSlice({
 
     cameraStreamDataReportReceived: (
       state,
-      action: PayloadAction<{camera: keyof typeof CameraNames; frameData: string}>
+      action: PayloadAction<{camera: keyof typeof CameraNames; frameData: string | null}>
     ) => {
       const {camera, frameData} = action.payload
       if (state[camera].isStreaming) {

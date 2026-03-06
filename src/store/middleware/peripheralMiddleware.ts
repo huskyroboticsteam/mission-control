@@ -1,10 +1,12 @@
-import {mountedPeripheralReportReceived} from '../peripheralsSlice'
-import {messageReceivedFromRover, roverDisconnected} from '../roverSocketSlice'
+import type {Middleware} from '@reduxjs/toolkit'
+import {mountedPeripheralReportReceived} from '../peripheralSlice.js'
+import {messageReceivedFromRover, roverDisconnected} from '../roverSocketSlice.js'
+import type {RootState} from '../store.js'
 
 /**
  * Middleware that handles receiving mounted peripheral reports from the rover.
  */
-const peripheralsMiddleware = (store) => (next) => (action) => {
+export const peripheralMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
   const result = next(action)
 
   switch (action.type) {
@@ -34,5 +36,3 @@ const peripheralsMiddleware = (store) => (next) => (action) => {
 
   return result
 }
-
-export default peripheralsMiddleware
