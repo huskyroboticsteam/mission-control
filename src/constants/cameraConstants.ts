@@ -1,4 +1,4 @@
-export enum Cameras {
+export enum CameraNames {
   mast,
   hand,
   wrist,

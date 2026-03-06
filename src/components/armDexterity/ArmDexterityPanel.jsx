@@ -1,4 +1,4 @@
-import RoverModel from '../roverModel/RoverModel'
+// import RoverModel from '../roverModel/RoverModel'
 import CameraStream from '../camera/CameraStream'
 
 import './ArmDexterityPanel.css'
@@ -8,7 +8,7 @@ function ArmDexterityPanel() {
     <div className="arm-dexterity-panel">
       <CameraStream camera="hand" />
       <CameraStream camera="wrist" />
-      <RoverModel />
+      {/* <RoverModel /> */}
     </div>
   )
 }

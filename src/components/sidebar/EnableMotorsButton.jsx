@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux'
-import {selectMotorsAreEnabled, enableMotors} from '../../store/motorsSlice'
+import {selectMotorsAreEnabled, enableMotors} from '../../store/motorSlice'
 import './EnableMotorsButton.css'
 
 function EnableMotorsButton() {

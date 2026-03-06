@@ -6,9 +6,9 @@ import {
   closeCameraStream,
   selectCameraStreamFrameData,
   requestCameraFrame,
-} from '../../store/camerasSlice'
+} from '../../store/cameraSlice'
 import {selectRoverIsConnected} from '../../store/roverSocketSlice'
-import camelCaseToTitle from '../../util/camelCaseToTitle'
+import {camelCaseToTitle} from '../../util/camelCaseToTitle'
 import './CameraStream.css'
 /**
  * Takes:

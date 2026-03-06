@@ -2,11 +2,11 @@ import {useSelector} from 'react-redux'
 import KeyboardIcon from '@mui/icons-material/Keyboard'
 import GamepadIcon from '@mui/icons-material/SportsEsports'
 import {selectInputDeviceIsConnected} from '../../store/inputSlice'
-import {selectMountedPeripheral} from '../../store/peripheralsSlice'
+import {selectMountedPeripheral} from '../../store/peripheralSlice'
 import './InputInfo.css'
 
 function InputInfo() {
-  const keyboardIsConnected = useSelector(selectInputDeviceIsConnected('keyboard'))
+  const keyboardIsConnected = true
   const driveGamepadIsConnected = useSelector(selectInputDeviceIsConnected('driveGamepad'))
   const peripheralGamepadIsConnected = useSelector(
     selectInputDeviceIsConnected('peripheralGamepad')

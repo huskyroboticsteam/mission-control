@@ -10,7 +10,7 @@ import {
   roverConnected,
   roverDisconnected,
 } from '../roverSocketSlice'
-import camelCaseToTitle from '../../util/camelCaseToTitle'
+import {camelCaseToTitle} from '../../util/camelCaseToTitle'
 import {piexif} from 'piexifjs'
 import {Quaternion, Euler} from '@math.gl/core'
 
@@ -97,6 +97,7 @@ const camerasMiddleware = (store) => (next) => (action) => {
     case messageReceivedFromRover.type: {
       const {message} = action.payload
       if (message.type === 'cameraStreamReport') {
+        console.log(typeof message.data)
         store.dispatch(
           cameraStreamDataReportReceived({
             camera: message.camera,

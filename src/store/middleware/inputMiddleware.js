@@ -3,7 +3,6 @@ import {requestDrive, requestTankDrive} from '../driveSlice'
 import {requestJointPower} from '../jointsSlice'
 import {enableIK, visuallyEnableIK} from '../inputSlice'
 import {requestStop} from '../emergencyStopSlice'
-import {requestSciencePower} from '../scienceSlice'
 import {
   messageReceivedFromRover,
   messageRover,
@@ -99,16 +98,6 @@ function updatePeripherals(
 ) {
   if (mountedPeripheral === 'arm') {
     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-  } else if (mountedPeripheral === 'scienceStation') {
-    updateScience(
-      prevComputedInput,
-      computedInput,
-      prevMountedPeripheral,
-      mountedPeripheral,
-      dispatch
-    )
-    updateDrillMotor(prevComputedInput, computedInput, dispatch)
-    updateDrillActuator(prevComputedInput, computedInput, dispatch)
   }
 }
 
@@ -132,53 +121,6 @@ function updateArm(
       )
     }
   })
-}
-
-function updateScience(
-  prevComputedInput,
-  computedInput,
-  prevMountedPeripheral,
-  mountedPeripheral,
-  dispatch
-) {
-  Object.keys(computedInput.science).forEach((scienceName) => {
-    if (
-      (computedInput.science[scienceName] !== prevComputedInput.science[scienceName] ||
-        mountedPeripheral !== prevMountedPeripheral) &&
-      scienceName !== 'drillMotor' &&
-      scienceName !== 'drillActuator' &&
-      scienceName !== 'speed'
-    ) {
-      dispatch(
-        requestSciencePower({
-          scienceName,
-          power: computedInput.science[scienceName],
-        })
-      )
-    }
-  })
-}
-
-function updateDrillMotor(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.science.drillMotor !== prevComputedInput.science.drillMotor) {
-    dispatch(
-      requestJointPower({
-        jointName: 'drillMotor',
-        power: computedInput.science.drillMotor,
-      })
-    )
-  }
-}
-
-function updateDrillActuator(prevComputedInput, computedInput, dispatch) {
-  if (computedInput.science.drillActuator !== prevComputedInput.science.drillActuator) {
-    dispatch(
-      requestJointPower({
-        jointName: 'drillActuator',
-        power: computedInput.science.drillActuator,
-      })
-    )
-  }
 }
 
 export default inputMiddleware

@@ -1,4 +1,4 @@
-import {ROVER_SERVER_URL} from '../../constants/networkConstants'
+import {ROVER_SERVER_URL} from '../../constants/networkConstants.js'
 import {
   connectToRover,
   disconnectFromRover,
@@ -6,13 +6,13 @@ import {
   roverDisconnected,
   messageRover,
   messageReceivedFromRover,
-} from '../roverSocketSlice'
+} from '../roverSocketSlice.js'
 
 /**
  * Middleware that handles connecting to, disconnecting from, and messaging the
  * rover when related actions are dispatched.
  */
-const roverSocketMiddleware = () => {
+export const roverSocketMiddleware = () => {
   let socket = null
   let isConnecting = false
 
@@ -69,5 +69,3 @@ const roverSocketMiddleware = () => {
     return result
   }
 }
-
-export default roverSocketMiddleware()

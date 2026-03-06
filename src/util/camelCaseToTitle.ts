@@ -1,4 +1,4 @@
-function camelCaseToTitle(str) {
+export const camelCaseToTitle = (str: string) => {
   return (
     str[0].toUpperCase() +
     str
@@ -7,5 +7,3 @@ function camelCaseToTitle(str) {
       .join(' ')
   )
 }
-
-export default camelCaseToTitle

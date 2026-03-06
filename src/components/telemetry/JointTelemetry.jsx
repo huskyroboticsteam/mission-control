@@ -1,12 +1,11 @@
 import {useSelector} from 'react-redux'
-import {selectJointCurrentPosition, selectAllJointNames} from '../../store/jointsSlice'
+import {selectJointCurrentPosition} from '../../store/jointSlice'
 
-import camelCaseToTitle from '../../util/camelCaseToTitle'
+import {camelCaseToTitle} from '../../util/camelCaseToTitle'
 import './JointTelemetry.css'
+import {JointNames} from '../../constants/jointConstants'
 
 function JointTelemetry() {
-  const jointNames = useSelector(selectAllJointNames)
-
   return (
     <div className="motor-telemetry">
       <table>
@@ -17,7 +16,7 @@ function JointTelemetry() {
           </tr>
         </thead>
         <tbody>
-          {jointNames.map((motorName) => (
+          {JointNames.map((motorName) => (
             <MotorData motorName={motorName} key={motorName} />
           ))}
         </tbody>
