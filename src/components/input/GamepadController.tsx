@@ -1,13 +1,15 @@
-import Gamepad from 'react-gamepad'
+import Gamepad, { type Axis, type Button, type Layout } from 'react-gamepad'
 import {useDispatch} from 'react-redux'
 import {
   gamepadConnected,
   gamepadDisconnected,
   gamepadAxisChanged,
   gamepadButtonChanged,
-} from '../../store/inputSlice'
+} from '../../store/inputSlice.js'
+import type { GamepadNames } from '../../constants/gamepadConstants.js'
+import React from 'react'
 
-const crossPlatformLayout = {
+const crossPlatformLayout: Layout = {
   buttons: [
     'A',
     'B',
@@ -31,24 +33,27 @@ const crossPlatformLayout = {
     'LeftStickY',
     'RightStickX',
     'RightStickY',
-    'DPadX',
-    '-DPadY',
     'LeftTrigger',
     'RightTrigger',
   ],
   buttonAxis: [null, null, null, null, null, null, 'LeftTrigger', 'RightTrigger'],
 }
 
-function GamepadController({gamepadName, gamepadIndex}) {
+// TODO: this is wack
+const GamepadComponent = Gamepad as unknown as React.FC<Gamepad.Props>
+
+export const GamepadController = ({gamepadName, gamepadIndex}: {gamepadName: keyof typeof GamepadNames, gamepadIndex: number}) => {
   const dispatch = useDispatch()
+
   return (
-    <Gamepad
+    <>
+    <GamepadComponent
       layout={crossPlatformLayout}
       gamepadIndex={gamepadIndex}
       deadZone={0.0}
       onConnect={() => dispatch(gamepadConnected({gamepadName}))}
       onDisconnect={() => dispatch(gamepadDisconnected({gamepadName}))}
-      onAxisChange={(axisName, value) =>
+      onAxisChange={(axisName: Axis, value: number) =>
         dispatch(
           gamepadAxisChanged({
             gamepadName,
@@ -57,7 +62,7 @@ function GamepadController({gamepadName, gamepadIndex}) {
           })
         )
       }
-      onButtonChange={(buttonName, pressed) =>
+      onButtonChange={(buttonName: Button, pressed: boolean) =>
         dispatch(
           gamepadButtonChanged({
             gamepadName,
@@ -68,8 +73,7 @@ function GamepadController({gamepadName, gamepadIndex}) {
       }>
       {/* Due to a bug in react-gamepad, we must supply a child component. */}
       <></>
-    </Gamepad>
+    </GamepadComponent>
+    </>
   )
 }
-
-export default GamepadController

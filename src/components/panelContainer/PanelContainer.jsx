@@ -2,7 +2,7 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import TelemetryPanel from '../telemetry/TelemetryPanel'
 import HelpPanel from '../help/HelpPanel'
 import NavigationPanel from '../navigation/NavigationPanel'
-import ArmDexterityPanel from '../armDexterity/ArmDexterityPanel'
+import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel'
 import './PanelContainer.css'
 
 function PanelContainer() {

@@ -1,8 +1,9 @@
 import {Keycap} from 'keycap'
 import './Keyboard.css'
+import React from 'react'
 
 // Uses Keycap library to render keyboard display
-function Keyboard() {
+export const Keyboard = () => {
   // Responds to lowercase ver of character keys
   return (
     <div>
@@ -83,5 +84,3 @@ function Keyboard() {
     </div>
   )
 }
-
-export default Keyboard

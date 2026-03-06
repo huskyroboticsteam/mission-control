@@ -1,15 +1,16 @@
 import {useEffect} from 'react'
-import RoverSocketManager from '../networking/RoverSocketManager'
-import GamepadController from '../input/GamepadController'
-import KeyboardController from '../input/KeyboardController'
-import Sidebar from '../sidebar/Sidebar'
-import PanelContainer from '../panelContainer/PanelContainer'
+import RoverSocketManager from '../networking/RoverSocketManager.jsx'
+import {GamepadController} from '../input/GamepadController.js'
+import {KeyboardController} from '../input/KeyboardController.js'
+import Sidebar from '../sidebar/Sidebar.jsx'
+import PanelContainer from '../panelContainer/PanelContainer.jsx'
 import './App.css'
+import React from 'react'
 
-function App() {
+export const App = () => {
   // Disable context menu.
   useEffect(() => {
-    const handleContextMenu = (event) => event.preventDefault()
+    const handleContextMenu = (event: PointerEvent) => event.preventDefault()
     document.addEventListener('contextmenu', handleContextMenu)
   }, [])
 
@@ -24,5 +25,3 @@ function App() {
     </div>
   )
 }
-
-export default App
