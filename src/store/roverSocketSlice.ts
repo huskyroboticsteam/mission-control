@@ -1,6 +1,6 @@
 import {createAction, createSlice} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
-import { ROVER_SERVER_URL } from '../constants/networkConstants.js'
+import {ROVER_SERVER_URL} from '../constants/networkConstants.js'
 
 type RoverSocketState = {
   // readonly socket: WebSocket | null

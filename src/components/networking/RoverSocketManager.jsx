@@ -5,7 +5,7 @@ import {
   selectRoverIsConnected,
   selectRoverIsConnecting,
 } from '../../store/roverSocketSlice'
-import { CONNECTION_ATTEMPT_DELAY } from '../../constants/networkConstants'
+import {CONNECTION_ATTEMPT_DELAY} from '../../constants/networkConstants'
 
 /**
  * RoverSocketManager manages the WebSocket connection to the rover.
@@ -19,12 +19,11 @@ function RoverSocketManager() {
   useEffect(() => {
     dispatch(connectToRover())
 
-    const id  = setInterval(
-      () => {
-        if (!roverIsConnected && !roverIsConnecting) {
-          dispatch(connectToRover())
-        }
-      }, CONNECTION_ATTEMPT_DELAY)
+    const id = setInterval(() => {
+      if (!roverIsConnected && !roverIsConnecting) {
+        dispatch(connectToRover())
+      }
+    }, CONNECTION_ATTEMPT_DELAY)
 
     return () => clearInterval(id)
   }, [])
