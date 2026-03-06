@@ -2,15 +2,15 @@ import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
 
 type WaypointNavState = {
-  readonly latitude: number | null
-  readonly longitude: number | null
+  readonly latitude: number
+  readonly longitude: number
   readonly isApproximate: boolean
   readonly isGate: boolean
 }
 
 const initialState: WaypointNavState = {
-  latitude: null,
-  longitude: null,
+  latitude: 0,
+  longitude: 0,
   isApproximate: false,
   isGate: false,
 }

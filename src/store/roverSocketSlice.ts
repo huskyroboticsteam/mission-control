@@ -1,6 +1,6 @@
 import {createAction, createSlice} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
-import {ROVER_SERVER_URL} from '../constants/networkConstants.js'
+import type {ReportMessage, RequestMessage} from '../constants/messages.js'
 
 type RoverSocketState = {
   // readonly socket: WebSocket | null
@@ -37,10 +37,18 @@ export const roverSocketSlice = createSlice({
 
 export const {roverConnected, roverDisconnected, connectToRover} = roverSocketSlice.actions
 // Actions handled by rover socket middleware.
-export const disconnectFromRover = createAction('roverSocket/disconnect')
-// TODO: Do we want to specify every type of message?
-export const messageRover = createAction<any>('roverSocket/sendMessage')
-export const messageReceivedFromRover = createAction<any>('roverSocket/messageReceived')
+// Typescript expands the action type to string, so we have to define the name twice
+export const disconnectFromRover = createAction<{}, 'roverSocket/disconnect'>(
+  'roverSocket/disconnect'
+)
+export const messageRover = createAction<{message: RequestMessage}, 'roverSocket/sendMessage'>(
+  'roverSocket/sendMessage'
+)
+export const messageReceivedFromRover = createAction<
+  {message: ReportMessage},
+  'roverSocket/messageReceived'
+>('roverSocket/messageReceived')
+type T = ReturnType<typeof messageReceivedFromRover>
 
 export const selectRoverIsConnected = (state: RootState) => state.roverSocket.isConnected
 export const selectRoverIsConnecting = (state: RootState) => state.roverSocket.isConnecting

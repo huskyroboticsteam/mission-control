@@ -8,85 +8,89 @@ import {
   roverDisconnected,
   roverConnected,
 } from '../roverSocketSlice.js'
-import type {Middleware} from '@reduxjs/toolkit'
-import type {RootState} from '../store.js'
-import {keyPressed} from '../inputSlice.js'
+import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
+import type {RootState, RoverStoreAPI} from '../store.js'
+import {inputSlice, keyPressed} from '../inputSlice.js'
 
 /**
  * Middleware that messages the rover in response to user input.
  */
-export const inputMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
-  const result = next(action)
+export const inputMiddleware: Middleware<{}, RootState> =
+  (store: RoverStoreAPI) => (next) => (action) => {
+    const result = next(action)
 
-  switch (action.type) {
-    case keyPressed.type:
-      if (action.payload.key === ' ') {
-        store.dispatch(requestStop({stop: !store.getState().emergencyStop.stopped}))
+    if (isAnyOf(...Object.values(inputSlice.actions))(action)) {
+      switch (action.type) {
+        case keyPressed.type: {
+          if (action.payload.key === ' ') {
+            store.dispatch(requestStop({stop: !store.getState().emergencyStop.stopped}))
+          }
+          break
+        }
+
+        default:
+          break
       }
-      break
 
-    default:
-      break
+      // if (action.type.startsWith('input/')) {
+      // if (action.type === enableIK.type) {
+      //   store.dispatch(
+      //     messageRover({
+      //       message: {
+      //         type: 'armIKRequest',
+      //         enabled: action.payload.enable,
+      //       },
+      //     })
+      //   )
+      //   return next(action)
+      // } else if (action.type === 'input/keyPressed' && action.payload.key === ' ') {
+      //   store.dispatch(requestStop({stop: !store.getState().input.emergencyStop}))
+      //   return next(action)
+      // } else {
+      //   const prevComputedInput = store.getState().input.computed
+      //   const prevMountedPeripheral = selectMountedPeripheral(store.getState())
+      //   const result = next(action)
+      //   const computedInput = store.getState().input.computed
+      //   const mountedPeripheral = selectMountedPeripheral(store.getState())
+
+      //   updateDrive(prevComputedInput, computedInput, store)
+      //   updatePeripherals(
+      //     prevComputedInput,
+      //     computedInput,
+      //     prevMountedPeripheral,
+      //     mountedPeripheral,
+      //     store.dispatch
+      //   )
+      // return result
+      // }
+      // } else {
+      //   switch (action.type) {
+      //     case roverDisconnected.type:
+      //     case roverConnected.type: {
+      //       store.dispatch(enableIK({enable: false}))
+      //       break
+      //     }
+
+      //     case messageReceivedFromRover.type: {
+      //       const {message} = action.payload
+      //       if (message.type === 'armIKEnabledReport') {
+      //         let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState
+      //         if (lastArmIKState !== null && lastArmIKState !== message.enabled) {
+      //           alert('Arm IK was unable to be ' + (!message.enabled ? 'enabled.' : 'disabled.'))
+      //         }
+      //         store.dispatch(visuallyEnableIK(message.enabled))
+      //       }
+      //       break
+      //     }
+      //     default:
+      //       break
+      //   }
+      // return next(action)
+      // }
+
+      return result
+    }
   }
-
-  // if (action.type.startsWith('input/')) {
-  // if (action.type === enableIK.type) {
-  //   store.dispatch(
-  //     messageRover({
-  //       message: {
-  //         type: 'armIKRequest',
-  //         enabled: action.payload.enable,
-  //       },
-  //     })
-  //   )
-  //   return next(action)
-  // } else if (action.type === 'input/keyPressed' && action.payload.key === ' ') {
-  //   store.dispatch(requestStop({stop: !store.getState().input.emergencyStop}))
-  //   return next(action)
-  // } else {
-  //   const prevComputedInput = store.getState().input.computed
-  //   const prevMountedPeripheral = selectMountedPeripheral(store.getState())
-  //   const result = next(action)
-  //   const computedInput = store.getState().input.computed
-  //   const mountedPeripheral = selectMountedPeripheral(store.getState())
-
-  //   updateDrive(prevComputedInput, computedInput, store)
-  //   updatePeripherals(
-  //     prevComputedInput,
-  //     computedInput,
-  //     prevMountedPeripheral,
-  //     mountedPeripheral,
-  //     store.dispatch
-  //   )
-  // return result
-  // }
-  // } else {
-  //   switch (action.type) {
-  //     case roverDisconnected.type:
-  //     case roverConnected.type: {
-  //       store.dispatch(enableIK({enable: false}))
-  //       break
-  //     }
-
-  //     case messageReceivedFromRover.type: {
-  //       const {message} = action.payload
-  //       if (message.type === 'armIKEnabledReport') {
-  //         let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState
-  //         if (lastArmIKState !== null && lastArmIKState !== message.enabled) {
-  //           alert('Arm IK was unable to be ' + (!message.enabled ? 'enabled.' : 'disabled.'))
-  //         }
-  //         store.dispatch(visuallyEnableIK(message.enabled))
-  //       }
-  //       break
-  //     }
-  //     default:
-  //       break
-  //   }
-  // return next(action)
-  // }
-
-  return result
-}
 
 // function updateDrive(prevComputedInput, computedInput, store) {
 //   const dispatch = store.dispatch

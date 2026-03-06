@@ -1,5 +1,5 @@
-import {combineReducers, configureStore, type Middleware} from '@reduxjs/toolkit'
-import {camerasSlice} from './cameraSlice.js'
+import {combineReducers, configureStore, type MiddlewareAPI} from '@reduxjs/toolkit'
+import {cameraSlice} from './cameraSlice.js'
 import {driveSlice} from './driveSlice.js'
 import {emergencyStopSlice} from './emergencyStopSlice.js'
 import {inputSlice} from './inputSlice.js'
@@ -25,7 +25,7 @@ import {telemetryMiddleware} from './middleware/telemetryMiddleware.js'
 import {waypointNavMiddleware} from './middleware/waypointNavMiddleware.js'
 
 const rootReducer = combineReducers({
-  camera: camerasSlice.reducer,
+  camera: cameraSlice.reducer,
   drive: driveSlice.reducer,
   emergencyStop: emergencyStopSlice.reducer,
   input: inputSlice.reducer,
@@ -51,7 +51,7 @@ export const store = configureStore({
       motorMiddleware,
       opModeMiddleware,
       peripheralMiddleware,
-      roverSocketMiddleware(),
+      roverSocketMiddleware,
       servoMiddleware,
       telemetryMiddleware,
       waypointNavMiddleware
@@ -60,3 +60,4 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof rootReducer>
 export type RoverDispatch = typeof store.dispatch
+export type RoverStoreAPI = MiddlewareAPI<RoverDispatch, RootState>

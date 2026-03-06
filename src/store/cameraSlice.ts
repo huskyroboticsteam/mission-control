@@ -20,7 +20,7 @@ const initialState: CameraState = Object.keys(CameraNames).reduce<CameraState>(
   {} as CameraState
 )
 
-export const camerasSlice = createSlice({
+export const cameraSlice = createSlice({
   name: 'camera',
   initialState,
   reducers: {
@@ -47,10 +47,14 @@ export const camerasSlice = createSlice({
 })
 
 export const {openCameraStream, closeCameraStream, cameraStreamDataReportReceived} =
-  camerasSlice.actions
+  cameraSlice.actions
 
 // Handled by camera middleware.
-export const requestCameraFrame = createAction('camera/requestCameraFrame')
+// Typescript expands the action type to string, so we have to define the name twice
+export const requestCameraFrame = createAction<
+  {camera: keyof typeof CameraNames},
+  'camera/requestCameraFrame'
+>('camera/requestCameraFrame')
 
 export const selectAllCameraNames = (state: RootState) => Object.keys(state.camera)
 export const selectCameraIsStreaming = (camera: keyof typeof CameraNames) => (state: RootState) =>

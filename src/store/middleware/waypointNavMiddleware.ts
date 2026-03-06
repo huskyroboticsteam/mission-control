@@ -1,13 +1,13 @@
 import type {Middleware} from '@reduxjs/toolkit'
 import {messageRover} from '../roverSocketSlice.js'
 import {requestWaypointNav} from '../waypointNavSlice.js'
-import type {RootState} from '../store.js'
+import type {RootState, RoverStoreAPI} from '../store.js'
 
-export const waypointNavMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
-  const result = next(action)
+export const waypointNavMiddleware: Middleware<{}, RootState> =
+  (store: RoverStoreAPI) => (next) => (action) => {
+    const result = next(action)
 
-  switch (action.type) {
-    case requestWaypointNav.type:
+    if (requestWaypointNav.match(action)) {
       store.dispatch(
         messageRover({
           message: {
@@ -16,11 +16,7 @@ export const waypointNavMiddleware: Middleware<{}, RootState> = (store) => (next
           },
         })
       )
-      break
+    }
 
-    default:
-      break
+    return result
   }
-
-  return result
-}

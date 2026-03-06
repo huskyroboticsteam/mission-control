@@ -1,18 +1,17 @@
 import {roverConnected, messageRover} from '../roverSocketSlice.js'
 import {requestOpMode} from '../opModeSlice.js'
-import type {Middleware} from '@reduxjs/toolkit'
-import type {RootState} from '../store.js'
+import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
+import type {RootState, RoverStoreAPI} from '../store.js'
 
 /**
  * Middleware that handles sending messages to the rover to request operation
  * modes.
  */
-export const opModeMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
-  const result = next(action)
+export const opModeMiddleware: Middleware<{}, RootState> =
+  (store: RoverStoreAPI) => (next) => (action) => {
+    const result = next(action)
 
-  switch (action.type) {
-    case requestOpMode.type:
-    case roverConnected.type: {
+    if (isAnyOf(requestOpMode, roverConnected)(action)) {
       store.dispatch(
         messageRover({
           message: {
@@ -21,12 +20,7 @@ export const opModeMiddleware: Middleware<{}, RootState> = (store) => (next) => 
           },
         })
       )
-      break
     }
 
-    default:
-      break
+    return result
   }
-
-  return result
-}

@@ -1,18 +1,17 @@
 import {roverConnected, messageRover} from '../roverSocketSlice.js'
 import {requestStop} from '../emergencyStopSlice.js'
-import type {Middleware} from '@reduxjs/toolkit'
-import type {RootState} from '../store.js'
+import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
+import type {RootState, RoverStoreAPI} from '../store.js'
 
 /**
  * Middleware that handles sending messages to the rover to request emergency
  * stops.
  */
-export const emergencyStopMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
-  const result = next(action)
+export const emergencyStopMiddleware: Middleware<{}, RootState> =
+  (store: RoverStoreAPI) => (next) => (action) => {
+    const result = next(action)
 
-  switch (action.type) {
-    case requestStop.type:
-    case roverConnected.type: {
+    if (isAnyOf(requestStop, roverConnected)(action)) {
       store.dispatch(
         messageRover({
           message: {
@@ -21,12 +20,7 @@ export const emergencyStopMiddleware: Middleware<{}, RootState> = (store) => (ne
           },
         })
       )
-      break
     }
 
-    default:
-      break
+    return result
   }
-
-  return result
-}
