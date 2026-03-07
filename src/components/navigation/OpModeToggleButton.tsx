@@ -1,9 +1,11 @@
+import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {requestOpMode, selectOpMode} from '../../store/opModeSlice'
+import {requestOpMode, selectOpMode} from '../../store/opModeSlice.js'
+import type {RoverDispatch} from '../../store/store.js'
 import './OpModeToggleButton.css'
 
 function OpModeToggleButton() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<RoverDispatch>()
   const opMode = useSelector(selectOpMode)
 
   const handleClick = () => {

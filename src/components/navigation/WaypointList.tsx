@@ -1,13 +1,18 @@
 import {useSelector} from 'react-redux'
 import React, {useState} from 'react'
 import './WaypointList.css'
-import {selectRoverPosition} from '../../store/telemetrySlice'
-import {randFloat} from 'three/src/math/MathUtils'
+import {selectRoverPosition} from '../../store/telemetrySlice.js'
+
+type WaypointEntry = {
+  title: string
+  lat: number | null
+  lon: number | null
+}
 
 function WaypointList() {
-  const {_, __, ___, ____, lon, lat, _____} = useSelector(selectRoverPosition)
+  const {lon, lat} = useSelector(selectRoverPosition)
   const [title, setTitle] = useState('')
-  const [list, setList] = useState([])
+  const [list, setList] = useState<WaypointEntry[]>([])
 
   return (
     <div>
@@ -15,14 +20,16 @@ function WaypointList() {
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <button
           onClick={() => {
-            setList([...list, {title: title, lat: lat, lon: lon}])
+            setList([...list, {title, lat, lon}])
           }}>
           Add
         </button>
       </div>
       <div>
-        {list.map((w) => (
-          <div className="waypoint-display">{`${w.title}:\t\t(${w.lat},${w.lon})`}</div>
+        {list.map((w, i) => (
+          <div
+            className="waypoint-display"
+            key={`${w.title}-${i}`}>{`${w.title}:\t\t(${w.lat},${w.lon})`}</div>
         ))}
       </div>
     </div>

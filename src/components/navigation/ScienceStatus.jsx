@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux'
-import {getSpeed} from '../../store/inputSlice'
+import {getSpeed} from '../../store/inputSlice.js'
 
 function ScienceStatus() {
   const speed = useSelector(getSpeed)

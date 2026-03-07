@@ -1,20 +1,21 @@
 import {useDispatch, useSelector} from 'react-redux'
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {type FormEvent, useState, useEffect, useCallback} from 'react'
 import {
   requestWaypointNav,
   setWaypointPosition,
   selectLatitude,
   selectLongitude,
-} from '../../store/waypointNavSlice'
-import {selectOpMode} from '../../store/opModeSlice'
-import {selectRoverIsConnected} from '../../store/roverSocketSlice'
+} from '../../store/waypointNavSlice.js'
+import {selectOpMode} from '../../store/opModeSlice.js'
+import {selectRoverIsConnected} from '../../store/roverSocketSlice.js'
+import type {RoverDispatch} from '../../store/store.js'
 import './WaypointNav.css'
 
 function WaypointNav() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<RoverDispatch>()
   const [submitted, setSubmitted] = useState(false)
-  const [lat, setLat] = useState(0)
-  const [lon, setLon] = useState(0)
+  const [lat, setLat] = useState('0')
+  const [lon, setLon] = useState('0')
 
   const [isWaypointSet, setIsWaypointSet] = useState(false)
 
@@ -25,20 +26,28 @@ function WaypointNav() {
   const roverIsConnected = useSelector(selectRoverIsConnected)
 
   const handleWaypoint = useCallback(() => {
+    const latitude = Number(lat)
+    const longitude = Number(lon)
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return
+    }
+
     dispatch(
       setWaypointPosition({
-        longitude: lon,
-        latitude: lat,
+        longitude,
+        latitude,
       })
     )
-  }, [lat, lon])
+  }, [dispatch, lat, lon])
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (roverIsConnected) {
-      const form = e.target
-      const formData = new FormData(form)
-      const formJson = Object.fromEntries(formData.entries())
+      const formData = new FormData(e.currentTarget)
+      const formJson = {
+        isApproximate: formData.has('isApproximate'),
+        isGate: formData.has('isGate'),
+      }
       setSubmitted(true)
       dispatch(requestWaypointNav(formJson))
     }

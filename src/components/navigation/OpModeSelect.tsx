@@ -1,7 +1,8 @@
+import React from 'react'
 import {useSelector} from 'react-redux'
-import {selectOpMode} from '../../store/opModeSlice'
+import {selectOpMode} from '../../store/opModeSlice.js'
 import './OpModeSelect.css'
-import NavigationStatus from './NavigationStatus'
+import NavigationStatus from './NavigationStatus.jsx'
 
 function OpModeSelect() {
   const opMode = useSelector(selectOpMode)
