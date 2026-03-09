@@ -1,9 +1,11 @@
 import {useDispatch, useSelector} from 'react-redux'
-import {selectMotorsAreEnabled, enableMotors} from '../../store/motorSlice'
+import {selectMotorsAreEnabled, enableMotors} from '../../store/motorSlice.js'
 import './EnableMotorsButton.css'
+import React from 'react'
+import type {RoverDispatch} from '../../store/store.js'
 
-function EnableMotorsButton() {
-  const dispatch = useDispatch()
+export const EnableMotorsButton = () => {
+  const dispatch = useDispatch<RoverDispatch>()
   const motorsEnabled = useSelector(selectMotorsAreEnabled)
 
   const handleClick = () => {
@@ -20,5 +22,3 @@ function EnableMotorsButton() {
     </div>
   )
 }
-
-export default EnableMotorsButton

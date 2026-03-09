@@ -1,9 +1,10 @@
 import {useSelector} from 'react-redux'
-import ConnectionIcon from '@mui/icons-material/SignalCellularAlt'
-import {selectRoverIsConnected} from '../../store/roverSocketSlice'
+import {SignalCellularAlt as ConnectionIcon} from '@mui/icons-material'
+import {selectRoverIsConnected} from '../../store/roverSocketSlice.js'
 import './ConnectionInfo.css'
+import React from 'react'
 
-function ConnectionInfo() {
+export const ConnectionInfo = () => {
   const roverIsConnected = useSelector(selectRoverIsConnected)
   if (roverIsConnected) {
     return (
@@ -21,5 +22,3 @@ function ConnectionInfo() {
     )
   }
 }
-
-export default ConnectionInfo

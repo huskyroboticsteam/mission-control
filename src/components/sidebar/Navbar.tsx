@@ -1,13 +1,9 @@
 import {NavLink} from 'react-router-dom'
-import NavigationIcon from '@mui/icons-material/Map'
-import ArmDexterityIcon from '@mui/icons-material/BackHand'
-import ScienceIcon from '@mui/icons-material/Science'
-import TelemetryIcon from '@mui/icons-material/Info'
-import HelpIcon from '@mui/icons-material/Help'
-import CalcIcon from '@mui/icons-material/Calculate'
+import {Map as NavigationIcon, BackHand as ArmDexterityIcon, Science as ScienceIcon, Info as TelemetryIcon, Help as HelpIcon} from '@mui/icons-material'
 import './Navbar.css'
+import React from 'react'
 
-function Navbar() {
+export const Navbar = () => {
   return (
     <nav className="navbar">
       <ul>
@@ -44,5 +40,3 @@ function Navbar() {
     </nav>
   )
 }
-
-export default Navbar

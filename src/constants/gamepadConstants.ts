@@ -1,4 +1,6 @@
 import type {Axis, Button} from 'react-gamepad'
+import { GamepadApiWrapper } from 'virtual-gamepad-lib/GamepadApiWrapper'
+import { GamepadEmulator } from 'virtual-gamepad-lib/GamepadEmulator'
 
 export enum GamepadNames {
   driveGamepad,
@@ -38,3 +40,10 @@ export const GamepadInitialState: GamepadState = {
   LeftTrigger: 0,
   RightTrigger: 0,
 }
+
+export const gamepadEmulator = new GamepadEmulator(0.1)
+export const gamepadApiWrapper = new GamepadApiWrapper({
+  buttonConfigs: [],
+  updateDelay: 0,
+  axisDeadZone: 0.05,
+})

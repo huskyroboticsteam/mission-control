@@ -1,11 +1,13 @@
 import {useSelector} from 'react-redux'
-import {selectJointCurrentPosition} from '../../store/jointSlice'
+import {selectJointCurrentPosition} from '../../store/jointSlice.js'
 
-import {camelCaseToTitle} from '../../util/camelCaseToTitle'
+import {camelCaseToTitle} from '../../util/camelCaseToTitle.js'
 import './JointTelemetry.css'
-import {JointNames} from '../../constants/jointConstants'
+import {JointNames} from '../../constants/jointConstants.js'
+import React from 'react'
+import {enumKeys} from '../../util/enumKeys.js'
 
-function JointTelemetry() {
+export const JointTelemetry = () => {
   return (
     <div className="motor-telemetry">
       <table>
@@ -16,7 +18,7 @@ function JointTelemetry() {
           </tr>
         </thead>
         <tbody>
-          {JointNames.map((motorName) => (
+          {enumKeys(JointNames).map((motorName) => (
             <MotorData motorName={motorName} key={motorName} />
           ))}
         </tbody>
@@ -25,7 +27,7 @@ function JointTelemetry() {
   )
 }
 
-function MotorData({motorName}) {
+const MotorData = ({motorName}: {motorName: keyof typeof JointNames}) => {
   const position = useSelector(selectJointCurrentPosition(motorName))
   const motorTitle = camelCaseToTitle(motorName)
 
@@ -36,5 +38,3 @@ function MotorData({motorName}) {
     </tr>
   )
 }
-
-export default JointTelemetry

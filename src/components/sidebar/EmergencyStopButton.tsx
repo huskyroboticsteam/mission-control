@@ -1,9 +1,11 @@
 import {useDispatch, useSelector} from 'react-redux'
-import {selectIsStopped, requestStop} from '../../store/emergencyStopSlice'
+import {selectIsStopped, requestStop} from '../../store/emergencyStopSlice.js'
 import './EmergencyStopButton.css'
+import React from 'react'
+import type {RoverDispatch} from '../../store/store.js'
 
-function EmergencyStopButton() {
-  const dispatch = useDispatch()
+export const EmergencyStopButton = () => {
+  const dispatch = useDispatch<RoverDispatch>()
   const stopEngaged = useSelector(selectIsStopped)
 
   const handleClick = () => {
@@ -20,5 +22,3 @@ function EmergencyStopButton() {
     </div>
   )
 }
-
-export default EmergencyStopButton

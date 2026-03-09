@@ -1,31 +1,11 @@
-import './HelpPanel.css'
-import KeyboardTable from './KeyboardTable.jsx'
-import {Keyboard} from './Keyboard.tsx'
-import Table from './Table.jsx'
-import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
-import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
-import {useState, useRef, useEffect} from 'react'
-import FULL_GPAD_SVG_SOURCE_CODE from 'virtual-gamepad-lib/gamepad_assets/rounded/display-gamepad-full.svg?raw'
-import {CenterTransformOrigin} from 'virtual-gamepad-lib/utilities'
-import {GamepadDisplay} from 'virtual-gamepad-lib/GamepadDisplay'
-import {
-  gamepadButtonType,
-  gamepadDirection,
-  PRESET_SVG_GPAD_BTN_IDS,
-  PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS,
-  PRESET_SVG_GPAD_CLASS,
-  standardGpadButtonMap,
-} from 'virtual-gamepad-lib/enums'
+import { gamepadButtonType, gamepadDirection, PRESET_SVG_GPAD_BTN_IDS, PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS, PRESET_SVG_GPAD_CLASS, standardGpadButtonMap } from "virtual-gamepad-lib/enums"
+import { GamepadDisplay, type DisplayGamepadConfig } from "virtual-gamepad-lib/GamepadDisplay"
+import { CenterTransformOrigin } from "virtual-gamepad-lib/utilities"
+import { gamepadApiWrapper, gamepadEmulator } from "../constants/gamepadConstants.js"
+import type { ButtonTouchConfig, VariableButtonTouchConfig } from "virtual-gamepad-lib/GamepadEmulator"
 
-const gamepadEmulator = new GamepadEmulator(0.1)
-const gamepadApiWrapper = new GamepadApiWrapper({
-  buttonConfigs: [],
-  updateDelay: 0,
-  axisDeadZone: 0.05,
-})
-
-// From Virtual Gamepad Library - sets up input for buttons and joystick
-function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
+// From Virtual Gamepad Library - sets up input for buttons and9 joystick
+export const setupEmulatedGamepadInput = (gpadIndex: number, display_gpad: HTMLElement) => {
   gamepadEmulator.AddButtonTouchEventListeners(
     gpadIndex,
     PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS.map((tapTargetId, i) => {
@@ -36,7 +16,7 @@ function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
         return {
           buttonIndex: i,
           type: gamepadButtonType.variable,
-          tapTarget: display_gpad.querySelector('#' + tapTargetId),
+          tapTarget: display_gpad.querySelector('#' + tapTargetId) as HTMLElement,
           dragDistance: 50, // pixels that the user must drag the button down to fully press it.
           lockTargetWhilePressed: true,
           directions: {
@@ -45,14 +25,14 @@ function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
             [gamepadDirection.left]: false,
             [gamepadDirection.right]: false,
           },
-        }
+        } as VariableButtonTouchConfig
       } else {
         return {
           buttonIndex: i,
           type: gamepadButtonType.onOff,
           lockTargetWhilePressed: isStick === true,
           tapTarget: display_gpad.querySelector('#' + tapTargetId),
-        }
+        } as ButtonTouchConfig
       }
     })
   )
@@ -62,7 +42,7 @@ function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
       // Left joystick
       tapTarget: display_gpad.querySelector(
         '#' + PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS[standardGpadButtonMap.LStick]
-      ),
+      )!,
       dragDistance: 30, // pixels that the user must drag the joystic to represent + 1 (or in reverse to represent minus one).
       xAxisIndex: 0,
       yAxisIndex: 1,
@@ -78,7 +58,7 @@ function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
       // Right joystick
       tapTarget: display_gpad.querySelector(
         '#' + PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS[standardGpadButtonMap.RStick]
-      ),
+      )!,
       dragDistance: 30, // pixels that the user must drag the joystic to represent + 1 (or in reverse to represent minus one).
       xAxisIndex: 2,
       yAxisIndex: 3,
@@ -93,14 +73,14 @@ function setupEmulatedGamepadInput(gpadIndex, display_gpad) {
   ])
 }
 // From Virtual Gamepad Lib - connects display buttons/axes of onscreen gamepad to gamepadapi
-function addGamepadDisplay(gpadIndex, display_gpad) {
+export const addGamepadDisplay = (gpadIndex: number, display_gpad: HTMLElement) => {
   // Add a copy of the gamepad display to the page
   const leftStickButton = document.querySelector(
     `#${PRESET_SVG_GPAD_BTN_IDS[standardGpadButtonMap.LStick]}`
-  )
+  ) as SVGGraphicsElement
   const rightStickButton = document.querySelector(
     `#${PRESET_SVG_GPAD_BTN_IDS[standardGpadButtonMap.RStick]}`
-  )
+  ) as SVGGraphicsElement
   CenterTransformOrigin(leftStickButton)
   CenterTransformOrigin(rightStickButton)
   // Button Display Config
@@ -156,112 +136,7 @@ function addGamepadDisplay(gpadIndex, display_gpad) {
       gamepadIndex: gpadIndex,
       buttons: buttons,
       sticks: joysticks,
-    },
+    } as DisplayGamepadConfig,
     gamepadApiWrapper
   ) // we can pass our existing instance of the gpadApiWrapper to the gamepad display so that it can use it to update the gamepad state efficiently.
 }
-
-function HelpPanel() {
-  const [tankDriveEnabled, setTankDriveEnabled] = useState(false)
-  const displayGpad1 = useRef(null)
-  const displayGpad2 = useRef(null)
-  const [buttonChange, setButtonChange] = useState(null)
-  const [axisChange, setAxisChange] = useState(null)
-
-  // Sets up the emulated gamepads on page load
-  useEffect(() => {
-    gamepadEmulator.AddEmulatedGamepad(0, true, 18, 4) // returns the new (emulated) gamepad or false if some error happened.
-    gamepadEmulator.AddEmulatedGamepad(1, true, 18, 4) // returns the new (emulated) gamepad or false if some error happened.
-    addGamepadDisplay(0, displayGpad1.current)
-    addGamepadDisplay(1, displayGpad2.current)
-    setupEmulatedGamepadInput(0, displayGpad1.current)
-    setupEmulatedGamepadInput(1, displayGpad2.current)
-  }, [])
-
-  // Adds listener for gamepad button changes + updates buttonChange state accordingly
-  useEffect(() => {
-    if (!gamepadApiWrapper) return
-
-    const unsubscribe = gamepadApiWrapper.onGamepadButtonChange(
-      (gpadIndex, gpad, buttonChanges) => {
-        setButtonChange({
-          gpadIndex,
-          gpad,
-          buttonChanges,
-        })
-      }
-    )
-
-    // stops listening when unmounted
-    return () => {
-      unsubscribe?.()
-    }
-  }, [])
-
-  // Adds listener for gamepad axis changes + updates axisChange state accordingly
-  useEffect(() => {
-    if (!gamepadApiWrapper) return
-
-    const unsubscribe = gamepadApiWrapper.onGamepadAxisChange(
-      (gpadIndex, gpad, axisChangesMask) => {
-        setAxisChange({
-          gpadIndex,
-          gpad,
-          axisChangesMask,
-        })
-      }
-    )
-
-    // stops listening when unmounted
-    return () => {
-      unsubscribe?.()
-    }
-  }, [])
-
-  return (
-    <div className="help-panel">
-      <div className="top">
-        <div className="g1">
-          <Table
-            gpadButton={buttonChange?.gpad}
-            gpadAxis={axisChange?.gpad}
-            gpadIndex={0}
-            tankDriveEnabled={tankDriveEnabled}
-            setTankDriveEnabled={setTankDriveEnabled}
-          />
-          <div className="g1-text-wrapper">
-            <b className="label">Driver Gamepad</b>
-            <div
-              className="gamepad-1"
-              ref={displayGpad1}
-              dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
-          </div>
-        </div>
-        <div className="g2">
-          <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
-          <div className="g2-text-wrapper">
-            <b className="label">Peripheral Gamepad</b>
-            <div
-              className="gamepad-2"
-              ref={displayGpad2}
-              dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
-          </div>
-        </div>
-      </div>
-      <div className="bot">
-        <div className="keyboard-T">
-          <KeyboardTable
-            tankDriveEnabled={tankDriveEnabled}
-            setTankDriveEnabled={setTankDriveEnabled}
-          />
-        </div>
-        <div className="keyboard">
-          <b className="label">Keyboard Controls</b>
-          <Keyboard />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default HelpPanel

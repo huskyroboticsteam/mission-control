@@ -4,14 +4,15 @@ import {
   connectToRover,
   selectRoverIsConnected,
   selectRoverIsConnecting,
-} from '../../store/roverSocketSlice'
-import {CONNECTION_ATTEMPT_DELAY} from '../../constants/networkConstants'
+} from '../../store/roverSocketSlice.js'
+import {CONNECTION_ATTEMPT_DELAY} from '../../constants/networkConstants.js'
+import type { RoverDispatch } from '../../store/store.js'
 
 /**
  * RoverSocketManager manages the WebSocket connection to the rover.
  */
-function RoverSocketManager() {
-  const dispatch = useDispatch()
+export const RoverSocketManager = () => {
+  const dispatch = useDispatch<RoverDispatch>()
   const roverIsConnected = useSelector(selectRoverIsConnected)
   const roverIsConnecting = useSelector(selectRoverIsConnecting)
 
@@ -30,5 +31,3 @@ function RoverSocketManager() {
 
   return null
 }
-
-export default RoverSocketManager

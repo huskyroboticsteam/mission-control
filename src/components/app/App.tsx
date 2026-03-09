@@ -1,9 +1,9 @@
 import {useEffect} from 'react'
-import RoverSocketManager from '../networking/RoverSocketManager.jsx'
+import {RoverSocketManager} from '../networking/RoverSocketManager.js'
 import {GamepadController} from '../input/GamepadController.js'
 import {KeyboardController} from '../input/KeyboardController.js'
-import Sidebar from '../sidebar/Sidebar.jsx'
-import PanelContainer from '../panelContainer/PanelContainer.jsx'
+import {Sidebar} from '../sidebar/Sidebar.js'
+import PanelContainer from '../panelContainer/PanelContainer.js'
 import './App.css'
 import React from 'react'
 

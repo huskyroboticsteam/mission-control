@@ -5,7 +5,7 @@ import type {RootState} from './store.js'
 type CameraState = {
   readonly [C in keyof typeof CameraNames]: {
     readonly isStreaming: boolean
-    readonly frameData: string | null
+    readonly frameData: number[][] | null
   }
 }
 
@@ -36,7 +36,7 @@ export const cameraSlice = createSlice({
 
     cameraStreamDataReportReceived: (
       state,
-      action: PayloadAction<{camera: keyof typeof CameraNames; frameData: string | null}>
+      action: PayloadAction<{camera: keyof typeof CameraNames; frameData: number[][] | null}>
     ) => {
       const {camera, frameData} = action.payload
       if (state[camera].isStreaming) {

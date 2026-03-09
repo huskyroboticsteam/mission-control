@@ -1,5 +1,5 @@
 import React from 'react'
-import CameraStream from '../camera/CameraStream.jsx'
+import {CameraStream} from '../camera/CameraStream.js'
 
 import './ArmDexterityPanel.css'
 

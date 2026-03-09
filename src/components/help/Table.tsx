@@ -1,7 +1,13 @@
+import React from 'react'
 import {useEffect, useState} from 'react'
+import type { EGamepad } from 'virtual-gamepad-lib/GamepadEmulator'
 
 // Table for Gamepad Controls
-function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveEnabled}) {
+function Table({gpadButton, gpadAxis, gpadIndex}: {
+  gpadButton: EGamepad | Gamepad | undefined,
+  gpadAxis: EGamepad | Gamepad | undefined,
+  gpadIndex: number,
+}) {
   const [arrButton, setArrButton] = useState(new Array(17).fill(0))
   const [arrAxis, setArrAxis] = useState(new Array(4).fill(0))
   const arrControls = new Array(18).fill(' ')
@@ -30,13 +36,13 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
   useEffect(() => {
     if (gpadIndex == 0) {
       let arr = new Array(18).fill(' ')
-      if (tankDriveEnabled) {
-        arr[3] = 'Switch to DRIVE mode'
-        arr[10] = 'Left Stick Y: Left Track'
-        arr[11] = 'Right Stick Y: Right Track'
-        setControls(arr)
-        //setLabel("Tank Gamepad");
-      } else {
+      // if (tankDriveEnabled) {
+      //   arr[3] = 'Switch to DRIVE mode'
+      //   arr[10] = 'Left Stick Y: Left Track'
+      //   arr[11] = 'Right Stick Y: Right Track'
+      //   setControls(arr)
+      //   //setLabel("Tank Gamepad");
+      // } else {
         arr[3] = 'Switch to TANK mode'
         arr[4] = 'Reduce Speed (0.3)'
         arr[5] = 'Reduce Speed (0.3)'
@@ -44,18 +50,18 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
         arr[11] = 'Steer'
         setControls(arr)
         //setLabel("Drive Gamepad");
-      }
+      // }
     }
-  }, [tankDriveEnabled])
+  }, [])
 
   useEffect(() => {
-    console.log(gpadButton)
+    // console.log(gpadButton)
     for (let i = 0; i < 17; i++) {
       if (!gpadButton?.buttons[i] || gpadButton?.index !== gpadIndex) continue
 
-      if (i == 3 && gpadButton?.index == 0 && gpadButton?.buttons[3].pressed) {
-        setTankDriveEnabled((prev) => !prev)
-      }
+      // if (i == 3 && gpadButton?.index == 0 && gpadButton?.buttons[3].pressed && setTankDriveEnabled) {
+      //   setTankDriveEnabled((prev: boolean) => !prev)
+      // }
       setArrButton((prevArr) => {
         const newArr = [...prevArr]
         newArr[i] = Math.round(gpadButton.buttons[i].value * 100) / 100
@@ -65,7 +71,7 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
   }, [gpadButton?.buttons])
 
   useEffect(() => {
-    console.log(gpadAxis)
+    // console.log(gpadAxis)
     if (gpadAxis?.index == gpadIndex) {
       for (let i = 0; i < 4; i++) {
         if (

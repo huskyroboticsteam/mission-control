@@ -1,7 +1,8 @@
+import React from 'react'
 import {useState, useEffect} from 'react'
 
 // Table for Keyboard Controls
-function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
+function KeyboardTable() {
   // tracks whether each key is pressed (1) or not (0)
   // 18 total keys that are linked to actions
   const [keys, setKeys] = useState(new Array(18).fill(0))
@@ -35,27 +36,23 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
 
   // Listens for keydown and keyup events, updates key state accordingly
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      console.log('Key Down:', event.key)
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // console.log('Key Down:', event.key)
       if (event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
-          newKeys[keyMap[event.key]] = 1
+          newKeys[keyMap[event.key as keyof typeof keyMap]] = 1
           return newKeys
         })
-        // Toggle drive/tank mode when 'y' is pressed
-        if (event.key === 'y') {
-          setTankDriveEnabled((prev) => !prev)
-        }
       }
     }
 
-    const handleKeyUp = (event) => {
-      console.log('Key Up:', event.key)
+    const handleKeyUp = (event: KeyboardEvent) => {
+      // console.log('Key Up:', event.key)
       if (event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
-          newKeys[keyMap[event.key]] = 0
+          newKeys[keyMap[event.key as keyof typeof keyMap]] = 0
           return newKeys
         })
       }
@@ -72,22 +69,22 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
 
   // Updates controls based on drive/tank mode
   useEffect(() => {
-    if (tankDriveEnabled) {
-      arr[0] = 'Right Side Forward'
-      arr[1] = 'Left Side Backward'
-      arr[2] = 'Left Side Forward'
-      arr[3] = 'Right Side Backward'
-      arr[4] = 'Switch to DRIVE mode'
-      setControls(arr)
-    } else {
+    // if (tankDriveEnabled) {
+    //   arr[0] = 'Right Side Forward'
+    //   arr[1] = 'Left Side Backward'
+    //   arr[2] = 'Left Side Forward'
+    //   arr[3] = 'Right Side Backward'
+    //   arr[4] = 'Switch to DRIVE mode'
+    //   setControls(arr)
+    // } else {
       arr[0] = 'Forward'
       arr[1] = 'Backward'
       arr[2] = 'Left'
       arr[3] = 'Right'
       arr[4] = 'Switch to TANK mode'
       setControls(arr)
-    }
-  }, [tankDriveEnabled, setTankDriveEnabled])
+    // }
+  }, [])
 
   return (
     <div className="keyboard-table-container">
