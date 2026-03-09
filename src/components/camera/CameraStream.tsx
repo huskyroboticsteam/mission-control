@@ -11,8 +11,8 @@ import {selectRoverIsConnected} from '../../store/roverSocketSlice.js'
 import {camelCaseToTitle} from '../../util/camelCaseToTitle.js'
 import './CameraStream.css'
 import React from 'react'
-import type { CameraNames } from '../../constants/cameraConstants.js'
-import type { RoverDispatch } from '../../store/store.js'
+import type {CameraNames} from '../../constants/cameraConstants.js'
+import type {RoverDispatch} from '../../store/store.js'
 
 export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const dispatch = useDispatch<RoverDispatch>()
@@ -116,7 +116,7 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
       {/* {popoutWindow ? (
         <h3>Stream In External Window</h3>
       ) : ( */}
-        {!frameDataArray && <h3>No Stream Available</h3>}
+      {!frameDataArray && <h3>No Stream Available</h3>}
       {/* )} */}
       <div className="camera-stream-fps">
         FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}

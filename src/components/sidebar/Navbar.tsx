@@ -1,5 +1,11 @@
 import {NavLink} from 'react-router-dom'
-import {Map as NavigationIcon, BackHand as ArmDexterityIcon, Science as ScienceIcon, Info as TelemetryIcon, Help as HelpIcon} from '@mui/icons-material'
+import {
+  Map as NavigationIcon,
+  BackHand as ArmDexterityIcon,
+  Science as ScienceIcon,
+  Info as TelemetryIcon,
+  Help as HelpIcon,
+} from '@mui/icons-material'
 import './Navbar.css'
 import React from 'react'
 

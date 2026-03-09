@@ -93,7 +93,7 @@
 //         if (button) button.disabled = !(hasFrame && roverIsConnected)
 //       }
 //     }, [popoutWindow, hasFrame, roverIsConnected])
-  
+
 //     const handlePopOut = useCallback(async () => {
 //       if (popoutWindow) {
 //         // if the window popout exists

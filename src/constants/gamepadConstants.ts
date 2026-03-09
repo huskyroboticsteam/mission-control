@@ -1,6 +1,6 @@
 import type {Axis, Button} from 'react-gamepad'
-import { GamepadApiWrapper } from 'virtual-gamepad-lib/GamepadApiWrapper'
-import { GamepadEmulator } from 'virtual-gamepad-lib/GamepadEmulator'
+import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
+import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 
 export enum GamepadNames {
   driveGamepad,

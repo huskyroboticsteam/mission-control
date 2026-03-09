@@ -6,7 +6,7 @@ import {
   selectRoverIsConnecting,
 } from '../../store/roverSocketSlice.js'
 import {CONNECTION_ATTEMPT_DELAY} from '../../constants/networkConstants.js'
-import type { RoverDispatch } from '../../store/store.js'
+import type {RoverDispatch} from '../../store/store.js'
 
 /**
  * RoverSocketManager manages the WebSocket connection to the rover.

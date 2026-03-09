@@ -1,8 +1,18 @@
-import { gamepadButtonType, gamepadDirection, PRESET_SVG_GPAD_BTN_IDS, PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS, PRESET_SVG_GPAD_CLASS, standardGpadButtonMap } from "virtual-gamepad-lib/enums"
-import { GamepadDisplay, type DisplayGamepadConfig } from "virtual-gamepad-lib/GamepadDisplay"
-import { CenterTransformOrigin } from "virtual-gamepad-lib/utilities"
-import { gamepadApiWrapper, gamepadEmulator } from "../constants/gamepadConstants.js"
-import type { ButtonTouchConfig, VariableButtonTouchConfig } from "virtual-gamepad-lib/GamepadEmulator"
+import {
+  gamepadButtonType,
+  gamepadDirection,
+  PRESET_SVG_GPAD_BTN_IDS,
+  PRESET_SVG_GPAD_BTN_TAP_TARGET_IDS,
+  PRESET_SVG_GPAD_CLASS,
+  standardGpadButtonMap,
+} from 'virtual-gamepad-lib/enums'
+import {GamepadDisplay, type DisplayGamepadConfig} from 'virtual-gamepad-lib/GamepadDisplay'
+import {CenterTransformOrigin} from 'virtual-gamepad-lib/utilities'
+import {gamepadApiWrapper, gamepadEmulator} from '../constants/gamepadConstants.js'
+import type {
+  ButtonTouchConfig,
+  VariableButtonTouchConfig,
+} from 'virtual-gamepad-lib/GamepadEmulator'
 
 // From Virtual Gamepad Library - sets up input for buttons and9 joystick
 export const setupEmulatedGamepadInput = (gpadIndex: number, display_gpad: HTMLElement) => {

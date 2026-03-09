@@ -1,12 +1,16 @@
 import React from 'react'
 import {useEffect, useState} from 'react'
-import type { EGamepad } from 'virtual-gamepad-lib/GamepadEmulator'
+import type {EGamepad} from 'virtual-gamepad-lib/GamepadEmulator'
 
 // Table for Gamepad Controls
-function Table({gpadButton, gpadAxis, gpadIndex}: {
-  gpadButton: EGamepad | Gamepad | undefined,
-  gpadAxis: EGamepad | Gamepad | undefined,
-  gpadIndex: number,
+function Table({
+  gpadButton,
+  gpadAxis,
+  gpadIndex,
+}: {
+  gpadButton: EGamepad | Gamepad | undefined
+  gpadAxis: EGamepad | Gamepad | undefined
+  gpadIndex: number
 }) {
   const [arrButton, setArrButton] = useState(new Array(17).fill(0))
   const [arrAxis, setArrAxis] = useState(new Array(4).fill(0))
@@ -43,13 +47,13 @@ function Table({gpadButton, gpadAxis, gpadIndex}: {
       //   setControls(arr)
       //   //setLabel("Tank Gamepad");
       // } else {
-        arr[3] = 'Switch to TANK mode'
-        arr[4] = 'Reduce Speed (0.3)'
-        arr[5] = 'Reduce Speed (0.3)'
-        arr[10] = 'Forward/Backward'
-        arr[11] = 'Steer'
-        setControls(arr)
-        //setLabel("Drive Gamepad");
+      arr[3] = 'Switch to TANK mode'
+      arr[4] = 'Reduce Speed (0.3)'
+      arr[5] = 'Reduce Speed (0.3)'
+      arr[10] = 'Forward/Backward'
+      arr[11] = 'Steer'
+      setControls(arr)
+      //setLabel("Drive Gamepad");
       // }
     }
   }, [])

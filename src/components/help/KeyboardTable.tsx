@@ -77,12 +77,12 @@ function KeyboardTable() {
     //   arr[4] = 'Switch to DRIVE mode'
     //   setControls(arr)
     // } else {
-      arr[0] = 'Forward'
-      arr[1] = 'Backward'
-      arr[2] = 'Left'
-      arr[3] = 'Right'
-      arr[4] = 'Switch to TANK mode'
-      setControls(arr)
+    arr[0] = 'Forward'
+    arr[1] = 'Backward'
+    arr[2] = 'Left'
+    arr[3] = 'Right'
+    arr[4] = 'Switch to TANK mode'
+    setControls(arr)
     // }
   }, [])
 
