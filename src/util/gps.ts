@@ -1,4 +1,4 @@
-import {clamp, Euler, Quaternion} from '@math.gl/core'
+import {clamp} from '@math.gl/core'
 
 /**
  * Convert latitude and longitudes to heading.
