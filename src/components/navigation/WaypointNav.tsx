@@ -90,6 +90,7 @@ export const WaypointNav = () => {
       <div className="waypoint-select__params">
         <label htmlFor="latitude">Latitude</label>
         <input
+          id="latitude"
           disabled={isWaypointSet}
           type="number"
           step="any"
@@ -99,6 +100,7 @@ export const WaypointNav = () => {
         />
         <label htmlFor="longitude">Longitude</label>
         <input
+          id="longitude"
           disabled={isWaypointSet}
           type="number"
           step="any"

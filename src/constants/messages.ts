@@ -35,7 +35,7 @@ export type CameraStreamOpenRequestMessage = {
 export type CameraStreamReportMessage = {
   type: 'cameraStreamReport'
   camera: keyof typeof CameraNames
-  data: string | null
+  data: number[][] | null
 }
 
 export type DriveRequestMessage = {

@@ -32,6 +32,11 @@ export const HelpPanel = () => {
     addGamepadDisplay(1, displayGpad2.current!)
     setupEmulatedGamepadInput(0, displayGpad1.current!)
     setupEmulatedGamepadInput(1, displayGpad2.current!)
+
+    return () => {
+      gamepadEmulator.RemoveEmulatedGamepad(0)
+      gamepadEmulator.RemoveEmulatedGamepad(1)
+    }
   }, [])
 
   // Adds listener for gamepad button changes + updates buttonChange state accordingly

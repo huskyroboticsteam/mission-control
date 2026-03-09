@@ -80,15 +80,7 @@ export const cameraMiddleware: Middleware<{}, RootState> =
           const cameras = store.getState().camera
           enumKeys(CameraNames).forEach((camera) => {
             if (cameras[camera].isStreaming) {
-              store.dispatch(
-                messageRover({
-                  message: {
-                    type: 'cameraStreamOpenRequest',
-                    camera: camera,
-                    fps: 20, // default to 20
-                  },
-                })
-              )
+              store.dispatch(openCameraStream({camera}))
             }
           })
           break
@@ -112,7 +104,6 @@ export const cameraMiddleware: Middleware<{}, RootState> =
         case messageReceivedFromRover.type: {
           const {message} = action.payload
           if (message.type === 'cameraStreamReport') {
-            console.log(typeof message.data)
             store.dispatch(
               cameraStreamDataReportReceived({
                 camera: message.camera,
@@ -176,7 +167,7 @@ export const cameraMiddleware: Middleware<{}, RootState> =
             const orientZ = message.orientZ
             const orientW = message.orientW
             let quat = new Quaternion(orientX, orientY, orientZ, orientW)
-            let rpy = new Euler().fromQuaternion(quat, Euler.ZYX)
+            let rpy = new Euler().fromQuaternion(quat)
             let yaw = Math.round((rpy.yaw * 180) / Math.PI)
             let heading = yaw != null ? -yaw : undefined
 

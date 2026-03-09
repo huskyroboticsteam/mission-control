@@ -38,15 +38,12 @@ export const roverSocketMiddleware: Middleware<{}, RootState> = (store: RoverSto
     if (isAnyOf(connectToRover, disconnectFromRover, messageRover)(action)) {
       switch (action.type) {
         case connectToRover.type: {
-          if (store.getState().roverSocket.isConnected) {
-            store.dispatch(roverConnected())
-            break
+          if (!store.getState().roverSocket.isConnected) {
+            socket = new WebSocket(ROVER_SERVER_URL)
+            socket.onmessage = onMessage(store)
+            socket.onclose = onClose(store)
+            socket.onopen = onOpen(store)
           }
-
-          socket = new WebSocket(ROVER_SERVER_URL)
-          socket.onmessage = onMessage(store)
-          socket.onclose = onClose(store)
-          socket.onopen = onOpen(store)
           break
         }
 

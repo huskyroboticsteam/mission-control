@@ -1,3 +1,36 @@
+import React, {useEffect, useRef, useState} from 'react'
+import {createPortal} from 'react-dom'
+
+export const CameraPopout = ({content}: {content: React.JSX.Element}) => {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null)
+  const newWindow = useRef<Window | null>(null)
+
+  useEffect(() => {
+    setContainer(document.createElement('div'))
+  }, [])
+
+  useEffect(() => {
+    if (container) {
+      newWindow.current = window.open(
+        "",
+        "",
+        "width=600,height=400,left=200,top=200" 
+      )
+
+      const currWindow = newWindow.current
+      if (currWindow) {
+        newWindow.current.document.title = 'Stream'
+        newWindow.current?.document.body.appendChild(container)
+
+      }
+
+      return () => currWindow?.close()
+    }
+  }, [container])
+
+  return container && createPortal(content, container)
+}
+
 // /**
 //  * Takes:
 //  *    cameraName: the camera name,

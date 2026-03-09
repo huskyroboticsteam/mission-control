@@ -13,6 +13,7 @@ import './CameraStream.css'
 import React from 'react'
 import type {CameraNames} from '../../constants/cameraConstants.js'
 import type {RoverDispatch} from '../../store/store.js'
+import { CameraPopout } from './CameraPopout.js'
 
 export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const dispatch = useDispatch<RoverDispatch>()
@@ -31,6 +32,7 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const cameraTitle = camelCaseToTitle(camera)
   const [hasRendered, setHasRendered] = useState(false)
   const [hasFrame, setHasFrame] = useState(false)
+  const [popout, setPopout] = useState(false)
 
   const [lastFrameTime, setLastFrameTime] = useState(0.0)
   const [currentFpsAvg, setCurrentFpsAvg] = useState(20)
@@ -122,12 +124,12 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
         FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}
       </div>
       <div className="camera-stream-pop-header">
-        {/* <span
+        <span
           className="camera-stream-pop-button"
           title={`Open "${cameraTitle}" camera stream in a new window.`}
-          onClick={handlePopOut}>
-          {popoutWindow ? 'Merge Window' : 'Pop Out'}
-        </span> */}
+          onClick={() => setPopout(true)}>
+          {popout ? <CameraPopout content={<div>Hello</div>} /> : <h3>Pop Out</h3>}
+        </span>
       </div>
       <div className="camera-stream-download-header">
         <button
