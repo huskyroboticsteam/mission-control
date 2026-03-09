@@ -11,17 +11,12 @@ export const CameraPopout = ({content}: {content: React.JSX.Element}) => {
 
   useEffect(() => {
     if (container) {
-      newWindow.current = window.open(
-        "",
-        "",
-        "width=600,height=400,left=200,top=200" 
-      )
+      newWindow.current = window.open('', '', 'width=600,height=400,left=200,top=200')
 
       const currWindow = newWindow.current
       if (currWindow) {
-        newWindow.current.document.title = 'Stream'
-        newWindow.current?.document.body.appendChild(container)
-
+        currWindow.document.title = 'Stream'
+        currWindow.document.body.appendChild(container)
       }
 
       return () => currWindow?.close()

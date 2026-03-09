@@ -13,7 +13,7 @@ import './CameraStream.css'
 import React from 'react'
 import type {CameraNames} from '../../constants/cameraConstants.js'
 import type {RoverDispatch} from '../../store/store.js'
-import { CameraPopout } from './CameraPopout.js'
+import {CameraPopout} from './CameraPopout.js'
 
 export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const dispatch = useDispatch<RoverDispatch>()
