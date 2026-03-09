@@ -1,11 +1,11 @@
-import CameraStream from '../camera/CameraStream'
-import Compass from './Compass'
+import React from 'react'
+import CameraStream from '../camera/CameraStream.js'
+import Compass from './Compass.js'
 import './NavigationPanel.css'
-import OpModeSelect from './OpModeSelect'
-import WaypointList from './WaypointList'
-import WaypointNav from './WaypointNav'
+import { WaypointList } from './WaypointList.js'
+import {WaypointNav} from './WaypointNav.js'
 
-function NavigationPanel() {
+export const NavigationPanel = () => {
   return (
     <div className="navigation-panel">
       <CameraStream camera="mast" />
@@ -17,5 +17,3 @@ function NavigationPanel() {
     </div>
   )
 }
-
-export default NavigationPanel

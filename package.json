@@ -6,7 +6,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@math.gl/core": "^4.0.0",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@react-three/drei": "^9.88.7",
@@ -57,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@math.gl/core": "^4.1.0",
     "@types/jmuxer": "^2.0.7",
     "@types/node": "^25.3.3",
     "@types/piexifjs": "^1.0.0",

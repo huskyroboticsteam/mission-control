@@ -2,9 +2,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {selectOpMode} from '../../store/opModeSlice.js'
 import './OpModeSelect.css'
-import NavigationStatus from './NavigationStatus.jsx'
+import { NavigationStatus } from './NavigationStatus.js'
 
-function OpModeSelect() {
+export const OpModeSelect = () => {
   const opMode = useSelector(selectOpMode)
 
   return (
@@ -19,5 +19,3 @@ function OpModeSelect() {
     </div>
   )
 }
-
-export default OpModeSelect

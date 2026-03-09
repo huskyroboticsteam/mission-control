@@ -9,7 +9,7 @@ type WaypointEntry = {
   lon: number | null
 }
 
-function WaypointList() {
+export const WaypointList = () => {
   const {lon, lat} = useSelector(selectRoverPosition)
   const [title, setTitle] = useState('')
   const [list, setList] = useState<WaypointEntry[]>([])
@@ -35,5 +35,3 @@ function WaypointList() {
     </div>
   )
 }
-
-export default WaypointList

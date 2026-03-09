@@ -1,23 +1,13 @@
 import {useSelector} from 'react-redux'
-import {selectRoverPosition} from '../../store/telemetrySlice'
-import {selectLatitude, selectLongitude} from '../../store/waypointNavSlice'
+import {selectRoverPosition} from '../../store/telemetrySlice.js'
+import {selectLatitude, selectLongitude} from '../../store/waypointNavSlice.js'
 import './NavigationStatus.css'
-import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants'
-import {convertCoordsToDistance} from './Compass'
+import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants.js'
+import { convertCoordsToDistance } from '../../util/gps.js'
+import React from 'react'
 
-function sanitize(num, decimals) {
-  if (num == null) {
-    return 'N/A'
-  }
-  let ret = num.toString()
-  if (decimals !== undefined) {
-    ret = num.toFixed(decimals)
-  }
-  return num >= 0 ? ret : ret
-}
-
-function NavigationStatus() {
-  const {lon, lat} = useSelector(selectRoverPosition)
+export const NavigationStatus = () => {
+  const {lat, lon} = useSelector(selectRoverPosition)
   const targetLatitude = useSelector(selectLatitude)
   const targetLongitude = useSelector(selectLongitude)
 
@@ -67,15 +57,13 @@ function NavigationStatus() {
         <div>Distance: {navStatus.distance ? navStatus.distance.toFixed(6) : 'N/A'}</div>
         <div className="nav-status__coordinates">
           <div>
-            Current: ({sanitize(lat, 6)}, {sanitize(lon, 6)})
+            Current: ({lat}, {lon})
           </div>
           <div>
-            Target: ({sanitize(targetLatitude, 6)}, {sanitize(targetLongitude, 6)})
+            Target: ({targetLatitude}, {targetLongitude})
           </div>
         </div>
       </div>
     </div>
   )
 }
-
-export default NavigationStatus

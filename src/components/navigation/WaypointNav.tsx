@@ -11,7 +11,7 @@ import {selectRoverIsConnected} from '../../store/roverSocketSlice.js'
 import type {RoverDispatch} from '../../store/store.js'
 import './WaypointNav.css'
 
-function WaypointNav() {
+export const WaypointNav = () => {
   const dispatch = useDispatch<RoverDispatch>()
   const [submitted, setSubmitted] = useState(false)
   const [lat, setLat] = useState('0')
@@ -141,5 +141,3 @@ function WaypointNav() {
     </form>
   )
 }
-
-export default WaypointNav
