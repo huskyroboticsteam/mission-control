@@ -4,8 +4,8 @@ import {selectRoverPosition} from '../../store/telemetrySlice.js'
 import {selectLongitude, selectLatitude} from '../../store/waypointNavSlice.js'
 import './Compass.css'
 import {Quaternion, Euler} from '@math.gl/core'
-import { convertCoordsToDistance, convertCoordsToHeading } from '../../util/gps.js'
-import { APPROACHING_THRESHOLD } from '../../constants/navigationConstants.js'
+import {convertCoordsToDistance, convertCoordsToHeading} from '../../util/gps.js'
+import {APPROACHING_THRESHOLD} from '../../constants/navigationConstants.js'
 
 export const Compass = () => {
   const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
@@ -73,9 +73,7 @@ export const Compass = () => {
       <div className="compass">
         <div className="compass-parts">
           {targetHeading != null && targetDistance! > APPROACHING_THRESHOLD && (
-            <div
-              className={`target-dot`}
-              style={{transform: `rotate(${targetHeading}deg)`}}></div>
+            <div className={`target-dot`} style={{transform: `rotate(${targetHeading}deg)`}}></div>
           )}
           <div
             className={`compass__needle compass__needle--green}`}
@@ -87,7 +85,8 @@ export const Compass = () => {
           <div className="compass__label compass__label--east">E</div>
           {targetDistance != null && (
             <div className="compass__label compass__label--distance">
-              <span className={targetDistance > APPROACHING_THRESHOLD ? 'target-far' : 'target-close'}>
+              <span
+                className={targetDistance > APPROACHING_THRESHOLD ? 'target-far' : 'target-close'}>
                 Target: {targetDistance}
               </span>
             </div>

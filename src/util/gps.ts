@@ -1,4 +1,4 @@
-import { clamp, Euler, Quaternion } from "@math.gl/core"
+import {clamp, Euler, Quaternion} from '@math.gl/core'
 
 /**
  * Convert latitude and longitudes to heading.
@@ -33,7 +33,13 @@ export function convertCoordsToHeading(lati: number, loni: number, latf: number,
  * @param radius radius of the planet in km (default is Earth: 6,371km).
  * @return The distance in km.
  */
-export function convertCoordsToDistance(lati: number, loni: number, latf: number, lonf: number, radius = 6371) {
+export function convertCoordsToDistance(
+  lati: number,
+  loni: number,
+  latf: number,
+  lonf: number,
+  radius = 6371
+) {
   const DEGREES_TO_RADIANS = Math.PI / 180
   lati *= DEGREES_TO_RADIANS
   loni *= DEGREES_TO_RADIANS

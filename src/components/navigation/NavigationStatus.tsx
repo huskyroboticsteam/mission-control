@@ -3,7 +3,7 @@ import {selectRoverPosition} from '../../store/telemetrySlice.js'
 import {selectLatitude, selectLongitude} from '../../store/waypointNavSlice.js'
 import './NavigationStatus.css'
 import {POSITION_THRESHOLD, APPROACHING_THRESHOLD} from '../../constants/navigationConstants.js'
-import { convertCoordsToDistance } from '../../util/gps.js'
+import {convertCoordsToDistance} from '../../util/gps.js'
 import React from 'react'
 
 export const NavigationStatus = () => {
