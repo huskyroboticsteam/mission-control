@@ -3,9 +3,7 @@ import TelemetryPanel from '../telemetry/TelemetryPanel'
 import HelpPanel from '../help/HelpPanel'
 import NavigationPanel from '../navigation/NavigationPanel'
 import ArmDexterityPanel from '../armDexterity/ArmDexterityPanel'
-import SciencePanel from '../science/SciencePanel'
 import MapPanel from '../map/MapPanel'
-import Calculator from '../navigation/Calculator'
 import './PanelContainer.css'
 
 function PanelContainer() {
