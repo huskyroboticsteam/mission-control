@@ -18,11 +18,7 @@ function PanelContainer() {
 
         <Route path="/arm-dexterity" element={<ArmDexterityPanel />} />
 
-        <Route path="/science" element={<SciencePanel />} />
-
         <Route path="/telemetry" element={<TelemetryPanel />} />
-
-        <Route path="/calc" element={<Calculator />} />
 
         <Route path="/help" element={<HelpPanel />} />
 

@@ -1,19 +1,105 @@
+@import url('virtual-gamepad-lib/gamepad_assets/base.css');
+
 .help-panel {
   box-sizing: border-box;
   padding: 10px;
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  background-color: aliceblue;
+  flex-direction: column;
 }
 
-.help-panel > img {
-  width: 600px;
-  height: auto;
+.top {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 50%;
+}
+
+.bot {
+  display: flex;
+  width: 90%;
+  height: 50%;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgb(67, 67, 67);
+  border-radius: 20px;
+  padding: 2vmin 1vmin;
+}
+
+.g1,
+.g2 {
+  display: flex;
+  width: 100%;
+  max-height: 100%;
+  flex-direction: row;
+  border-radius: 20px;
+  padding: 2vmin 1vmin;
+  margin: 0.3rem;
+  background-color: rgb(67, 67, 67);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  margin-right: 5%;
+}
+
+.keyboard-T {
   max-width: 50%;
-  max-height: 50%;
-  border-radius: 15px;
-  -webkit-user-drag: none;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.g1-text-wrapper,
+.g2-text-wrapper {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 5%;
+}
+
+.drive-gpad-table {
+  width: 45%;
+  margin-left: 5%;
+}
+
+.table {
+  color: black;
+  background-color: white;
+  border-collapse: collapse;
+  font-size: 7px;
+  justify-content: center;
+}
+
+.th,
+.td {
+  border: 1px solid black;
+  padding: 3px;
+}
+
+.th {
+  background-color: #4fb185;
+  font-weight: bold;
+  color: white;
+}
+
+.keyboard-table-container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  color: #4fb185;
 }
