@@ -1,6 +1,7 @@
 import React from 'react'
 import {Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics} from 'resium'
 import {
+  Cartesian2,
   Cartesian3,
   Math as CesiumMath,
   ScreenSpaceEventHandler,
@@ -10,13 +11,14 @@ import {
   Color,
   SingleTileImageryProvider,
   Rectangle,
+  type Viewer as CesiumViewer,
 } from 'cesium'
 import {useSelector, useDispatch} from 'react-redux'
 import {
   selectRoverLatitude,
   selectRoverLongitude,
   selectRoverHeading,
-} from '../../store/telemetrySlice'
+} from '../../store/telemetrySlice.js'
 import {
   addPin,
   removePin,
@@ -25,22 +27,36 @@ import {
   resetPinCounter,
   selectAllPins,
   selectSelectedPins,
-} from '../../store/mapSlice'
-import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from './MapConsts'
+} from '../../store/mapSlice.js'
+import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from './MapConsts.js'
 import './Map.css'
 
 import robotModel from '../../../assets/Dozer.glb'
 Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_ACCESS_TOKEN
 
+type Pin = {
+  id: number
+  lat: number
+  lon: number
+  label: string
+}
+
+type LastPickedCoord = {
+  lat: number
+  lon: number
+  distance: number
+  t: number
+}
+
 function Map() {
-  const telemetryLat = useSelector(selectRoverLatitude)
-  const telemetryLon = useSelector(selectRoverLongitude)
+  const telemetryLat = useSelector(selectRoverLatitude as (state: unknown) => number)
+  const telemetryLon = useSelector(selectRoverLongitude as (state: unknown) => number)
   const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548
   const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.3032
-  const heading = useSelector(selectRoverHeading)
+  const heading = useSelector(selectRoverHeading as (state: unknown) => number)
 
-  const viewerRef = React.useRef(null)
-  const rightClickHandlerRef = React.useRef(null)
+  const viewerRef = React.useRef<{cesiumElement?: CesiumViewer | null} | null>(null)
+  const rightClickHandlerRef = React.useRef<ScreenSpaceEventHandler | null>(null)
 
   const [manualLatInput, setManualLatInput] = React.useState('47.6061')
   const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
@@ -49,23 +65,24 @@ function Map() {
   const [manualLon, setManualLon] = React.useState(-122.3328)
   const [useManual, setUseManual] = React.useState(false)
 
-  const [lastPickedCoord, setLastPickedCoord] = React.useState(null)
-  const [errorMessage, setErrorMessage] = React.useState(null)
+  const [lastPickedCoord, setLastPickedCoord] = React.useState<LastPickedCoord | null>(null)
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
   const dispatch = useDispatch()
-  const pins = useSelector(selectAllPins)
-  const selectedPins = useSelector(selectSelectedPins)
+  const pins = useSelector(selectAllPins as (state: unknown) => Pin[])
+  const selectedPins = useSelector(selectSelectedPins as (state: unknown) => number[])
 
   const imageryProvider = React.useMemo(
     () =>
-      new ArcGisMapServerImageryProvider({
-        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-      }),
+      ArcGisMapServerImageryProvider.fromUrl(
+        'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      ),
     []
   )
 
-  const [activeMapIndex, setActiveMapIndex] = React.useState(null)
-  const [activeLocalProvider, setActiveLocalProvider] = React.useState(null)
+  const [activeMapIndex, setActiveMapIndex] = React.useState<number | null>(null)
+  const [activeLocalProvider, setActiveLocalProvider] =
+    React.useState<SingleTileImageryProvider | null>(null)
 
   React.useEffect(() => {
     let mounted = true
@@ -123,7 +140,7 @@ function Map() {
       img.crossOrigin = 'anonymous'
       let loaded = false
       try {
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
           img.onload = () => {
             loaded = true
             resolve()
@@ -162,7 +179,7 @@ function Map() {
     }
   }, [activeMapIndex])
 
-  const chooseMap = React.useCallback((latDeg, lonDeg) => {
+  const chooseMap = React.useCallback((latDeg: number, lonDeg: number): number | null => {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null
     for (let i = 0; i < MAP_TILES.length; i++) {
       const t = MAP_TILES[i]
@@ -222,7 +239,7 @@ function Map() {
     const handler = new ScreenSpaceEventHandler(viewer.canvas)
     rightClickHandlerRef.current = handler
     console.log('[Map] RIGHT_CLICK handler attached')
-    handler.setInputAction((movement) => {
+    handler.setInputAction((movement: {position: Cartesian2}) => {
       const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid)
       if (!cartesian) return
       const cartographic = ellipsoid.cartesianToCartographic(cartesian)
@@ -264,7 +281,7 @@ function Map() {
     dispatch(addPin({lat: parsedLat, lon: parsedLon}))
   }
 
-  function toggleSelectPin(id) {
+  function toggleSelectPin(id: number) {
     dispatch(togglePinSelection({pinId: id}))
   }
 
@@ -272,11 +289,11 @@ function Map() {
     dispatch(clearSelectedPins())
   }
 
-  function deletePin(id) {
+  function deletePin(id: number) {
     dispatch(removePin({pinId: id}))
   }
 
-  function flyToPin(pin) {
+  function flyToPin(pin: Pin) {
     setManualLat(pin.lat)
     setManualLon(pin.lon)
     setUseManual(true)
@@ -293,8 +310,8 @@ function Map() {
       timeline={false}
       animation={false}
       fullscreenButton={false}
-      imageryProvider={imageryProvider}
       ref={viewerRef}>
+      <ImageryLayer imageryProvider={imageryProvider} />
       {activeLocalProvider ? <ImageryLayer imageryProvider={activeLocalProvider} /> : null}
 
       <div className="map-controls">
@@ -377,7 +394,7 @@ function Map() {
               text={pin.label}
               font="14px sans-serif"
               fillColor={Color.WHITE}
-              pixelOffset={{x: 12, y: -12}}
+              pixelOffset={new Cartesian2(12, -12)}
             />
           </Entity>
         )

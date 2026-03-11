@@ -1,4 +1,5 @@
-import Map from './Map'
+import React from 'react'
+import Map from './Map.js'
 import './MapPanel.css'
 
 function MapPanel() {
