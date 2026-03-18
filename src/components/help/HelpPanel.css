@@ -19,7 +19,8 @@
 
 .bot {
   display: flex;
-  width: 90%;
+  /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
+  width: 95%;
   height: 50%;
   flex-direction: row;
   align-items: center;
@@ -41,17 +42,20 @@
 }
 
 .keyboard {
-  display: flex;
+  flex: 3;
+  /* display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 80%;
-  margin-right: 5%;
+  justify-content: center; */
+  /* margin-right: 5%; */
+  /* margin: 0 5rem; */
 }
 
 .keyboard-T {
-  max-width: 50%;
-  margin-left: 5%;
-  margin-right: 5%;
+  flex: 1;
+  /* margin: 0 5rem ; */
+  /* max-width: 50%; */
+  /* margin-left: 5%;
+  margin-right: 5%; */
 }
 
 .g1-text-wrapper,
@@ -72,7 +76,7 @@
   color: black;
   background-color: white;
   border-collapse: collapse;
-  font-size: 7px;
+  /* font-size: 7px; */
   justify-content: center;
 }
 

@@ -1,7 +1,7 @@
 import './HelpPanel.css'
-import KeyboardTable from './KeyboardTable.js'
+import {KeyboardTable} from './KeyboardTable.js'
 import {Keyboard} from './Keyboard.js'
-import Table from './Table.js'
+import GamepadTable from './GamepadTable.js'
 import {type EGamepad} from 'virtual-gamepad-lib/GamepadEmulator'
 import {type buttonChangeDetails} from 'virtual-gamepad-lib/GamepadApiWrapper'
 import {useState, useRef, useEffect} from 'react'
@@ -83,7 +83,7 @@ export const HelpPanel = () => {
     <div className="help-panel">
       <div className="top">
         <div className="g1">
-          <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={0} />
+          <GamepadTable gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={0} />
           <div className="g1-text-wrapper">
             <b className="label">Driver Gamepad</b>
             <div
@@ -93,7 +93,7 @@ export const HelpPanel = () => {
           </div>
         </div>
         <div className="g2">
-          <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
+          <GamepadTable gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
           <div className="g2-text-wrapper">
             <b className="label">Peripheral Gamepad</b>
             <div

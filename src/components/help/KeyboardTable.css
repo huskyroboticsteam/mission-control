@@ -1,0 +1,20 @@
+#keyboard-table-container {
+  display: grid;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+#keyboard-table,
+#keyboard-table th,
+#keyboard-table td {
+  border: 1px solid black;
+  /* border-radius: 10px; */
+  border-collapse: collapse;
+  color: black;
+}
+
+#keyboard-table th {
+  background-color: #4fb185;
+  font-weight: bold;
+  color: white;
+}

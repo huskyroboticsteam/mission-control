@@ -4,7 +4,7 @@ import type {RootState} from './store.js'
 
 type JointState = {
   readonly [J in keyof typeof JointNames]: {
-    readonly requestedPower: number | null
+    readonly requestedPower: number
     readonly requestedPosition: number | null
     readonly currentPosition: number | null
   }
@@ -14,7 +14,7 @@ const initialState: JointState = Object.keys(JointNames).reduce<JointState>(
   (state, jointName) => ({
     ...state,
     [jointName]: {
-      requestedPower: null,
+      requestedPower: 0,
       requestedPosition: null,
       currentPosition: null,
     },

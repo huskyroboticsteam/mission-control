@@ -48,7 +48,6 @@ export const messageReceivedFromRover = createAction<
   {message: ReportMessage},
   'roverSocket/messageReceived'
 >('roverSocket/messageReceived')
-type T = ReturnType<typeof messageReceivedFromRover>
 
 export const selectRoverIsConnected = (state: RootState) => state.roverSocket.isConnected
 export const selectRoverIsConnecting = (state: RootState) => state.roverSocket.isConnecting

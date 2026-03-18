@@ -47,3 +47,34 @@ export const gamepadApiWrapper = new GamepadApiWrapper({
   updateDelay: 0,
   axisDeadZone: 0.05,
 })
+
+export const Axes: Axis[] = [
+  'LeftStickX',
+  'LeftStickY',
+  'RightStickX',
+  'RightStickY',
+  'LeftTrigger',
+  'RightTrigger',
+]
+export const Buttons: Button[] = [
+  'A',
+  'B',
+  'X',
+  'Y',
+  'Start',
+  'Back',
+  'LT',
+  'RT',
+  'LB',
+  'RB',
+  'LS',
+  'RS',
+  'DPadUp',
+  'DPadDown',
+  'DPadLeft',
+  'DPadRight',
+]
+
+export const isAxis = (value: string): value is Axis => (Axes as readonly string[]).includes(value)
+export const isButton = (value: string): value is Button =>
+  (Buttons as readonly string[]).includes(value)

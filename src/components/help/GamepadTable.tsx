@@ -1,9 +1,10 @@
 import React from 'react'
 import {useEffect, useState} from 'react'
 import type {EGamepad} from 'virtual-gamepad-lib/GamepadEmulator'
+import './GamepadTable.css'
 
 // Table for Gamepad Controls
-function Table({
+function GamepadTable({
   gpadButton,
   gpadAxis,
   gpadIndex,
@@ -101,7 +102,7 @@ function Table({
   }, [gpadAxis?.axes])
 
   return (
-    <div className="drive-gpad-table">
+    <div id="drive-gpad-table">
       <table className="table">
         <tbody className="axis-table">
           <tr>
@@ -234,4 +235,4 @@ function Table({
   )
 }
 
-export default Table
+export default GamepadTable

@@ -1,30 +1,83 @@
-import {selectMountedPeripheral} from '../peripheralSlice.js'
 import {requestDrive, requestTankDrive} from '../driveSlice.js'
 import {requestJointPower} from '../jointSlice.js'
-import {requestStop} from '../emergencyStopSlice.js'
-import {
-  messageReceivedFromRover,
-  messageRover,
-  roverDisconnected,
-  roverConnected,
-} from '../roverSocketSlice.js'
 import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
-import type {RootState, RoverStoreAPI} from '../store.js'
-import {inputSlice, keyPressed} from '../inputSlice.js'
+import type {RootState, RoverDispatch, RoverStoreAPI} from '../store.js'
+import {
+  gamepadAxisChanged,
+  gamepadButtonChanged,
+  inputSlice,
+  keyPressed,
+  keyReleased,
+} from '../inputSlice.js'
+import {
+  driveGamepadToAxes,
+  KeyboardControls,
+  keyToAxes,
+  peripheralGamepadToAxes,
+  type DriveAxis,
+} from '../../constants/controls.js'
+import {JointNames} from '../../constants/jointConstants.js'
+import type {Axis, Button} from 'react-gamepad'
 
 /**
  * Middleware that messages the rover in response to user input.
  */
 export const inputMiddleware: Middleware<{}, RootState> =
   (store: RoverStoreAPI) => (next) => (action) => {
+    const prev = store.getState()
     const result = next(action)
 
     if (isAnyOf(...Object.values(inputSlice.actions))(action)) {
+      const state = store.getState()
       switch (action.type) {
-        case keyPressed.type: {
-          if (action.payload.key === ' ') {
-            store.dispatch(requestStop({stop: !store.getState().emergencyStop.stopped}))
+        case gamepadAxisChanged.type: {
+          const {gamepadName, axisName, value} = action.payload
+          if (prev.input[gamepadName][axisName] === value) {
+            break
           }
+          if (gamepadName === 'driveGamepad') {
+            requestDriveAxisMovementFromGamepad(state, store.dispatch, axisName)
+          }
+          if (gamepadName === 'peripheralGamepad') {
+            requestPeripheralAxisMovementFromGamepad(state, store.dispatch, axisName)
+          }
+          break
+        }
+
+        case gamepadButtonChanged.type: {
+          const {gamepadName, buttonName, pressed} = action.payload
+          if (prev.input[gamepadName][buttonName] === pressed) {
+            break
+          }
+          if (gamepadName === 'peripheralGamepad') {
+            requestPeripheralAxisMovementFromGamepad(state, store.dispatch, buttonName)
+          }
+          break
+        }
+
+        case keyPressed.type: {
+          const key = action.payload.key.toUpperCase()
+          if (prev.input.pressedKeys.includes(key)) {
+            break
+          }
+
+          requestAxisMovement(state, store.dispatch, key)
+
+          const control = KeyboardControls[key]
+          control?.onPress?.(store)
+          break
+        }
+
+        case keyReleased.type: {
+          const key = action.payload.key.toUpperCase()
+          if (!prev.input.pressedKeys.includes(key)) {
+            break
+          }
+
+          requestAxisMovement(state, store.dispatch, key)
+
+          const control = KeyboardControls[key]
+          control?.onRelease?.(store)
           break
         }
 
@@ -32,113 +85,76 @@ export const inputMiddleware: Middleware<{}, RootState> =
           break
       }
 
-      // if (action.type.startsWith('input/')) {
-      // if (action.type === enableIK.type) {
-      //   store.dispatch(
-      //     messageRover({
-      //       message: {
-      //         type: 'armIKRequest',
-      //         enabled: action.payload.enable,
-      //       },
-      //     })
-      //   )
-      //   return next(action)
-      // } else if (action.type === 'input/keyPressed' && action.payload.key === ' ') {
-      //   store.dispatch(requestStop({stop: !store.getState().input.emergencyStop}))
-      //   return next(action)
-      // } else {
-      //   const prevComputedInput = store.getState().input.computed
-      //   const prevMountedPeripheral = selectMountedPeripheral(store.getState())
-      //   const result = next(action)
-      //   const computedInput = store.getState().input.computed
-      //   const mountedPeripheral = selectMountedPeripheral(store.getState())
-
-      //   updateDrive(prevComputedInput, computedInput, store)
-      //   updatePeripherals(
-      //     prevComputedInput,
-      //     computedInput,
-      //     prevMountedPeripheral,
-      //     mountedPeripheral,
-      //     store.dispatch
-      //   )
-      // return result
-      // }
-      // } else {
-      //   switch (action.type) {
-      //     case roverDisconnected.type:
-      //     case roverConnected.type: {
-      //       store.dispatch(enableIK({enable: false}))
-      //       break
-      //     }
-
-      //     case messageReceivedFromRover.type: {
-      //       const {message} = action.payload
-      //       if (message.type === 'armIKEnabledReport') {
-      //         let lastArmIKState = store.getState().input.inverseKinematics.lastSentArmIKState
-      //         if (lastArmIKState !== null && lastArmIKState !== message.enabled) {
-      //           alert('Arm IK was unable to be ' + (!message.enabled ? 'enabled.' : 'disabled.'))
-      //         }
-      //         store.dispatch(visuallyEnableIK(message.enabled))
-      //       }
-      //       break
-      //     }
-      //     default:
-      //       break
-      //   }
-      // return next(action)
-      // }
-
       return result
     }
   }
 
-// function updateDrive(prevComputedInput, computedInput, store) {
-//   const dispatch = store.dispatch
-//   if (computedInput.drive.tank) {
-//     const {left: prevLeft, right: prevRight} = prevComputedInput.drive
-//     const {left, right} = computedInput.drive
-//     if (left !== prevLeft || right !== prevRight) {
-//       dispatch(requestTankDrive({left, right}))
-//     }
-//   } else {
-//     const {straight: prevStraight, steer: prevSteer} = prevComputedInput.drive
-//     const {straight, steer} = computedInput.drive
-//     if (straight !== prevStraight || steer !== prevSteer) {
-//       dispatch(requestDrive({straight, steer}))
-//     }
-//   }
-// }
+const requestAxisMovement = (state: RootState, dispatch: RoverDispatch, key: string) => {
+  // If key is changing an axis
+  keyToAxes[key]?.forEach((axis) => {
+    if (axis in JointNames) {
+      dispatch(
+        requestJointPower({
+          jointName: axis as JointNames,
+          power: state.input.axes[axis as JointNames],
+        })
+      )
+      // If one key is somehow changing both axes at once, it will send the request twice
+    } else if (['straight', 'steer'].includes(axis)) {
+      dispatch(
+        requestDrive({
+          straight: state.input.axes.straight,
+          steer: state.input.axes.steer,
+        })
+      )
+    } else if (['left', 'right'].includes(axis)) {
+      dispatch(
+        requestTankDrive({
+          left: state.input.axes.left,
+          right: state.input.axes.right,
+        })
+      )
+    }
+  })
+}
 
-// function updatePeripherals(
-//   prevComputedInput,
-//   computedInput,
-//   prevMountedPeripheral,
-//   mountedPeripheral,
-//   dispatch
-// ) {
-//   if (mountedPeripheral === 'arm') {
-//     updateArm(prevComputedInput, computedInput, prevMountedPeripheral, mountedPeripheral, dispatch)
-//   }
-// }
+const requestDriveAxisMovementFromGamepad = (
+  state: RootState,
+  dispatch: RoverDispatch,
+  gamepadAxis: Axis
+) => {
+  driveGamepadToAxes[gamepadAxis]?.forEach((axis) => {
+    if (['straight', 'steer'].includes(axis)) {
+      dispatch(
+        requestDrive({
+          straight: state.input.axes.straight,
+          steer: state.input.axes.steer,
+        })
+      )
+    } else if (['left', 'right'].includes(axis)) {
+      dispatch(
+        requestTankDrive({
+          left: state.input.axes.left,
+          right: state.input.axes.right,
+        })
+      )
+    }
+  })
+}
 
-// function updateArm(
-//   prevComputedInput,
-//   computedInput,
-//   prevMountedPeripheral,
-//   mountedPeripheral,
-//   dispatch
-// ) {
-//   Object.keys(computedInput.arm).forEach((jointName) => {
-//     if (
-//       computedInput.arm[jointName] !== prevComputedInput.arm[jointName] ||
-//       mountedPeripheral !== prevMountedPeripheral
-//     ) {
-//       dispatch(
-//         requestJointPower({
-//           jointName,
-//           power: computedInput.arm[jointName],
-//         })
-//       )
-//     }
-//   })
-// }
+const requestPeripheralAxisMovementFromGamepad = (
+  state: RootState,
+  dispatch: RoverDispatch,
+  name: Axis | Button
+) => {
+  peripheralGamepadToAxes[name]?.forEach((axis) => {
+    if (axis in JointNames) {
+      dispatch(
+        requestJointPower({
+          jointName: axis as JointNames,
+          power: state.input.axes[axis as JointNames],
+        })
+      )
+    }
+  })
+}

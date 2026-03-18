@@ -1,6 +1,8 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
+import type {DriveMode} from '../constants/types.js'
 
 type DriveState = {
+  readonly driveMode: DriveMode
   readonly straight: number
   readonly steer: number
   readonly left: number
@@ -8,6 +10,7 @@ type DriveState = {
 }
 
 const initialState: DriveState = {
+  driveMode: 'normal',
   straight: 0,
   steer: 0,
   left: 0,
@@ -18,6 +21,10 @@ export const driveSlice = createSlice({
   name: 'drive',
   initialState,
   reducers: {
+    requestDriveMode: (state, action: PayloadAction<{mode: DriveMode}>) => {
+      state.driveMode = action.payload.mode
+    },
+
     requestDrive: (state, action: PayloadAction<{straight: number; steer: number}>) => {
       const {straight, steer} = action.payload
       state.straight = straight
@@ -32,4 +39,4 @@ export const driveSlice = createSlice({
   },
 })
 
-export const {requestDrive, requestTankDrive} = driveSlice.actions
+export const {requestDriveMode, requestDrive, requestTankDrive} = driveSlice.actions
