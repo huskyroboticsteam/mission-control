@@ -1,5 +1,6 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {DriveMode} from '../constants/types.js'
+import type {RootState} from './store.js'
 
 type DriveState = {
   readonly driveMode: DriveMode
@@ -40,3 +41,5 @@ export const driveSlice = createSlice({
 })
 
 export const {requestDriveMode, requestDrive, requestTankDrive} = driveSlice.actions
+
+export const selectDriveMode = (state: RootState) => state.drive.driveMode

@@ -1,6 +1,4 @@
 #keyboard-table-container {
-  display: grid;
-  font-size: 0.75rem;
   text-align: center;
 }
 
@@ -17,4 +15,8 @@
   background-color: #4fb185;
   font-weight: bold;
   color: white;
+}
+
+#keyboard-table td {
+  font-size: 11px;
 }

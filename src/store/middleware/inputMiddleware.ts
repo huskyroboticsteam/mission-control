@@ -10,9 +10,11 @@ import {
   keyReleased,
 } from '../inputSlice.js'
 import {
+  DriveGamepadControls,
   driveGamepadToAxes,
   KeyboardControls,
   keyToAxes,
+  PeripheralGamepadControls,
   peripheralGamepadToAxes,
   type DriveAxis,
 } from '../../constants/controls.js'
@@ -49,8 +51,20 @@ export const inputMiddleware: Middleware<{}, RootState> =
           if (prev.input[gamepadName][buttonName] === pressed) {
             break
           }
+          if (gamepadName === 'driveGamepad') {
+            const control = DriveGamepadControls[buttonName]
+
+            if (pressed) {
+              control?.onPress?.(store)
+            } else {
+              control?.onRelease?.(store)
+            }
+          }
           if (gamepadName === 'peripheralGamepad') {
             requestPeripheralAxisMovementFromGamepad(state, store.dispatch, buttonName)
+
+            const control = PeripheralGamepadControls[buttonName]
+            control?.onPress?.(store)
           }
           break
         }

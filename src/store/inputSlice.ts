@@ -162,7 +162,6 @@ const updatePeripheralAxesFromGamepad = (
         negative: Button
         positive: Button
       }
-      console.log('button axis', negative, positive)
       state.axes[axis as InputAxis] =
         getAxisFromButtons(state.peripheralGamepad, negative, positive) * state.axisMultiplier
     }
@@ -217,3 +216,5 @@ export const selectInputDeviceIsConnected =
   (deviceName: keyof typeof GamepadNames) => (state: RootState) =>
     state.input[deviceName].isConnected
 export const selectPressedKeys = (state: RootState) => state.input.pressedKeys
+export const selectGamepad = (gamepadName: keyof typeof GamepadNames) => (state: RootState) =>
+  state.input[gamepadName]

@@ -3,8 +3,15 @@ import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
 import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 
 export enum GamepadNames {
-  driveGamepad,
-  peripheralGamepad,
+  driveGamepad = 'driveGamepad',
+  peripheralGamepad = 'peripheralGamepad',
+}
+
+export const Gamepads: GamepadNames[] = [GamepadNames.driveGamepad, GamepadNames.peripheralGamepad]
+
+export const GamepadIndex: {[G in keyof typeof GamepadNames]: number} = {
+  driveGamepad: 0,
+  peripheralGamepad: 1,
 }
 
 export type GamepadState = {

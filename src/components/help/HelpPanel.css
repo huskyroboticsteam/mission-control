@@ -1,61 +1,39 @@
 @import url('virtual-gamepad-lib/gamepad_assets/base.css');
 
-.help-panel {
+#help-panel {
   box-sizing: border-box;
-  padding: 10px;
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: aliceblue;
   flex-direction: column;
 }
 
-.top {
+#help-panel #top {
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
+  margin: 0.5rem;
   width: 100%;
   height: 50%;
 }
 
-.bot {
+#help-panel #bot {
   display: flex;
-  /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
-  width: 95%;
-  height: 50%;
   flex-direction: row;
-  align-items: center;
-  background-color: rgb(67, 67, 67);
   border-radius: 20px;
-  padding: 2vmin 1vmin;
+  gap: 2rem;
+  padding: 0.5rem 2rem;
+  background-color: rgb(67, 67, 67);
 }
 
-.g1,
-.g2 {
+.gamepad-container {
   display: flex;
   width: 100%;
   max-height: 100%;
   flex-direction: row;
   border-radius: 20px;
-  padding: 2vmin 1vmin;
-  margin: 0.3rem;
+  padding: 0.5rem;
   background-color: rgb(67, 67, 67);
-}
-
-.keyboard {
-  flex: 3;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center; */
-  /* margin-right: 5%; */
-  /* margin: 0 5rem; */
-}
-
-.keyboard-T {
-  flex: 1;
-  /* margin: 0 5rem ; */
-  /* max-width: 50%; */
-  /* margin-left: 5%;
-  margin-right: 5%; */
 }
 
 .g1-text-wrapper,
@@ -65,38 +43,6 @@
   flex-direction: column;
   justify-content: center;
   margin: 5%;
-}
-
-.drive-gpad-table {
-  width: 45%;
-  margin-left: 5%;
-}
-
-.table {
-  color: black;
-  background-color: white;
-  border-collapse: collapse;
-  /* font-size: 7px; */
-  justify-content: center;
-}
-
-.th,
-.td {
-  border: 1px solid black;
-  padding: 3px;
-}
-
-.th {
-  background-color: #4fb185;
-  font-weight: bold;
-  color: white;
-}
-
-.keyboard-table-container {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 10px;
 }
 
 .label {

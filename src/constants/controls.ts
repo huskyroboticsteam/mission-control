@@ -1,18 +1,26 @@
 import type {Axis, Button} from 'react-gamepad'
 import {requestDriveMode} from '../store/driveSlice.js'
-import {requestStop, selectIsStopped} from '../store/emergencyStopSlice.js'
+import {requestStop} from '../store/emergencyStopSlice.js'
 import {requestAxisMultiplier} from '../store/inputSlice.js'
-import {requestJointPower} from '../store/jointSlice.js'
-import type {RootState, RoverStoreAPI} from '../store/store.js'
-import {camelCaseToTitle} from '../util/camelCaseToTitle.js'
+import type {RoverStoreAPI} from '../store/store.js'
 import {JointNames} from './jointConstants.js'
+import type {GamepadNames} from './gamepadConstants.js'
 
 type KeyboardControl = {
-  [key: string]: {
-    display?: string
-    description: string | ((store: RoverStoreAPI) => string)
-    onPress?: (store: RoverStoreAPI) => void
-    onRelease?: (store: RoverStoreAPI) => void
+  readonly [key: string]: {
+    readonly display?: string
+    readonly description: string | ((store: RoverStoreAPI) => string)
+    readonly onPress?: (store: RoverStoreAPI) => void
+    readonly onRelease?: (store: RoverStoreAPI) => void
+  }
+}
+
+type GamepadControl = {
+  readonly [name in Axis | Button]?: {
+    readonly display?: string
+    readonly description: string | ((store: RoverStoreAPI) => string)
+    readonly onPress?: (store: RoverStoreAPI) => void
+    readonly onRelease?: (store: RoverStoreAPI) => void
   }
 }
 
@@ -42,8 +50,7 @@ export const KeyboardControls: KeyboardControl = {
   },
   Y: {
     description: (store) =>
-      camelCaseToTitle(store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal') +
-      ' Drive',
+      (store.getState().drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
     onPress: (store) => {
       store.dispatch(
         requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
@@ -85,6 +92,78 @@ export const KeyboardControls: KeyboardControl = {
   U: {description: 'Hand Close'},
   O: {description: 'Hand Open'},
   '.': {description: 'Actuator Out'},
+}
+
+export const DriveGamepadControls: GamepadControl = {
+  Y: {
+    description: (store) =>
+      (store.getState().drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
+    onPress: (store) => {
+      store.dispatch(
+        requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
+      )
+    },
+  },
+  LB: {
+    display: 'LBumper',
+    description: 'Slow Mode',
+    onPress: (store) => {
+      store.dispatch(requestAxisMultiplier({multiplier: 0.5}))
+    },
+    onRelease: (store) => {
+      store.dispatch(requestAxisMultiplier({multiplier: 1.0}))
+    },
+  },
+  LeftStickY: {
+    display: 'LStickY',
+    description: (store) =>
+      store.getState().drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive',
+  },
+  RightStickX: {
+    display: 'RStickX',
+    description: (store) => (store.getState().drive.driveMode === 'normal' ? 'Turn' : ''),
+  },
+  RightStickY: {
+    display: 'RStickY',
+    description: (store) => (store.getState().drive.driveMode === 'normal' ? '' : 'Right Drive'),
+  },
+}
+
+export const PeripheralGamepadControls: GamepadControl = {
+  Y: {description: 'Actuator Out'},
+  LT: {
+    display: 'LTrigger',
+    description: 'Hand Close',
+  },
+  RT: {
+    display: 'RTrigger',
+    description: 'Hand Open',
+  },
+  LeftStickX: {
+    display: 'LStickX',
+    description: 'Arm Base',
+  },
+  LeftStickY: {
+    display: 'LStickY',
+    description: 'Shoulder',
+  },
+  RightStickY: {
+    display: 'RStickY',
+    description: 'Elbow',
+  },
+  RightStickX: {
+    display: 'RStickX',
+    description: 'Forearm',
+  },
+  DPadUp: {description: 'Wrist Pitch Up'},
+  DPadDown: {description: 'Wrist Pitch Down'},
+  DPadLeft: {description: 'Wrist Roll Left'},
+  DPadRight: {description: 'Wrist Roll Right'},
+}
+
+export const GamepadControls: {[G in GamepadNames]: GamepadControl} = {
+  driveGamepad: DriveGamepadControls,
+  peripheralGamepad: PeripheralGamepadControls,
 }
 
 export type DriveAxis = 'straight' | 'steer' | 'left' | 'right'

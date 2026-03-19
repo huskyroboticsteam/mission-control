@@ -21,12 +21,10 @@ export const KeyboardTable = () => {
           </tr>
         </thead>
         <tbody className="keyboard-table">
-          {Object.entries(KeyboardControls).map((entry) => (
-            <tr
-              key={entry[0]}
-              style={{backgroundColor: keys.includes(entry[0]) ? 'yellow' : 'white'}}>
-              <td>{entry[1].display ? entry[1].display : entry[0]}</td>
-              <td>{resolveDescription(entry[1], store)}</td>
+          {Object.entries(KeyboardControls).map(([key, control]) => (
+            <tr key={key} style={{backgroundColor: keys.includes(key) ? 'yellow' : 'white'}}>
+              <td>{control.display ?? key}</td>
+              <td>{resolveDescription(control, store)}</td>
             </tr>
           ))}
         </tbody>
