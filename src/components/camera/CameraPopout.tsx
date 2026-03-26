@@ -1,9 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {createPortal} from 'react-dom'
 
-export const CameraPopout = ({content}: {content: React.JSX.Element}) => {
+export const CameraPopout = ({content, setPopout}: {content: React.JSX.Element, setPopout: React.Dispatch<React.SetStateAction<boolean>>}) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
   const newWindow = useRef<Window | null>(null)
+
+  // give this its own jmuxer? try feed in external window
 
   useEffect(() => {
     setContainer(document.createElement('div'))
@@ -17,9 +19,15 @@ export const CameraPopout = ({content}: {content: React.JSX.Element}) => {
       if (currWindow) {
         currWindow.document.title = 'Stream'
         currWindow.document.body.appendChild(container)
+
+        currWindow.onbeforeunload = () => {
+          setPopout(false)
+        }
       }
 
-      return () => currWindow?.close()
+      return () => {
+        currWindow?.close()
+      }
     }
   }, [container])
 
