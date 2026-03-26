@@ -7,7 +7,6 @@ import {
   roverDisconnected,
   messageRover,
   messageReceivedFromRover,
-  roverSocketSlice,
 } from '../roverSocketSlice.js'
 import type {RootState, RoverStoreAPI} from '../store.js'
 
@@ -17,13 +16,17 @@ import type {RootState, RoverStoreAPI} from '../store.js'
  */
 export const roverSocketMiddleware: Middleware<{}, RootState> = (store: RoverStoreAPI) => {
   let socket: WebSocket | null = null
+  // Flag to restrict websocket access
+  let isConnecting = false
 
   const onOpen = (store: RoverStoreAPI) => () => {
+    isConnecting = false
     store.dispatch(roverConnected())
   }
 
   const onClose = (store: RoverStoreAPI) => () => {
     socket = null
+    isConnecting = false
     store.dispatch(roverDisconnected())
   }
 
@@ -38,7 +41,13 @@ export const roverSocketMiddleware: Middleware<{}, RootState> = (store: RoverSto
     if (isAnyOf(connectToRover, disconnectFromRover, messageRover)(action)) {
       switch (action.type) {
         case connectToRover.type: {
-          if (!store.getState().roverSocket.isConnected) {
+          if (!store.getState().roverSocket.isConnected && !isConnecting) {
+            if (socket?.readyState !== WebSocket.CLOSED) {
+              // Close the socket if there is a lingering connection, rover will reject otherwise
+              socket?.close()
+            }
+            isConnecting = true
+
             socket = new WebSocket(ROVER_SERVER_URL)
             socket.onmessage = onMessage(store)
             socket.onclose = onClose(store)
