@@ -27,7 +27,9 @@ export const roverSocketSlice = createSlice({
 export const {roverConnected, roverDisconnected} = roverSocketSlice.actions
 // Actions handled by rover socket middleware.
 // Typescript expands the action type to string, so we have to define the name twice
-export const connectToRover = createAction<undefined, 'roverSocket/connectToRover'>('roverSocket/connectToRover')
+export const connectToRover = createAction<undefined, 'roverSocket/connectToRover'>(
+  'roverSocket/connectToRover'
+)
 export const disconnectFromRover = createAction<undefined, 'roverSocket/disconnect'>(
   'roverSocket/disconnect'
 )

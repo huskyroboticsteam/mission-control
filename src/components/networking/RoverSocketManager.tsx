@@ -1,9 +1,6 @@
 import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {
-  connectToRover,
-  selectRoverIsConnected,
-} from '../../store/roverSocketSlice.js'
+import {connectToRover, selectRoverIsConnected} from '../../store/roverSocketSlice.js'
 import {CONNECTION_ATTEMPT_DELAY} from '../../constants/networkConstants.js'
 import type {RoverDispatch} from '../../store/store.js'
 
