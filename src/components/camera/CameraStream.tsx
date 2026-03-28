@@ -23,14 +23,15 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const [popoutActive, setPopoutActive] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const jmuxer = useRef<JMuxer | null>(null)
+  const fps = useRef(0)
+  const fpsRef = useRef<HTMLDivElement>(null)
+  const fpsCalcTime = useRef(performance.now())
+  const frameCount = useRef(0)
   const popoutWindow = useRef<Window | null>(null)
   const popoutCanvas = useRef<HTMLCanvasElement | null>(null)
   const popoutAnimFrameId = useRef<number | null>(null)
 
   const cameraTitle = camelCaseToTitle(camera)
-
-  // const [lastFrameTime, setLastFrameTime] = useState(0.0)
-  // const [currentFpsAvg, setCurrentFpsAvg] = useState(20)
 
   useEffect(() => {
     if (!videoRef.current) {
@@ -67,30 +68,21 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   useEffect(() => {
     if (frameDataArray && jmuxer.current) {
       frameDataArray.forEach((frame) => {
-        const data = {video: new Uint8Array(frame)}
-        jmuxer.current?.feed(data)
+        jmuxer.current?.feed({video: new Uint8Array(frame)})
+        frameCount.current++
       })
-      // const currentTime = Date.now()
-      // if (currentTime !== lastFrameTime) {
-      //   setCurrentFpsAvg((oldFps) => {
-      //     let fps = (oldFps + 1 / ((currentTime - lastFrameTime) / 1000)) / 2
-      //     // if (popoutWindow) {
-      //     //   popoutWindow.document.querySelector('#ext-fps').innerText = `FPS: ${Math.round(fps)}`
-      //     // }
-      //     return fps
-      //   })
-      // }
-      // if (vidTag) {
-      //   let vid: HTMLVideoElement | null = document.querySelector(`#${vidTag.props.id}`)
-      //   if (vid && vid.videoWidth && vid.videoHeight) {
-      //     setHasFrame(true)
-      //   }
-      // }
-      // setAspectRatio(
-      //   document.querySelector(`#${camera}-player`).videoHeight /
-      //     document.querySelector(`#${camera}-player`).videoWidth
-      // )
-      // setLastFrameTime(currentTime) // current time in ms
+
+      const now = performance.now()
+      const elapsed = now - fpsCalcTime.current
+      if (elapsed >= 1000) {
+        fps.current = Math.round((frameCount.current / elapsed) * 1000)
+        frameCount.current = 0
+        fpsCalcTime.current = now
+
+        if (fpsRef.current) {
+          fpsRef.current.textContent = `FPS: ${fps.current}`
+        }
+      }
     }
   }, [frameDataArray])
 
@@ -116,7 +108,9 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
     const video = videoRef.current
     const win = popoutWindow.current
     const canvas = popoutCanvas.current
-    if (!video || !win || !canvas) { return }
+    if (!video || !win || !canvas) {
+      return
+    }
 
     const draw = () => {
       if (!win || win.closed) {
@@ -125,7 +119,6 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
         return
       }
 
-      popoutAnimFrameId.current = win.requestAnimationFrame(draw)
       const ctx = canvas.getContext('2d')
       if (ctx && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
         // Resize window if needed
@@ -142,12 +135,16 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
       }
 
+      popoutAnimFrameId.current = win.requestAnimationFrame(draw)
     }
 
     popoutAnimFrameId.current = win.requestAnimationFrame(draw)
   }
 
   const handlePopout: React.MouseEventHandler<HTMLSpanElement> = () => {
+    if (!videoRef.current) {
+      return
+    }
     if (popoutWindow.current) {
       popoutWindow.current.focus()
       return
@@ -162,13 +159,19 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
 
     popoutWindow.current = popout
 
+    popout.document.title = `${cameraTitle} Stream`
     popout.document.body.style.cssText =
-      'margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden'
+      'margin:0;background:#202225;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden'
 
     const canvas = popout.document.createElement('canvas')
-    canvas.style.cssText = 'object-fit:contain'
+    canvas.style.cssText = 'background:#000;object-fit:contain'
     popout.document.body.appendChild(canvas)
     popoutCanvas.current = canvas
+
+    const fpsDisplay = popout.document.createElement('div')
+    fpsDisplay.style.cssText = 'position:absolute;color:red;top:10px;left:10px;z-index:5'
+    fpsDisplay.textContent = `FPS: ${fps.current}`
+    popout.document.body.appendChild(fpsDisplay)
 
     startPopoutMirror()
 
@@ -189,6 +192,7 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
           muted
           autoPlay
           preload="auto"
+          style={{opacity: popoutActive ? '0' : '1'}}
           aria-label={`${cameraTitle} stream`}
         />
         <div className="camera-stream-pop-header">
@@ -205,27 +209,26 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
       ) : (
         !frameDataArray && <h3>No Stream Available</h3>
       )}
-      {/* <div className="camera-stream-fps">
-        FPS: {currentFpsAvg && frameDataArray ? Math.round(currentFpsAvg) : 'N/A'}
-      </div> */}
+      <div className="camera-stream-fps" ref={fpsRef}>
+        FPS: N/A
+      </div>
 
-      {/* <div className="camera-stream-download-header">
+      <div className="camera-stream-download-header">
         <button
           className="camera-stream-download-button"
           title={`Download "${cameraTitle}" camera stream current frame`}
           onClick={() => {
             dispatch(requestCameraFrame({camera}))
           }}
-          disabled={!(hasFrame && roverIsConnected)}>
+          disabled={!roverIsConnected}>
           Download
         </button>
         <button
           className="camera-stream-download-button"
           onClick={() => {
             dispatch(closeCameraStream({camera}))
-            setHasFrame(false)
           }}
-          disabled={!(hasFrame && roverIsConnected)}>
+          disabled={!roverIsConnected}>
           Off
         </button>
         <button
@@ -233,10 +236,10 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
           onClick={() => {
             dispatch(openCameraStream({camera}))
           }}
-          disabled={!(!hasFrame && roverIsConnected)}>
+          disabled={!roverIsConnected}>
           On
         </button>
-      </div> */}
+      </div>
     </div>
   )
 }
