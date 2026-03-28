@@ -119,30 +119,29 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
     if (!video || !win || !canvas) { return }
 
     const draw = () => {
-      if (!popoutWindow.current || popoutWindow.current.closed) {
+      if (!win || win.closed) {
         stopPopoutMirror()
         setPopoutActive(false)
         return
       }
 
+      popoutAnimFrameId.current = win.requestAnimationFrame(draw)
       const ctx = canvas.getContext('2d')
       if (ctx && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
         // Resize window if needed
-        if (win.innerWidth !== canvas.width || win.innerHeight !== canvas.height) {
-          const aspectRatio = video.height / video.width
+        if (canvas.width !== win.innerWidth || canvas.height !== win.innerHeight) {
+          const aspectRatio = video.videoHeight / video.videoWidth
           if (win.innerHeight / win.innerWidth > aspectRatio) {
             canvas.width = Math.floor(win.innerWidth)
             canvas.height = Math.floor(win.innerWidth * aspectRatio)
           } else {
-            canvas.width = Math.floor(win.innerWidth * aspectRatio)
-            canvas.height = Math.floor(win.innerWidth)
+            canvas.width = Math.floor(win.innerHeight / aspectRatio)
+            canvas.height = Math.floor(win.innerHeight)
           }
         }
-
-        ctx.drawImage(video, 0, 0)
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
       }
 
-      popoutAnimFrameId.current = win.requestAnimationFrame(draw)
     }
 
     popoutAnimFrameId.current = win.requestAnimationFrame(draw)
@@ -167,7 +166,7 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
       'margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden'
 
     const canvas = popout.document.createElement('canvas')
-    canvas.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain'
+    canvas.style.cssText = 'object-fit:contain'
     popout.document.body.appendChild(canvas)
     popoutCanvas.current = canvas
 
