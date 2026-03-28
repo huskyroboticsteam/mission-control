@@ -11,16 +11,8 @@ export const Compass = () => {
   const {orientW, orientX, orientY, orientZ, lon, lat, alt} = useSelector(selectRoverPosition)
   const quat = new Quaternion(orientX!, orientY!, orientZ!, orientW!)
   const rpy = new Euler().fromQuaternion(quat)
-  const heading = rpy.yaw
-
-  // let quat = new Quaternion(orientX, orientY, orientZ, orientW)
-  // let rpy = new Euler().fromQuaternion(quat, Euler.ZYX)
-  // let attitude = getAttitude(rpy.roll, rpy.pitch)
-  // roll = Math.round((rpy.roll * 180) / Math.PI)
-  // pitch = Math.round((rpy.pitch * 180) / Math.PI)
-  // yaw = Math.round((rpy.yaw * 180) / Math.PI)
-
-  // const heading = yaw != null ? -yaw : undefined // yaw is CCW, heading is CW
+  const [roll, pitch, yaw] = rpy.map((rad) => (rad * 180) / Math.PI)
+  const heading = -yaw
 
   const [targetHeading, setTargetHeading] = useState<number | null>(null)
   const [targetDistance, setTargetDistance] = useState<number | null>(null)
