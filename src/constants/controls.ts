@@ -24,12 +24,14 @@ type GamepadControl = {
   }
 }
 
+// We let the description be a function of the store for controls that change depending on the state
+// For example, whether tank drive is on or not changes what should be displayed on the help screen
 export const resolveDescription = (control: KeyboardControl[string], store: RoverStoreAPI) =>
   typeof control.description === 'function' ? control.description(store) : control.description
 
 // Mostly for displays and inputs that aren't mapping directly to a joint movement
 // See https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values for pressedKeys strings
-// Note: We convert all keys to all caps to let use shift as a modifier
+// Note: We convert all keys to all caps to let us use shift as a modifier
 export const KeyboardControls: KeyboardControl = {
   ' ': {
     display: 'Space',
