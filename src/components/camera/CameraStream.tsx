@@ -23,8 +23,9 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
   const [popoutActive, setPopoutActive] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const jmuxer = useRef<JMuxer | null>(null)
-  const popoutRef = useRef<Window | null>(null)
-  const popoutJmuxer = useRef<JMuxer | null>(null)
+  const popoutWindow = useRef<Window | null>(null)
+  const popoutCanvas = useRef<HTMLCanvasElement | null>(null)
+  const popoutAnimFrameId = useRef<number | null>(null)
 
   const cameraTitle = camelCaseToTitle(camera)
 
@@ -60,22 +61,14 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
       dispatch(closeCameraStream({camera}))
       // Clean JMuxer
       jmuxer.current?.destroy()
-      // Close popout window if it's active
-      popoutRef.current?.close()
-      popoutJmuxer.current?.destroy()
     }
   }, [camera])
 
-  // const requestDownloadFrame = useCallback(() => {
-  //   dispatch(requestCameraFrame({camera}))
-  // }, [camera, dispatch])
-
   useEffect(() => {
-    if (frameDataArray && jmuxer) {
+    if (frameDataArray && jmuxer.current) {
       frameDataArray.forEach((frame) => {
         const data = {video: new Uint8Array(frame)}
         jmuxer.current?.feed(data)
-        popoutJmuxer.current?.feed(data)
       })
       // const currentTime = Date.now()
       // if (currentTime !== lastFrameTime) {
@@ -99,50 +92,90 @@ export const CameraStream = ({camera}: {camera: keyof typeof CameraNames}) => {
       // )
       // setLastFrameTime(currentTime) // current time in ms
     }
-  }, [frameDataArray, jmuxer])
+  }, [frameDataArray])
+
+  useEffect(() => {
+    return () => {
+      // Clean up popout
+      stopPopoutMirror()
+      // Close popup if active
+      popoutWindow.current?.close()
+    }
+  })
+
+  const stopPopoutMirror = () => {
+    if (popoutActive && popoutWindow.current && popoutAnimFrameId.current) {
+      popoutWindow.current.cancelAnimationFrame(popoutAnimFrameId.current)
+      popoutAnimFrameId.current = null
+    }
+    popoutCanvas.current = null
+    popoutWindow.current = null
+  }
+
+  const startPopoutMirror = () => {
+    const video = videoRef.current
+    const win = popoutWindow.current
+    const canvas = popoutCanvas.current
+    if (!video || !win || !canvas) { return }
+
+    const draw = () => {
+      if (!popoutWindow.current || popoutWindow.current.closed) {
+        stopPopoutMirror()
+        setPopoutActive(false)
+        return
+      }
+
+      const ctx = canvas.getContext('2d')
+      if (ctx && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        // Resize window if needed
+        if (win.innerWidth !== canvas.width || win.innerHeight !== canvas.height) {
+          const aspectRatio = video.height / video.width
+          if (win.innerHeight / win.innerWidth > aspectRatio) {
+            canvas.width = Math.floor(win.innerWidth)
+            canvas.height = Math.floor(win.innerWidth * aspectRatio)
+          } else {
+            canvas.width = Math.floor(win.innerWidth * aspectRatio)
+            canvas.height = Math.floor(win.innerWidth)
+          }
+        }
+
+        ctx.drawImage(video, 0, 0)
+      }
+
+      popoutAnimFrameId.current = win.requestAnimationFrame(draw)
+    }
+
+    popoutAnimFrameId.current = win.requestAnimationFrame(draw)
+  }
 
   const handlePopout: React.MouseEventHandler<HTMLSpanElement> = () => {
+    if (popoutWindow.current) {
+      popoutWindow.current.focus()
+      return
+    }
+
     setPopoutActive(true)
 
-    const popout = window.open('', '', 'width=600,height=400')
+    const popout = window.open('', '', 'width=600,height=400,resizable=yes,scrollbars=no')
     if (!popout || !videoRef.current) {
       return
     }
 
-    popoutRef.current = popout
+    popoutWindow.current = popout
 
     popout.document.body.style.cssText =
-      'margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh'
+      'margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden'
 
-    const video = popout.document.createElement('video')
-    video.id = `${camera}-popout-player`
-    video.className = 'video-tag'
-    video.muted = true
-    video.autoplay = true
-    video.preload = 'auto'
-    video.ariaLabel = `${cameraTitle} popout stream`
+    const canvas = popout.document.createElement('canvas')
+    canvas.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain'
+    popout.document.body.appendChild(canvas)
+    popoutCanvas.current = canvas
 
-    popout.document.body.appendChild(video)
-
-    popoutJmuxer.current = new JMuxer({
-      node: video,
-      mode: 'video',
-      flushingTime: 0,
-      maxDelay: 50,
-      clearBuffer: true,
-      onError: (data) => {
-        console.warn('Buffer error encountered', data)
-      },
-
-      onMissingVideoFrames: (data) => {
-        console.warn('Video frames missing', data)
-      },
-    })
+    startPopoutMirror()
 
     popout.onbeforeunload = () => {
       setPopoutActive(false)
-      popoutJmuxer.current?.destroy()
-      popoutJmuxer.current = null
+      stopPopoutMirror()
     }
   }
 
