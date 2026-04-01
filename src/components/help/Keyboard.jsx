@@ -1,9 +1,9 @@
 import {Keycap} from 'keycap'
+import {useState, useEffect} from 'react'
 import './Keyboard.css'
 
 // Uses Keycap library to render keyboard display
 function Keyboard() {
-  // Responds to lowercase ver of character keys
   return (
     <div>
       <div className="entire">
