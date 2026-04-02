@@ -1,5 +1,4 @@
 import {Keycap} from 'keycap'
-import {useState, useEffect} from 'react'
 import './Keyboard.css'
 
 // Uses Keycap library to render keyboard display
