@@ -2,14 +2,14 @@ import type {Axis, Button} from 'react-gamepad'
 import {requestDriveMode} from '../store/driveSlice.js'
 import {requestStop} from '../store/emergencyStopSlice.js'
 import {requestAxisMultiplier} from '../store/inputSlice.js'
-import type {RoverStoreAPI} from '../store/store.js'
+import type {RootState, RoverStoreAPI} from '../store/store.js'
 import {JointNames} from './jointConstants.js'
 import type {GamepadNames} from './gamepadConstants.js'
 
 type KeyboardControl = {
   readonly [key: string]: {
     readonly display?: string
-    readonly description: string | ((store: RoverStoreAPI) => string)
+    readonly description: string | ((store: RootState) => string)
     readonly onPress?: (store: RoverStoreAPI) => void
     readonly onRelease?: (store: RoverStoreAPI) => void
   }
@@ -18,16 +18,11 @@ type KeyboardControl = {
 type GamepadControl = {
   readonly [name in Axis | Button]?: {
     readonly display?: string
-    readonly description: string | ((store: RoverStoreAPI) => string)
+    readonly description: string | ((store: RootState) => string)
     readonly onPress?: (store: RoverStoreAPI) => void
     readonly onRelease?: (store: RoverStoreAPI) => void
   }
 }
-
-// We let the description be a function of the store for controls that change depending on the state
-// For example, whether tank drive is on or not changes what should be displayed on the help screen
-export const resolveDescription = (control: KeyboardControl[string], store: RoverStoreAPI) =>
-  typeof control.description === 'function' ? control.description(store) : control.description
 
 // Mostly for displays and inputs that aren't mapping directly to a joint movement
 // See https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values for pressedKeys strings
@@ -51,8 +46,7 @@ export const KeyboardControls: KeyboardControl = {
     },
   },
   Y: {
-    description: (store) =>
-      (store.getState().drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
     onPress: (store) => {
       store.dispatch(
         requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
@@ -62,22 +56,20 @@ export const KeyboardControls: KeyboardControl = {
   ARROWUP: {
     display: 'Up',
     description: (store) =>
-      store.getState().drive.driveMode === 'normal' ? 'Drive Forward' : 'Right Backward',
+      store.drive.driveMode === 'normal' ? 'Drive Forward' : 'Right Backward',
   },
   ARROWDOWN: {
     display: 'Down',
     description: (store) =>
-      store.getState().drive.driveMode === 'normal' ? 'Drive Backward' : 'Left Backward',
+      store.drive.driveMode === 'normal' ? 'Drive Backward' : 'Left Backward',
   },
   ARROWLEFT: {
     display: 'Left',
-    description: (store) =>
-      store.getState().drive.driveMode === 'normal' ? 'Turn Left' : 'Left Forward',
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn Left' : 'Left Forward'),
   },
   ARROWRIGHT: {
     display: 'Right',
-    description: (store) =>
-      store.getState().drive.driveMode === 'normal' ? 'Turn Right' : 'Right Forward',
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn Right' : 'Right Forward'),
   },
   A: {description: 'Arm Base Left'},
   D: {description: 'Arm Base Right'},
@@ -98,8 +90,7 @@ export const KeyboardControls: KeyboardControl = {
 
 export const DriveGamepadControls: GamepadControl = {
   Y: {
-    description: (store) =>
-      (store.getState().drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
     onPress: (store) => {
       store.dispatch(
         requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
@@ -118,16 +109,15 @@ export const DriveGamepadControls: GamepadControl = {
   },
   LeftStickY: {
     display: 'LStickY',
-    description: (store) =>
-      store.getState().drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive',
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive'),
   },
   RightStickX: {
     display: 'RStickX',
-    description: (store) => (store.getState().drive.driveMode === 'normal' ? 'Turn' : ''),
+    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn' : ''),
   },
   RightStickY: {
     display: 'RStickY',
-    description: (store) => (store.getState().drive.driveMode === 'normal' ? '' : 'Right Drive'),
+    description: (store) => (store.drive.driveMode === 'normal' ? '' : 'Right Drive'),
   },
 }
 

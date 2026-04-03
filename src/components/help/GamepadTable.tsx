@@ -1,6 +1,6 @@
 import React from 'react'
 import './GamepadTable.css'
-import {GamepadControls, resolveDescription} from '../../constants/controls.js'
+import {GamepadControls} from '../../constants/controls.js'
 import {useSelector, useStore} from 'react-redux'
 import type {RootState} from '../../store/store.js'
 import {isAxis, isButton, type GamepadNames} from '../../constants/gamepadConstants.js'
@@ -24,10 +24,17 @@ export const GamepadTable = ({gamepadName}: {gamepadName: GamepadNames}) => {
         <tbody>
           {Object.entries(GamepadControls[gamepadName]).map(([name, control]) => {
             if (isAxis(name)) {
+              // We let the description be a function of the store for controls that change depending on the state
+              // For example, whether tank drive is on or not changes what should be displayed on the help screen
+              const description = useSelector((state: RootState) =>
+                typeof control.description === 'function'
+                  ? control.description(state)
+                  : control.description
+              )
               return (
                 <tr key={name}>
                   <td>{control.display ?? name}</td>
-                  <td>{resolveDescription(control, store)}</td>
+                  <td>{description}</td>
                   <td>{state[name].toFixed(2)}</td>
                 </tr>
               )
@@ -46,10 +53,17 @@ export const GamepadTable = ({gamepadName}: {gamepadName: GamepadNames}) => {
         <tbody className="button-table">
           {Object.entries(GamepadControls[gamepadName]).map(([name, control]) => {
             if (isButton(name)) {
+              // We let the description be a function of the store for controls that change depending on the state
+              // For example, whether tank drive is on or not changes what should be displayed on the help screen
+              const description = useSelector((state: RootState) =>
+                typeof control.description === 'function'
+                  ? control.description(state)
+                  : control.description
+              )
               return (
                 <tr key={name} style={{backgroundColor: state[name] ? 'yellow' : 'white'}}>
                   <td>{control.display ?? name}</td>
-                  <td>{resolveDescription(control, store)}</td>
+                  <td>{description}</td>
                 </tr>
               )
             }
