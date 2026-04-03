@@ -27,8 +27,8 @@ export const telemetrySlice = createSlice({
   name: 'telemetry',
   initialState,
   reducers: {
-    roverPositionReportReceived: (state, action: PayloadAction<TelemetryState>) => {
-      state = action.payload
+    roverPositionReportReceived: (_, action: PayloadAction<TelemetryState>) => {
+      return action.payload
     },
   },
 })

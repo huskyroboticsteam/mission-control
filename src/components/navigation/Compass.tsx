@@ -37,11 +37,11 @@ export const Compass = () => {
           <tbody>
             <tr>
               <td>roll:</td>
-              <td>{rpy.roll}</td>
+              <td>{roll}</td>
             </tr>
             <tr>
               <td>pitch:</td>
-              <td>{rpy.pitch}</td>
+              <td>{pitch}</td>
             </tr>
             <tr>
               <td>heading:</td>
