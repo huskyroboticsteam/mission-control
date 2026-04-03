@@ -15,7 +15,7 @@ export const opModeSlice = createSlice({
   initialState,
   reducers: {
     requestOpMode: (state, action: PayloadAction<{mode: OpMode}>) => {
-      state = action.payload
+      state.mode = action.payload.mode
     },
   },
 })
