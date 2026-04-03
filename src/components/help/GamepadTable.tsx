@@ -8,7 +8,6 @@ import {selectGamepad} from '../../store/inputSlice.js'
 
 // Table for Gamepad Controls
 export const GamepadTable = ({gamepadName}: {gamepadName: GamepadNames}) => {
-  const store = useStore<RootState>()
   const state = useSelector(selectGamepad(gamepadName))
 
   return (

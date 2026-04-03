@@ -37,27 +37,27 @@ export const Compass = () => {
           <tbody>
             <tr>
               <td>roll:</td>
-              <td>{roll}</td>
+              <td>{roll.toFixed(5)}</td>
             </tr>
             <tr>
               <td>pitch:</td>
-              <td>{pitch}</td>
+              <td>{pitch.toFixed(5)}</td>
             </tr>
             <tr>
               <td>heading:</td>
-              <td>{heading}</td>
+              <td>{heading.toFixed(5)}</td>
             </tr>
             <tr>
               <td>latitude:</td>
-              <td>{lat}</td>
+              <td>{lat?.toFixed(5)}</td>
             </tr>
             <tr>
               <td>longitude:</td>
-              <td>{lon}</td>
+              <td>{lon?.toFixed(5)}</td>
             </tr>
             <tr>
               <td>altitude:</td>
-              <td>{alt}</td>
+              <td>{alt?.toFixed(5)}</td>
             </tr>
           </tbody>
         </table>
@@ -79,7 +79,7 @@ export const Compass = () => {
             <div className="compass__label compass__label--distance">
               <span
                 className={targetDistance > APPROACHING_THRESHOLD ? 'target-far' : 'target-close'}>
-                Target: {targetDistance}
+                Target: {targetDistance.toFixed(5)}
               </span>
             </div>
           )}
