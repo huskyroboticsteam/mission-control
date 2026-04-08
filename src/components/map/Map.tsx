@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useCallback, useRef, useState, useMemo} from 'react'
 import {Viewer, Entity, PointGraphics, LabelGraphics, ImageryLayer, ModelGraphics} from 'resium'
 import {
   Cartesian2,
@@ -31,7 +31,7 @@ import {
 import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from './MapConsts.js'
 import './Map.css'
 
-import robotModel from '../../../assets/Dozer.glb'
+const robotModel = new URL('../../../assets/Dozer.glb', import.meta.url).href
 Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_ACCESS_TOKEN
 
 type Pin = {
@@ -48,31 +48,31 @@ type LastPickedCoord = {
   t: number
 }
 
-function Map() {
+export const Map = () => {
   const telemetryLat = useSelector(selectRoverLatitude as (state: unknown) => number)
   const telemetryLon = useSelector(selectRoverLongitude as (state: unknown) => number)
   const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548
   const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.3032
   const heading = useSelector(selectRoverHeading as (state: unknown) => number)
 
-  const viewerRef = React.useRef<{cesiumElement?: CesiumViewer | null} | null>(null)
-  const rightClickHandlerRef = React.useRef<ScreenSpaceEventHandler | null>(null)
+  const viewerRef = useRef<any>(null)
+  const rightClickHandlerRef = useRef<ScreenSpaceEventHandler | null>(null)
 
-  const [manualLatInput, setManualLatInput] = React.useState('47.6061')
-  const [manualLonInput, setManualLonInput] = React.useState('-122.3328')
+  const [manualLatInput, setManualLatInput] = useState('47.6061')
+  const [manualLonInput, setManualLonInput] = useState('-122.3328')
 
-  const [manualLat, setManualLat] = React.useState(47.6061)
-  const [manualLon, setManualLon] = React.useState(-122.3328)
-  const [useManual, setUseManual] = React.useState(false)
+  const [manualLat, setManualLat] = useState(47.6061)
+  const [manualLon, setManualLon] = useState(-122.3328)
+  const [useManual, setUseManual] = useState(false)
 
-  const [lastPickedCoord, setLastPickedCoord] = React.useState<LastPickedCoord | null>(null)
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+  const [lastPickedCoord, setLastPickedCoord] = useState<LastPickedCoord | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const dispatch = useDispatch()
   const pins = useSelector(selectAllPins as (state: unknown) => Pin[])
   const selectedPins = useSelector(selectSelectedPins as (state: unknown) => number[])
 
-  const imageryProvider = React.useMemo(
+  const imageryProvider = useMemo(
     () =>
       ArcGisMapServerImageryProvider.fromUrl(
         'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
@@ -80,11 +80,12 @@ function Map() {
     []
   )
 
-  const [activeMapIndex, setActiveMapIndex] = React.useState<number | null>(null)
-  const [activeLocalProvider, setActiveLocalProvider] =
-    React.useState<SingleTileImageryProvider | null>(null)
+  const [activeMapIndex, setActiveMapIndex] = useState<number | null>(null)
+  const [activeLocalProvider, setActiveLocalProvider] = useState<SingleTileImageryProvider | null>(
+    null
+  )
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true
     async function createProviderAsync() {
       setActiveLocalProvider(null)
@@ -179,7 +180,7 @@ function Map() {
     }
   }, [activeMapIndex])
 
-  const chooseMap = React.useCallback((latDeg: number, lonDeg: number): number | null => {
+  const chooseMap = useCallback((latDeg: number, lonDeg: number): number | null => {
     if (typeof latDeg !== 'number' || typeof lonDeg !== 'number') return null
     for (let i = 0; i < MAP_TILES.length; i++) {
       const t = MAP_TILES[i]
@@ -190,14 +191,14 @@ function Map() {
     return null
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const currentLat = useManual ? manualLat : lat
     const currentLon = useManual ? manualLon : lon
     const idx = chooseMap(currentLat, currentLon)
     if (idx !== activeMapIndex) setActiveMapIndex(idx)
   }, [lat, lon, useManual, manualLat, manualLon, chooseMap, activeMapIndex])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
     if (!viewer) return
 
@@ -217,7 +218,7 @@ function Map() {
     }
   }, [viewerRef, useManual, manualLat, manualLon, lat, lon])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement
     if (!viewer) {
       return () => {
@@ -423,5 +424,3 @@ function Map() {
     </Viewer>
   )
 }
-
-export default Map

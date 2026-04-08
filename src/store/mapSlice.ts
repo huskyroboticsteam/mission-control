@@ -27,7 +27,7 @@ try {
     console.warn('localStorage is not available, pins will not be persisted')
   }
 } catch (e) {
-  console.error('Failed to load saved pins from localStorage:', e.message || e)
+  console.error('Failed to load saved pins from localStorage:', (e as Error).message || e)
   savedPins = []
   savedNextPinId = 1
 }
@@ -81,15 +81,15 @@ const mapSlice = createSlice({
     },
     togglePinSelection(state, action) {
       const {pinId} = action.payload
-      const idx = state.selectedPins.indexOf(pinId)
+      const idx = (state.selectedPins as number[]).indexOf(pinId)
       if (idx === -1) {
-        state.selectedPins.push(pinId)
+        ;(state.selectedPins as number[]).push(pinId)
       } else {
-        state.selectedPins.splice(idx, 1)
+        ;(state.selectedPins as number[]).splice(idx, 1)
       }
     },
     clearSelectedPins(state) {
-      state.pins = state.pins.filter((pin) => !state.selectedPins.includes(pin.id))
+      state.pins = state.pins.filter((pin) => !(state.selectedPins as number[]).includes(pin.id))
       state.selectedPins = []
 
       localStorage.setItem('pins', JSON.stringify(state.pins))
@@ -105,8 +105,9 @@ const mapSlice = createSlice({
 export const {addPin, removePin, togglePinSelection, clearSelectedPins, resetPinCounter} =
   mapSlice.actions
 
-export const selectAllPins = (state) => state.map.pins
-export const selectSelectedPins = (state) => state.map.selectedPins
-export const selectPinById = (state, pinId) => state.map.pins.find((pin) => pin.id === pinId)
+export const selectAllPins = (state: any) => state.map.pins
+export const selectSelectedPins = (state: any) => state.map.selectedPins
+export const selectPinById = (state: any, pinId: number) =>
+  state.map.pins.find((pin: any) => pin.id === pinId)
 
 export default mapSlice.reducer
