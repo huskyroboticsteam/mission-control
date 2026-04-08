@@ -31,7 +31,7 @@ export const GamepadTable = ({gamepadName}: {gamepadName: GamepadNames}) => {
                   : control.description
               )
               return (
-                <tr key={name}>
+                <tr key={name} style={{backgroundColor: Math.abs(state[name]) > 0 ? 'yellow' : 'white'}}>
                   <td>{control.display ?? name}</td>
                   <td>{description}</td>
                   <td>{state[name].toFixed(2)}</td>
