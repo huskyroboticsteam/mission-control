@@ -1,6 +1,5 @@
 import './HelpPanel.css'
 import KeyboardTable from './KeyboardTable.jsx'
-//import Keyboard from './Keyboard.jsx'
 import KeyboardNew from './KeyboardNew.jsx'
 import Table from './Table.jsx'
 import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'

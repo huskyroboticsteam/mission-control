@@ -1,6 +1,7 @@
 import Keyboard from 'react-simple-keyboard'
 import {useState, useEffect} from 'react'
 import 'react-simple-keyboard/build/css/index.css'
+import './KeyboardNew.css'
 
 function KeyboardNew() {
   const [layoutName, setLayoutName] = useState('default')
@@ -39,16 +40,16 @@ function KeyboardNew() {
         default: [
           '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
           '{tab} q w e r t y u i o p [ ] \\',
-          "{lock} a s d f g h j k l {arrowup} ' {enter}",
-          '{shift} z x c v b n m , {arrowleft} {arrowdown} {arrowright} {shift}',
-          '{space}',
+          "{lock} a s d f g h j k l ; ' {enter}",
+          '{shift} z x c v b n m , . / {shift}',
+          '{space} {arrowleft} {arrowdown} {arrowup} {arrowright}',
         ],
         shift: [
           '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
           '{tab} Q W E R T Y U I O P { } |',
-          '{lock} A S D F G H J K L {arrowup} " {enter}',
-          '{shift} Z X C V B N M < {arrowleft} {arrowdown} {arrowright} {shift}',
-          '{space}',
+          '{lock} A S D F G H J K L : " {enter}',
+          '{shift} Z X C V B N M < > {shift}',
+          '{space} {arrowleft} {arrowdown} {arrowup} {arrowright}',
         ],
       }}
       display={{
@@ -63,6 +64,12 @@ function KeyboardNew() {
         '{arrowleft}': '←',
         '{arrowright}': '→',
       }}
+      buttonTheme={[
+        {
+          class: 'space',
+          buttons: '{space}',
+        },
+      ]}
       layoutName={layoutName}
       useTouchEvents={true}
       onKeyPress={onKeyPress}
