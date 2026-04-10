@@ -1,4 +1,4 @@
-import {ROVER_SERVER_URL} from '../../constants/networkConstants'
+import {getRoverServerUrl} from '../../constants/networkConstants'
 import {
   connectToRover,
   disconnectFromRover,
@@ -42,7 +42,7 @@ const roverSocketMiddleware = () => {
             socket.close()
           }
           isConnecting = true
-          socket = new WebSocket(ROVER_SERVER_URL)
+          socket = new WebSocket(getRoverServerUrl())
           socket.onmessage = onMessage(store)
           socket.onclose = onClose(store)
           socket.onopen = onOpen(store)
