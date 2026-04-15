@@ -5,7 +5,7 @@ interface CustomizationPanelProps {
     components: string[];
 }
 
-
+// populates an array with option elements for the dropdown menus
 function populateArray(num: number) {
     let arr = [];
     for (let i=1; i<=num; i++) {
@@ -14,33 +14,40 @@ function populateArray(num: number) {
     return arr;
 }
 
+function putInArray(row: number, col: number, arr: number[][], toPut: number) {
+    const arrCopy = arr.map(row => [...row]);
+    arrCopy[row][col] = toPut;
+    return arrCopy;
+}
+
 function resize2DArray(rows: number, cols: number, arr: number[][]) {
+    const arrCopy = arr.map(row => [...row]);
     // Case 1: row is less than current array row length - slice extra rows off
     if (rows < arr.length) {
-        arr.splice(rows, arr.length - rows);
+        arrCopy.splice(rows, arr.length - rows);
     }
     // Case 2: row is greater than current array row length - add new rows to end (fill w/ -1)
     else if (rows > arr.length) {
-        for (let i = arr.length; i < rows; i++) {
-            arr.push(Array(cols).fill(-1));
+        for (let i = arrCopy.length; i < rows; i++) {
+            arrCopy.push(Array(cols).fill(-1));
         }
     }
     // Case 3: col is less than current array col length - slice extra cols off
-    if (cols < arr[0].length) {
-        for (let i = 0; i < arr.length; i++) {
-            arr[i].splice(cols, arr[i].length - cols);
+    if (arr.length != 0 && cols < arr[0].length) {
+        for (let i = 0; i < arrCopy.length; i++) {
+            arrCopy[i].splice(cols, arrCopy[i].length - cols);
         }
     }
     // Case 4: col is greater than current array col length - add new cols to end (fill w/ -1)
-    else if (cols > arr[0].length) {
-        for (let i = 0; i < arr.length; i++) {
-            for (let j = arr[i].length; j < cols; j++) {
-                arr[i].push(-1);
+    else if (arr.length != 0 &&cols > arrCopy[0].length) {
+        for (let i = 0; i < arrCopy.length; i++) {
+            for (let j = arrCopy[i].length; j < cols; j++) {
+                arrCopy[i].push(-1);
             }
         }
     }
 
-    return arr;
+    return arrCopy;
     // Case 5/6: row/col equal to current array row/col length - do nothing
 }
 
@@ -50,6 +57,21 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
     const [totalNumRows, setTotalNumRows] = useState(populateArray(components.length));
     const [totalNumCols, setTotalNumCols] = useState(populateArray(components.length));
     const [arr, setArr] = useState(Array<Array<number>>);
+    const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]);
+
+    useEffect(() => {
+        console.log(arr + "arr changed");
+    }, [arr]);
+
+    useEffect(() => {
+        const selectOptions = components.map((component, index) => (
+            <option value={index} key={index}>
+                {component}
+            </option>
+        ));
+        setComponentSelect(selectOptions);
+    }, []);
+
     //let arr: number[][] = Array(numRows).fill(Array(numCols).fill(-1));
 
     //populateArray(components.length);
@@ -92,7 +114,12 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
                     {arr.map((row, rowIndex) => (
                     <tr key={rowIndex}>
                         {row.map((cell, colIndex) => (
-                        <td key={colIndex}>{cell}</td>
+                        <td key={colIndex}>
+                            <select value={cell} onChange={(e) => setArr(prev => putInArray(rowIndex, colIndex, prev, parseInt(e.target.value)))}>
+                                <option value={-1} key={-1}></option>
+                                {componentSelect}
+                            </select>
+                        </td>
                         ))}
                     </tr>
                     ))}
