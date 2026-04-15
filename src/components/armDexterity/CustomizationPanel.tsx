@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 
 interface CustomizationPanelProps {
     components: string[];
+    onSend: (data: number[][]) => void;
 }
 
 // populates an array with option elements for the dropdown menus
@@ -51,17 +52,13 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
     // Case 5/6: row/col equal to current array row/col length - do nothing
 }
 
-export default function CustomizationPanel({ components }: CustomizationPanelProps) {
+export default function CustomizationPanel({ components, onSend }: CustomizationPanelProps) {
     const [numRows, setNumRows] = useState(1);
     const [numCols, setNumCols] = useState(1);
     const [totalNumRows, setTotalNumRows] = useState(populateArray(components.length));
     const [totalNumCols, setTotalNumCols] = useState(populateArray(components.length));
     const [arr, setArr] = useState(Array<Array<number>>);
     const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]);
-
-    useEffect(() => {
-        console.log(arr + "arr changed");
-    }, [arr]);
 
     useEffect(() => {
         const selectOptions = components.map((component, index) => (
@@ -84,7 +81,6 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
         }
         setTotalNumRows(populateArray(i));
         setArr(prev => resize2DArray(numRows, numCols, prev));
-        console.log(arr);
     }, [numCols]);
 
     useEffect(() => {
@@ -94,7 +90,6 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
         }
         setTotalNumCols(populateArray(i));
         setArr(prev => resize2DArray(numRows, numCols, prev));
-        console.log(arr);
     }, [numRows]);
 
 
@@ -125,6 +120,7 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => onSend(arr)}>Save</button>
         </div>
     );
 }
