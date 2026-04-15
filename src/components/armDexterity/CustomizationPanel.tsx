@@ -49,7 +49,7 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
     const [numCols, setNumCols] = useState(1);
     const [totalNumRows, setTotalNumRows] = useState(populateArray(components.length));
     const [totalNumCols, setTotalNumCols] = useState(populateArray(components.length));
-    const [arr, setArr] = useState(Array(numRows).fill(Array(numCols).fill(-1)));
+    const [arr, setArr] = useState(Array<Array<number>>);
     //let arr: number[][] = Array(numRows).fill(Array(numCols).fill(-1));
 
     //populateArray(components.length);
@@ -87,6 +87,17 @@ export default function CustomizationPanel({ components }: CustomizationPanelPro
             <select name='column' value = {numCols} onChange={(e) => setNumCols(parseInt(e.target.value))}>
                 {totalNumCols}
             </select>
+            <table border={1}>
+                <tbody>
+                    {arr.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                        {row.map((cell, colIndex) => (
+                        <td key={colIndex}>{cell}</td>
+                        ))}
+                    </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
