@@ -40,8 +40,6 @@
     "start": "vite",
     "build": "vite build --config vite.config.js",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
