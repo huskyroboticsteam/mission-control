@@ -16,7 +16,7 @@ type MapState = {
 const initialState: MapState = {
   pins: [],
   selected: [],
-  nextPinID: 1
+  nextPinID: 1,
 }
 
 // let savedPins = []
@@ -55,7 +55,7 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    addPin(state, action: PayloadAction<{lat: number, lon: number, label: string | undefined}>) {
+    addPin(state, action: PayloadAction<{lat: number; lon: number; label: string | undefined}>) {
       const {lat, lon, label} = action.payload
 
       // Validate latitude and longitude ranges

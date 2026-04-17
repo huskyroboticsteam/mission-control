@@ -14,9 +14,7 @@ import {
   type Viewer as CesiumViewer,
 } from 'cesium'
 import {useSelector, useDispatch} from 'react-redux'
-import {
-  selectRoverPosition,
-} from '../../store/telemetrySlice.js'
+import {selectRoverPosition} from '../../store/telemetrySlice.js'
 import {
   addPin,
   removePin,
@@ -28,7 +26,7 @@ import {
 } from '../../store/mapSlice.js'
 import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from '../../constants/mapConstants.js'
 import './Map.css'
-import { Euler, Quaternion } from '@math.gl/core'
+import {Euler, Quaternion} from '@math.gl/core'
 
 const robotModel = new URL('../../../assets/Dozer.glb', import.meta.url).href
 Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_ACCESS_TOKEN
@@ -51,7 +49,12 @@ export const Map = () => {
   const telemetry = useSelector(selectRoverPosition)
   const lat = telemetry.lat ?? 47.655548
   const lon = telemetry.lon ?? -122.3032
-  const quat = new Quaternion(telemetry.orientX ?? 0, telemetry.orientY ?? 0, telemetry.orientZ ?? 0, telemetry.orientW ?? 0)
+  const quat = new Quaternion(
+    telemetry.orientX ?? 0,
+    telemetry.orientY ?? 0,
+    telemetry.orientZ ?? 0,
+    telemetry.orientW ?? 0
+  )
   const rpy = new Euler().fromQuaternion(quat)
   const [roll, pitch, yaw] = rpy.map((rad) => (rad * 180) / Math.PI)
   const heading = -yaw
