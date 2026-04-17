@@ -58,9 +58,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "jsdom": "^29.0.1",
-    "vitest": "^4.1.2"
   }
 }
