@@ -3,7 +3,7 @@ import TelemetryPanel from '../telemetry/TelemetryPanel'
 import HelpPanel from '../help/HelpPanel'
 import NavigationPanel from '../navigation/NavigationPanel'
 import ArmDexterityPanel from '../armDexterity/ArmDexterityPanel'
-import SciencePanel from '../science/SciencePanel'
+
 import Calculator from '../navigation/Calculator'
 import './PanelContainer.css'
 
@@ -16,8 +16,6 @@ function PanelContainer() {
         <Route path="/navigation" element={<NavigationPanel />} />
 
         <Route path="/arm-dexterity" element={<ArmDexterityPanel />} />
-
-        <Route path="/science" element={<SciencePanel />} />
 
         <Route path="/telemetry" element={<TelemetryPanel />} />
 
