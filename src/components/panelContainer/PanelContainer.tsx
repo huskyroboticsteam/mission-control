@@ -3,6 +3,7 @@ import {TelemetryPanel} from '../telemetry/TelemetryPanel.js'
 import {HelpPanel} from '../help/HelpPanel.js'
 import {NavigationPanel} from '../navigation/NavigationPanel.js'
 import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel.js'
+import {MapPanel} from '../map/MapPanel.js'
 import './PanelContainer.css'
 import React from 'react'
 
@@ -19,6 +20,8 @@ function PanelContainer() {
         <Route path="/telemetry" element={<TelemetryPanel />} />
 
         <Route path="/help" element={<HelpPanel />} />
+
+        <Route path="/map" element={<MapPanel />} />
       </Routes>
     </div>
   )

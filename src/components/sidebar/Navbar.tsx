@@ -2,7 +2,6 @@ import {NavLink} from 'react-router-dom'
 import {
   Map as NavigationIcon,
   BackHand as ArmDexterityIcon,
-  Science as ScienceIcon,
   Info as TelemetryIcon,
   Help as HelpIcon,
 } from '@mui/icons-material'
@@ -40,6 +39,12 @@ export const Navbar = () => {
           <NavLink to="/help" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
             <HelpIcon fontSize="large" className="navbar__icon" />
             Help
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/map" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
+            <NavigationIcon fontSize="large" className="navbar__icon" />
+            Map
           </NavLink>
         </li>
       </ul>
