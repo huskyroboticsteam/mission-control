@@ -11,6 +11,7 @@ import motorsReducer from './motorsSlice'
 import camerasReducer from './camerasSlice'
 import telemetryReducer from './telemetrySlice'
 import waypointNavReducer from './waypointNavSlice'
+import mapReducer from './mapSlice'
 import servoReducer from './servoSlice'
 import roverSocketMiddleware from './middleware/roverSocketMiddleware'
 import peripheralsMiddleware from './middleware/peripheralsMiddleware'
@@ -40,6 +41,7 @@ export default configureStore({
     cameras: camerasReducer,
     telemetry: telemetryReducer,
     waypointNav: waypointNavReducer,
+    map: mapReducer,
     servo: servoReducer,
   },
 
