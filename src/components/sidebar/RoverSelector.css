@@ -1,0 +1,27 @@
+.rover-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-top: 1px solid gray;
+}
+
+.rover-selector__label {
+  color: #dcddde;
+  font-size: large;
+}
+
+.rover-selector__select {
+  background-color: #2f3136;
+  color: #dcddde;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: medium;
+  cursor: pointer;
+}
+
+.rover-selector__select:focus {
+  outline: none;
+  border-color: #4fb185;
+}

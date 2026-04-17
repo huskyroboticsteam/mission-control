@@ -4,6 +4,7 @@ import EnableMotorsButton from './EnableMotorsButton'
 import ToggleInverseKinematics from './ToggleInverseKinematics'
 import InputInfo from './InputInfo'
 import ConnectionInfo from './ConnectionInfo'
+import RoverSelector from './RoverSelector'
 import OpModeSelect from '../navigation/OpModeToggleButton'
 import './Sidebar.css'
 
@@ -16,6 +17,7 @@ function Sidebar() {
       <EnableMotorsButton />
       <ToggleInverseKinematics />
       <InputInfo />
+      <RoverSelector />
       <ConnectionInfo />
     </div>
   )
