@@ -1,9 +1,9 @@
 import Keyboard from 'react-simple-keyboard'
 import {useState, useEffect} from 'react'
 import 'react-simple-keyboard/build/css/index.css'
-import './KeyboardNew.css'
+import './KeyboardDisplay.css'
 
-function KeyboardNew() {
+function KeyboardDisplay() {
   const [layoutName, setLayoutName] = useState('default')
 
   useEffect(() => {
@@ -29,10 +29,6 @@ function KeyboardNew() {
       window.removeEventListener('keyup', handleKeyUp)
     }
   }, [])
-
-  const onKeyPress = (button) => {
-    console.log('Button pressed', button)
-  }
 
   return (
     <Keyboard
@@ -72,11 +68,10 @@ function KeyboardNew() {
       ]}
       layoutName={layoutName}
       useTouchEvents={true}
-      onKeyPress={onKeyPress}
       physicalKeyboardHighlight={true}
       physicalKeyboardHighlightPress={true}
     />
   )
 }
 
-export default KeyboardNew
+export default KeyboardDisplay

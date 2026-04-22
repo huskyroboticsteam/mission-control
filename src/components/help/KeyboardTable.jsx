@@ -36,7 +36,6 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
   // Listens for keydown and keyup events, updates key state accordingly
   useEffect(() => {
     const handleKeyDown = (event) => {
-      console.log('Key Down:', event.key)
       if (event.key.toLowerCase() in keyMap || event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
@@ -55,7 +54,6 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
     }
 
     const handleKeyUp = (event) => {
-      console.log('Key Up:', event.key)
       if (event.key.toLowerCase() in keyMap || event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
