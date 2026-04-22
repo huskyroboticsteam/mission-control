@@ -4,6 +4,7 @@ import CustomizationPanel from './CustomizationPanel'
 import './ArmDexterityPanel.css'
 
 function ArmDexterityPanel() {
+  const components = ['handcam', 'wristcam', 'rovermodel'];
   const handleChildData = (data) => {
     console.log("Received from child:", data);
   };
@@ -13,8 +14,7 @@ function ArmDexterityPanel() {
       <CameraStream camera="hand" />
       <CameraStream camera="wrist" />
       <RoverModel />
-      <CustomizationPanel onSend={handleChildData} components={['Component 1', 'Component 2', 'Component 3']} />
-      
+      <CustomizationPanel onSend={handleChildData} components={components} />
     </div>
   )
 }
