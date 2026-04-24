@@ -63,7 +63,6 @@ export default function CustomizationPanel({components, edit, onSend}: Customiza
   const [totalNumCols, setTotalNumCols] = useState(populateArray(components.length))
   const [arr, setArr] = useState(Array<Array<number>>)
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([])
-  const [show, setShow] = useState(edit)
 
   useEffect(() => {
     const selectOptions = components.map((component, index) => (
@@ -98,7 +97,7 @@ export default function CustomizationPanel({components, edit, onSend}: Customiza
   }, [numRows])
 
   return (
-    <div style={{ display: edit ? "block" : "none" }}>
+    <div style={{display: edit ? 'block' : 'none', position: 'absolute', right: '0', bottom: '0', zIndex: 1000, backgroundColor: "blue"}}>
       <h1>Customization Panel</h1>
       <label htmlFor="row">Rows:</label>
       <select name="row" value={numRows} onChange={(e) => setNumRows(parseInt(e.target.value))}>
