@@ -10,7 +10,7 @@ function WaypointList() {
   const [list, setList] = useState([])
 
   return (
-    <div className = "waypoint-header">
+    <div className="waypoint-header">
       <div className="list-header">
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <button
