@@ -43,7 +43,7 @@ function ArmDexterityPanel() {
       }}>
       {coordinates[0]?.length > 0 &&
         coordinates[0].map((coord) => (
-          <div style={{gridColumn: `${coord?.[1]+1}`, gridRow: `${coord?.[0] + 1}`}}>
+          <div style={{gridColumn: `${coord[1]+1}`, gridRow: `${coord[0] + 1}`}}>
           <CameraStream
             key={`handcam-${coord[0]}-${coord[1]}`}
             camera="hand"
@@ -52,7 +52,7 @@ function ArmDexterityPanel() {
         ))}
       {
         coordinates[1]?.length > 0 && coordinates[1].map((coord) => (
-          <div style={{gridColumn: `${coord?.[1]+1}`, gridRow: `${coord?.[0] + 1}`}}>
+          <div style={{gridColumn: `${coord[1]+1}`, gridRow: `${coord[0] + 1}`}}>
           <CameraStream
             key={`wristcam-${coord[0]}-${coord[1]}`}
             camera="wrist"
@@ -61,7 +61,7 @@ function ArmDexterityPanel() {
         ))}
       {
         coordinates[2]?.length > 0 && coordinates[2].map((coord) => (
-          <div style={{gridColumn: `${coord?.[1]+1}`, gridRow: `${coord?.[0] + 1}`}}>
+          <div style={{gridColumn: `${coord[1]+1}`, gridRow: `${coord[0] + 1}`}}>
           <RoverModel key={`rovermodel-${coord[0]}-${coord[1]}`} />
           </div>
         ))}
