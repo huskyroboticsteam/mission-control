@@ -6,7 +6,7 @@ import {ConnectionInfo} from './ConnectionInfo.js'
 import OpModeSelect from '../navigation/OpModeToggleButton.js'
 import './Sidebar.css'
 import React from 'react'
-import { RoverSelector } from './RoverSelector.js'
+import {RoverSelector} from './RoverSelector.js'
 
 export const Sidebar = () => {
   return (

@@ -1,7 +1,7 @@
 import {createAction, createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
 import type {ReportMessage, RequestMessage} from '../constants/messages.js'
-import { IS_DEV } from '../constants/networkConstants.js'
+import {IS_DEV} from '../constants/networkConstants.js'
 
 type RoverSocketState = {
   readonly isConnected: boolean
@@ -10,7 +10,7 @@ type RoverSocketState = {
 
 const initialState: RoverSocketState = {
   isConnected: false,
-  roverHost: IS_DEV ? 'localhost' : 'jetson-1'
+  roverHost: IS_DEV ? 'localhost' : 'jetson-1',
 }
 
 export const roverSocketSlice = createSlice({
