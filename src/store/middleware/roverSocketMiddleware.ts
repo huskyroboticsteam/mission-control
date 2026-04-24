@@ -1,5 +1,4 @@
 import {isAnyOf, type Middleware, type MiddlewareAPI} from '@reduxjs/toolkit'
-import {ROVER_SERVER_URL} from '../../constants/networkConstants.js'
 import {
   connectToRover,
   disconnectFromRover,
@@ -41,14 +40,15 @@ export const roverSocketMiddleware: Middleware<{}, RootState> = (store: RoverSto
     if (isAnyOf(connectToRover, disconnectFromRover, messageRover)(action)) {
       switch (action.type) {
         case connectToRover.type: {
-          if (!store.getState().roverSocket.isConnected && !isConnecting) {
+          const state = store.getState()
+          if (!state.roverSocket.isConnected && !isConnecting) {
             if (socket?.readyState !== WebSocket.CLOSED) {
               // Close the socket if there is a lingering connection, rover will reject otherwise
               socket?.close()
             }
             isConnecting = true
 
-            socket = new WebSocket(ROVER_SERVER_URL)
+            socket = new WebSocket(`ws://${state.roverSocket.roverHost}:3001/mission-control`)
             socket.onmessage = onMessage(store)
             socket.onclose = onClose(store)
             socket.onopen = onOpen(store)

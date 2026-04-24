@@ -1,6 +1,4 @@
-export const ROVER_SERVER_URL =
-  process.env.NODE_ENV && process.env.NODE_ENV === 'development'
-    ? 'ws://localhost:3001/mission-control'
-    : 'ws://jetson-1.local:3001/mission-control'
+export const IS_DEV = process.env.NODE_ENV === 'development'
+export const ROVER_HOSTS = ['jetson-1.local', 'jetson-2.local']
 
 export const CONNECTION_ATTEMPT_DELAY = 5000
