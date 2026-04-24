@@ -1,4 +1,4 @@
-import {isAnyOf, type Middleware, type MiddlewareAPI} from '@reduxjs/toolkit'
+import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
 import {
   connectToRover,
   disconnectFromRover,

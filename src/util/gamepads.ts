@@ -14,7 +14,7 @@ import type {
   VariableButtonTouchConfig,
 } from 'virtual-gamepad-lib/GamepadEmulator'
 
-// From Virtual Gamepad Library - sets up input for buttons and9 joystick
+// From Virtual Gamepad Library - sets up input for buttons and joystick
 export const setupEmulatedGamepadInput = (gpadIndex: number, display_gpad: HTMLElement) => {
   gamepadEmulator.AddButtonTouchEventListeners(
     gpadIndex,

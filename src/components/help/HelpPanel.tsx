@@ -15,7 +15,7 @@ import {useStore} from 'react-redux'
 import type {RootState} from '../../store/store.js'
 import {gamepadAxisChanged, gamepadButtonChanged} from '../../store/inputSlice.js'
 import {KeyboardTable} from './KeyboardTable.js'
-import {Keyboard} from './Keyboard.js'
+import { KeyboardDisplay } from './KeyboardDisplay.js'
 
 export const HelpPanel = () => {
   const store = useStore<RootState>()
@@ -87,7 +87,7 @@ export const HelpPanel = () => {
         <KeyboardTable />
         <div className="keyboard">
           <b className="label">Keyboard Controls</b>
-          <Keyboard />
+          <KeyboardDisplay />
         </div>
       </div>
     </div>
