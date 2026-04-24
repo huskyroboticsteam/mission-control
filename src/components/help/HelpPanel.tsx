@@ -15,7 +15,7 @@ import {useStore} from 'react-redux'
 import type {RootState} from '../../store/store.js'
 import {gamepadAxisChanged, gamepadButtonChanged} from '../../store/inputSlice.js'
 import {KeyboardTable} from './KeyboardTable.js'
-import { KeyboardDisplay } from './KeyboardDisplay.js'
+import {KeyboardDisplay} from './KeyboardDisplay.js'
 
 export const HelpPanel = () => {
   const store = useStore<RootState>()

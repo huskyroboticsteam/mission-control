@@ -2,11 +2,13 @@ import {KeyboardReact} from 'react-simple-keyboard'
 import 'react-simple-keyboard/build/css/index.css'
 import './KeyboardDisplay.css'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { selectPressedKeys } from '../../store/inputSlice.js'
+import {useSelector} from 'react-redux'
+import {selectPressedKeys} from '../../store/inputSlice.js'
 
 export const KeyboardDisplay = () => {
-  const shifting = useSelector(selectPressedKeys).some((key) => key === 'SHIFT' || key === 'CAPSLOCK')
+  const shifting = useSelector(selectPressedKeys).some(
+    (key) => key === 'SHIFT' || key === 'CAPSLOCK'
+  )
 
   return (
     <KeyboardReact
