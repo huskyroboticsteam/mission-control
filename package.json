@@ -27,6 +27,7 @@
     "react-gamepad": "SBRK/react-gamepad",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.17.0",
+    "react-simple-keyboard": "^3.8.183",
     "resium": "^1.17.2",
     "serve": "^14.2.5",
     "stream": "0.0.2",

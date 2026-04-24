@@ -49,7 +49,6 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
   }, [tankDriveEnabled])
 
   useEffect(() => {
-    console.log(gpadButton)
     for (let i = 0; i < 17; i++) {
       if (!gpadButton?.buttons[i] || gpadButton?.index !== gpadIndex) continue
 
@@ -65,7 +64,6 @@ function Table({gpadButton, gpadAxis, gpadIndex, tankDriveEnabled, setTankDriveE
   }, [gpadButton?.buttons])
 
   useEffect(() => {
-    console.log(gpadAxis)
     if (gpadAxis?.index == gpadIndex) {
       for (let i = 0; i < 4; i++) {
         if (

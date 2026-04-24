@@ -36,11 +36,14 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
   // Listens for keydown and keyup events, updates key state accordingly
   useEffect(() => {
     const handleKeyDown = (event) => {
-      console.log('Key Down:', event.key)
-      if (event.key in keyMap) {
+      if (event.key.toLowerCase() in keyMap || event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
-          newKeys[keyMap[event.key]] = 1
+          if (event.key.length == 1) {
+            newKeys[keyMap[event.key.toLowerCase()]] = 1
+          } else {
+            newKeys[keyMap[event.key]] = 1
+          }
           return newKeys
         })
         // Toggle drive/tank mode when 'y' is pressed
@@ -51,11 +54,14 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
     }
 
     const handleKeyUp = (event) => {
-      console.log('Key Up:', event.key)
-      if (event.key in keyMap) {
+      if (event.key.toLowerCase() in keyMap || event.key in keyMap) {
         setKeys((prevKeys) => {
           const newKeys = [...prevKeys]
-          newKeys[keyMap[event.key]] = 0
+          if (event.key.length == 1) {
+            newKeys[keyMap[event.key.toLowerCase()]] = 0
+          } else {
+            newKeys[keyMap[event.key]] = 0
+          }
           return newKeys
         })
       }
@@ -101,34 +107,34 @@ function KeyboardTable({tankDriveEnabled, setTankDriveEnabled}) {
         </thead>
         <tbody className="keyboard-table">
           <tr style={{backgroundColor: keys[0] > 0 ? 'yellow' : 'white'}}>
-            <td>Space</td>
-            <td>Toggle Emergency Stop</td>
-            <td>{keys[0]}</td>
+            <td className="td">Space</td>
+            <td className="td">Toggle Emergency Stop</td>
+            <td className="td">{keys[0]}</td>
           </tr>
           <tr style={{backgroundColor: keys[1] > 0 ? 'yellow' : 'white'}}>
-            <td>Up</td>
-            <td>{controls[0]}</td>
-            <td>{keys[1]}</td>
+            <td className="td">Up</td>
+            <td className="td">{controls[0]}</td>
+            <td className="td">{keys[1]}</td>
           </tr>
           <tr style={{backgroundColor: keys[2] > 0 ? 'yellow' : 'white'}}>
-            <td>Down</td>
-            <td>{controls[1]}</td>
-            <td>{keys[2]}</td>
+            <td className="td">Down</td>
+            <td className="td">{controls[1]}</td>
+            <td className="td">{keys[2]}</td>
           </tr>
           <tr style={{backgroundColor: keys[3] > 0 ? 'yellow' : 'white'}}>
-            <td>Left</td>
-            <td>{controls[2]}</td>
-            <td>{keys[3]}</td>
+            <td className="td">Left</td>
+            <td className="td">{controls[2]}</td>
+            <td className="td">{keys[3]}</td>
           </tr>
           <tr style={{backgroundColor: keys[4] > 0 ? 'yellow' : 'white'}}>
-            <td>Right</td>
-            <td>{controls[3]}</td>
-            <td>{keys[4]}</td>
+            <td className="td">Right</td>
+            <td className="td">{controls[3]}</td>
+            <td className="td">{keys[4]}</td>
           </tr>
           <tr style={{backgroundColor: keys[5] > 0 ? 'yellow' : 'white'}}>
-            <td>Shift</td>
-            <td>Reduce Speed (0.2)</td>
-            <td>{keys[5]}</td>
+            <td className="td">Shift</td>
+            <td className="td">Reduce Speed (0.2)</td>
+            <td className="td">{keys[5]}</td>
           </tr>
         </tbody>
       </table>
