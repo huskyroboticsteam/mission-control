@@ -1,4 +1,5 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
+import type {RootState} from './store.js'
 
 type Pin = {
   id: number
@@ -55,7 +56,10 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    addPin(state, action: PayloadAction<{lat: number; lon: number; label: string | undefined}>) {
+    addPin: (
+      state,
+      action: PayloadAction<{lat: number; lon: number; label: string | undefined}>
+    ) => {
       const {lat, lon, label} = action.payload
 
       // Validate latitude and longitude ranges
@@ -79,33 +83,37 @@ export const mapSlice = createSlice({
       // localStorage.setItem('pins', JSON.stringify(state.pins))
       // localStorage.setItem('nextPinId', state.nextPinId.toString())
     },
-    removePin(state, action: PayloadAction<{pinID: number}>) {
+
+    removePin: (state, action: PayloadAction<{pinID: number}>) => {
       const {pinID} = action.payload
       state.pins = state.pins.filter((pin) => pin.id !== pinID)
       state.selected = state.selected.filter((id) => id !== pinID)
 
-      localStorage.setItem('pins', JSON.stringify(state.pins))
-      localStorage.setItem('nextPinId', state.nextPinID.toString())
+      // localStorage.setItem('pins', JSON.stringify(state.pins))
+      // localStorage.setItem('nextPinId', state.nextPinID.toString())
     },
-    togglePinSelection(state, action) {
-      const {pinId} = action.payload
-      const idx = (state.selected as number[]).indexOf(pinId)
+
+    togglePinSelection: (state, action: PayloadAction<{pinID: number}>) => {
+      const {pinID} = action.payload
+      const idx = state.selected.indexOf(pinID)
       if (idx === -1) {
-        ;(state.selected as number[]).push(pinId)
+        state.selected.push(pinID)
       } else {
-        ;(state.selected as number[]).splice(idx, 1)
+        state.selected.splice(idx, 1)
       }
     },
-    clearSelectedPins(state) {
-      state.pins = state.pins.filter((pin) => !(state.selected as number[]).includes(pin.id))
+
+    clearSelectedPins: (state) => {
+      state.pins = state.pins.filter((pin) => !state.selected.includes(pin.id))
       state.selected = []
 
-      localStorage.setItem('pins', JSON.stringify(state.pins))
-      localStorage.setItem('nextPinId', state.nextPinID.toString())
+      // localStorage.setItem('pins', JSON.stringify(state.pins))
+      // localStorage.setItem('nextPinId', state.nextPinID.toString())
     },
-    resetPinCounter(state) {
+
+    resetPinCounter: (state) => {
       state.nextPinID = 1
-      localStorage.setItem('nextPinId', '1')
+      // localStorage.setItem('nextPinId', '1')
     },
   },
 })
@@ -113,9 +121,7 @@ export const mapSlice = createSlice({
 export const {addPin, removePin, togglePinSelection, clearSelectedPins, resetPinCounter} =
   mapSlice.actions
 
-export const selectAllPins = (state: any) => state.map.pins
-export const selectSelectedPins = (state: any) => state.map.selectedPins
-export const selectPinById = (state: any, pinId: number) =>
-  state.map.pins.find((pin: any) => pin.id === pinId)
+export const selectAllPins = (state: RootState) => state.map.pins
+export const selectSelectedPins = (state: RootState) => state.map.selected
 
 export default mapSlice.reducer

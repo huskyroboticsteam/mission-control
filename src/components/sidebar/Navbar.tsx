@@ -36,15 +36,16 @@ export const Navbar = () => {
         </li>
 
         <li>
-          <NavLink to="/help" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
-            <HelpIcon fontSize="large" className="navbar__icon" />
-            Help
-          </NavLink>
-        </li>
-        <li>
           <NavLink to="/map" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
             <NavigationIcon fontSize="large" className="navbar__icon" />
             Map
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink to="/help" className={({isActive}) => (isActive ? 'active' : 'inactive')}>
+            <HelpIcon fontSize="large" className="navbar__icon" />
+            Help
           </NavLink>
         </li>
       </ul>

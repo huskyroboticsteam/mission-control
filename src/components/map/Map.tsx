@@ -287,7 +287,7 @@ export const Map = () => {
   }
 
   function toggleSelectPin(id: number) {
-    dispatch(togglePinSelection({pinId: id}))
+    dispatch(togglePinSelection({pinID: id}))
   }
 
   function handleClearSelectedPins() {

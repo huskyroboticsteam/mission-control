@@ -23,6 +23,7 @@ import {roverSocketMiddleware} from './middleware/roverSocketMiddleware.js'
 import {servoMiddleware} from './middleware/servoMiddleware.js'
 import {telemetryMiddleware} from './middleware/telemetryMiddleware.js'
 import {waypointNavMiddleware} from './middleware/waypointNavMiddleware.js'
+import {mapSlice} from './mapSlice.js'
 
 const rootReducer = combineReducers({
   camera: cameraSlice.reducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   emergencyStop: emergencyStopSlice.reducer,
   input: inputSlice.reducer,
   joint: jointSlice.reducer,
+  map: mapSlice.reducer,
   motor: motorSlice.reducer,
   opMode: opModeSlice.reducer,
   peripheral: peripheralSlice.reducer,
