@@ -172,7 +172,7 @@ function CameraStream({camera}) {
         node: `${camera}-player`,
         mode: 'video',
         flushingTime: 0,
-        videoCodec: 'h264',
+        videoCodec: 'h265',
         maxDelay: 50,
         clearBuffer: true,
         onError: function (data) {
