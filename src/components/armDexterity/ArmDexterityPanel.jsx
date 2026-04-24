@@ -36,21 +36,22 @@ function ArmDexterityPanel() {
         gridTemplateRows: `repeat(${rowNum - 1}, 1fr)`,
         gridTemplateColumns: `repeat(${colNum}, 1fr)`,
       }}>
-      {coordinates[0]?.length > 0 && (
+      
+      {coordinates[0]?.length > 0 && coordinates[0].map((coord) => (
         <CameraStream
           camera="hand"
-          style={{gridColumn: `{coordinates[0][1]}`, gridRow: `{coordinates[0][0]}`}}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}
         />
-      )}
-      {coordinates[1]?.length > 0 && (
+      ))} 
+      {coordinates[1]?.length > 0 && coordinates[1].map((coord) => (
         <CameraStream
           camera="wrist"
-          style={{gridColumn: `{coordinates[1][1]}`, gridRow: `{coordinates[1][0]}`}}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}
         />
-      )}
-      {coordinates[2]?.length > 0 && (
-        <RoverModel style={{gridColumn: `{coordinates[2][1]}`, gridRow: `{coordinates[2][0]}`}} />
-      )}
+      ))} 
+      {coordinates[2]?.length > 0 && coordinates[2].map((coord) => (
+        <RoverModel style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}} />
+      ))}
       <div className = "customization-container">
       
         <CustomizationPanel onSend={handleChildData} components={components} edit = {edit}/>
