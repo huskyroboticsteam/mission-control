@@ -1,5 +1,6 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {RootState} from './store.js'
+import {getItem} from '../util/localStorage.js'
 
 type Pin = {
   id: number
@@ -15,42 +16,10 @@ type MapState = {
 }
 
 const initialState: MapState = {
-  pins: [],
+  pins: getItem('pins') ?? [],
   selected: [],
-  nextPinID: 1,
+  nextPinID: getItem('nextPinID') ?? 1,
 }
-
-// let savedPins = []
-// let savedNextPinId = 1
-// try {
-//   if (typeof localStorage !== 'undefined') {
-//     const raw = localStorage.getItem('pins')
-//     savedPins = raw ? JSON.parse(raw) : []
-
-//     // Validate that savedPins is an array
-//     if (!Array.isArray(savedPins)) {
-//       console.warn('Loaded pins data is not an array, resetting to empty array')
-//       savedPins = []
-//     }
-
-//     const nextRaw = localStorage.getItem('nextPinId')
-//     if (nextRaw) {
-//       const parsed = parseInt(nextRaw, 10)
-//       if (!Number.isNaN(parsed)) savedNextPinId = parsed
-//     } else {
-//       if (Array.isArray(savedPins) && savedPins.length) {
-//         const maxId = Math.max(...savedPins.map((p) => (typeof p.id === 'number' ? p.id : 0)))
-//         savedNextPinId = maxId + 1
-//       }
-//     }
-//   } else {
-//     console.warn('localStorage is not available, pins will not be persisted')
-//   }
-// } catch (e) {
-//   console.error('Failed to load saved pins from localStorage:', (e as Error).message || e)
-//   savedPins = []
-//   savedNextPinId = 1
-// }
 
 export const mapSlice = createSlice({
   name: 'map',
@@ -80,17 +49,12 @@ export const mapSlice = createSlice({
       }
       state.pins.push(pin)
       state.nextPinID += 1
-      // localStorage.setItem('pins', JSON.stringify(state.pins))
-      // localStorage.setItem('nextPinId', state.nextPinId.toString())
     },
 
     removePin: (state, action: PayloadAction<{pinID: number}>) => {
       const {pinID} = action.payload
       state.pins = state.pins.filter((pin) => pin.id !== pinID)
       state.selected = state.selected.filter((id) => id !== pinID)
-
-      // localStorage.setItem('pins', JSON.stringify(state.pins))
-      // localStorage.setItem('nextPinId', state.nextPinID.toString())
     },
 
     togglePinSelection: (state, action: PayloadAction<{pinID: number}>) => {
@@ -106,14 +70,10 @@ export const mapSlice = createSlice({
     clearSelectedPins: (state) => {
       state.pins = state.pins.filter((pin) => !state.selected.includes(pin.id))
       state.selected = []
-
-      // localStorage.setItem('pins', JSON.stringify(state.pins))
-      // localStorage.setItem('nextPinId', state.nextPinID.toString())
     },
 
     resetPinCounter: (state) => {
       state.nextPinID = 1
-      // localStorage.setItem('nextPinId', '1')
     },
   },
 })

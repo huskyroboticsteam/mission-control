@@ -243,7 +243,7 @@ export const Map = () => {
     const ellipsoid = viewer.scene.globe.ellipsoid
     const handler = new ScreenSpaceEventHandler(viewer.canvas)
     rightClickHandlerRef.current = handler
-    console.log('[Map] RIGHT_CLICK handler attached')
+    // console.log('[Map] RIGHT_CLICK handler attached')
     handler.setInputAction((movement: {position: Cartesian2}) => {
       const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid)
       if (!cartesian) return

@@ -24,6 +24,7 @@ import {servoMiddleware} from './middleware/servoMiddleware.js'
 import {telemetryMiddleware} from './middleware/telemetryMiddleware.js'
 import {waypointNavMiddleware} from './middleware/waypointNavMiddleware.js'
 import {mapSlice} from './mapSlice.js'
+import {mapMiddleware} from './middleware/mapMiddleware.js'
 
 const rootReducer = combineReducers({
   camera: cameraSlice.reducer,
@@ -50,6 +51,7 @@ export const store = configureStore({
       emergencyStopMiddleware,
       inputMiddleware,
       jointMiddleware,
+      mapMiddleware,
       motorMiddleware,
       opModeMiddleware,
       peripheralMiddleware,
