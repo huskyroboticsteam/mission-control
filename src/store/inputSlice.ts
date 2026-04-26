@@ -11,7 +11,7 @@ import {isLinux} from '../util/isLinux.js'
 import type {RootState} from './store.js'
 import {
   AxisKeyboardControls,
-  AxisPeripheralGameapdControls,
+  AxisPeripheralGamepadControls,
   driveGamepadToAxes,
   keyToAxes,
   peripheralGamepadToAxes,
@@ -158,7 +158,7 @@ const updatePeripheralAxesFromGamepad = (
     if (isAxis(name)) {
       state.axes[axis as InputAxis] = value!
     } else if (isButton(name)) {
-      const {negative, positive} = AxisPeripheralGameapdControls[axis as JointNames] as {
+      const {negative, positive} = AxisPeripheralGamepadControls[axis as JointNames] as {
         negative: Button
         positive: Button
       }

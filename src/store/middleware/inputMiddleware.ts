@@ -16,7 +16,6 @@ import {
   keyToAxes,
   PeripheralGamepadControls,
   peripheralGamepadToAxes,
-  type DriveAxis,
 } from '../../constants/controls.js'
 import {JointNames} from '../../constants/jointConstants.js'
 import type {Axis, Button} from 'react-gamepad'

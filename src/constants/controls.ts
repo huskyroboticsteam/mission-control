@@ -160,6 +160,7 @@ export const GamepadControls: {[G in GamepadNames]: GamepadControl} = {
 
 export type DriveAxis = 'straight' | 'steer' | 'left' | 'right'
 export type InputAxis = JointNames | DriveAxis
+
 // Axis mappings
 export const AxisKeyboardControls: {[axis in InputAxis]: {negative: string; positive: string}} = {
   straight: {
@@ -235,7 +236,7 @@ export const AxisDriveGamepadControls: {[axis in DriveAxis]: {axis: Axis}} = {
   },
 }
 
-export const AxisPeripheralGameapdControls: {
+export const AxisPeripheralGamepadControls: {
   [axis in JointNames]: {axis: Axis} | {negative: Button; positive: Button}
 } = {
   [JointNames.armBase]: {
@@ -291,7 +292,7 @@ export const driveGamepadToAxes = Object.entries(AxisDriveGamepadControls).reduc
   return map
 }, {})
 
-export const peripheralGamepadToAxes = Object.entries(AxisPeripheralGameapdControls).reduce<
+export const peripheralGamepadToAxes = Object.entries(AxisPeripheralGamepadControls).reduce<
   Record<string, string[]>
 >((map, [axis, value]) => {
   if ('axis' in value) {
