@@ -4,6 +4,7 @@ interface CustomizationPanelProps {
   components: string[]
   onSend: (data: number[][]) => void
   edit: boolean
+  defaultSettings: number[]
 }
 
 // populates an array with option elements for the dropdown menus
@@ -56,9 +57,9 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
   return arrCopy
 }
 
-export default function CustomizationPanel({components, edit, onSend}: CustomizationPanelProps) {
-  const [numRows, setNumRows] = useState(2)
-  const [numCols, setNumCols] = useState(2)
+export default function CustomizationPanel({components, edit, onSend, defaultSettings}: CustomizationPanelProps) {
+  const [numRows, setNumRows] = useState(defaultSettings[0])
+  const [numCols, setNumCols] = useState(defaultSettings[1])
   const [maxNumRows, setmaxNumRows] = useState(populateArray(components.length))
   const [maxNumCols, setmaxNumCols] = useState(populateArray(components.length))
   const [arr, setArr] = useState(Array<Array<number>>) // grid array

@@ -5,9 +5,10 @@ import {useState, useEffect, memo} from 'react'
 import './ArmDexterityPanel.css'
 
 function ArmDexterityPanel() {
+  const defaultSettings = [2, 2]
   const components = ['handcam', 'wristcam', 'rovermodel']
-  const [rowNum, setRowNum] = useState(2)
-  const [colNum, setColNum] = useState(2)
+  const [rowNum, setRowNum] = useState(defaultSettings[0])
+  const [colNum, setColNum] = useState(defaultSettings[1])
   // holds corresponding coordinates for where each component should be
   const [coordinates, setCoordinates] = useState([
     [[0, 0]],
@@ -65,6 +66,7 @@ function ArmDexterityPanel() {
           onSend={handleChildData}
           components={components}
           edit={edit}
+          defaultSettings = {defaultSettings}
           style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
         />
       </div>
