@@ -25,6 +25,7 @@ function putInArray(row: number, col: number, arr: number[][], toPut: number) {
   return arrCopy
 }
 
+// helper function to manage the array (representing the grid) state
 function resize2DArray(rows: number, cols: number, arr: number[][]) {
   const arrCopy = arr.map((row) => [...row])
   // Case 1: row is less than current array row length - slice extra rows off
@@ -51,19 +52,19 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
       }
     }
   }
-
-  return arrCopy
   // Case 5/6: row/col equal to current array row/col length - do nothing
+  return arrCopy
 }
 
 export default function CustomizationPanel({components, edit, onSend}: CustomizationPanelProps) {
-  const [numRows, setNumRows] = useState(1)
-  const [numCols, setNumCols] = useState(1)
-  const [totalNumRows, setTotalNumRows] = useState(populateArray(components.length))
-  const [totalNumCols, setTotalNumCols] = useState(populateArray(components.length))
-  const [arr, setArr] = useState(Array<Array<number>>)
-  const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([])
+  const [numRows, setNumRows] = useState(2)
+  const [numCols, setNumCols] = useState(2)
+  const [maxNumRows, setmaxNumRows] = useState(populateArray(components.length))
+  const [maxNumCols, setmaxNumCols] = useState(populateArray(components.length))
+  const [arr, setArr] = useState(Array<Array<number>>) // grid array
+  const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
+  // sets up component options
   useEffect(() => {
     const selectOptions = components.map((component, index) => (
       <option value={index} key={index}>
@@ -73,39 +74,44 @@ export default function CustomizationPanel({components, edit, onSend}: Customiza
     setComponentSelect(selectOptions)
   }, [])
 
-  //let arr: number[][] = Array(numRows).fill(Array(numCols).fill(-1));
-
-  //populateArray(components.length);
-  //populateArray(totalNumCols, components.length);
-
+  // updates grid array and the maximum number of rows when number of columns changes
   useEffect(() => {
     let i = Math.floor(components.length / numCols)
     if (components.length % numCols != 0) {
       i = Math.floor(components.length / numCols) + 1
     }
-    setTotalNumRows(populateArray(i))
+    setmaxNumRows(populateArray(i))
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numCols])
 
+  // updates grid array and the maximum number of columns when number of rows changes
   useEffect(() => {
     let i = Math.floor(components.length / numRows)
     if (components.length % numRows != 0) {
       i = Math.floor(components.length / numRows) + 1
     }
-    setTotalNumCols(populateArray(i))
+    setmaxNumCols(populateArray(i))
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numRows])
 
   return (
-    <div style={{display: edit ? 'block' : 'none', position: 'absolute', right: '0', bottom: '0', zIndex: 1000, backgroundColor: "blue"}}>
+    <div
+      style={{
+        display: edit ? 'block' : 'none',
+        position: 'absolute',
+        right: '0',
+        bottom: '0',
+        zIndex: 1000,
+        backgroundColor: 'blue',
+      }}>
       <h1>Customization Panel</h1>
       <label htmlFor="row">Rows:</label>
       <select name="row" value={numRows} onChange={(e) => setNumRows(parseInt(e.target.value))}>
-        {totalNumRows}
+        {maxNumRows}
       </select>
       <label htmlFor="column">Columns:</label>
       <select name="column" value={numCols} onChange={(e) => setNumCols(parseInt(e.target.value))}>
-        {totalNumCols}
+        {maxNumCols}
       </select>
       <table border={1}>
         <tbody>
