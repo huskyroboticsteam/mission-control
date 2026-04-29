@@ -1,8 +1,9 @@
 import RoverModel from '../roverModel/RoverModel'
 import CameraStream from '../camera/CameraStream'
 import CustomizationPanel from './CustomizationPanel'
-import {useState, useEffect, memo} from 'react'
+import {useState, useEffect} from 'react'
 import './ArmDexterityPanel.css'
+import processCustomizationPanelData from '../../util/processCustomizationPanelData'
 
 function ArmDexterityPanel() {
   const defaultSettings = [2, 2]
@@ -18,22 +19,13 @@ function ArmDexterityPanel() {
   const [edit, setEdit] = useState(false)
 
   const handleChildData = (data) => {
-    const temparr = Array.from({length: 3}, () => [])
-    setRowNum(data.length)
-    setColNum(data[0].length)
-
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data[i].length; j++) {
-        const key = data[i][j]
-
-        if (key !== -1 && key != null) {
-          temparr[key].push([i, j])
-        }
-      }
-    }
-    setCoordinates(temparr)
+    const processedData = processCustomizationPanelData(data, components)
+    setCoordinates(processedData.coordinates)
+    setRowNum(processedData.rowNum)
+    setColNum(processedData.colNum)
     setEdit(false)
-  }
+  } 
+  
 
   return (
     <div

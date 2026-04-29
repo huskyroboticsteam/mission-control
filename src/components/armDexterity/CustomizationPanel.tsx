@@ -57,6 +57,8 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
   return arrCopy
 }
 
+// sends array of coordinates back to parent component, will be same indexing as passed components array and 
+// have value of -1 if not selected, else will be coordinate in grid where component should be placed
 export default function CustomizationPanel({components, edit, onSend, defaultSettings}: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(defaultSettings[0])
   const [numCols, setNumCols] = useState(defaultSettings[1])
