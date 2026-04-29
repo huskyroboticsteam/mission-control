@@ -1,6 +1,5 @@
 import './HelpPanel.css'
 import KeyboardTable from './KeyboardTable.jsx'
-import Keyboard from './Keyboard.jsx'
 import Table from './Table.jsx'
 import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
@@ -16,6 +15,7 @@ import {
   PRESET_SVG_GPAD_CLASS,
   standardGpadButtonMap,
 } from 'virtual-gamepad-lib/enums'
+import KeyboardDisplay from './KeyboardDisplay.jsx'
 
 const gamepadEmulator = new GamepadEmulator(0.1)
 const gamepadApiWrapper = new GamepadApiWrapper({
@@ -257,7 +257,7 @@ function HelpPanel() {
         </div>
         <div className="keyboard">
           <b className="label">Keyboard Controls</b>
-          <Keyboard />
+          <KeyboardDisplay />
         </div>
       </div>
     </div>
