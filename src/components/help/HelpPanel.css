@@ -6,7 +6,7 @@
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: aliceblue;
+  background-color: rgb(0, 0, 0);
   flex-direction: column;
 }
 
@@ -24,7 +24,7 @@
   flex-direction: row;
   align-items: center;
   background-color: rgb(67, 67, 67);
-  border-radius: 20px;
+
   padding: 2vmin 1vmin;
 }
 
@@ -34,7 +34,7 @@
   width: 100%;
   max-height: 100%;
   flex-direction: row;
-  border-radius: 20px;
+
   padding: 2vmin 1vmin;
   margin: 0.3rem;
   background-color: rgb(67, 67, 67);
