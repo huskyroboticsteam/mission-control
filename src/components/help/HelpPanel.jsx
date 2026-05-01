@@ -5,10 +5,11 @@ import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
 import {useState, useRef, useEffect} from 'react'
 import FULL_GPAD_SVG_SOURCE_CODE from './GamepadSVG.svg?raw'
-
-//import FULL_GPAD_SVG_SOURCE_CODE from 'virtual-gamepad-lib/gamepad_assets/rounded/display-gamepad-full.svg?raw'
 import {CenterTransformOrigin} from 'virtual-gamepad-lib/utilities'
 import {GamepadDisplay} from 'virtual-gamepad-lib/GamepadDisplay'
+import CustomizationPanel from '../armDexterity/CustomizationPanel.tsx'
+import processCustomizationPanelData from '../../util/processCustomizationPanelData'
+
 import {
   gamepadButtonType,
   gamepadDirection,
@@ -170,6 +171,22 @@ function HelpPanel() {
   const [buttonChange, setButtonChange] = useState(null)
   const [axisChange, setAxisChange] = useState(null)
 
+  // for customization panel
+  const defaultSettings = [2, 2]
+  const components = ['driveGP', 'peripheralGP', 'keyboard']
+  const [rowNum, setRowNum] = useState(defaultSettings[0])
+  const [colNum, setColNum] = useState(defaultSettings[1])
+  // holds corresponding coordinates for where each component should be
+  const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
+  const [edit, setEdit] = useState(false)
+  const handleChildData = (data) => {
+    const processedData = processCustomizationPanelData(data, components)
+    setCoordinates(processedData.coordinates)
+    setRowNum(processedData.rowNum)
+    setColNum(processedData.colNum)
+    setEdit(false)
+  }
+
   // Sets up the emulated gamepads on page load
   useEffect(() => {
     gamepadEmulator.AddEmulatedGamepad(0, true, 18, 4) // returns the new (emulated) gamepad or false if some error happened.
@@ -221,9 +238,10 @@ function HelpPanel() {
   }, [])
 
   return (
-    <div className="help-panel">
-      
-        <div className="g1">
+    <div className="help-panel" style={{display: 'grid', gridTemplateRows: `repeat(${rowNum}, 1fr)`, gridTemplateColumns: `repeat(${colNum}, 1fr)`}}>
+      {coordinates[0]?.length > 0 &&
+        coordinates[0].map((coord) => (
+          <div className="g1" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <Table
             gpadButton={buttonChange?.gpad}
             gpadAxis={axisChange?.gpad}
@@ -239,7 +257,10 @@ function HelpPanel() {
               dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
           </div>
         </div>
-        <div className="g2">
+        ))}
+        {coordinates[1]?.length > 0 &&
+        coordinates[1].map((coord) => (
+          <div className="g2" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
           <div className="g2-text-wrapper">
             <b className="label">Peripheral Gamepad</b>
@@ -249,7 +270,11 @@ function HelpPanel() {
               dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
           </div>
         </div>
-      <div className="bottom">
+        ))}
+        
+      {coordinates[2]?.length > 0 &&
+        coordinates[2].map((coord) => (
+         <div className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
         <div className="keyboard-T">
           <KeyboardTable
             tankDriveEnabled={tankDriveEnabled}
@@ -261,6 +286,26 @@ function HelpPanel() {
           <KeyboardDisplay />
         </div>
       </div>
+        ))}
+      
+      <div className="customization-container">
+              <CustomizationPanel
+                onSend={handleChildData}
+                components={components}
+                edit={edit}
+                defaultSettings={defaultSettings}
+                style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
+              />
+            </div>
+            {!edit && (
+              <button
+                onClick={() => setEdit(true)}
+                style={{position: 'absolute', bottom: 0, right: 0, zIndex: 999}}>
+                {' '}
+                Edit Layout
+              </button>
+            )}
+          
     </div>
   )
 }

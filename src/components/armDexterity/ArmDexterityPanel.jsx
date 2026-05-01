@@ -11,11 +11,7 @@ function ArmDexterityPanel() {
   const [rowNum, setRowNum] = useState(defaultSettings[0])
   const [colNum, setColNum] = useState(defaultSettings[1])
   // holds corresponding coordinates for where each component should be
-  const [coordinates, setCoordinates] = useState([
-    [[0, 0]],
-    [[0, 1]],
-    [[1, 0]]
-  ])
+  const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
   const [edit, setEdit] = useState(false)
 
   const handleChildData = (data) => {
@@ -24,8 +20,7 @@ function ArmDexterityPanel() {
     setRowNum(processedData.rowNum)
     setColNum(processedData.colNum)
     setEdit(false)
-  } 
-  
+  }
 
   return (
     <div
@@ -58,7 +53,7 @@ function ArmDexterityPanel() {
           onSend={handleChildData}
           components={components}
           edit={edit}
-          defaultSettings = {defaultSettings}
+          defaultSettings={defaultSettings}
           style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
         />
       </div>
