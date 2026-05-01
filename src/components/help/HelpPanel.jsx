@@ -4,7 +4,9 @@ import Table from './Table.jsx'
 import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
 import {useState, useRef, useEffect} from 'react'
-import FULL_GPAD_SVG_SOURCE_CODE from 'virtual-gamepad-lib/gamepad_assets/rounded/display-gamepad-full.svg?raw'
+import FULL_GPAD_SVG_SOURCE_CODE from './GamepadSVG.svg?raw'
+
+//import FULL_GPAD_SVG_SOURCE_CODE from 'virtual-gamepad-lib/gamepad_assets/rounded/display-gamepad-full.svg?raw'
 import {CenterTransformOrigin} from 'virtual-gamepad-lib/utilities'
 import {GamepadDisplay} from 'virtual-gamepad-lib/GamepadDisplay'
 import {
@@ -220,7 +222,7 @@ function HelpPanel() {
 
   return (
     <div className="help-panel">
-      <div className="top">
+      
         <div className="g1">
           <Table
             gpadButton={buttonChange?.gpad}
@@ -247,8 +249,7 @@ function HelpPanel() {
               dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
           </div>
         </div>
-      </div>
-      <div className="bot">
+      <div className="bottom">
         <div className="keyboard-T">
           <KeyboardTable
             tankDriveEnabled={tankDriveEnabled}

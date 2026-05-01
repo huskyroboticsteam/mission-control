@@ -4,7 +4,7 @@ interface CustomizationPanelProps {
   components: string[]
   onSend: (data: number[][]) => void
   edit: boolean
-  defaultSettings: number[]
+  defaultSettings: number[] // [defaultNumRows, defaultNumCols]
 }
 
 // populates an array with option elements for the dropdown menus
@@ -105,7 +105,8 @@ export default function CustomizationPanel({components, edit, onSend, defaultSet
         right: '0',
         bottom: '0',
         zIndex: 1000,
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
+        color: 'black',
       }}>
       <h1>Customization Panel</h1>
       <label htmlFor="row">Rows:</label>
@@ -116,7 +117,7 @@ export default function CustomizationPanel({components, edit, onSend, defaultSet
       <select name="column" value={numCols} onChange={(e) => setNumCols(parseInt(e.target.value))}>
         {maxNumCols}
       </select>
-      <table border={1}>
+      <table >
         <tbody>
           {arr.map((row, rowIndex) => (
             <tr key={rowIndex}>
