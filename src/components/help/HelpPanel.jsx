@@ -204,7 +204,6 @@ function HelpPanel() {
   }, [])
 
   useEffect(() => {
-    gamepadEmulator.AddEmulatedGamepad(0, true, 18, 4)
     displayGpad1Refs.current.forEach((el) => {
       addGamepadDisplay(0, el)
       setupEmulatedGamepadInput(0, el)
@@ -213,7 +212,6 @@ function HelpPanel() {
 
 
 useEffect(() => {
-    gamepadEmulator.AddEmulatedGamepad(1, true, 18, 4)
     displayGpad2Refs.current.forEach((el) => {
       addGamepadDisplay(1, el)
     setupEmulatedGamepadInput(1, el)
@@ -268,11 +266,10 @@ useEffect(() => {
         gridTemplateRows: `repeat(${rowNum}, 1fr)`,
         gridTemplateColumns: `repeat(${colNum}, 1fr)`,
       }}>
-      {coordinates[0].map((coord) => (
-        <div
+      {coordinates[0]?.length> 0 && coordinates[0].map((coord) => (
+        <div key = {`g1-${coord[0]}-${coord[1]}`}
           className="g1"
           style={{
-            ...(coordinates[0]?.length > 0 ? {} : {display: 'none'}),
             gridColumn: coord[1] + 1,
             gridRow: coord[0] + 1,
           }}>
@@ -292,11 +289,11 @@ useEffect(() => {
           </div>
         </div>
       ))}
-      {coordinates[1].map((coord) => (
+      {coordinates[1]?.length> 0 && coordinates[1].map((coord) => (
         <div
+          key = {`g2-${coord[0]}-${coord[1]}`}
           className="g2"
           style={{
-            ...(coordinates[1]?.length > 0 ? {} : {display: 'none'}),
             gridColumn: coord[1] + 1,
             gridRow: coord[0] + 1,
           }}>
@@ -313,7 +310,7 @@ useEffect(() => {
 
       {coordinates[2]?.length > 0 &&
         coordinates[2].map((coord) => (
-          <div className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
+          <div key = {`g3-${coord[0]}-${coord[1]}`} className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
             <div className="keyboard-T">
               <KeyboardTable
                 tankDriveEnabled={tankDriveEnabled}

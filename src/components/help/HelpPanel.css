@@ -63,6 +63,12 @@
   margin-left: 5%;
 }
 
+/* prevents overflow */
+.g1, .g2, .bottom {
+  min-width: 0;
+  min-height: 0;
+}
+
 .table {
   color: black;
   background-color: white;
