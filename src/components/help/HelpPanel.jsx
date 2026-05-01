@@ -166,8 +166,12 @@ function addGamepadDisplay(gpadIndex, display_gpad) {
 
 function HelpPanel() {
   const [tankDriveEnabled, setTankDriveEnabled] = useState(false)
-  const displayGpad1 = useRef(null)
-  const displayGpad2 = useRef(null)
+  const displayGpad1Refs = useRef([])
+  const displayGpad2Refs = useRef([])
+  displayGpad1Refs.current = [];
+  displayGpad2Refs.current = [];
+  //const displayGpad1 = useRef(null)
+  //const displayGpad2 = useRef(null)
   const [buttonChange, setButtonChange] = useState(null)
   const [axisChange, setAxisChange] = useState(null)
 
@@ -180,6 +184,8 @@ function HelpPanel() {
   const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
   const [edit, setEdit] = useState(false)
   const handleChildData = (data) => {
+    displayGpad1Refs.current = [];
+    displayGpad2Refs.current = [];
     const processedData = processCustomizationPanelData(data, components)
     setCoordinates(processedData.coordinates)
     setRowNum(processedData.rowNum)
@@ -191,11 +197,28 @@ function HelpPanel() {
   useEffect(() => {
     gamepadEmulator.AddEmulatedGamepad(0, true, 18, 4) // returns the new (emulated) gamepad or false if some error happened.
     gamepadEmulator.AddEmulatedGamepad(1, true, 18, 4) // returns the new (emulated) gamepad or false if some error happened.
-    addGamepadDisplay(0, displayGpad1.current)
-    addGamepadDisplay(1, displayGpad2.current)
-    setupEmulatedGamepadInput(0, displayGpad1.current)
-    setupEmulatedGamepadInput(1, displayGpad2.current)
+    addGamepadDisplay(0, displayGpad1Refs.current[0])
+    addGamepadDisplay(1, displayGpad2Refs.current[0])
+    setupEmulatedGamepadInput(0, displayGpad1Refs.current[0])
+    setupEmulatedGamepadInput(1, displayGpad2Refs.current[0])
   }, [])
+
+  useEffect(() => {
+    gamepadEmulator.AddEmulatedGamepad(0, true, 18, 4)
+    displayGpad1Refs.current.forEach((el) => {
+      addGamepadDisplay(0, el)
+      setupEmulatedGamepadInput(0, el)
+    });
+  },[coordinates])
+
+
+useEffect(() => {
+    gamepadEmulator.AddEmulatedGamepad(1, true, 18, 4)
+    displayGpad2Refs.current.forEach((el) => {
+      addGamepadDisplay(1, el)
+    setupEmulatedGamepadInput(1, el)
+    });
+  },[coordinates])
 
   // Adds listener for gamepad button changes + updates buttonChange state accordingly
   useEffect(() => {
@@ -238,10 +261,21 @@ function HelpPanel() {
   }, [])
 
   return (
-    <div className="help-panel" style={{display: 'grid', gridTemplateRows: `repeat(${rowNum}, 1fr)`, gridTemplateColumns: `repeat(${colNum}, 1fr)`}}>
-      {coordinates[0]?.length > 0 &&
-        coordinates[0].map((coord) => (
-          <div className="g1" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+    <div
+      className="help-panel"
+      style={{
+        display: 'grid',
+        gridTemplateRows: `repeat(${rowNum}, 1fr)`,
+        gridTemplateColumns: `repeat(${colNum}, 1fr)`,
+      }}>
+      {coordinates[0].map((coord) => (
+        <div
+          className="g1"
+          style={{
+            ...(coordinates[0]?.length > 0 ? {} : {display: 'none'}),
+            gridColumn: coord[1] + 1,
+            gridRow: coord[0] + 1,
+          }}>
           <Table
             gpadButton={buttonChange?.gpad}
             gpadAxis={axisChange?.gpad}
@@ -253,59 +287,63 @@ function HelpPanel() {
             <b className="label">Driver Gamepad</b>
             <div
               className="gamepad-1"
-              ref={displayGpad1}
+              ref={(el) => el && displayGpad1Refs.current.push(el)}
               dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
           </div>
         </div>
-        ))}
-        {coordinates[1]?.length > 0 &&
-        coordinates[1].map((coord) => (
-          <div className="g2" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+      ))}
+      {coordinates[1].map((coord) => (
+        <div
+          className="g2"
+          style={{
+            ...(coordinates[1]?.length > 0 ? {} : {display: 'none'}),
+            gridColumn: coord[1] + 1,
+            gridRow: coord[0] + 1,
+          }}>
           <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
           <div className="g2-text-wrapper">
             <b className="label">Peripheral Gamepad</b>
             <div
               className="gamepad-2"
-              ref={displayGpad2}
+              ref={(el) => el && displayGpad2Refs.current.push(el)}
               dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
           </div>
         </div>
-        ))}
-        
+      ))}
+
       {coordinates[2]?.length > 0 &&
         coordinates[2].map((coord) => (
-         <div className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
-        <div className="keyboard-T">
-          <KeyboardTable
-            tankDriveEnabled={tankDriveEnabled}
-            setTankDriveEnabled={setTankDriveEnabled}
-          />
-        </div>
-        <div className="keyboard">
-          <b className="label">Keyboard Controls</b>
-          <KeyboardDisplay />
-        </div>
-      </div>
-        ))}
-      
-      <div className="customization-container">
-              <CustomizationPanel
-                onSend={handleChildData}
-                components={components}
-                edit={edit}
-                defaultSettings={defaultSettings}
-                style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
+          <div className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
+            <div className="keyboard-T">
+              <KeyboardTable
+                tankDriveEnabled={tankDriveEnabled}
+                setTankDriveEnabled={setTankDriveEnabled}
               />
             </div>
-            {!edit && (
-              <button
-                onClick={() => setEdit(true)}
-                style={{position: 'absolute', bottom: 0, right: 0, zIndex: 999}}>
-                {' '}
-                Edit Layout
-              </button>
-            )}
-          
+            <div className="keyboard">
+              <b className="label">Keyboard Controls</b>
+              <KeyboardDisplay />
+            </div>
+          </div>
+        ))}
+
+      <div className="customization-container">
+        <CustomizationPanel
+          onSend={handleChildData}
+          components={components}
+          edit={edit}
+          defaultSettings={defaultSettings}
+          style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
+        />
+      </div>
+      {!edit && (
+        <button
+          onClick={() => setEdit(true)}
+          style={{position: 'absolute', bottom: 0, right: 0, zIndex: 999}}>
+          {' '}
+          Edit Layout
+        </button>
+      )}
     </div>
   )
 }
