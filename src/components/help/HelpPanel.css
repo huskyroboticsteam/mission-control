@@ -62,7 +62,9 @@
 }
 
 /* prevents overflow */
-.g1, .g2, .bottom {
+.g1,
+.g2,
+.bottom {
   min-width: 0;
   min-height: 0;
 }
@@ -102,4 +104,3 @@
   align-items: center;
   color: #4fb185;
 }
-

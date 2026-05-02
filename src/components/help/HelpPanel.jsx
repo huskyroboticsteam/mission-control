@@ -168,8 +168,8 @@ function HelpPanel() {
   const [tankDriveEnabled, setTankDriveEnabled] = useState(false)
   const displayGpad1Refs = useRef([])
   const displayGpad2Refs = useRef([])
-  displayGpad1Refs.current = [];
-  displayGpad2Refs.current = [];
+  displayGpad1Refs.current = []
+  displayGpad2Refs.current = []
   //const displayGpad1 = useRef(null)
   //const displayGpad2 = useRef(null)
   const [buttonChange, setButtonChange] = useState(null)
@@ -184,8 +184,8 @@ function HelpPanel() {
   const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
   const [edit, setEdit] = useState(false)
   const handleChildData = (data) => {
-    displayGpad1Refs.current = [];
-    displayGpad2Refs.current = [];
+    displayGpad1Refs.current = []
+    displayGpad2Refs.current = []
     const processedData = processCustomizationPanelData(data, components)
     setCoordinates(processedData.coordinates)
     setRowNum(processedData.rowNum)
@@ -207,16 +207,15 @@ function HelpPanel() {
     displayGpad1Refs.current.forEach((el) => {
       addGamepadDisplay(0, el)
       setupEmulatedGamepadInput(0, el)
-    });
-  },[coordinates])
+    })
+  }, [coordinates])
 
-
-useEffect(() => {
+  useEffect(() => {
     displayGpad2Refs.current.forEach((el) => {
       addGamepadDisplay(1, el)
-    setupEmulatedGamepadInput(1, el)
-    });
-  },[coordinates])
+      setupEmulatedGamepadInput(1, el)
+    })
+  }, [coordinates])
 
   // Adds listener for gamepad button changes + updates buttonChange state accordingly
   useEffect(() => {
@@ -266,51 +265,57 @@ useEffect(() => {
         gridTemplateRows: `repeat(${rowNum}, 1fr)`,
         gridTemplateColumns: `repeat(${colNum}, 1fr)`,
       }}>
-      {coordinates[0]?.length> 0 && coordinates[0].map((coord) => (
-        <div key = {`g1-${coord[0]}-${coord[1]}`}
-          className="g1"
-          style={{
-            gridColumn: coord[1] + 1,
-            gridRow: coord[0] + 1,
-          }}>
-          <Table
-            gpadButton={buttonChange?.gpad}
-            gpadAxis={axisChange?.gpad}
-            gpadIndex={0}
-            tankDriveEnabled={tankDriveEnabled}
-            setTankDriveEnabled={setTankDriveEnabled}
-          />
-          <div className="g1-text-wrapper">
-            <b className="label">Driver Gamepad</b>
-            <div
-              className="gamepad-1"
-              ref={(el) => el && displayGpad1Refs.current.push(el)}
-              dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
+      {coordinates[0]?.length > 0 &&
+        coordinates[0].map((coord) => (
+          <div
+            key={`g1-${coord[0]}-${coord[1]}`}
+            className="g1"
+            style={{
+              gridColumn: coord[1] + 1,
+              gridRow: coord[0] + 1,
+            }}>
+            <Table
+              gpadButton={buttonChange?.gpad}
+              gpadAxis={axisChange?.gpad}
+              gpadIndex={0}
+              tankDriveEnabled={tankDriveEnabled}
+              setTankDriveEnabled={setTankDriveEnabled}
+            />
+            <div className="g1-text-wrapper">
+              <b className="label">Driver Gamepad</b>
+              <div
+                className="gamepad-1"
+                ref={(el) => el && displayGpad1Refs.current.push(el)}
+                dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
+            </div>
           </div>
-        </div>
-      ))}
-      {coordinates[1]?.length> 0 && coordinates[1].map((coord) => (
-        <div
-          key = {`g2-${coord[0]}-${coord[1]}`}
-          className="g2"
-          style={{
-            gridColumn: coord[1] + 1,
-            gridRow: coord[0] + 1,
-          }}>
-          <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
-          <div className="g2-text-wrapper">
-            <b className="label">Peripheral Gamepad</b>
-            <div
-              className="gamepad-2"
-              ref={(el) => el && displayGpad2Refs.current.push(el)}
-              dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
+        ))}
+      {coordinates[1]?.length > 0 &&
+        coordinates[1].map((coord) => (
+          <div
+            key={`g2-${coord[0]}-${coord[1]}`}
+            className="g2"
+            style={{
+              gridColumn: coord[1] + 1,
+              gridRow: coord[0] + 1,
+            }}>
+            <Table gpadButton={buttonChange?.gpad} gpadAxis={axisChange?.gpad} gpadIndex={1} />
+            <div className="g2-text-wrapper">
+              <b className="label">Peripheral Gamepad</b>
+              <div
+                className="gamepad-2"
+                ref={(el) => el && displayGpad2Refs.current.push(el)}
+                dangerouslySetInnerHTML={{__html: FULL_GPAD_SVG_SOURCE_CODE}}></div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
       {coordinates[2]?.length > 0 &&
         coordinates[2].map((coord) => (
-          <div key = {`g3-${coord[0]}-${coord[1]}`} className="bottom" style={{gridColumn: `${coord[1] + 1}/-1`, gridRow: `${coord[0] + 1}`}}>
+          <div
+            key={`g3-${coord[0]}-${coord[1]}`}
+            className="bottom"
+            style={{gridColumn: `${coord[1] + 1}/-1`, gridRow: `${coord[0] + 1}`}}>
             <div className="keyboard-T">
               <KeyboardTable
                 tankDriveEnabled={tankDriveEnabled}
