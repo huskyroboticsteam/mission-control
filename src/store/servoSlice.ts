@@ -1,49 +1,55 @@
-import {createSlice} from '@reduxjs/toolkit'
-import {SERVOS, ServoType} from '../constants/servoConstants.js'
+import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
+import {Servos, ServoType, ServoNames} from '../constants/servoConstants.js'
+import type {RootState} from './store.js'
 
-const initialState = Object.keys(SERVOS).reduce(
-  (state, servoName) => ({
+type ServoState = {
+  readonly [S in keyof typeof ServoNames]: {
+    readonly requestedPosition: number | null
+    readonly currentPosition: number | null
+  }
+}
+
+const initialState: ServoState = Object.keys(Servos).reduce<ServoState>(
+  (state, servo) => ({
     ...state,
-    [servoName]: {
+    [servo]: {
       requestedPosition: null,
       currentPosition: null,
     },
   }),
-  {}
+  {} as ServoState
 )
 
-const servoSlice = createSlice({
+export const servoSlice = createSlice({
   name: 'servo',
   initialState,
   reducers: {
-    requestServoPosition(state, action) {
+    requestServoPosition: (
+      state,
+      action: PayloadAction<{servoName: keyof typeof ServoNames; position: number}>
+    ) => {
       const {servoName, position} = action.payload
-      if (SERVOS[servoName].type !== ServoType.Positional) {
-        // throw Error("requestServoPosition on a non-positional Servo!")
+      if (Servos[servoName].type !== ServoType.Positional) {
+        throw Error('requestServoPosition on a non-positional Servo!')
       }
 
-      let clampedPos = position
-      if (SERVOS[servoName].type === ServoType.Positional) {
-        const limits = SERVOS[servoName].limits!
-        clampedPos = Math.min(Math.max(position, limits.lo), limits.hi)
-      }
-      const servo = state[servoName]
-      servo.requestedPosition = clampedPos
+      const limits = Servos[servoName].limits!
+      const clampedPos = Math.min(Math.max(position, limits.lo), limits.hi)
+      state[servoName].requestedPosition = clampedPos
     },
 
-    servoPositionReportReceived(state, action) {
+    servoPositionReportReceived: (
+      state,
+      action: PayloadAction<{servoName: keyof typeof ServoNames; position: number}>
+    ) => {
       const {servoName, position} = action.payload
-      const servo = state[servoName]
-      servo.currentPosition = position
-      return state
+      state[servoName].currentPosition = position
     },
   },
 })
 
 export const {requestServoPosition, servoPositionReportReceived} = servoSlice.actions
 
-export const selectAllServoNames = (state) => Object.keys(state.servo)
-export const selectServoCurrentPosition = (servoName) => (state) =>
-  state.servo[servoName].currentPosition
-
-export default servoSlice.reducer
+export const selectServoCurrentPosition =
+  (servoName: keyof typeof ServoNames) => (state: RootState) =>
+    state.servo[servoName].currentPosition
