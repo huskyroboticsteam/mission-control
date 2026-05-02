@@ -310,7 +310,7 @@ useEffect(() => {
 
       {coordinates[2]?.length > 0 &&
         coordinates[2].map((coord) => (
-          <div key = {`g3-${coord[0]}-${coord[1]}`} className="bottom" style={{gridColumn: `1/-1`, gridRow: `${coord[0] + 1}`}}>
+          <div key = {`g3-${coord[0]}-${coord[1]}`} className="bottom" style={{gridColumn: `${coord[1] + 1}/-1`, gridRow: `${coord[0] + 1}`}}>
             <div className="keyboard-T">
               <KeyboardTable
                 tankDriveEnabled={tankDriveEnabled}
