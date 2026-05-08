@@ -1,19 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const normalizePoint = (point) => {
-  if (!Array.isArray(point) || point.length < 2) {
-    return null
-  }
+  if (!point || typeof point !== 'object') return null
 
-  const lat = Number.parseFloat(point[0])
-  const lon = Number.parseFloat(point[1])
-  const radius = Number.parseFloat(point[2] || 0)
+  const lat = Number.parseFloat(point.lat)
+  const lon = Number.parseFloat(point.lon)
+  const radius = Number.parseFloat(point.radius ?? 0)
+  const tag = typeof point.tag === 'string' ? point.tag : ''
+  const circleMode = Boolean(point.circleMode)
 
-  if (Number.isNaN(lat) || Number.isNaN(lon) || Number.isNaN(radius)) {
-    return null
-  }
+  if (Number.isNaN(lat) || Number.isNaN(lon) || Number.isNaN(radius)) return null
 
-  return [lat, lon, radius]
+  return {lat, lon, radius, tag, circleMode}
 }
 
 const initialState = {

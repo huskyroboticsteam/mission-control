@@ -40,7 +40,7 @@ function WaypointNav() {
       return
     }
 
-    const newPoints = [...points.map((point) => [...point]), [parsedLat, parsedLon, parsedRadius]]
+    const newPoints = [...points, {lat: parsedLat, lon: parsedLon, radius: parsedRadius, tag: selectedTag === 'Task Type' ? '' : selectedTag, circleMode: circlePathEnabled}]
     dispatch(setPoints(newPoints))
     setLat(0)
     setLon(0)
@@ -63,7 +63,9 @@ function WaypointNav() {
     }
 
     const newPoints = points.map((point, index) =>
-      index === editPointIndex ? [parsedLat, parsedLon, parsedRadius] : [...point]
+      index === editPointIndex
+        ? {lat: parsedLat, lon: parsedLon, radius: parsedRadius, tag: selectedTag === 'Task Type' ? '' : selectedTag, circleMode: circlePathEnabled}
+        : {...point}
     )
     dispatch(setPoints(newPoints))
     exitEditPointState()
@@ -83,37 +85,26 @@ function WaypointNav() {
     }
   }
 
-  //move point by swapping values of the point at index & point one above
   function movePointUp(index) {
-    const newPoints = points.map((point) => [...point])
-    const indexLat = newPoints[index][0]
-    const indexLon = newPoints[index][1]
-    newPoints[index][0] = newPoints[index - 1][0]
-    newPoints[index][1] = newPoints[index - 1][1]
-    newPoints[index - 1][0] = indexLat
-    newPoints[index - 1][1] = indexLon
+    const newPoints = [...points]
+    ;[newPoints[index], newPoints[index - 1]] = [newPoints[index - 1], newPoints[index]]
     dispatch(setPoints(newPoints))
   }
 
-  //move point by swapping values of the point at index & point one below
   function movePointDown(index) {
-    const newPoints = points.map((point) => [...point])
-    const indexLat = newPoints[index][0]
-    const indexLon = newPoints[index][1]
-    newPoints[index][0] = newPoints[index + 1][0]
-    newPoints[index][1] = newPoints[index + 1][1]
-    newPoints[index + 1][0] = indexLat
-    newPoints[index + 1][1] = indexLon
+    const newPoints = [...points]
+    ;[newPoints[index], newPoints[index + 1]] = [newPoints[index + 1], newPoints[index]]
     dispatch(setPoints(newPoints))
   }
 
-  //change the state to editing and change the values in the point fill to be the values in the point we're editing
   function enterEditPointState(index) {
     setEditingPoint(true)
     setEditPointIndex(index)
-    setLat(points[index][0])
-    setLon(points[index][1])
-    setRadius(points[index][2])
+    setLat(points[index].lat)
+    setLon(points[index].lon)
+    setRadius(points[index].radius)
+    setSelectedTag(points[index].tag || 'Task Type')
+    setCirclePathEnabled(points[index].circleMode)
   }
 
   //change the state to adding points and change values to default
@@ -136,7 +127,7 @@ function WaypointNav() {
       return
     }
 
-    const requestPoints = points.map((point) => [...point])
+    const requestPoints = points.map((point) => ({...point}))
 
     setSubmitted(true)
     dispatch(requestWaypointNav({points: requestPoints}))
@@ -359,10 +350,12 @@ function WaypointNav() {
                 const isEditing = editingPoint && editPointIndex === index
                 return (
                   <div
-                    key={`${point[0]}-${point[1]}-${index}`}
+                    key={`${point.lat}-${point.lon}-${index}`}
                     className={`waypoint-item${isEditing ? ' waypoint-item--editing' : ''}`}>
                     <span className="waypoint-item__coords">
-                      ({point[0]}, {point[1]})
+                      {point.tag && <span className="waypoint-item__tag">{point.tag}</span>}
+                      ({point.lat}, {point.lon})
+                      {point.circleMode && <span className="waypoint-item__radius"> r={point.radius}</span>}
                     </span>
                     <div className="waypoint-item__actions">
                       {isEditing ? (
