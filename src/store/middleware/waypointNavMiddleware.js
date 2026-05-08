@@ -8,10 +8,16 @@ const waypointNavMiddleware = (store) => (next) => (action) => {
     case requestWaypointNav.type:
       store.dispatch(
         messageRover({
-          message: {
-            type: 'waypointNavRequest',
-            points: store.getState().waypointNav.points,
-          },
+          message: (() => {
+            const pts = store.getState().waypointNav.points
+            const first = pts[0] ?? {}
+            return {
+              type: 'waypointNavRequest',
+              tag: first.tag ?? '',
+              circleMode: first.circleMode ?? false,
+              points: pts.map(({lat, lon, radius}) => ({latitude: lat, longitude: lon, radius})),
+            }
+          })(),
         })
       )
       break
