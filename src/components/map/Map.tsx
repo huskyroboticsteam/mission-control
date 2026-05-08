@@ -14,11 +14,7 @@ import {
   type Viewer as CesiumViewer,
 } from 'cesium'
 import {useSelector, useDispatch} from 'react-redux'
-import {
-  selectRoverLatitude,
-  selectRoverLongitude,
-  selectRoverHeading,
-} from '../../store/telemetrySlice.js'
+import {selectRoverPosition} from '../../store/telemetrySlice.js'
 import {
   addPin,
   removePin,
@@ -28,8 +24,9 @@ import {
   selectAllPins,
   selectSelectedPins,
 } from '../../store/mapSlice.js'
-import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from './MapConsts.js'
+import {COLOR_OPTIONS, MAP_TILES, MIN_DEGREES} from '../../constants/mapConstants.js'
 import './Map.css'
+import {Euler, Quaternion} from '@math.gl/core'
 
 const robotModel = new URL('../../../assets/Dozer.glb', import.meta.url).href
 Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_ACCESS_TOKEN
@@ -49,11 +46,18 @@ type LastPickedCoord = {
 }
 
 export const Map = () => {
-  const telemetryLat = useSelector(selectRoverLatitude as (state: unknown) => number)
-  const telemetryLon = useSelector(selectRoverLongitude as (state: unknown) => number)
-  const lat = typeof telemetryLat === 'number' ? telemetryLat : 47.655548
-  const lon = typeof telemetryLon === 'number' ? telemetryLon : -122.3032
-  const heading = useSelector(selectRoverHeading as (state: unknown) => number)
+  const telemetry = useSelector(selectRoverPosition)
+  const lat = telemetry.lat ?? 47.655548
+  const lon = telemetry.lon ?? -122.3032
+  const quat = new Quaternion(
+    telemetry.orientX ?? 0,
+    telemetry.orientY ?? 0,
+    telemetry.orientZ ?? 0,
+    telemetry.orientW ?? 0
+  )
+  const rpy = new Euler().fromQuaternion(quat)
+  const [roll, pitch, yaw] = rpy.map((rad) => (rad * 180) / Math.PI)
+  const heading = -yaw
 
   const viewerRef = useRef<any>(null)
   const rightClickHandlerRef = useRef<ScreenSpaceEventHandler | null>(null)
@@ -239,7 +243,7 @@ export const Map = () => {
     const ellipsoid = viewer.scene.globe.ellipsoid
     const handler = new ScreenSpaceEventHandler(viewer.canvas)
     rightClickHandlerRef.current = handler
-    console.log('[Map] RIGHT_CLICK handler attached')
+    // console.log('[Map] RIGHT_CLICK handler attached')
     handler.setInputAction((movement: {position: Cartesian2}) => {
       const cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid)
       if (!cartesian) return
@@ -255,7 +259,7 @@ export const Map = () => {
       setManualLat(latDeg)
       setManualLon(lonDeg)
       setUseManual(true)
-      dispatch(addPin({lat: latDeg, lon: lonDeg}))
+      dispatch(addPin({lat: latDeg, lon: lonDeg, label: undefined}))
       setLastPickedCoord({lat: latDeg, lon: lonDeg, distance, t: Date.now()})
     }, ScreenSpaceEventType.RIGHT_CLICK)
     return () => {
@@ -279,11 +283,11 @@ export const Map = () => {
     setManualLon(parsedLon)
     setUseManual(true)
 
-    dispatch(addPin({lat: parsedLat, lon: parsedLon}))
+    dispatch(addPin({lat: parsedLat, lon: parsedLon, label: undefined}))
   }
 
   function toggleSelectPin(id: number) {
-    dispatch(togglePinSelection({pinId: id}))
+    dispatch(togglePinSelection({pinID: id}))
   }
 
   function handleClearSelectedPins() {
@@ -291,7 +295,7 @@ export const Map = () => {
   }
 
   function deletePin(id: number) {
-    dispatch(removePin({pinId: id}))
+    dispatch(removePin({pinID: id}))
   }
 
   function flyToPin(pin: Pin) {

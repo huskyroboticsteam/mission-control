@@ -1,8 +1,7 @@
 @import url('virtual-gamepad-lib/gamepad_assets/base.css');
 
-.help-panel {
+#help-panel {
   box-sizing: border-box;
-  padding: 10px;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -13,8 +12,7 @@
   grid-template-rows: 1fr 1fr;
 }
 
-.g1,
-.g2 {
+.gamepad-container {
   display: flex;
   height: 100%;
   width: 100%;
@@ -26,9 +24,9 @@
 .keyboard {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  width: 80%;
-  margin-right: 5%;
+  width: 100%;
   color: black;
   font-size: 12px;
 }

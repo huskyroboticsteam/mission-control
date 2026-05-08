@@ -6,7 +6,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@math.gl/core": "^4.0.0",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@react-three/drei": "^9.88.7",
@@ -31,8 +30,6 @@
     "resium": "^1.17.2",
     "serve": "^14.2.5",
     "stream": "0.0.2",
-    "three": "^0.158.0",
-    "typescript": "^5.3.3",
     "virtual-gamepad-lib": "^0.3.3",
     "vite": "^5.0.11",
     "vite-tsconfig-paths": "^4.3.1"
@@ -63,6 +60,11 @@
     ]
   },
   "devDependencies": {
+    "@math.gl/core": "^4.1.0",
+    "@types/jmuxer": "^2.0.7",
+    "@types/node": "^25.3.3",
+    "@types/piexifjs": "^1.0.0",
+    "@types/react-gamepad": "^1.0.6",
     "vite-plugin-cesium": "^1.2.22"
   }
 }

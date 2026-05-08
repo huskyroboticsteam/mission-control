@@ -2,13 +2,13 @@ import React from 'react'
 import CameraStream from '../camera/CameraStream.js'
 import Compass from './Compass.js'
 import './NavigationPanel.css'
-import OpModeSelect from './OpModeSelect'
-import {WaypointList} from './WaypointList'
-import {WaypointNav} from './WaypointNav'
+import {WaypointList} from './WaypointList.js'
+import {WaypointNav} from './WaypointNav.js'
 import {useState} from 'react'
-import CustomizationPanel from '../armDexterity/CustomizationPanel'
-import processCustomizationPanelData from '../../util/processCustomizationPanelData'
+import {CustomizationPanel} from '../armDexterity/CustomizationPanel.js'
+import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 
+export const NavigationPanel = () => {
 function NavigationPanel() {
   const defaultSettings = [2, 3]
   const components = ['mast', 'hand', 'compass', 'wrist', 'waypointlist', 'waypointnav']
@@ -25,8 +25,7 @@ function NavigationPanel() {
   ])
   const [edit, setEdit] = useState(false)
 
-  const handleChildData = (data: number[][] | null) => {
-    if (!data) return
+  const handleChildData = (data: (number | null)[][]): void => {
     const processedData = processCustomizationPanelData(data, components)
     setCoordinates(processedData.coordinates)
     setRowNum(processedData.rowNum)
@@ -78,13 +77,12 @@ function NavigationPanel() {
             <WaypointNav />
           </div>
         ))}
-      <div className="customization-container">
+      <div className="customization-container" style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}>
         <CustomizationPanel
           onSend={handleChildData}
           components={components}
           edit={edit}
           defaultSettings={defaultSettings}
-          style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}
         />
       </div>
       {!edit && (
@@ -97,4 +95,4 @@ function NavigationPanel() {
       )}
     </div>
   )
-}
+}}

@@ -1,0 +1,2 @@
+export const POSITION_THRESHOLD = 0.5
+export const APPROACHING_THRESHOLD = 3.0
