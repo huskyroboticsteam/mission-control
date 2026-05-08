@@ -5,11 +5,10 @@ import './NavigationPanel.css'
 import {WaypointList} from './WaypointList.js'
 import {WaypointNav} from './WaypointNav.js'
 import {useState} from 'react'
-import {CustomizationPanel} from '../armDexterity/CustomizationPanel.js'
+import CustomizationPanel from '../armDexterity/CustomizationPanel.js'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 
 export const NavigationPanel = () => {
-function NavigationPanel() {
   const defaultSettings = [2, 3]
   const components = ['mast', 'hand', 'compass', 'wrist', 'waypointlist', 'waypointnav']
   const [rowNum, setRowNum] = useState(defaultSettings[0])
@@ -77,7 +76,9 @@ function NavigationPanel() {
             <WaypointNav />
           </div>
         ))}
-      <div className="customization-container" style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}>
+      <div
+        className="customization-container"
+        style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}>
         <CustomizationPanel
           onSend={handleChildData}
           components={components}
@@ -95,4 +96,4 @@ function NavigationPanel() {
       )}
     </div>
   )
-}}
+}
