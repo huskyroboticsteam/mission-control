@@ -91,7 +91,7 @@ export const HelpPanel = () => {
       }}>
       {coordinates[0]?.length > 0 &&
         coordinates[0].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div className= "drive-gpad" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <GamepadTable gamepadName={GamepadNames.driveGamepad} />
             <div className="g1-text-wrapper">
               <b className="label">Driver Gamepad</b>
@@ -101,7 +101,7 @@ export const HelpPanel = () => {
         ))}
       {coordinates[1]?.length > 0 &&
         coordinates[1].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div className= "peripheral-gpad" style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
             <div className="g2-text-wrapper">
               <b className="label">Peripheral Gamepad</b>
@@ -111,7 +111,7 @@ export const HelpPanel = () => {
         ))}
       {coordinates[2]?.length > 0 &&
         coordinates[2].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div className= "keyboard-container"style={{gridColumn: `${coord[1] + 1}/-1`, gridRow: `${coord[0] + 1}`}}>
             <KeyboardTable />
             <div className="keyboard">
               <b className="label">Keyboard Controls</b>

@@ -5,14 +5,32 @@
   align-items: center;
   background-color: rgb(0, 0, 0);
 }
+.peripheral-gpad, .drive-gpad {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 85%;
+  gap: 10px;
+  max-height: 50%;
+}
 
-
-.keyboard {
-  align-items: center;
+.keyboard-container {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
+  gap: 10px;
+
+}
+.keyboard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
   color: black;
   font-size: 12px;
+  height: auto;
 }
 
 .keyboard-T {
@@ -30,10 +48,6 @@
   margin: 5%;
 }
 
-.drive-gpad-table {
-  width: 45%;
-  align-self: center;
-}
 
 .g1,
 .g2 {
@@ -41,32 +55,6 @@
   min-height: 0;
 }
 
-.table {
-  color: black;
-  background-color: white;
-  border-collapse: collapse;
-  font-size: 7px;
-  justify-content: center;
-}
-
-.th,
-.td {
-  border: 1px solid black;
-  padding: 3px;
-}
-
-.th {
-  background-color: #4fb185;
-  font-weight: bold;
-  color: white;
-}
-
-.keyboard-table-container {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 10px;
-}
 
 .label {
   font-size: 18px;

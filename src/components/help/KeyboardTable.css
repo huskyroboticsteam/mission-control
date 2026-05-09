@@ -1,14 +1,20 @@
 #keyboard-table-container {
+  width: 40%;
+  margin: 0 auto;
   text-align: center;
+    table-layout: fixed;
+
 }
 
-#keyboard-table,
+#keyboard-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  color: black;
+}
+
 #keyboard-table th,
 #keyboard-table td {
   border: 1px solid black;
-  /* border-radius: 10px; */
-  border-collapse: collapse;
-  color: black;
 }
 
 #keyboard-table th {
@@ -18,5 +24,5 @@
 }
 
 #keyboard-table td {
-  font-size: 11px;
+  font-size: 9.5px;
 }
