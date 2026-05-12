@@ -2,8 +2,7 @@
   width: 40%;
   margin: 0 auto;
   text-align: center;
-    table-layout: fixed;
-
+  table-layout: fixed;
 }
 
 #keyboard-table {
