@@ -13,9 +13,7 @@ const waypointNavMiddleware = (store) => (next) => (action) => {
             const first = pts[0] ?? {}
             return {
               type: 'waypointNavRequest',
-              points = [
-                [first.lat, first.lon],
-              ],
+              points: pts,
               tag: first.tag ?? '',
               circleMode: first.circleMode ?? false,
               radius: first.radius ?? 0,
