@@ -5,8 +5,11 @@ const normalizePoint = (point) => {
 
   const lat = Number.parseFloat(point.lat)
   const lon = Number.parseFloat(point.lon)
+
   const radius = Number.parseFloat(point.radius ?? 0)
+
   const tag = typeof point.tag === 'string' ? point.tag : ''
+
   const circleMode = Boolean(point.circleMode)
 
   if (Number.isNaN(lat) || Number.isNaN(lon) || Number.isNaN(radius)) return null
