@@ -9,15 +9,14 @@ const waypointNavMiddleware = (store) => (next) => (action) => {
       store.dispatch(
         messageRover({
           message: (() => {
-            const pts = store.getState().waypointNav.points
-            const first = pts[0] ?? {}
+            const waypointNav = store.getState().waypointNav
+            const pts = waypointNav.points ?? []
             return {
               type: 'waypointNavRequest',
-              points: pts,
-              tag: first.tag ?? '',
-              circleMode: first.circleMode ?? false,
-              radius: first.radius ?? 0,
-              //points: pts.map(({lat, lon}) => ({latitude: lat, longitude: lon})),
+              points: pts.map(({lat, lon}) => [lat, lon]),
+              tag: waypointNav.tag ?? '',
+              circleMode: waypointNav.circleMode ?? false,
+              radius: waypointNav.radius ?? 0,
             }
           })(),
         })
