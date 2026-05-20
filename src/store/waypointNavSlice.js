@@ -11,7 +11,7 @@ const normalizePoint = (point) => {
   return {lat, lon}
 }
 
-const extra = (point) => {
+const extraFields = (point) => {
   const radiusValue = Number.parseFloat(point?.radius ?? 0)
   const radius = Number.isNaN(radiusValue) ? 0 : radiusValue
 
@@ -28,7 +28,7 @@ const normalizeWaypoint = (point) => {
 
   return {
     ...normalizedPoint,
-    ...extra(point),
+    ...extraFields(point),
   }
 }
 
@@ -72,7 +72,9 @@ const waypointNavSlice = createSlice({
     },
     setPoints(state, action) {
       const payload = Array.isArray(action.payload) ? action.payload : []
-      state.points = payload.map((point) => normalizeWaypoint(point)).filter((point) => point !== null)
+      state.points = payload
+        .map((point) => normalizeWaypoint(point))
+        .filter((point) => point !== null)
 
       const first = state.points[0] ?? {radius: 0, tag: '', circleMode: false}
       state.tag = first.tag
