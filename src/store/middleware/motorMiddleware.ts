@@ -5,6 +5,7 @@ import type {Middleware} from '@reduxjs/toolkit'
 import type {RootState, RoverStoreAPI} from '../store.js'
 import {JointNames} from '../../constants/jointConstants.js'
 import {enumKeys} from '../../util/enumKeys.js'
+import { messageRover } from '../roverSocketSlice.js'
 
 /**
  * Middleware that handles receiving motor telemetry.
@@ -17,20 +18,28 @@ export const motorMiddleware: Middleware<{}, RootState> =
       const {enabled} = action.payload
       if (!enabled) {
         store.dispatch(
-          requestDrive({
-            straight: 0,
-            steer: 0,
+          messageRover({
+            message: {
+              type: 'disableMotors',
+              motors: false,
+            },
           })
         )
+        // store.dispatch(
+        //   requestDrive({
+        //     straight: 0,
+        //     steer: 0,
+        //   })
+        // )
 
-        enumKeys(JointNames).forEach((jointName) => {
-          store.dispatch(
-            requestJointPower({
-              jointName,
-              power: 0,
-            })
-          )
-        })
+        // enumKeys(JointNames).forEach((jointName) => {
+        //   store.dispatch(
+        //     requestJointPower({
+        //       jointName,
+        //       power: 0,
+        //     })
+        //   )
+        // })
       }
     }
 

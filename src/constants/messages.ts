@@ -115,6 +115,11 @@ export type WaypointNavRequestMessage = {
   isGate: boolean
 }
 
+export type DisableMotorsRequestMessage = {
+  type: 'disableMotors'
+  motors: boolean;
+}
+
 export type RequestMessage =
   | CameraFrameRequestMessage
   | CameraStreamCloseRequestMessage
@@ -127,6 +132,7 @@ export type RequestMessage =
   | OperationModeRequestMessage
   | ServoPositionRequestMessage
   | WaypointNavRequestMessage
+  | DisableMotorsRequestMessage
 
 export type ReportMessage =
   | CameraFrameReportMessage
