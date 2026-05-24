@@ -93,6 +93,11 @@ export const inputSlice = createSlice({
         scaledValue = value * Math.abs(value)
       }
 
+      // Invert Y axes so that forward = positive, backward = negative
+      if (axisName === 'LeftStickY') {
+        scaledValue = -scaledValue
+      }
+
       state[gamepadName][axisName] = scaledValue
 
       if (gamepadName === 'driveGamepad') {
