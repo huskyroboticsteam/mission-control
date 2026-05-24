@@ -46,7 +46,7 @@ export const jointSlice = createSlice({
       state,
       action: PayloadAction<{jointName: keyof typeof JointNames; position: number}>
     ) => {
-      const {jointName, position} = action.payload
+z      const {jointName, position} = action.payload
       state[jointName].currentPosition = position
     },
   },
