@@ -211,14 +211,14 @@ export const AxisKeyboardControls: {[axis in InputAxis]: {negative: string; posi
     negative: ',',
     positive: '.',
   },
-  [JointNames.ikUp]: {
-    negative: '',
-    positive: '',
-  },
-  [JointNames.ikForward]: {
-    negative: '',
-    positive: '',
-  },
+  // [JointNames.ikUp]: {
+  //   negative: '',
+  //   positive: '',
+  // },
+  // [JointNames.ikForward]: {
+  //   negative: '',
+  //   positive: '',
+  // },
 }
 
 export const AxisDriveGamepadControls: {[axis in DriveAxis]: {axis: Axis}} = {
@@ -267,12 +267,12 @@ export const AxisPeripheralGamepadControls: {
     negative: 'X',
     positive: 'Y',
   },
-  [JointNames.ikUp]: {
-    axis: 'RightStickY',
-  },
-  [JointNames.ikForward]: {
-    axis: 'LeftStickY',
-  },
+  // [JointNames.ikUp]: {
+  //   axis: 'RightStickY',
+  // },
+  // [JointNames.ikForward]: {
+  //   axis: 'LeftStickY',
+  // },
 }
 
 // For reverse lookup

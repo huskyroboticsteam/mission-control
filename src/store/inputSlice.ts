@@ -49,8 +49,8 @@ const initialState: InputState = {
     wristRoll: 0,
     hand: 0,
     handActuator: 0,
-    ikUp: 0,
-    ikForward: 0,
+    // ikUp: 0,
+    // ikForward: 0,
   },
   axisMultiplier: 1.0,
 }
@@ -97,6 +97,15 @@ export const inputSlice = createSlice({
       if (axisName === 'LeftStickY') {
         scaledValue = -scaledValue
       }
+
+      if (Math.abs(scaledValue) < 0.05) { scaledValue = 0 }
+      if (Math.abs(scaledValue) > 0.95) { scaledValue = Math.round(scaledValue) }
+
+      if (Math.abs(state[gamepadName][axisName] - scaledValue) < 0.05) {
+        return state;
+      }
+
+      console.log(axisName, scaledValue);
 
       state[gamepadName][axisName] = scaledValue
 

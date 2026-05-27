@@ -33,7 +33,7 @@ export const inputMiddleware: Middleware<{}, RootState> =
       switch (action.type) {
         case gamepadAxisChanged.type: {
           const {gamepadName, axisName, value} = action.payload
-          if (prev.input[gamepadName][axisName] === value) {
+          if (Math.abs(prev.input[gamepadName][axisName] - value) < 0.05) {
             break
           }
           if (gamepadName === 'driveGamepad') {
