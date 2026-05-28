@@ -94,7 +94,7 @@ export const inputSlice = createSlice({
       }
 
       // Invert Y axes so that forward = positive, backward = negative
-      if (axisName === 'LeftStickY') {
+      if (gamepadName === 'peripheralGamepad' && (axisName === 'LeftStickX' || axisName === 'RightStickX')) {
         scaledValue = -scaledValue
       }
 

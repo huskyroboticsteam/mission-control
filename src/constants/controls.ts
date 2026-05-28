@@ -256,8 +256,8 @@ export const AxisPeripheralGamepadControls: {
     positive: 'DPadUp',
   },
   [JointNames.wristRoll]: {
-    negative: 'DPadLeft',
-    positive: 'DPadRight',
+    negative: 'DPadRight',
+    positive: 'DPadLeft',
   },
   [JointNames.hand]: {
     negative: 'LT',
