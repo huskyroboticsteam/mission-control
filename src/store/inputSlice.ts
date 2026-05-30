@@ -49,6 +49,7 @@ const initialState: InputState = {
     wristRoll: 0,
     hand: 0,
     handActuator: 0,
+    laser: 0,
     // ikUp: 0,
     // ikForward: 0,
   },
@@ -94,6 +95,9 @@ export const inputSlice = createSlice({
       }
 
       // Invert Y axes so that forward = positive, backward = negative
+      if (gamepadName === 'driveGamepad' && axisName === 'LeftStickY') {
+        scaledValue = -scaledValue
+      }
       if (gamepadName === 'peripheralGamepad' && (axisName === 'LeftStickX' || axisName === 'RightStickX')) {
         scaledValue = -scaledValue
       }
@@ -104,8 +108,6 @@ export const inputSlice = createSlice({
       if (Math.abs(state[gamepadName][axisName] - scaledValue) < 0.05) {
         return state;
       }
-
-      console.log(axisName, scaledValue);
 
       state[gamepadName][axisName] = scaledValue
 

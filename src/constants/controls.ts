@@ -5,6 +5,7 @@ import {requestAxisMultiplier} from '../store/inputSlice.js'
 import type {RootState, RoverStoreAPI} from '../store/store.js'
 import {JointNames} from './jointConstants.js'
 import type {GamepadNames} from './gamepadConstants.js'
+import { requestJointPower } from '../store/jointSlice.js'
 
 type KeyboardControl = {
   readonly [key: string]: {
@@ -86,6 +87,11 @@ export const KeyboardControls: KeyboardControl = {
   U: {description: 'Hand Close'},
   O: {description: 'Hand Open'},
   '.': {description: 'Actuator Out'},
+  ';': {description: 'Toggle Laser', onPress: (store) => {
+    store.dispatch(
+      requestJointPower({jointName: 'laser', power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0})
+    )
+  }}
 }
 
 export const DriveGamepadControls: GamepadControl = {
@@ -122,6 +128,11 @@ export const DriveGamepadControls: GamepadControl = {
 }
 
 export const PeripheralGamepadControls: GamepadControl = {
+  B: {description: 'Toggle Laser', onPress: (store) => {
+    store.dispatch(
+      requestJointPower({jointName: 'laser', power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0})
+    )
+  }},
   Y: {description: 'Actuator Out'},
   LT: {
     display: 'LTrigger',
@@ -211,14 +222,10 @@ export const AxisKeyboardControls: {[axis in InputAxis]: {negative: string; posi
     negative: ',',
     positive: '.',
   },
-  // [JointNames.ikUp]: {
-  //   negative: '',
-  //   positive: '',
-  // },
-  // [JointNames.ikForward]: {
-  //   negative: '',
-  //   positive: '',
-  // },
+  [JointNames.laser]: {
+    negative: '',
+    positive: '',
+  },
 }
 
 export const AxisDriveGamepadControls: {[axis in DriveAxis]: {axis: Axis}} = {
@@ -267,12 +274,11 @@ export const AxisPeripheralGamepadControls: {
     negative: 'X',
     positive: 'Y',
   },
-  // [JointNames.ikUp]: {
-  //   axis: 'RightStickY',
-  // },
-  // [JointNames.ikForward]: {
-  //   axis: 'LeftStickY',
-  // },
+  // dummy, we don't actually want to axis this
+  [JointNames.laser]: {
+    negative: 'Start',
+    positive: 'Start',
+  }
 }
 
 // For reverse lookup
