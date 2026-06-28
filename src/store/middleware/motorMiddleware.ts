@@ -5,7 +5,7 @@ import type {Middleware} from '@reduxjs/toolkit'
 import type {RootState, RoverStoreAPI} from '../store.js'
 import {JointNames} from '../../constants/jointConstants.js'
 import {enumKeys} from '../../util/enumKeys.js'
-import { messageRover } from '../roverSocketSlice.js'
+import {messageRover} from '../roverSocketSlice.js'
 
 /**
  * Middleware that handles receiving motor telemetry.

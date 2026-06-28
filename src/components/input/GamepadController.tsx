@@ -49,7 +49,7 @@ export const GamepadController = ({
       <GamepadComponent
         layout={crossPlatformLayout}
         gamepadIndex={gamepadIndex}
-        deadZone={0.0}
+        deadZone={0.05}
         onConnect={() => dispatch(gamepadConnected({gamepadName}))}
         onDisconnect={() => dispatch(gamepadDisconnected({gamepadName}))}
         onAxisChange={(axisName: Axis, value: number) =>

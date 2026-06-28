@@ -117,7 +117,7 @@ export type WaypointNavRequestMessage = {
 
 export type DisableMotorsRequestMessage = {
   type: 'disableMotors'
-  motors: boolean;
+  motors: boolean
 }
 
 export type RequestMessage =

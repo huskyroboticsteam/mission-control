@@ -12,13 +12,12 @@ import {
 import {
   DriveGamepadControls,
   driveGamepadToAxes,
-  KeyboardControls,
-  keyToAxes,
   PeripheralGamepadControls,
   peripheralGamepadToAxes,
-} from '../../constants/controls.js'
+} from '../../constants/controls/gamepadControls.js'
 import {JointNames} from '../../constants/jointConstants.js'
 import type {Axis, Button} from 'react-gamepad'
+import { KeyboardControls } from '../../constants/controls/keyboardControls.js'
 
 /**
  * Middleware that messages the rover in response to user input.

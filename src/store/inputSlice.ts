@@ -10,14 +10,13 @@ import type {Axis, Button} from 'react-gamepad'
 import {isLinux} from '../util/isLinux.js'
 import type {RootState} from './store.js'
 import {
-  AxisKeyboardControls,
   AxisPeripheralGamepadControls,
   driveGamepadToAxes,
-  keyToAxes,
   peripheralGamepadToAxes,
-  type InputAxis,
-} from '../constants/controls.js'
+} from '../constants/controls/gamepadControls.js'
 import type {JointNames} from '../constants/jointConstants.js'
+import { keyToAxes, KeyboardAxisControls } from '../constants/controls/keyboardControls.js'
+import type { InputAxis } from '../constants/types.js'
 
 // See https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values for pressedKeys strings
 type InputState = {
@@ -98,15 +97,22 @@ export const inputSlice = createSlice({
       if (gamepadName === 'driveGamepad' && axisName === 'LeftStickY') {
         scaledValue = -scaledValue
       }
-      if (gamepadName === 'peripheralGamepad' && (axisName === 'LeftStickX' || axisName === 'RightStickX')) {
+      if (
+        gamepadName === 'peripheralGamepad' &&
+        (axisName === 'LeftStickX' || axisName === 'RightStickX')
+      ) {
         scaledValue = -scaledValue
       }
 
-      if (Math.abs(scaledValue) < 0.05) { scaledValue = 0 }
-      if (Math.abs(scaledValue) > 0.95) { scaledValue = Math.round(scaledValue) }
+      if (Math.abs(scaledValue) < 0.05) {
+        scaledValue = 0
+      }
+      if (Math.abs(scaledValue) > 0.95) {
+        scaledValue = Math.round(scaledValue)
+      }
 
       if (Math.abs(state[gamepadName][axisName] - scaledValue) < 0.05) {
-        return state;
+        return state
       }
 
       state[gamepadName][axisName] = scaledValue
@@ -185,9 +191,12 @@ const updatePeripheralAxesFromGamepad = (
 }
 
 const updateAxesFromKeyboard = (state: Draft<InputState>, key: string) => {
+  // For each key pressed, check if it maps to an axis
   keyToAxes[key]?.forEach((axis) => {
-    const {negative, positive} = AxisKeyboardControls[axis as InputAxis]
-    state.axes[axis as InputAxis] =
+    // If it does, check to see whether that key is the positive or negative
+    const {negative, positive} = KeyboardAxisControls[axis]
+    // Update state accordingly
+    state.axes[axis] =
       getAxisFromKeys(state.pressedKeys, negative, positive) * state.axisMultiplier
   })
 }

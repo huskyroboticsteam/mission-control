@@ -1,7 +1,7 @@
 import React from 'react'
 import {selectPressedKeys} from '../../store/inputSlice.js'
 import {useSelector} from 'react-redux'
-import {KeyboardControls} from '../../constants/controls.js'
+import {KeyboardControls} from '../../constants/controls/keyboardControls.js'
 import type {RootState} from '../../store/store.js'
 import './KeyboardTable.css'
 
