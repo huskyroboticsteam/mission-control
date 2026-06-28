@@ -93,20 +93,6 @@ export const inputSlice = createSlice({
         scaledValue = value * Math.abs(value)
       }
 
-      // Invert Y axes so that forward = positive, backward = negative
-      if (gamepadName === 'driveGamepad' && axisName === 'LeftStickY') {
-        scaledValue = -scaledValue
-      }
-      if (
-        gamepadName === 'peripheralGamepad' &&
-        (axisName === 'LeftStickX' || axisName === 'RightStickX')
-      ) {
-        scaledValue = -scaledValue
-      }
-
-      if (Math.abs(scaledValue) < 0.05) {
-        scaledValue = 0
-      }
       if (Math.abs(scaledValue) > 0.95) {
         scaledValue = Math.round(scaledValue)
       }
