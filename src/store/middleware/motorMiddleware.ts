@@ -1,7 +1,6 @@
 import {enableMotors} from '../motorSlice.js'
 import type {Middleware} from '@reduxjs/toolkit'
 import type {RootState, RoverStoreAPI} from '../store.js'
-import {JointNames} from '../../constants/jointConstants.js'
 import {messageRover} from '../roverSocketSlice.js'
 
 /**

@@ -1,7 +1,7 @@
 import React from 'react'
 import './GamepadTable.css'
 import {GamepadControls} from '../../constants/controls/gamepadControls.js'
-import {useSelector, useStore} from 'react-redux'
+import {useSelector} from 'react-redux'
 import type {RootState} from '../../store/store.js'
 import {isAxis, isButton, type GamepadNames} from '../../constants/gamepadConstants.js'
 import {selectGamepad} from '../../store/inputSlice.js'
