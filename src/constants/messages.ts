@@ -50,6 +50,11 @@ export type TankDriveRequestMessage = {
   right: number
 }
 
+export type EnableMotorsRequestMessage = {
+  type: 'enableMotorsRequest'
+  enabled: boolean
+}
+
 export type EmergencyStopRequestMessage = {
   type: 'emergencyStopRequest'
   stop: boolean
@@ -115,11 +120,6 @@ export type WaypointNavRequestMessage = {
   isGate: boolean
 }
 
-export type DisableMotorsRequestMessage = {
-  type: 'disableMotors'
-  motors: boolean
-}
-
 export type RequestMessage =
   | CameraFrameRequestMessage
   | CameraStreamCloseRequestMessage
@@ -127,12 +127,12 @@ export type RequestMessage =
   | DriveRequestMessage
   | TankDriveRequestMessage
   | EmergencyStopRequestMessage
+  | EnableMotorsRequestMessage
   | JointPositionRequestMessage
   | JointPowerRequestMessage
   | OperationModeRequestMessage
   | ServoPositionRequestMessage
   | WaypointNavRequestMessage
-  | DisableMotorsRequestMessage
 
 export type ReportMessage =
   | CameraFrameReportMessage

@@ -17,7 +17,7 @@ import {
 } from '../../constants/controls/gamepadControls.js'
 import {JointNames} from '../../constants/jointConstants.js'
 import type {Axis, Button} from 'react-gamepad'
-import {KeyboardControls} from '../../constants/controls/keyboardControls.js'
+import {KeyboardControls, keyToAxes} from '../../constants/controls/keyboardControls.js'
 
 /**
  * Middleware that messages the rover in response to user input.
