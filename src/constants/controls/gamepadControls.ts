@@ -6,7 +6,7 @@ import type {RootState, RoverStoreAPI} from '../../store/store.js'
 import {JointNames} from '../jointConstants.js'
 import type {GamepadNames} from '../gamepadConstants.js'
 import {requestJointPower} from '../../store/jointSlice.js'
-import type { DriveAxis } from '../types.js'
+import type {DriveAxis} from '../types.js'
 
 type GamepadControl = {
   readonly [name in Axis | Button]?: {

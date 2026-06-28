@@ -145,10 +145,13 @@ export const KeyboardControls: KeyboardControl = {
   },
 }
 
-const entries = Object.entries(KeyboardAxisControls) as [InputAxis, {
-    negative: string;
-    positive: string;
-}][]
+const entries = Object.entries(KeyboardAxisControls) as [
+  InputAxis,
+  {
+    negative: string
+    positive: string
+  },
+][]
 
 // For reverse lookup
 export const keyToAxes = entries.reduce<Record<string, InputAxis[]>>(

@@ -15,8 +15,8 @@ import {
   peripheralGamepadToAxes,
 } from '../constants/controls/gamepadControls.js'
 import type {JointNames} from '../constants/jointConstants.js'
-import { keyToAxes, KeyboardAxisControls } from '../constants/controls/keyboardControls.js'
-import type { InputAxis } from '../constants/types.js'
+import {keyToAxes, KeyboardAxisControls} from '../constants/controls/keyboardControls.js'
+import type {InputAxis} from '../constants/types.js'
 
 // See https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values for pressedKeys strings
 type InputState = {
@@ -196,8 +196,7 @@ const updateAxesFromKeyboard = (state: Draft<InputState>, key: string) => {
     // If it does, check to see whether that key is the positive or negative
     const {negative, positive} = KeyboardAxisControls[axis]
     // Update state accordingly
-    state.axes[axis] =
-      getAxisFromKeys(state.pressedKeys, negative, positive) * state.axisMultiplier
+    state.axes[axis] = getAxisFromKeys(state.pressedKeys, negative, positive) * state.axisMultiplier
   })
 }
 
