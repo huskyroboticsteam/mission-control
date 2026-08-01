@@ -1,5 +1,3 @@
-import {requestDrive, requestTankDrive} from '../driveSlice.js'
-import {requestJointPower} from '../jointSlice.js'
 import {isAnyOf, type Middleware} from '@reduxjs/toolkit'
 import type {RootState, RoverDispatch, RoverStoreAPI} from '../store.js'
 import {
@@ -104,29 +102,29 @@ export const inputMiddleware: Middleware<{}, RootState> =
 const requestAxisMovement = (state: RootState, dispatch: RoverDispatch, key: string) => {
   // If key is changing an axis
   keyToAxes[key]?.forEach((axis) => {
-    if (axis in JointNames) {
-      dispatch(
-        requestJointPower({
-          jointName: axis as JointNames,
-          power: state.input.axes[axis as JointNames],
-        })
-      )
-      // If one key is somehow changing both axes at once, it will send the request twice
-    } else if (['straight', 'steer'].includes(axis)) {
-      dispatch(
-        requestDrive({
-          straight: state.input.axes.straight,
-          steer: state.input.axes.steer,
-        })
-      )
-    } else if (['left', 'right'].includes(axis)) {
-      dispatch(
-        requestTankDrive({
-          left: state.input.axes.left,
-          right: state.input.axes.right,
-        })
-      )
-    }
+    // if (axis in JointNames) {
+    //   dispatch(
+    //     requestJointPower({
+    //       jointName: axis as JointNames,
+    //       power: state.input.axes[axis as JointNames],
+    //     })
+    //   )
+    //   // If one key is somehow changing both axes at once, it will send the request twice
+    // } else if (['straight', 'steer'].includes(axis)) {
+    //   dispatch(
+    //     requestDrive({
+    //       straight: state.input.axes.straight,
+    //       steer: state.input.axes.steer,
+    //     })
+    //   )
+    // } else if (['left', 'right'].includes(axis)) {
+    //   dispatch(
+    //     requestTankDrive({
+    //       left: state.input.axes.left,
+    //       right: state.input.axes.right,
+    //     })
+    //   )
+    // }
   })
 }
 
@@ -136,21 +134,21 @@ const requestDriveAxisMovementFromGamepad = (
   gamepadAxis: Axis
 ) => {
   driveGamepadToAxes[gamepadAxis]?.forEach((axis) => {
-    if (['straight', 'steer'].includes(axis)) {
-      dispatch(
-        requestDrive({
-          straight: state.input.axes.straight,
-          steer: state.input.axes.steer,
-        })
-      )
-    } else if (['left', 'right'].includes(axis)) {
-      dispatch(
-        requestTankDrive({
-          left: state.input.axes.left,
-          right: state.input.axes.right,
-        })
-      )
-    }
+    // if (['straight', 'steer'].includes(axis)) {
+    //   dispatch(
+    //     requestDrive({
+    //       straight: state.input.axes.straight,
+    //       steer: state.input.axes.steer,
+    //     })
+    //   )
+    // } else if (['left', 'right'].includes(axis)) {
+    //   dispatch(
+    //     requestTankDrive({
+    //       left: state.input.axes.left,
+    //       right: state.input.axes.right,
+    //     })
+    //   )
+    // }
   })
 }
 
@@ -161,12 +159,12 @@ const requestPeripheralAxisMovementFromGamepad = (
 ) => {
   peripheralGamepadToAxes[name]?.forEach((axis) => {
     if (axis in JointNames) {
-      dispatch(
-        requestJointPower({
-          jointName: axis as JointNames,
-          power: state.input.axes[axis as JointNames],
-        })
-      )
+      // dispatch(
+      //   requestJointPower({
+      //     jointName: axis as JointNames,
+      //     power: state.input.axes[axis as JointNames],
+      //   })
+      // )
     }
   })
 }

@@ -1,9 +1,5 @@
 import {useEffect} from 'react'
-import {RoverSocketManager} from '../networking/RoverSocketManager.js'
 import {GamepadController} from '../input/GamepadController.js'
-import {KeyboardController} from '../input/KeyboardController.js'
-import {Sidebar} from '../sidebar/Sidebar.js'
-import PanelContainer from '../panelContainer/PanelContainer.js'
 import './App.css'
 import React from 'react'
 
@@ -16,12 +12,12 @@ export const App = () => {
 
   return (
     <div className="app">
-      <RoverSocketManager />
+      {/* <RoverSocketManager /> */}
       <GamepadController gamepadName="driveGamepad" gamepadIndex={0} />
       <GamepadController gamepadName="peripheralGamepad" gamepadIndex={1} />
-      <KeyboardController />
+      {/* <KeyboardController />
       <Sidebar />
-      <PanelContainer />
+      <PanelContainer /> */}
     </div>
   )
 }

@@ -1,7 +1,4 @@
-import {requestDriveMode} from '../../store/driveSlice.js'
-import {requestStop} from '../../store/emergencyStopSlice.js'
 import {requestAxisMultiplier} from '../../store/inputSlice.js'
-import {requestJointPower} from '../../store/jointSlice.js'
 import type {RootState, RoverStoreAPI} from '../../store/store.js'
 import {JointNames} from '../jointConstants.js'
 import type {InputAxis} from '../types.js'
@@ -78,7 +75,7 @@ export const KeyboardControls: KeyboardControl = {
     display: 'Space',
     description: 'Toggle EStop',
     onPress: (store) => {
-      store.dispatch(requestStop({stop: !store.getState().emergencyStop.stopped}))
+      // store.dispatch(requestStop({stop: !store.getState().emergencyStop.stopped}))
     },
   },
   SHIFT: {
@@ -92,30 +89,30 @@ export const KeyboardControls: KeyboardControl = {
     },
   },
   Y: {
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
+    description: (store) => '', //(store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
     onPress: (store) => {
-      store.dispatch(
-        requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
-      )
+      // store.dispatch(
+      //   requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
+      // )
     },
   },
   ARROWUP: {
     display: 'Up',
-    description: (store) =>
-      store.drive.driveMode === 'normal' ? 'Drive Forward' : 'Right Backward',
+    description: (store) => ''
+      // store.drive.driveMode === 'normal' ? 'Drive Forward' : 'Right Backward',
   },
   ARROWDOWN: {
     display: 'Down',
-    description: (store) =>
-      store.drive.driveMode === 'normal' ? 'Drive Backward' : 'Left Backward',
+    description: (store) => ''
+      // store.drive.driveMode === 'normal' ? 'Drive Backward' : 'Left Backward',
   },
   ARROWLEFT: {
     display: 'Left',
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn Left' : 'Left Forward'),
+    description: (store) => '' //(store.drive.driveMode === 'normal' ? 'Turn Left' : 'Left Forward'),
   },
   ARROWRIGHT: {
     display: 'Right',
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn Right' : 'Right Forward'),
+    description: (store) => '' //(store.drive.driveMode === 'normal' ? 'Turn Right' : 'Right Forward'),
   },
   A: {description: 'Arm Base Left'},
   D: {description: 'Arm Base Right'},
@@ -135,12 +132,12 @@ export const KeyboardControls: KeyboardControl = {
   ';': {
     description: 'Toggle Laser',
     onPress: (store) => {
-      store.dispatch(
-        requestJointPower({
-          jointName: 'laser',
-          power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0,
-        })
-      )
+      // store.dispatch(
+      //   requestJointPower({
+      //     jointName: 'laser',
+      //     power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0,
+      //   })
+      // )
     },
   },
 }

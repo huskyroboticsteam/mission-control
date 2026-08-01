@@ -1,11 +1,8 @@
 import type {Axis, Button, InvertibleAxis} from 'react-gamepad'
-import {requestDriveMode} from '../../store/driveSlice.js'
-import {requestStop} from '../../store/emergencyStopSlice.js'
 import {requestAxisMultiplier} from '../../store/inputSlice.js'
 import type {RootState, RoverStoreAPI} from '../../store/store.js'
 import {JointNames} from '../jointConstants.js'
 import type {GamepadNames} from '../gamepadConstants.js'
-import {requestJointPower} from '../../store/jointSlice.js'
 import type {DriveAxis} from '../types.js'
 
 type GamepadControl = {
@@ -72,11 +69,11 @@ export const AxisPeripheralGamepadControls: {
 
 export const DriveGamepadControls: GamepadControl = {
   Y: {
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
+    description: (store) => '', //(store.drive.driveMode === 'normal' ? 'Tank' : 'Normal') + ' Drive',
     onPress: (store) => {
-      store.dispatch(
-        requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
-      )
+      // store.dispatch(
+      //   requestDriveMode({mode: store.getState().drive.driveMode === 'normal' ? 'tank' : 'normal'})
+      // )
     },
   },
   LB: {
@@ -91,15 +88,15 @@ export const DriveGamepadControls: GamepadControl = {
   },
   LeftStickY: {
     display: 'LStickY',
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive'),
+    description: (store) => ''//(store.drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive'),
   },
   RightStickX: {
     display: 'RStickX',
-    description: (store) => (store.drive.driveMode === 'normal' ? 'Turn' : ''),
+    description: (store) => ''//(store.drive.driveMode === 'normal' ? 'Turn' : ''),
   },
   RightStickY: {
     display: 'RStickY',
-    description: (store) => (store.drive.driveMode === 'normal' ? '' : 'Right Drive'),
+    description: (store) => ''//(store.drive.driveMode === 'normal' ? '' : 'Right Drive'),
   },
 }
 
@@ -107,12 +104,12 @@ export const PeripheralGamepadControls: GamepadControl = {
   B: {
     description: 'Toggle Laser',
     onPress: (store) => {
-      store.dispatch(
-        requestJointPower({
-          jointName: 'laser',
-          power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0,
-        })
-      )
+      // store.dispatch(
+      //   requestJointPower({
+      //     jointName: 'laser',
+      //     power: store.getState().joint.laser.requestedPower === 0 ? 1 : 0,
+      //   })
+      // )
     },
   },
   Y: {description: 'Actuator Out'},
