@@ -19,7 +19,7 @@ type GamepadControl = {
 
 export const DriveGamepadAxisControls: {[axis in DriveAxis]: {axis: InvertibleAxis}} = {
   straight: {
-    axis: '-LeftStickY',
+    axis: 'LeftStickY',
   },
   steer: {
     axis: 'RightStickX',
@@ -36,16 +36,18 @@ export const AxisPeripheralGamepadControls: {
   [axis in JointNames]: {axis: InvertibleAxis} | {negative: Button; positive: Button}
 } = {
   [JointNames.armBase]: {
-    axis: '-LeftStickX',
+    axis: 'LeftStickX',
   },
   [JointNames.shoulder]: {
-    axis: 'LeftStickY',
+    negative: 'Start',
+    positive: 'Start',
   },
   [JointNames.elbow]: {
-    axis: 'RightStickY',
+    negative: 'Start',
+    positive: 'Start',
   },
   [JointNames.forearm]: {
-    axis: '-RightStickX',
+    axis: 'RightStickX',
   },
   [JointNames.wristPitch]: {
     negative: 'DPadDown',

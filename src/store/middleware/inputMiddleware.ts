@@ -33,8 +33,9 @@ export const inputMiddleware: Middleware<{}, RootState> =
         case gamepadAxisChanged.type: {
           const {gamepadName, axisName, value} = action.payload
           if (Math.abs(prev.input[gamepadName][axisName] - value) < 0.05) {
-            break
+            return result;
           }
+
           if (gamepadName === 'driveGamepad') {
             requestDriveAxisMovementFromGamepad(state, store.dispatch, axisName)
           }

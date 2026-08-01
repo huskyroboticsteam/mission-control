@@ -37,8 +37,8 @@ export const KeyboardAxisControls: {[axis in InputAxis]: {negative: string; posi
     positive: 'A',
   },
   [JointNames.shoulder]: {
-    negative: 'S',
-    positive: 'W',
+    negative: 'W',
+    positive: 'S',
   },
   [JointNames.elbow]: {
     negative: 'G',
@@ -49,12 +49,12 @@ export const KeyboardAxisControls: {[axis in InputAxis]: {negative: string; posi
     positive: 'H',
   },
   [JointNames.wristPitch]: {
-    negative: 'K',
-    positive: 'I',
+    negative: 'I',
+    positive: 'K',
   },
   [JointNames.wristRoll]: {
-    negative: 'J',
-    positive: 'L',
+    negative: 'L',
+    positive: 'J',
   },
   [JointNames.hand]: {
     negative: 'U',

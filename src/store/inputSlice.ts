@@ -93,12 +93,27 @@ export const inputSlice = createSlice({
         scaledValue = value * Math.abs(value)
       }
 
+      if (Math.abs(scaledValue) < 0.05) {
+        scaledValue = 0.0
+      }
       if (Math.abs(scaledValue) > 0.95) {
         scaledValue = Math.round(scaledValue)
       }
 
+      // console.log(Math.abs(state[gamepadName][axisName] - scaledValue) < 0.05);
+
       if (Math.abs(state[gamepadName][axisName] - scaledValue) < 0.05) {
         return state
+      }
+
+      if (gamepadName === 'driveGamepad' && axisName === 'LeftStickY') {
+        scaledValue *= -1
+      }
+      if (gamepadName === 'peripheralGamepad' && (
+        axisName === 'LeftStickX' ||
+        axisName === 'RightStickX'
+      )) {
+        scaledValue *= -1
       }
 
       state[gamepadName][axisName] = scaledValue
