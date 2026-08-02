@@ -4,12 +4,12 @@ import {requestStop} from '../../store/emergencyStopSlice.js'
 import {requestAxisMultiplier} from '../../store/inputSlice.js'
 import type {RootState, RoverStoreAPI} from '../../store/store.js'
 import {JointNames} from '../jointConstants.js'
-import type {GamepadNames} from '../gamepadConstants.js'
+import {GamepadNames} from '../gamepadConstants.js'
 import {requestJointPower} from '../../store/jointSlice.js'
 import type {DriveAxis} from '../types.js'
 
 type GamepadControl = {
-  readonly [name in Axis | Button]?: {
+  readonly [name in InvertibleAxis | Button]?: {
     readonly display?: string
     readonly description: string | ((store: RootState) => string)
     readonly onPress?: (store: RoverStoreAPI) => void
@@ -19,16 +19,16 @@ type GamepadControl = {
 
 export const DriveGamepadAxisControls: {[axis in DriveAxis]: {axis: InvertibleAxis}} = {
   straight: {
-    axis: 'LeftStickY',
+    axis: '-LeftStickY',
   },
   steer: {
     axis: 'RightStickX',
   },
   left: {
-    axis: 'LeftStickY',
+    axis: '-LeftStickY',
   },
   right: {
-    axis: 'RightStickY',
+    axis: '-RightStickY',
   },
 }
 
@@ -36,18 +36,16 @@ export const AxisPeripheralGamepadControls: {
   [axis in JointNames]: {axis: InvertibleAxis} | {negative: Button; positive: Button}
 } = {
   [JointNames.armBase]: {
-    axis: 'LeftStickX',
+    axis: '-LeftStickX',
   },
   [JointNames.shoulder]: {
-    negative: 'Start',
-    positive: 'Start',
+    axis: 'LeftStickY',
   },
   [JointNames.elbow]: {
-    negative: 'Start',
-    positive: 'Start',
+    axis: 'RightStickY',
   },
   [JointNames.forearm]: {
-    axis: 'RightStickX',
+    axis: '-RightStickX',
   },
   [JointNames.wristPitch]: {
     negative: 'DPadDown',
@@ -85,13 +83,13 @@ export const DriveGamepadControls: GamepadControl = {
     display: 'LBumper',
     description: 'Slow Mode',
     onPress: (store) => {
-      store.dispatch(requestAxisMultiplier({multiplier: 0.5}))
+      store.dispatch(requestAxisMultiplier({category: GamepadNames.driveGamepad, multiplier: 0.5}))
     },
     onRelease: (store) => {
-      store.dispatch(requestAxisMultiplier({multiplier: 1.0}))
+      store.dispatch(requestAxisMultiplier({category: GamepadNames.driveGamepad, multiplier: 1.0}))
     },
   },
-  LeftStickY: {
+  '-LeftStickY': {
     display: 'LStickY',
     description: (store) => (store.drive.driveMode === 'normal' ? 'Straight Drive' : 'Left Drive'),
   },
@@ -99,7 +97,7 @@ export const DriveGamepadControls: GamepadControl = {
     display: 'RStickX',
     description: (store) => (store.drive.driveMode === 'normal' ? 'Turn' : ''),
   },
-  RightStickY: {
+  '-RightStickY': {
     display: 'RStickY',
     description: (store) => (store.drive.driveMode === 'normal' ? '' : 'Right Drive'),
   },
@@ -118,6 +116,16 @@ export const PeripheralGamepadControls: GamepadControl = {
     },
   },
   Y: {description: 'Actuator Out'},
+  LB: {
+    display: 'LBumper',
+    description: 'Slow Mode',
+    onPress: (store) => {
+      store.dispatch(requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 0.5}))
+    },
+    onRelease: (store) => {
+      store.dispatch(requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 1.0}))
+    },
+  },
   LT: {
     display: 'LTrigger',
     description: 'Hand Close',

@@ -16,7 +16,7 @@ import {
   peripheralGamepadToAxes,
 } from '../../constants/controls/gamepadControls.js'
 import {JointNames} from '../../constants/jointConstants.js'
-import type {Axis, Button} from 'react-gamepad'
+import type {Axis, Button, InvertedAxis, InvertibleAxis} from 'react-gamepad'
 import {KeyboardControls, keyToAxes} from '../../constants/controls/keyboardControls.js'
 
 /**
@@ -32,15 +32,26 @@ export const inputMiddleware: Middleware<{}, RootState> =
       switch (action.type) {
         case gamepadAxisChanged.type: {
           const {gamepadName, axisName, value} = action.payload
-          if (Math.abs(prev.input[gamepadName][axisName] - value) < 0.05) {
-            return result;
+          if (Math.abs(prev.input[gamepadName][axisName] - value) <= 0.1) {
+            break
           }
 
+          // Double up because react-gamepad doesn't know how to tell us if an axis is inverted :/
           if (gamepadName === 'driveGamepad') {
             requestDriveAxisMovementFromGamepad(state, store.dispatch, axisName)
+            requestDriveAxisMovementFromGamepad(
+              state,
+              store.dispatch,
+              ('-' + axisName) as InvertedAxis
+            )
           }
           if (gamepadName === 'peripheralGamepad') {
             requestPeripheralAxisMovementFromGamepad(state, store.dispatch, axisName)
+            requestPeripheralAxisMovementFromGamepad(
+              state,
+              store.dispatch,
+              ('-' + axisName) as InvertedAxis
+            )
           }
           break
         }
@@ -134,7 +145,7 @@ const requestAxisMovement = (state: RootState, dispatch: RoverDispatch, key: str
 const requestDriveAxisMovementFromGamepad = (
   state: RootState,
   dispatch: RoverDispatch,
-  gamepadAxis: Axis
+  gamepadAxis: InvertibleAxis
 ) => {
   driveGamepadToAxes[gamepadAxis]?.forEach((axis) => {
     if (['straight', 'steer'].includes(axis)) {
@@ -158,7 +169,7 @@ const requestDriveAxisMovementFromGamepad = (
 const requestPeripheralAxisMovementFromGamepad = (
   state: RootState,
   dispatch: RoverDispatch,
-  name: Axis | Button
+  name: InvertibleAxis | Button
 ) => {
   peripheralGamepadToAxes[name]?.forEach((axis) => {
     if (axis in JointNames) {

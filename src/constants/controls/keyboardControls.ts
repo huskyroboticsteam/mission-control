@@ -85,10 +85,10 @@ export const KeyboardControls: KeyboardControl = {
     display: 'Shift',
     description: 'Slow mode',
     onPress: (store) => {
-      store.dispatch(requestAxisMultiplier({multiplier: 0.5}))
+      store.dispatch(requestAxisMultiplier({category: 'Keyboard', multiplier: 0.5}))
     },
     onRelease: (store) => {
-      store.dispatch(requestAxisMultiplier({multiplier: 1.0}))
+      store.dispatch(requestAxisMultiplier({category: 'Keyboard', multiplier: 1.0}))
     },
   },
   Y: {
