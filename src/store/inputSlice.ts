@@ -82,7 +82,7 @@ export const inputSlice = createSlice({
       const {gamepadName, axisName, value} = action.payload
       const prev = state[gamepadName][axisName]
 
-      if (Math.abs(value - prev) > 0.1) {
+      if ((value === 0 && prev !== 0) || Math.abs(value - prev) > 0.1) {
         state[gamepadName][axisName] = value
         state[gamepadName][('-' + axisName) as InvertedAxis] = -value
       } else {
