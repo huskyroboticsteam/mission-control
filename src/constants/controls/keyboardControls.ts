@@ -68,6 +68,10 @@ export const KeyboardAxisControls: {[axis in InputAxis]: {negative: string; posi
     negative: '',
     positive: '',
   },
+  [JointNames.lights]: {
+    negative: '',
+    positive: ''
+  }
 }
 
 // Mostly for display and button inputs that aren't mapping directly to a joint movement
@@ -143,6 +147,17 @@ export const KeyboardControls: KeyboardControl = {
       )
     },
   },
+  '[': {
+    description: 'Toggle Lights',
+    onPress: (store) => {
+      store.dispatch(
+        requestJointPower({
+          jointName: 'lights',
+          power: store.getState().joint.lights.requestedPower === 0 ? 1 : 0,
+        })
+      )
+    }
+  }
 }
 
 const entries = Object.entries(KeyboardAxisControls) as [

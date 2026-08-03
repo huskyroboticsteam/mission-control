@@ -49,6 +49,7 @@ const initialState: InputState = {
     hand: 0,
     handActuator: 0,
     laser: 0,
+    lights: 0,
     // ikUp: 0,
     // ikForward: 0,
   },
