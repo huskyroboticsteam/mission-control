@@ -131,7 +131,10 @@ export const inputSlice = createSlice({
       }
     },
 
-    requestAxisMultiplier: (state, action: PayloadAction<{category: 'Keyboard' | GamepadNames, multiplier: number}>) => {
+    requestAxisMultiplier: (
+      state,
+      action: PayloadAction<{category: 'Keyboard' | GamepadNames; multiplier: number}>
+    ) => {
       const {category, multiplier} = action.payload
       if (category === 'Keyboard') {
         state.axisMultiplier = multiplier
@@ -169,7 +172,8 @@ const updatePeripheralAxesFromGamepad = (
         positive: Button
       }
       state.axes[axis as InputAxis] =
-        getAxisFromButtons(state.peripheralGamepad, negative, positive) * state.peripheralGamepad.axisMultiplier
+        getAxisFromButtons(state.peripheralGamepad, negative, positive) *
+        state.peripheralGamepad.axisMultiplier
     }
   })
 
@@ -182,7 +186,8 @@ const updatePeripheralAxesFromGamepad = (
         positive: Button
       }
       state.axes[axis as InputAxis] =
-        getAxisFromButtons(state.peripheralGamepad, negative, positive) * state.peripheralGamepad.axisMultiplier
+        getAxisFromButtons(state.peripheralGamepad, negative, positive) *
+        state.peripheralGamepad.axisMultiplier
     }
   })
 }

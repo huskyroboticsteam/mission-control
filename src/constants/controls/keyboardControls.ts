@@ -70,8 +70,8 @@ export const KeyboardAxisControls: {[axis in InputAxis]: {negative: string; posi
   },
   [JointNames.lights]: {
     negative: '',
-    positive: ''
-  }
+    positive: '',
+  },
 }
 
 // Mostly for display and button inputs that aren't mapping directly to a joint movement
@@ -156,8 +156,8 @@ export const KeyboardControls: KeyboardControl = {
           power: store.getState().joint.lights.requestedPower === 0 ? 1 : 0,
         })
       )
-    }
-  }
+    },
+  },
 }
 
 const entries = Object.entries(KeyboardAxisControls) as [

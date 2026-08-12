@@ -8,7 +8,7 @@ export enum JointNames {
   hand = 'hand',
   handActuator = 'handActuator',
   laser = 'laser',
-  lights = 'lights'
+  lights = 'lights',
   // ikUp = 'ikUp',
   // ikForward = 'ikForward',
 }

@@ -8,7 +8,7 @@ import {
 } from '../../store/inputSlice.js'
 import type {GamepadNames} from '../../constants/gamepadConstants.js'
 import React from 'react'
-import { isLinux } from '../../util/isLinux.js'
+import {isLinux} from '../../util/isLinux.js'
 
 const crossPlatformLayout: Layout = {
   buttons: [

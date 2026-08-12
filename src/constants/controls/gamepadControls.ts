@@ -120,10 +120,14 @@ export const PeripheralGamepadControls: GamepadControl = {
     display: 'LBumper',
     description: 'Slow Mode',
     onPress: (store) => {
-      store.dispatch(requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 0.5}))
+      store.dispatch(
+        requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 0.5})
+      )
     },
     onRelease: (store) => {
-      store.dispatch(requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 1.0}))
+      store.dispatch(
+        requestAxisMultiplier({category: GamepadNames.peripheralGamepad, multiplier: 1.0})
+      )
     },
   },
   LT: {

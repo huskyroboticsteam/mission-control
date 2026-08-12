@@ -99,7 +99,9 @@ export const Buttons: Button[] = [
 ]
 
 export const isAxis = (value: string): value is Axis => (Axes as readonly string[]).includes(value)
-export const isInvertedAxis = (value: string): value is InvertedAxis => (InvertedAxes as readonly string[]).includes(value)
-export const isInvertibleAxis = (value: string): value is InvertibleAxis => isAxis(value) || isInvertedAxis(value)
+export const isInvertedAxis = (value: string): value is InvertedAxis =>
+  (InvertedAxes as readonly string[]).includes(value)
+export const isInvertibleAxis = (value: string): value is InvertibleAxis =>
+  isAxis(value) || isInvertedAxis(value)
 export const isButton = (value: string): value is Button =>
   (Buttons as readonly string[]).includes(value)

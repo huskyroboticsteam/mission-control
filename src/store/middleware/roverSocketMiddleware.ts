@@ -8,7 +8,7 @@ import {
   messageReceivedFromRover,
 } from '../roverSocketSlice.js'
 import type {RootState, RoverStoreAPI} from '../store.js'
-import { enableMotors } from '../motorSlice.js'
+import {enableMotors} from '../motorSlice.js'
 
 /**
  * Middleware that handles connecting to, disconnecting from, and messaging the
