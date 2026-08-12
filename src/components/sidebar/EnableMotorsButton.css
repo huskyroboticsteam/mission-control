@@ -17,30 +17,30 @@
   width: 100%;
 }
 
-.enable-motors-button--enabled > button {
-  background-color: #ed4245;
-}
-
 .enable-motors-button--disabled > button {
-  background-color: #3ea074;
+  background-color: #ed4245;
 }
 
-.enable-motors-button--enabled > button:hover {
-  cursor: pointer;
-  background-color: #ed4245;
+.enable-motors-button--enabled > button {
+  background-color: #3ea074;
 }
 
 .enable-motors-button--disabled > button:hover {
   cursor: pointer;
+  background-color: #ed4245;
+}
+
+.enable-motors-button--enabled > button:hover {
+  cursor: pointer;
   background-color: #3ea074;
 }
 
-.enable-motors-button--enabled > button:active {
+.enable-motors-button--disabled > button:active {
   cursor: pointer;
   background-color: #ed4245;
 }
 
-.enable-motors--disabled > button:active {
+.enable-motors-button--enabled > button:active {
   cursor: pointer;
   background-color: #3ea074;
 }

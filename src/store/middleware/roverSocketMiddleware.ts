@@ -8,6 +8,7 @@ import {
   messageReceivedFromRover,
 } from '../roverSocketSlice.js'
 import type {RootState, RoverStoreAPI} from '../store.js'
+import {enableMotors} from '../motorSlice.js'
 
 /**
  * Middleware that handles connecting to, disconnecting from, and messaging the
@@ -27,6 +28,7 @@ export const roverSocketMiddleware: Middleware<{}, RootState> = (store: RoverSto
     socket = null
     isConnecting = false
     store.dispatch(roverDisconnected())
+    store.dispatch(enableMotors({enabled: false}))
   }
 
   const onMessage = (store: RoverStoreAPI) => (event: MessageEvent) => {

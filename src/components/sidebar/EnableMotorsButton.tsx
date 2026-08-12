@@ -14,7 +14,7 @@ export const EnableMotorsButton = () => {
 
   const className =
     'enable-motors-button enable-motors-button--' + (motorsEnabled ? 'enabled' : 'disabled')
-  const text = motorsEnabled ? 'Disable Motors' : 'Enable Motors'
+  const text = motorsEnabled ? 'Motors Enabled' : 'Motors Disabled'
 
   return (
     <div className={className}>

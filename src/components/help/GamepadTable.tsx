@@ -1,9 +1,9 @@
 import React from 'react'
 import './GamepadTable.css'
-import {GamepadControls} from '../../constants/controls.js'
-import {useSelector, useStore} from 'react-redux'
+import {GamepadControls} from '../../constants/controls/gamepadControls.js'
+import {useSelector} from 'react-redux'
 import type {RootState} from '../../store/store.js'
-import {isAxis, isButton, type GamepadNames} from '../../constants/gamepadConstants.js'
+import {isButton, isInvertibleAxis, type GamepadNames} from '../../constants/gamepadConstants.js'
 import {selectGamepad} from '../../store/inputSlice.js'
 
 // Table for Gamepad Controls
@@ -22,7 +22,7 @@ export const GamepadTable = ({gamepadName}: {gamepadName: GamepadNames}) => {
         </thead>
         <tbody>
           {Object.entries(GamepadControls[gamepadName]).map(([name, control]) => {
-            if (isAxis(name)) {
+            if (isInvertibleAxis(name)) {
               // We let the description be a function of the store for controls that change depending on the state
               // For example, whether tank drive is on or not changes what should be displayed on the help screen
               const description = useSelector((state: RootState) =>

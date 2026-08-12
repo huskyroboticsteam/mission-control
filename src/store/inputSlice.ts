@@ -6,18 +6,17 @@ import {
   isButton,
   type GamepadState,
 } from '../constants/gamepadConstants.js'
-import type {Axis, Button} from 'react-gamepad'
+import type {Axis, Button, InvertedAxis, InvertibleAxis} from 'react-gamepad'
 import {isLinux} from '../util/isLinux.js'
 import type {RootState} from './store.js'
 import {
-  AxisKeyboardControls,
   AxisPeripheralGamepadControls,
   driveGamepadToAxes,
-  keyToAxes,
   peripheralGamepadToAxes,
-  type InputAxis,
-} from '../constants/controls.js'
+} from '../constants/controls/gamepadControls.js'
 import type {JointNames} from '../constants/jointConstants.js'
+import {keyToAxes, KeyboardAxisControls} from '../constants/controls/keyboardControls.js'
+import type {InputAxis} from '../constants/types.js'
 
 // See https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values for pressedKeys strings
 type InputState = {
@@ -49,8 +48,10 @@ const initialState: InputState = {
     wristRoll: 0,
     hand: 0,
     handActuator: 0,
-    ikUp: 0,
-    ikForward: 0,
+    laser: 0,
+    lights: 0,
+    // ikUp: 0,
+    // ikForward: 0,
   },
   axisMultiplier: 1.0,
 }
@@ -79,27 +80,20 @@ export const inputSlice = createSlice({
       }>
     ) => {
       const {gamepadName, axisName, value} = action.payload
-      let scaledValue = value
-      // linux maps dpad to axes, so map them to buttons
-      // also rescale triggers from [-1,1] -> [0,1], if necessary
-      if (isLinux() && (axisName === 'LeftTrigger' || axisName === 'RightTrigger')) {
-        // bug in linux, trigger values keep jumping to 0.
-        // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
-        if (value !== 0.0) {
-          scaledValue = (value + 1) / 2.0
-        }
-      } else {
-        // Analog stick input squaring
-        scaledValue = value * Math.abs(value)
-      }
+      const prev = state[gamepadName][axisName]
 
-      state[gamepadName][axisName] = scaledValue
+      if ((value === 0 && prev !== 0) || Math.abs(value - prev) > 0.1) {
+        state[gamepadName][axisName] = value
+        state[gamepadName][('-' + axisName) as InvertedAxis] = -value
+      } else {
+        return state
+      }
 
       if (gamepadName === 'driveGamepad') {
-        updateDriveAxesFromGamepad(state, axisName, scaledValue)
+        updateDriveAxesFromGamepad(state, axisName, value)
       }
       if (gamepadName === 'peripheralGamepad') {
-        updatePeripheralAxesFromGamepad(state, axisName, scaledValue)
+        updatePeripheralAxesFromGamepad(state, axisName, value)
       }
     },
 
@@ -137,42 +131,74 @@ export const inputSlice = createSlice({
       }
     },
 
-    requestAxisMultiplier: (state, action: PayloadAction<{multiplier: number}>) => {
-      state.axisMultiplier = action.payload.multiplier
+    requestAxisMultiplier: (
+      state,
+      action: PayloadAction<{category: 'Keyboard' | GamepadNames; multiplier: number}>
+    ) => {
+      const {category, multiplier} = action.payload
+      if (category === 'Keyboard') {
+        state.axisMultiplier = multiplier
+      } else {
+        state[category].axisMultiplier = multiplier
+      }
     },
   },
 })
 
-const updateDriveAxesFromGamepad = (state: Draft<InputState>, gamepadAxis: Axis, value: number) => {
+const updateDriveAxesFromGamepad = (
+  state: Draft<InputState>,
+  gamepadAxis: InvertibleAxis,
+  value: number
+) => {
   driveGamepadToAxes[gamepadAxis]?.forEach((axis) => {
-    state.axes[axis as InputAxis] = value * state.axisMultiplier
+    state.axes[axis as InputAxis] = value * state.driveGamepad.axisMultiplier
+  })
+  driveGamepadToAxes['-' + gamepadAxis]?.forEach((axis) => {
+    state.axes[axis as InputAxis] = -value * state.driveGamepad.axisMultiplier
   })
 }
 
 const updatePeripheralAxesFromGamepad = (
   state: Draft<InputState>,
-  name: Axis | Button,
+  name: InvertibleAxis | Button,
   value?: number
 ) => {
   peripheralGamepadToAxes[name]?.forEach((axis) => {
     if (isAxis(name)) {
-      state.axes[axis as InputAxis] = value!
+      state.axes[axis as InputAxis] = value! * state.peripheralGamepad.axisMultiplier
     } else if (isButton(name)) {
       const {negative, positive} = AxisPeripheralGamepadControls[axis as JointNames] as {
         negative: Button
         positive: Button
       }
       state.axes[axis as InputAxis] =
-        getAxisFromButtons(state.peripheralGamepad, negative, positive) * state.axisMultiplier
+        getAxisFromButtons(state.peripheralGamepad, negative, positive) *
+        state.peripheralGamepad.axisMultiplier
+    }
+  })
+
+  peripheralGamepadToAxes['-' + name]?.forEach((axis) => {
+    if (isAxis(name)) {
+      state.axes[axis as InputAxis] = -value! * state.peripheralGamepad.axisMultiplier
+    } else if (isButton(name)) {
+      const {negative, positive} = AxisPeripheralGamepadControls[axis as JointNames] as {
+        negative: Button
+        positive: Button
+      }
+      state.axes[axis as InputAxis] =
+        getAxisFromButtons(state.peripheralGamepad, negative, positive) *
+        state.peripheralGamepad.axisMultiplier
     }
   })
 }
 
 const updateAxesFromKeyboard = (state: Draft<InputState>, key: string) => {
+  // For each key pressed, check if it maps to an axis
   keyToAxes[key]?.forEach((axis) => {
-    const {negative, positive} = AxisKeyboardControls[axis as InputAxis]
-    state.axes[axis as InputAxis] =
-      getAxisFromKeys(state.pressedKeys, negative, positive) * state.axisMultiplier
+    // If it does, check to see whether that key is the positive or negative
+    const {negative, positive} = KeyboardAxisControls[axis]
+    // Update state accordingly
+    state.axes[axis] = getAxisFromKeys(state.pressedKeys, negative, positive) * state.axisMultiplier
   })
 }
 

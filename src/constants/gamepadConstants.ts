@@ -1,4 +1,4 @@
-import type {Axis, Button} from 'react-gamepad'
+import type {Axis, Button, InvertedAxis, InvertibleAxis} from 'react-gamepad'
 import {GamepadApiWrapper} from 'virtual-gamepad-lib/GamepadApiWrapper'
 import {GamepadEmulator} from 'virtual-gamepad-lib/GamepadEmulator'
 
@@ -16,14 +16,16 @@ export const GamepadIndex: {[G in keyof typeof GamepadNames]: number} = {
 
 export type GamepadState = {
   readonly isConnected: boolean
+  readonly axisMultiplier: number
 } & {
   readonly [B in Button]: boolean
 } & {
-  readonly [A in Axis]: number
+  readonly [A in InvertibleAxis]: number
 }
 
 export const GamepadInitialState: GamepadState = {
   isConnected: false,
+  axisMultiplier: 1,
   A: false,
   B: false,
   X: false,
@@ -46,6 +48,12 @@ export const GamepadInitialState: GamepadState = {
   RightStickY: 0,
   LeftTrigger: 0,
   RightTrigger: 0,
+  '-LeftStickX': 0,
+  '-LeftStickY': 0,
+  '-RightStickX': 0,
+  '-RightStickY': 0,
+  '-LeftTrigger': 0,
+  '-RightTrigger': 0,
 }
 
 export const gamepadEmulator = new GamepadEmulator(0.1)
@@ -62,6 +70,14 @@ export const Axes: Axis[] = [
   'RightStickY',
   'LeftTrigger',
   'RightTrigger',
+]
+export const InvertedAxes: InvertedAxis[] = [
+  '-LeftStickX',
+  '-LeftStickY',
+  '-RightStickX',
+  '-RightStickY',
+  '-LeftTrigger',
+  '-RightTrigger',
 ]
 export const Buttons: Button[] = [
   'A',
@@ -83,5 +99,9 @@ export const Buttons: Button[] = [
 ]
 
 export const isAxis = (value: string): value is Axis => (Axes as readonly string[]).includes(value)
+export const isInvertedAxis = (value: string): value is InvertedAxis =>
+  (InvertedAxes as readonly string[]).includes(value)
+export const isInvertibleAxis = (value: string): value is InvertibleAxis =>
+  isAxis(value) || isInvertedAxis(value)
 export const isButton = (value: string): value is Button =>
   (Buttons as readonly string[]).includes(value)

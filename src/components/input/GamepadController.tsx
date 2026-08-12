@@ -8,6 +8,7 @@ import {
 } from '../../store/inputSlice.js'
 import type {GamepadNames} from '../../constants/gamepadConstants.js'
 import React from 'react'
+import {isLinux} from '../../util/isLinux.js'
 
 const crossPlatformLayout: Layout = {
   buttons: [
@@ -49,18 +50,39 @@ export const GamepadController = ({
       <GamepadComponent
         layout={crossPlatformLayout}
         gamepadIndex={gamepadIndex}
-        deadZone={0.0}
+        deadZone={0.05}
         onConnect={() => dispatch(gamepadConnected({gamepadName}))}
         onDisconnect={() => dispatch(gamepadDisconnected({gamepadName}))}
-        onAxisChange={(axisName: Axis, value: number) =>
+        // Move axis modification to the gamepad controller itself, so there is no discrepancy between slice and middleware
+        onAxisChange={(axisName: Axis, value: number) => {
+          let scaledValue = value
+
+          // linux maps dpad to axes, so map them to buttons
+          // also rescale triggers from [-1,1] -> [0,1], if necessary
+          if (isLinux() && (axisName === 'LeftTrigger' || axisName === 'RightTrigger')) {
+            // bug in linux, trigger values keep jumping to 0.
+            // Rejecting this is ok, since it'll never be *exactly* zero, since that's halfway-pressed
+            if (value !== 0.0) {
+              scaledValue = (value + 1) / 2.0
+            }
+          } else {
+            // Analog stick input squaring
+            scaledValue = value * Math.abs(value)
+          }
+
+          // Deadzoning
+          if (Math.abs(scaledValue) < 0.05 || Math.abs(scaledValue) > 0.95) {
+            scaledValue = Math.round(scaledValue)
+          }
+
           dispatch(
             gamepadAxisChanged({
               gamepadName,
               axisName,
-              value,
+              value: scaledValue,
             })
           )
-        }
+        }}
         onButtonChange={(buttonName: Button, pressed: boolean) =>
           dispatch(
             gamepadButtonChanged({

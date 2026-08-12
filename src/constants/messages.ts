@@ -50,6 +50,11 @@ export type TankDriveRequestMessage = {
   right: number
 }
 
+export type EnableMotorsRequestMessage = {
+  type: 'enableMotorsRequest'
+  enabled: boolean
+}
+
 export type EmergencyStopRequestMessage = {
   type: 'emergencyStopRequest'
   stop: boolean
@@ -122,6 +127,7 @@ export type RequestMessage =
   | DriveRequestMessage
   | TankDriveRequestMessage
   | EmergencyStopRequestMessage
+  | EnableMotorsRequestMessage
   | JointPositionRequestMessage
   | JointPowerRequestMessage
   | OperationModeRequestMessage
