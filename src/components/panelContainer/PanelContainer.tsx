@@ -4,6 +4,7 @@ import {HelpPanel} from '../help/HelpPanel.js'
 import {NavigationPanel} from '../navigation/NavigationPanel.js'
 import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel.js'
 import {MapPanel} from '../map/MapPanel.js'
+import {DriveDisplayPanel} from '../driveDisplay/DriveDisplayPanel.js'
 import './PanelContainer.css'
 import React from 'react'
 
@@ -22,6 +23,8 @@ function PanelContainer() {
         <Route path="/help" element={<HelpPanel />} />
 
         <Route path="/map" element={<MapPanel />} />
+
+        <Route path="/drive-display" element={<DriveDisplayPanel />} />
       </Routes>
     </div>
   )

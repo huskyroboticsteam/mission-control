@@ -1,0 +1,9 @@
+.wheel {
+  width: 45px;
+  height: 80px;
+  background-color: #444;
+  border: 1px solid #888;
+  border-radius: 4px;
+  position: absolute;
+  transition: transform 100ms linear;
+}

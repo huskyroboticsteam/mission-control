@@ -4,6 +4,7 @@ import {
   BackHand as ArmDexterityIcon,
   Info as TelemetryIcon,
   Help as HelpIcon,
+  DirectionsCar as DriveDisplayIcon,
 } from '@mui/icons-material'
 import './Navbar.css'
 import React from 'react'
@@ -25,6 +26,15 @@ export const Navbar = () => {
             className={({isActive}) => (isActive ? 'active' : 'inactive')}>
             <ArmDexterityIcon fontSize="large" className="navbar__icon" />
             Arm Dexterity
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/drive-display"
+            className={({isActive}) => (isActive ? 'active' : 'inactive')}>
+            <DriveDisplayIcon fontSize="large" className="navbar__icon" />
+            Drive Display
           </NavLink>
         </li>
 
