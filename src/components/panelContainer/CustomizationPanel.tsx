@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from 'react'
+type Coordinate = [number, number]
+type ComponentName =
+  | 'cam'
+  | 'compass'
+  | 'gps'
+  | 'waypointlist'
+  | 'waypointnav'
+  | 'driveGP'
+  | 'peripheralGP'
+  | 'keyboard'
+type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
+type PanelKey = 'navigation' | 'armDexterity' | 'help'
+type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 
-interface CustomizationPanelProps {
+type CustomizationPanelProps = {
   components: string[]
-  onSend: (data: number[][]) => void
+  panelKey: PanelKey
+  onSend: (data: (number | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
-}
-
-// populates an array with option elements for the dropdown menus
-function populateArray(num: number) {
-  let arr = []
-  for (let i = 1; i <= num; i++) {
-    arr.push(
-      <option value={i} key={i}>
-        {i}
-      </option>
-    )
-  }
-  return arr
 }
 
 function putInArray(row: number, col: number, arr: number[][], toPut: number) {
@@ -59,11 +60,15 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
 
 // sends array of coordinates back to parent component, will be same indexing as passed components array and
 // have value of -1 if not selected, else will be coordinate in grid where component should be placed
-function CustomizationPanel({components, edit, onSend, defaultSettings}: CustomizationPanelProps) {
+function CustomizationPanel({
+  components,
+  panelKey,
+  edit,
+  onSend,
+  defaultSettings,
+}: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(defaultSettings[0])
   const [numCols, setNumCols] = useState(defaultSettings[1])
-  const [maxNumRows, setmaxNumRows] = useState(populateArray(components.length))
-  const [maxNumCols, setmaxNumCols] = useState(populateArray(components.length))
   const [arr, setArr] = useState(Array<Array<number>>) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
@@ -77,23 +82,21 @@ function CustomizationPanel({components, edit, onSend, defaultSettings}: Customi
     setComponentSelect(selectOptions)
   }, [])
 
-  // updates grid array and the maximum number of rows when number of columns changes
+  // updates grid array when number of columns changes
   useEffect(() => {
     let i = Math.floor(components.length / numCols)
     if (components.length % numCols != 0) {
       i = Math.floor(components.length / numCols) + 1
     }
-    setmaxNumRows(populateArray(i))
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numCols])
 
-  // updates grid array and the maximum number of columns when number of rows changes
+  // updates grid array when number of rows changes
   useEffect(() => {
     let i = Math.floor(components.length / numRows)
     if (components.length % numRows != 0) {
       i = Math.floor(components.length / numRows) + 1
     }
-    setmaxNumCols(populateArray(i))
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numRows])
 
@@ -109,14 +112,24 @@ function CustomizationPanel({components, edit, onSend, defaultSettings}: Customi
         color: 'black',
       }}>
       <h1>Customization Panel</h1>
-      <label htmlFor="row">Rows:</label>
-      <select name="row" value={numRows} onChange={(e) => setNumRows(parseInt(e.target.value))}>
-        {maxNumRows}
-      </select>
-      <label htmlFor="column">Columns:</label>
-      <select name="column" value={numCols} onChange={(e) => setNumCols(parseInt(e.target.value))}>
-        {maxNumCols}
-      </select>
+      <div>
+        <p>Rows:</p>
+        <button onClick={() => setNumRows((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
+        <p>{numRows}</p>
+        <button onClick={() => setNumRows((prev) => (prev < components.length ? prev + 1 : prev))}>
+          &gt;
+        </button>
+      </div>
+
+      <div>
+        <p>Columns:</p>
+        <button onClick={() => setNumCols((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
+        <p>{numCols}</p>
+        <button onClick={() => setNumCols((prev) => (prev < components.length ? prev + 1 : prev))}>
+          &gt;
+        </button>
+      </div>
+
       <table>
         <tbody>
           {arr.map((row, rowIndex) => (
@@ -139,7 +152,7 @@ function CustomizationPanel({components, edit, onSend, defaultSettings}: Customi
           ))}
         </tbody>
       </table>
-      <button onClick={() => onSend(arr)}>Save/Close</button>
+      <button onClick={() => onSend(arr, panelKey)}>Save/Close</button>
     </div>
   )
 }

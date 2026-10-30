@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {CameraStream} from '../camera/CameraStream.js'
-import CustomizationPanel from './CustomizationPanel.js'
+import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import './ArmDexterityPanel.css'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 

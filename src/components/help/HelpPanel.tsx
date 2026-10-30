@@ -17,7 +17,7 @@ import {gamepadAxisChanged, gamepadButtonChanged} from '../../store/inputSlice.j
 import {KeyboardTable} from './KeyboardTable.js'
 import {KeyboardDisplay} from './KeyboardDisplay.js'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
-import CustomizationPanel from '../armDexterity/CustomizationPanel.js'
+import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 
 export const HelpPanel = () => {
   const store = useStore<RootState>()
