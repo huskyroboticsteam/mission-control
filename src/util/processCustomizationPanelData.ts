@@ -1,30 +1,30 @@
 type Coordinate = [number, number]
 
 type ProcessedCustomizationPanelData = {
-  coordinates: Coordinate[][]
+  coordinates: Map<string, Coordinate[]>
   rowNum: number
   colNum: number
 }
 
 export function processCustomizationPanelData(
-  data: (number | null)[][],
+  data: (string | null)[][],
   components: unknown[],
   key: string
 ): ProcessedCustomizationPanelData {
-  const arr: Coordinate[][] = Array.from({length: components.length}, () => [])
+  const coordMap = new Map<string, Coordinate[]>()
 
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data[i].length; j++) {
-      const key = data[i][j]
+      const componentName = data[i][j]
 
-      if (key != null && key !== -1) {
-        arr[key].push([i, j])
+      if (componentName != null && componentName !== "") {
+        coordMap.set(componentName, [...(coordMap.get(componentName) || []), [i, j]])
       }
     }
   }
 
   return {
-    coordinates: arr,
+    coordinates: coordMap,
     rowNum: data.length,
     colNum: data[0].length,
   }

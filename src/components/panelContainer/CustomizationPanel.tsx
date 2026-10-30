@@ -16,28 +16,28 @@ type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 type CustomizationPanelProps = {
   components: string[]
   panelKey: PanelKey
-  onSend: (data: (number | null)[][], key: PanelKey) => void
+  onSend: (data: (string | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
 }
 
-function putInArray(row: number, col: number, arr: number[][], toPut: number) {
+function putInArray(row: number, col: number, arr: string[][], toPut: string) {
   const arrCopy = arr.map((row) => [...row])
   arrCopy[row][col] = toPut
   return arrCopy
 }
 
 // helper function to manage the array (representing the grid) state
-function resize2DArray(rows: number, cols: number, arr: number[][]) {
+function resize2DArray(rows: number, cols: number, arr: string[][]) {
   const arrCopy = arr.map((row) => [...row])
   // Case 1: row is less than current array row length - slice extra rows off
   if (rows < arr.length) {
     arrCopy.splice(rows, arr.length - rows)
   }
-  // Case 2: row is greater than current array row length - add new rows to end (fill w/ -1)
+  // Case 2: row is greater than current array row length - add new rows to end (remains empty)
   else if (rows > arr.length) {
     for (let i = arrCopy.length; i < rows; i++) {
-      arrCopy.push(Array(cols).fill(-1))
+      arrCopy.push(Array(cols).fill(""))
     }
   }
   // Case 3: col is less than current array col length - slice extra cols off
@@ -46,11 +46,11 @@ function resize2DArray(rows: number, cols: number, arr: number[][]) {
       arrCopy[i].splice(cols, arrCopy[i].length - cols)
     }
   }
-  // Case 4: col is greater than current array col length - add new cols to end (fill w/ -1)
+  // Case 4: col is greater than current array col length - add new cols to end (remains empty)
   else if (arr.length != 0 && cols > arrCopy[0].length) {
     for (let i = 0; i < arrCopy.length; i++) {
       for (let j = arrCopy[i].length; j < cols; j++) {
-        arrCopy[i].push(-1)
+        arrCopy[i].push("")
       }
     }
   }
@@ -69,13 +69,13 @@ function CustomizationPanel({
 }: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(defaultSettings[0])
   const [numCols, setNumCols] = useState(defaultSettings[1])
-  const [arr, setArr] = useState(Array<Array<number>>) // grid array
+  const [arr, setArr] = useState(Array<Array<string>>()) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
   // sets up component options
   useEffect(() => {
     const selectOptions = components.map((component, index) => (
-      <option value={index} key={index}>
+      <option value={component} key={index}>
         {component}
       </option>
     ))
@@ -140,7 +140,7 @@ function CustomizationPanel({
                     value={cell}
                     onChange={(e) =>
                       setArr((prev) =>
-                        putInArray(rowIndex, colIndex, prev, parseInt(e.target.value))
+                        putInArray(rowIndex, colIndex, prev, e.target.value)
                       )
                     }>
                     <option value={-1} key={-1}></option>
