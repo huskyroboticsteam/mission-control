@@ -21,11 +21,12 @@ function PanelContainer() {
     | 'driveGP'
     | 'peripheralGP'
     | 'keyboard'
+    | ''
   type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
   type PanelKey = 'navigation' | 'armDexterity' | 'help'
   type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 
-  const components = [
+  const components: ComponentName[] = [
     'cam',
     'compass',
     'gps',
@@ -34,6 +35,7 @@ function PanelContainer() {
     'driveGP',
     'peripheralGP',
     'keyboard',
+    '',
   ]
   // layouts holds the default num of rows/cols for each panel for layout customization
   // ex. layouts[navigation] = [2,3] means the navigation panel has 2 rows and 3 cols by default
@@ -124,10 +126,10 @@ function PanelContainer() {
     armDexterity: false,
     help: false,
   })
-  type mapValue = [number, number] | number | boolean | Map<string, [[number, number]] | null>
-  const handleChildData = (data: (string | null)[][], key: PanelKey) => {
+  type mapValue = [number, number] | number | boolean | Record<ComponentName, Coordinate[] | null>
+  const handleChildData = (data: (ComponentName | null)[][], key: PanelKey) => {
     const processedData = processCustomizationPanelData(data)
-    updateMapKey(key, processedData.coordinates, setCoordinates);
+    //updateMapKey(key, processedData.coordinates, setCoordinates);
     //setRowNum(processedData.rowNum)
     //setColNum(processedData.colNum)
     setEditStatus((prev) => ({

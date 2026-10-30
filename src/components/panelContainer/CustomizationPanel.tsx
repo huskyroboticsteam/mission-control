@@ -9,6 +9,7 @@ type ComponentName =
   | 'driveGP'
   | 'peripheralGP'
   | 'keyboard'
+  | ''
 type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
 type PanelKey = 'navigation' | 'armDexterity' | 'help'
 type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
@@ -16,19 +17,19 @@ type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 type CustomizationPanelProps = {
   components: ComponentName[]
   panelKey: PanelKey
-  onSend: (data: (string | null)[][], key: PanelKey) => void
+  onSend: (data: (ComponentName | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
 }
 
-function putInArray(row: number, col: number, arr: string[][], toPut: string) {
+function putInArray(row: number, col: number, arr: ComponentName[][], toPut: ComponentName) {
   const arrCopy = arr.map((row) => [...row])
   arrCopy[row][col] = toPut
   return arrCopy
 }
 
 // helper function to manage the array (representing the grid) state
-function resize2DArray(rows: number, cols: number, arr: string[][]) {
+function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
   const arrCopy = arr.map((row) => [...row])
   // Case 1: row is less than current array row length - slice extra rows off
   if (rows < arr.length) {
@@ -69,7 +70,7 @@ function CustomizationPanel({
 }: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(defaultSettings[0])
   const [numCols, setNumCols] = useState(defaultSettings[1])
-  const [arr, setArr] = useState(Array<Array<string>>()) // grid array
+  const [arr, setArr] = useState(Array<Array<ComponentName>>()) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
   // sets up component options
@@ -140,7 +141,7 @@ function CustomizationPanel({
                     value={cell}
                     onChange={(e) =>
                       setArr((prev) =>
-                        putInArray(rowIndex, colIndex, prev, e.target.value)
+                        putInArray(rowIndex, colIndex, prev, e.target.value as ComponentName)
                       )
                     }>
                     <option value={-1} key={-1}></option>
