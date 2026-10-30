@@ -1,24 +1,31 @@
 type Coordinate = [number, number]
 
 type ProcessedCustomizationPanelData = {
-  coordinates: Map<string, Coordinate[]>
+  coordinates: Record<string, Coordinate[]>
   rowNum: number
   colNum: number
 }
+type ComponentName =
+    | 'cam'
+    | 'compass'
+    | 'gps'
+    | 'waypointlist'
+    | 'waypointnav'
+    | 'driveGP'
+    | 'peripheralGP'
+    | 'keyboard'
+    | ''
 
 export function processCustomizationPanelData(
-  data: (string | null)[][],
-  components: unknown[],
-  key: string
+  data: (ComponentName | null)[][],
 ): ProcessedCustomizationPanelData {
-  const coordMap = new Map<string, Coordinate[]>()
-
+  const coordMap: Partial<Record<ComponentName, Coordinate[]>> = {};
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data[i].length; j++) {
       const componentName = data[i][j]
 
       if (componentName != null && componentName !== "") {
-        coordMap.set(componentName, [...(coordMap.get(componentName) || []), [i, j]])
+        coordMap[componentName] = [...(coordMap[componentName] || []), [i, j]]
       }
     }
   }

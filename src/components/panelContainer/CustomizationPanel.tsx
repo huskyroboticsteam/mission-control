@@ -14,7 +14,7 @@ type PanelKey = 'navigation' | 'armDexterity' | 'help'
 type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 
 type CustomizationPanelProps = {
-  components: string[]
+  components: ComponentName[]
   panelKey: PanelKey
   onSend: (data: (string | null)[][], key: PanelKey) => void
   edit: boolean

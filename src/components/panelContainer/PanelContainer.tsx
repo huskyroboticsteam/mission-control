@@ -126,8 +126,8 @@ function PanelContainer() {
   })
   type mapValue = [number, number] | number | boolean | Map<string, [[number, number]] | null>
   const handleChildData = (data: (string | null)[][], key: PanelKey) => {
-    const processedData = processCustomizationPanelData(data, components, key)
-    //updateMapKey(key, processedData.coordinates, setCoordinates);
+    const processedData = processCustomizationPanelData(data)
+    updateMapKey(key, processedData.coordinates, setCoordinates);
     //setRowNum(processedData.rowNum)
     //setColNum(processedData.colNum)
     setEditStatus((prev) => ({
