@@ -8,7 +8,19 @@ import {WaypointNav} from './WaypointNav.js'
 import {useState} from 'react'
 import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
-import Keyboard from 'react-simple-keyboard'
+import {KeyboardTable} from '../help/KeyboardTable.js'
+import {KeyboardDisplay} from '../help/KeyboardDisplay.js'
+import {Gamepad} from '../help/Gamepad.js'
+import {GamepadTable} from '../help/GamepadTable.js'
+import {
+  Axes,
+  Buttons,
+  gamepadApiWrapper,
+  GamepadIndex,
+  GamepadNames,
+  Gamepads,
+} from '../../constants/gamepadConstants.js'
+
  type Coordinate = [number, number]
   type ComponentName =
     | 'cam'
@@ -43,47 +55,75 @@ export const NavigationPanel = ({coordinateData, rowData, colData}: {coordinateD
         gridTemplateRows: `repeat(${rowData}, 1fr)`,
         gridTemplateColumns: `repeat(${colData}, 1fr)`,
       }}>
-      {coordinateData['cam']?.length > 0 &&
-        coordinateData['cam'].map((coord) => (
+      {(coordinateData['cam'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <CameraStream camera="mast" />
           </div>
         ))}
-      {coordinateData['compass']?.length > 0 &&
-        coordinateData['compass'].map((coord) => (
+      {(coordinateData['compass'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <CameraStream camera="hand" />
             <Compass />
           </div>
         ))}
-      {coordinateData['waypointlist']?.length > 0 &&
-        coordinateData['waypointlist'].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <CameraStream camera="wrist" />
-          </div>
-        ))}
-      {coordinateData['waypointlist']?.length > 0 &&
-        coordinateData['waypointlist'].map((coord) => (
+      {(coordinateData['waypointlist'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <WaypointList />
           </div>
         ))}
-      {coordinateData['waypointnav']?.length > 0 &&
-        coordinateData['waypointnav'].map((coord) => (
+      {(coordinateData['waypointnav'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <WaypointNav />
           </div>
         ))}
-      {coordinateData['peripheralGP']?.length > 0 &&
-        coordinateData['peripheralGP'].map((coord) => (
+      {(coordinateData['driveGP'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <PeripheralGP />
+            <div
+                        className="drive-gpad"
+                        style={{
+                          gridColumn: `${coord[1] + 1}`,
+                          gridRow: `${coord[0] + 1}`,
+                        }}>
+                        <GamepadTable gamepadName={GamepadNames.driveGamepad} />
+                        <div className="g1-text-wrapper">
+                          <b className="label">Driver Gamepad</b>
+                          <Gamepad index={GamepadIndex.driveGamepad} />
+                        </div>
+                      </div>
           </div>
         ))}
-      {coordinateData['keyboard']?.length > 0 &&
-        coordinateData['keyboard'].map((coord) => (
+        {(coordinateData['peripheralGP'] ?? []).map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <Keyboard />
+            <div
+                        className="peripheral-gpad"
+                        style={{
+                          gridColumn: `${coord[1] + 1}`,
+                          gridRow: `${coord[0] + 1}`,
+                        }}>
+                        <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
+                        <div className="g2-text-wrapper">
+                          <b className="label">Peripheral Gamepad</b>
+                          <Gamepad index={GamepadIndex.peripheralGamepad} />
+                        </div>
+                      </div>
+          </div>
+        ))}
+
+
+      {(coordinateData['keyboard'] ?? []).map((coord) => (
+          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+            <div
+                        className="keyboard-container"
+                        style={{
+                          gridColumn: `${coord[1] + 1}/-1`,
+                          gridRow: `${coord[0] + 1}`,
+                          alignSelf: 'center',
+                        }}>
+                        <KeyboardTable />
+                        <div className="keyboard">
+                          <b className="label">Keyboard Controls</b>
+                          <KeyboardDisplay />
+                        </div>
+                      </div>
           </div>
         ))}
     </div>

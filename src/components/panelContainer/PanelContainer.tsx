@@ -46,18 +46,13 @@ function PanelContainer() {
         [1, 0],
       ],
       compass: [
-        [0, 2],
-        [1, 2],
+        [0, 2]
       ],
       waypointlist: [
-        [0, 0],
-        [0, 1],
-        [1, 0],
+        [1, 1],
       ],
       waypointnav: [
-        [0, 0],
-        [0, 1],
-        [1, 0],
+        [1, 2]
       ],
       driveGP: null,
       peripheralGP: null,
