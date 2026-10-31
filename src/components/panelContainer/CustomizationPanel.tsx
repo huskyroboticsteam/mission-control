@@ -14,11 +14,34 @@ type PanelKey = 'navigation' | 'armDexterity' | 'help'
 type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 
 type CustomizationPanelProps = {
+  prevCoordinates: Record<ComponentName, Coordinate[] | null>
   components: ComponentName[]
   panelKey: PanelKey
   onSend: (data: (ComponentName | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
+}
+
+function convertComponentToCoordMap(
+  prevCoordinates: Record<ComponentName, Coordinate[] | null>,
+  numRows: number,
+  numCols: number,
+): Array<Array<ComponentName>> {
+  const rows = numRows; // adjust to your grid size
+  const cols = numCols;
+
+  const arr: Array<Array<ComponentName>> = Array.from(
+    { length: rows },
+    () => Array(cols).fill("" as ComponentName)
+  );
+
+  Object.entries(prevCoordinates).forEach(([component, coordinates]) => {
+    coordinates?.forEach(([row, col]) => {
+      arr[row][col] = component as ComponentName;
+    });
+  });
+
+  return arr;
 }
 
 function putInArray(row: number, col: number, arr: ComponentName[][], toPut: ComponentName) {
@@ -61,6 +84,7 @@ function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
 // sends array of coordinates back to parent component, will be same indexing as passed components array and
 // have value of -1 if not selected, else will be coordinate in grid where component should be placed
 function CustomizationPanel({
+  prevCoordinates,
   components,
   panelKey,
   edit,
@@ -69,7 +93,7 @@ function CustomizationPanel({
 }: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(defaultSettings[0])
   const [numCols, setNumCols] = useState(defaultSettings[1])
-  const [arr, setArr] = useState(Array<Array<ComponentName>>()) // grid array
+  const [arr, setArr] = useState<Array<Array<ComponentName>>>(convertComponentToCoordMap(prevCoordinates, numRows, numCols)) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
   // sets up component options

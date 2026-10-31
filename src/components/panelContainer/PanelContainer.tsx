@@ -111,7 +111,6 @@ function PanelContainer() {
     armDexterity: false,
     help: false,
   })
-  type mapValue = [number, number] | number | boolean | Record<ComponentName, Coordinate[] | null>
   const handleChildData = (data: (ComponentName | null)[][], key: PanelKey) => {
     const processedData = processCustomizationPanelData(data)
     updateMapKey(key, processedData.coordinates, setCoordinates);
@@ -180,6 +179,7 @@ function PanelContainer() {
                 )}
                 {editStatus.navigation && (
                   <CustomizationPanel
+                    prevCoordinates={coordinates.navigation}
                     onSend={(data) => handleChildData(data, 'navigation')}
                     components={components}
                     panelKey="navigation"
