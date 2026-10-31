@@ -6,7 +6,7 @@ import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel.js'
 import {MapPanel} from '../map/MapPanel.js'
 import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import './PanelContainer.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 import {useState} from 'react'
 
@@ -40,7 +40,7 @@ function PanelContainer() {
   // layouts holds the default num of rows/cols for each panel for layout customization
   // ex. layouts[navigation] = [2,3] means the navigation panel has 2 rows and 3 cols by default
   const [layouts, setLayouts] = useState({navigation: [2, 3], armDexterity: [1, 2], help: [2, 2]})
-  const [coordinates, setCoordinates] = useState({
+  const [coordinates, setCoordinates] = useState<Record<PanelKey,Record<ComponentName, Coordinate[] | null>>>({
     navigation: {
       cam: [
         [0, 0],
@@ -69,6 +69,7 @@ function PanelContainer() {
       driveGP: null,
       peripheralGP: null,
       keyboard: null,
+      '': null,
     },
     armDexterity: {
       cam: [
@@ -98,6 +99,7 @@ function PanelContainer() {
       driveGP: null,
       peripheralGP: null,
       keyboard: null,
+      '': null,
     },
     help: {
       cam: null,
@@ -108,6 +110,7 @@ function PanelContainer() {
       driveGP: [[0, 0]],
       peripheralGP: [[0, 1]],
       keyboard: [[1, 0]],
+      '': null,
     },
   })
 
@@ -129,15 +132,17 @@ function PanelContainer() {
   type mapValue = [number, number] | number | boolean | Record<ComponentName, Coordinate[] | null>
   const handleChildData = (data: (ComponentName | null)[][], key: PanelKey) => {
     const processedData = processCustomizationPanelData(data)
-    //updateMapKey(key, processedData.coordinates, setCoordinates);
-    //setRowNum(processedData.rowNum)
-    //setColNum(processedData.colNum)
+    updateMapKey(key, processedData.coordinates, setCoordinates);
+    updateRowColNum(key, processedData.rowNum, processedData.colNum, setRowNum, setColNum)
     setEditStatus((prev) => ({
       ...prev,
       [key]: false,
     }))
-    console.log('Processed Data:', processedData)
   }
+
+  useEffect(() => {
+    console.log('Coordinates updated:', coordinates)
+  }, [coordinates])
 
   const updateMapKey = (
     key: PanelKey,
@@ -147,6 +152,23 @@ function PanelContainer() {
     setCoordinates((prev) => ({
       ...prev,
       [key]: newValue,
+    }))
+  }
+
+  const updateRowColNum = (
+    key: PanelKey,
+    rowNum: number,
+    colNum: number,
+    setRowNum: React.Dispatch<React.SetStateAction<Record<PanelKey, number>>>,
+    setColNum: React.Dispatch<React.SetStateAction<Record<PanelKey, number>>>
+  ) => {
+    setRowNum((prev) => ({
+      ...prev,
+      [key]: rowNum,
+    }))
+    setColNum((prev) => ({
+      ...prev,
+      [key]: colNum,
     }))
   }
   return (
