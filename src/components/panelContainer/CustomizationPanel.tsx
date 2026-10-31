@@ -3,7 +3,6 @@ type Coordinate = [number, number]
 type ComponentName =
   | 'cam'
   | 'compass'
-  | 'gps'
   | 'waypointlist'
   | 'waypointnav'
   | 'driveGP'

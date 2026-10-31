@@ -15,7 +15,6 @@ function PanelContainer() {
   type ComponentName =
     | 'cam'
     | 'compass'
-    | 'gps'
     | 'waypointlist'
     | 'waypointnav'
     | 'driveGP'
@@ -29,7 +28,6 @@ function PanelContainer() {
   const components: ComponentName[] = [
     'cam',
     'compass',
-    'gps',
     'waypointlist',
     'waypointnav',
     'driveGP',
@@ -50,11 +48,6 @@ function PanelContainer() {
       compass: [
         [0, 2],
         [1, 2],
-      ],
-      gps: [
-        [0, 0],
-        [0, 1],
-        [1, 0],
       ],
       waypointlist: [
         [0, 0],
@@ -81,11 +74,6 @@ function PanelContainer() {
         [0, 2],
         [1, 2],
       ],
-      gps: [
-        [0, 0],
-        [0, 1],
-        [1, 0],
-      ],
       waypointlist: [
         [0, 0],
         [0, 1],
@@ -104,7 +92,6 @@ function PanelContainer() {
     help: {
       cam: null,
       compass: null,
-      gps: null,
       waypointlist: null,
       waypointnav: null,
       driveGP: [[0, 0]],
@@ -179,7 +166,7 @@ function PanelContainer() {
           path="/navigation"
           element={
             <>
-              <NavigationPanel />
+              <NavigationPanel coordinateData = {coordinates.navigation} rowData = {rowNum.navigation} colData = {colNum.navigation} />
               <div
                 className="customization-container"
                 style={{

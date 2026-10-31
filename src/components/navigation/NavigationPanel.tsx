@@ -4,76 +4,86 @@ import Compass from './Compass.js'
 import './NavigationPanel.css'
 import {WaypointList} from './WaypointList.js'
 import {WaypointNav} from './WaypointNav.js'
+
 import {useState} from 'react'
 import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
+import Keyboard from 'react-simple-keyboard'
+ type Coordinate = [number, number]
+  type ComponentName =
+    | 'cam'
+    | 'compass'
+    | 'waypointlist'
+    | 'waypointnav'
+    | 'driveGP'
+    | 'peripheralGP'
+    | 'keyboard'
+    | ''
+  type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
+  type PanelKey = 'navigation' | 'armDexterity' | 'help'
+  type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
 
-export const NavigationPanel = () => {
-  const defaultSettings = [2, 3]
-  const components = ['mast', 'hand', 'compass', 'wrist', 'waypointlist', 'waypointnav']
-  const [rowNum, setRowNum] = useState(defaultSettings[0])
-  const [colNum, setColNum] = useState(defaultSettings[1])
-  // holds corresponding coordinates for where each component should be
-  const [coordinates, setCoordinates] = useState([
-    [[0, 0]],
-    [[0, 1]],
-    [[0, 2]],
-    [[1, 0]],
-    [[1, 1]],
-    [[1, 2]],
-  ])
-  const [edit, setEdit] = useState(false)
-
-  const handleChildData = (data: (number | null)[][]): void => {
-    const processedData = processCustomizationPanelData(data, components)
-    setCoordinates(processedData.coordinates)
-    setRowNum(processedData.rowNum)
-    setColNum(processedData.colNum)
-    setEdit(false)
-  }
+  const components: ComponentName[] = [
+    'cam',
+    'compass',
+    'waypointlist',
+    'waypointnav',
+    'driveGP',
+    'peripheralGP',
+    'keyboard',
+    '',
+  ]
+export const NavigationPanel = ({coordinateData, rowData, colData}: {coordinateData: Record<ComponentName, Coordinate[] | null>, rowData: number, colData: number}) => {
 
   return (
     <div
       className="navigation-panel"
       style={{
         display: 'grid',
-        gridTemplateRows: `repeat(${rowNum}, 1fr)`,
-        gridTemplateColumns: `repeat(${colNum}, 1fr)`,
+        gridTemplateRows: `repeat(${rowData}, 1fr)`,
+        gridTemplateColumns: `repeat(${colData}, 1fr)`,
       }}>
-      {coordinates[0]?.length > 0 &&
-        coordinates[0].map((coord) => (
+      {coordinateData['cam']?.length > 0 &&
+        coordinateData['cam'].map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <CameraStream camera="mast" />
           </div>
         ))}
-      {coordinates[1]?.length > 0 &&
-        coordinates[1].map((coord) => (
+      {coordinateData['compass']?.length > 0 &&
+        coordinateData['compass'].map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <CameraStream camera="hand" />
-          </div>
-        ))}
-      {coordinates[2]?.length > 0 &&
-        coordinates[2].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <Compass />
           </div>
         ))}
-      {coordinates[3]?.length > 0 &&
-        coordinates[3].map((coord) => (
+      {coordinateData['waypointlist']?.length > 0 &&
+        coordinateData['waypointlist'].map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <CameraStream camera="wrist" />
           </div>
         ))}
-      {coordinates[4]?.length > 0 &&
-        coordinates[4].map((coord) => (
+      {coordinateData['waypointlist']?.length > 0 &&
+        coordinateData['waypointlist'].map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <WaypointList />
           </div>
         ))}
-      {coordinates[5]?.length > 0 &&
-        coordinates[5].map((coord) => (
+      {coordinateData['waypointnav']?.length > 0 &&
+        coordinateData['waypointnav'].map((coord) => (
           <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
             <WaypointNav />
+          </div>
+        ))}
+      {coordinateData['peripheralGP']?.length > 0 &&
+        coordinateData['peripheralGP'].map((coord) => (
+          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+            <PeripheralGP />
+          </div>
+        ))}
+      {coordinateData['keyboard']?.length > 0 &&
+        coordinateData['keyboard'].map((coord) => (
+          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+            <Keyboard />
           </div>
         ))}
     </div>
