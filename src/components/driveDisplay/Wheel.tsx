@@ -12,7 +12,9 @@ export const Wheel = ({
 }) => {
   return (
     <div className={`wheel-module ${className}`}>
-      <div className="wheel" style={{transform: `rotate(${steerDeg}deg)`}}></div>
+      <div className="wheel" style={{transform: `rotate(${steerDeg}deg)`}}>
+        <div className="wheel-arrow">▲</div>
+      </div>
       <div className="wheel-readout">
         <div>steer: {steerDeg.toFixed(2)}°</div>
         <div>spin: {spinRadPerSec.toFixed(2)} rad/s</div>
