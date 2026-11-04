@@ -180,6 +180,8 @@ function PanelContainer() {
                 {editStatus.navigation && (
                   <CustomizationPanel
                     prevCoordinates={coordinates.navigation}
+                    numRowsP={rowNum.navigation}
+                    numColsP={colNum.navigation}
                     onSend={(data) => handleChildData(data, 'navigation')}
                     components={components}
                     panelKey="navigation"

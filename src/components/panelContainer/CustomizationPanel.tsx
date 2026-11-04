@@ -17,6 +17,8 @@ type CustomizationPanelProps = {
   prevCoordinates: Record<ComponentName, Coordinate[] | null>
   components: ComponentName[]
   panelKey: PanelKey
+  numRowsP: number
+  numColsP: number
   onSend: (data: (ComponentName | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
@@ -37,6 +39,9 @@ function convertComponentToCoordMap(
 
   Object.entries(prevCoordinates).forEach(([component, coordinates]) => {
     coordinates?.forEach(([row, col]) => {
+      if (!arr[row]){
+        arr[row] = Array(cols).fill("" as ComponentName)
+      }
       arr[row][col] = component as ComponentName;
     });
   });
@@ -87,12 +92,13 @@ function CustomizationPanel({
   prevCoordinates,
   components,
   panelKey,
+  numRowsP,
+  numColsP,
   edit,
   onSend,
-  defaultSettings,
 }: CustomizationPanelProps) {
-  const [numRows, setNumRows] = useState(defaultSettings[0])
-  const [numCols, setNumCols] = useState(defaultSettings[1])
+  const [numRows, setNumRows] = useState(numRowsP)
+  const [numCols, setNumCols] = useState(numColsP)
   const [arr, setArr] = useState<Array<Array<ComponentName>>>(convertComponentToCoordMap(prevCoordinates, numRows, numCols)) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
