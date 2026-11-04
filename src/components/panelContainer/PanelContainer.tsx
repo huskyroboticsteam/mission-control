@@ -6,7 +6,7 @@ import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel.js'
 import {MapPanel} from '../map/MapPanel.js'
 import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import './PanelContainer.css'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 import {useState} from 'react'
 
@@ -38,22 +38,18 @@ function PanelContainer() {
   // layouts holds the default num of rows/cols for each panel for layout customization
   // ex. layouts[navigation] = [2,3] means the navigation panel has 2 rows and 3 cols by default
   const [layouts, setLayouts] = useState({navigation: [2, 3], armDexterity: [1, 2], help: [2, 2]})
-  const [coordinates, setCoordinates] = useState<Record<PanelKey,Record<ComponentName, Coordinate[] | null>>>({
+  const [coordinates, setCoordinates] = useState<
+    Record<PanelKey, Record<ComponentName, Coordinate[] | null>>
+  >({
     navigation: {
       cam: [
         [0, 0],
         [0, 1],
         [1, 0],
       ],
-      compass: [
-        [0, 2]
-      ],
-      waypointlist: [
-        [1, 1],
-      ],
-      waypointnav: [
-        [1, 2]
-      ],
+      compass: [[0, 2]],
+      waypointlist: [[1, 1]],
+      waypointnav: [[1, 2]],
       driveGP: null,
       peripheralGP: null,
       keyboard: null,
@@ -113,7 +109,7 @@ function PanelContainer() {
   })
   const handleChildData = (data: (ComponentName | null)[][], key: PanelKey) => {
     const processedData = processCustomizationPanelData(data)
-    updateMapKey(key, processedData.coordinates, setCoordinates);
+    updateMapKey(key, processedData.coordinates, setCoordinates)
     updateRowColNum(key, processedData.rowNum, processedData.colNum, setRowNum, setColNum)
     setEditStatus((prev) => ({
       ...prev,
@@ -160,7 +156,11 @@ function PanelContainer() {
           path="/navigation"
           element={
             <>
-              <NavigationPanel coordinateData = {coordinates.navigation} rowData = {rowNum.navigation} colData = {colNum.navigation} />
+              <NavigationPanel
+                coordinateData={coordinates.navigation}
+                rowData={rowNum.navigation}
+                colData={colNum.navigation}
+              />
               <div
                 className="customization-container"
                 style={{

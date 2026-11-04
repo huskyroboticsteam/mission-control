@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {getItem, setItem} from '../../util/localStorage.js'
 type Coordinate = [number, number]
 type ComponentName =
   | 'cam'
@@ -27,26 +28,25 @@ type CustomizationPanelProps = {
 function convertComponentToCoordMap(
   prevCoordinates: Record<ComponentName, Coordinate[] | null>,
   numRows: number,
-  numCols: number,
+  numCols: number
 ): Array<Array<ComponentName>> {
-  const rows = numRows; // adjust to your grid size
-  const cols = numCols;
+  const rows = numRows // adjust to your grid size
+  const cols = numCols
 
-  const arr: Array<Array<ComponentName>> = Array.from(
-    { length: rows },
-    () => Array(cols).fill("" as ComponentName)
-  );
+  const arr: Array<Array<ComponentName>> = Array.from({length: rows}, () =>
+    Array(cols).fill('' as ComponentName)
+  )
 
   Object.entries(prevCoordinates).forEach(([component, coordinates]) => {
     coordinates?.forEach(([row, col]) => {
-      if (!arr[row]){
-        arr[row] = Array(cols).fill("" as ComponentName)
+      if (!arr[row]) {
+        arr[row] = Array(cols).fill('' as ComponentName)
       }
-      arr[row][col] = component as ComponentName;
-    });
-  });
+      arr[row][col] = component as ComponentName
+    })
+  })
 
-  return arr;
+  return arr
 }
 
 function putInArray(row: number, col: number, arr: ComponentName[][], toPut: ComponentName) {
@@ -65,7 +65,7 @@ function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
   // Case 2: row is greater than current array row length - add new rows to end (remains empty)
   else if (rows > arr.length) {
     for (let i = arrCopy.length; i < rows; i++) {
-      arrCopy.push(Array(cols).fill(""))
+      arrCopy.push(Array(cols).fill(''))
     }
   }
   // Case 3: col is less than current array col length - slice extra cols off
@@ -78,7 +78,7 @@ function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
   else if (arr.length != 0 && cols > arrCopy[0].length) {
     for (let i = 0; i < arrCopy.length; i++) {
       for (let j = arrCopy[i].length; j < cols; j++) {
-        arrCopy[i].push("")
+        arrCopy[i].push('')
       }
     }
   }
@@ -99,7 +99,9 @@ function CustomizationPanel({
 }: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(numRowsP)
   const [numCols, setNumCols] = useState(numColsP)
-  const [arr, setArr] = useState<Array<Array<ComponentName>>>(convertComponentToCoordMap(prevCoordinates, numRows, numCols)) // grid array
+  const [arr, setArr] = useState<Array<Array<ComponentName>>>(
+    convertComponentToCoordMap(prevCoordinates, numRows, numCols)
+  ) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
 
   // sets up component options
@@ -142,16 +144,14 @@ function CustomizationPanel({
         color: 'black',
       }}>
       <h1>Customization Panel</h1>
-      <div>
+      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
         <p>Rows:</p>
         <button onClick={() => setNumRows((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
         <p>{numRows}</p>
         <button onClick={() => setNumRows((prev) => (prev < components.length ? prev + 1 : prev))}>
           &gt;
         </button>
-      </div>
 
-      <div>
         <p>Columns:</p>
         <button onClick={() => setNumCols((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
         <p>{numCols}</p>
@@ -182,7 +182,7 @@ function CustomizationPanel({
           ))}
         </tbody>
       </table>
-      <button onClick={() => onSend(arr, panelKey)}>Save/Close</button>
+      <button onClick={() => onSend(arr, panelKey)}>Set</button>
     </div>
   )
 }

@@ -44,6 +44,8 @@ export const ArmDexterityPanel = () => {
         className="customization-container"
         style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}>
         <CustomizationPanel
+          numRowsP={rowNum}
+          numColsP={colNum}
           onSend={handleChildData}
           components={components}
           edit={edit}
