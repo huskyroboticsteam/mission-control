@@ -103,6 +103,7 @@ function CustomizationPanel({
     convertComponentToCoordMap(prevCoordinates, numRows, numCols)
   ) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
+  const [currLayoutName, setCurrLayoutName] = useState('')
 
   // sets up component options
   useEffect(() => {
@@ -132,6 +133,48 @@ function CustomizationPanel({
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numRows])
 
+  setItem('labubu world domination', prevCoordinates.toString())
+
+// Convert layout to string
+// layout structure: first line is numRows, numCols
+//                   remaining lines are formatted like coordinate : component 
+//                   new line for each coord mapping
+  function convertToString(layoutToSave : Array<Array<ComponentName>> ) : string {
+    let s = layoutToSave.length + "," + layoutToSave[0].length + "\n";
+    for (let i = 0; i < layoutToSave.length; i++) {
+      for (let j = 0; j < layoutToSave[i].length; j++) {
+        if (layoutToSave[i][j] !== "") {
+          s += i +"," + j + ":" + layoutToSave[i][j]
+          s += "\n"
+        }
+      }
+      
+    }
+    return s
+  }
+
+  useEffect(() => {
+    console.log(arr)
+  }, [arr])
+
+  // convert string to layout (2d array map of components)
+  function convertStringToLayout(layoutString : string) : Array<Array<ComponentName>> {
+    const lines = layoutString.split("\n")
+    const [numRows, numCols] = lines[0].split(",").map(Number)
+    const layout: ComponentName[][] = Array.from({ length: numRows }, () => 
+  Array.from({ length: numCols }, () => "")
+    );
+
+    for (let i = 1; i < lines.length; i++) {
+      const [coords, component] = lines[i].split(":")
+      const [row, col] = coords.split(",").map(Number)
+      if (!(row === undefined || col === undefined || component === undefined)) {
+       layout[row][col] = component as ComponentName
+      }
+    }
+    return layout
+  }
+
   return (
     <div
       style={{
@@ -144,6 +187,12 @@ function CustomizationPanel({
         color: 'black',
       }}>
       <h1>Customization Panel</h1>
+      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+      <p>Saved Layouts: </p>
+      <select>
+        <option value="">Select a saved layout</option>
+      </select>
+      </div>
       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
         <p>Rows:</p>
         <button onClick={() => setNumRows((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
@@ -183,6 +232,8 @@ function CustomizationPanel({
         </tbody>
       </table>
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
+      <button>Save Layout </button>
+      
     </div>
   )
 }

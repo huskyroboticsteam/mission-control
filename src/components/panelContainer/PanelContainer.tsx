@@ -117,10 +117,6 @@ function PanelContainer() {
     }))
   }
 
-  useEffect(() => {
-    console.log('Coordinates updated:', coordinates)
-  }, [coordinates])
-
   const updateMapKey = (
     key: PanelKey,
     newValue: ComponentCoordinates,
