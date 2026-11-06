@@ -165,6 +165,12 @@ console.log("COMPONENT RENDERED");
     return layout
   }
 
+  function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string) {
+    const layoutString = convertToString(layoutToSave)
+    name = "Nav: " + name
+    setItem(name, layoutString)
+  }
+
   return (
     <div
       style={{
@@ -222,7 +228,7 @@ console.log("COMPONENT RENDERED");
         </tbody>
       </table>
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
-      <button>Save Layout </button>
+      <button onClick={() => saveLayout(arr, 'My Layout')}>Save Layout </button>
       
     </div>
   )
