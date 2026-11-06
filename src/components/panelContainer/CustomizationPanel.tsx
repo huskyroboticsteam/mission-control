@@ -115,23 +115,11 @@ function CustomizationPanel({
     setComponentSelect(selectOptions)
   }, [])
 
-  // updates grid array when number of columns changes
+  // updates grid array when number of columns or rows changes
   useEffect(() => {
-    let i = Math.floor(components.length / numCols)
-    if (components.length % numCols != 0) {
-      i = Math.floor(components.length / numCols) + 1
-    }
     setArr((prev) => resize2DArray(numRows, numCols, prev))
-  }, [numCols])
+  }, [numCols, numRows])
 
-  // updates grid array when number of rows changes
-  useEffect(() => {
-    let i = Math.floor(components.length / numRows)
-    if (components.length % numRows != 0) {
-      i = Math.floor(components.length / numRows) + 1
-    }
-    setArr((prev) => resize2DArray(numRows, numCols, prev))
-  }, [numRows])
 
   setItem('labubu world domination', prevCoordinates.toString())
 
@@ -153,9 +141,11 @@ function CustomizationPanel({
     return s
   }
 
-  useEffect(() => {
-    console.log(arr)
-  }, [arr])
+ useEffect(() => {
+    console.log("EFFECT RAN", arr);
+}, [arr]);
+
+console.log("COMPONENT RENDERED");
 
   // convert string to layout (2d array map of components)
   function convertStringToLayout(layoutString : string) : Array<Array<ComponentName>> {

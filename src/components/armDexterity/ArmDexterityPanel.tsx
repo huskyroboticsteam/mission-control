@@ -40,26 +40,7 @@ export const ArmDexterityPanel = () => {
             <CameraStream key={`wristcam-${coord[0]}-${coord[1]}`} camera="wrist" />
           </div>
         ))}
-      <div
-        className="customization-container"
-        style={{position: 'absolute', bottom: 0, right: 0, zIndex: 1000}}>
-        <CustomizationPanel
-          numRowsP={rowNum}
-          numColsP={colNum}
-          onSend={handleChildData}
-          components={components}
-          edit={edit}
-          defaultSettings={defaultSettings}
-        />
-      </div>
-      {!edit && (
-        <button
-          onClick={() => setEdit(true)}
-          style={{position: 'absolute', bottom: 0, right: 0, zIndex: 999}}>
-          {' '}
-          Edit Layout
-        </button>
-      )}
+      
     </div>
   )
 }
