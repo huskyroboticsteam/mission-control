@@ -259,10 +259,10 @@ function CustomizationPanel({
           ))}
         </tbody>
       </table>
-      <div style={{display: "flex",alignItems: "center", fontSize: "12px" , width: "100%"}}>
-        <p style = {{ width: "30%"}}>Save your layout:</p>
-        <input style = {{ width: "40%"}} type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
-        <button  style = {{ width: "30%"}} onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
+      <div style={{display: "flex",alignItems: "flex-start", fontSize: "12px" , width: "100%", gap: "10px"}}>
+        <p>Save your layout:</p>
+        <input type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
+        <button onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
       </div> 
       <div>
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
