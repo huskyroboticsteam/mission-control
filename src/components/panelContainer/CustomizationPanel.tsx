@@ -188,6 +188,8 @@ function CustomizationPanel({
     if (str != null){
       const layout = convertStringToLayout(str)
       setArr(layout)
+      setNumRows(layout.length)
+      setNumCols(layout[0].length)
     }
   }
 
@@ -266,7 +268,6 @@ function CustomizationPanel({
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
       <button onClick={() => setEdit(false)}>Close</button>
       </div>
-  
         </div>
     </div>
   )
