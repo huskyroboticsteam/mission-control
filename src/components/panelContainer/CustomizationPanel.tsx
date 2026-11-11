@@ -194,7 +194,9 @@ function CustomizationPanel({
   return (
     <div
       style={{
-        display: edit ? 'block' : 'none',
+        display: edit ? 'flex' : 'none',
+        flexDirection: 'column',
+        gap: '5px',
         position: 'absolute',
         right: '0',
         bottom: '0',
@@ -202,7 +204,8 @@ function CustomizationPanel({
         backgroundColor: 'white',
         color: 'black',
       }}>
-      <h1>Customization Panel</h1>
+        <div style = {{margin: '5px'}}>
+          <h1>Customization Panel</h1>
       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
       <p>Saved Layouts: </p>
       <select
@@ -259,9 +262,12 @@ function CustomizationPanel({
         <input style = {{ width: "40%"}} type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
         <button  style = {{ width: "30%"}} onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
       </div> 
+      <div>
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
       <button onClick={() => setEdit(false)}>Close</button>
-      
+      </div>
+  
+        </div>
     </div>
   )
 }
