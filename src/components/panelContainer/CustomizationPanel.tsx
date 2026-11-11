@@ -103,7 +103,10 @@ function CustomizationPanel({
     convertComponentToCoordMap(prevCoordinates, numRows, numCols)
   ) // grid array
   const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
-  const [currLayoutName, setCurrLayoutName] = useState('')
+  const [currLayoutName, setCurrLayoutName] = useState<string | null>(null)
+  const [savedLayoutNames, setSavedLayoutNames] = useState<string[]>(getSavedLayoutNames(panelKey))
+  const [selectedSavedLayout, setSelectedSavedLayout] = useState('')
+  
 
   // sets up component options
   useEffect(() => {
@@ -119,9 +122,6 @@ function CustomizationPanel({
   useEffect(() => {
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numCols, numRows])
-
-
-  setItem('labubu world domination', prevCoordinates.toString())
 
 // Convert layout to string
 // layout structure: first line is numRows, numCols
@@ -141,11 +141,10 @@ function CustomizationPanel({
     return s
   }
 
- useEffect(() => {
-    console.log("EFFECT RAN", arr);
-}, [arr]);
-
-console.log("COMPONENT RENDERED");
+  function getSavedLayoutNames(key: string) {
+    const keys = Object.keys(localStorage).filter((k) => k.startsWith(key)).map((k) => k.split(": ")[1]) // grabs only name not associated key
+    return keys
+  }
 
   // convert string to layout (2d array map of components)
   function convertStringToLayout(layoutString : string) : Array<Array<ComponentName>> {
@@ -165,10 +164,26 @@ console.log("COMPONENT RENDERED");
     return layout
   }
 
-  function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string) {
+  function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string | null, key: string) {
+    const saveName = name ?? "unnamed"
     const layoutString = convertToString(layoutToSave)
-    name = "Nav: " + name
+    setSavedLayoutNames((prev) => [...prev, saveName]);
+    if (name != null) {
+      name = key + ": "  + name
+      
+    } else {
+      name = key + ": unnamed"
+    }
     setItem(name, layoutString)
+    setCurrLayoutName(null)
+  }
+
+  function chooseThisLayout(layoutName: string, key: string){
+    const str = localStorage.getItem(key + ": " + layoutName)
+    if (str != null){
+      const layout = convertStringToLayout(str)
+      setArr(layout)
+    }
   }
 
   return (
@@ -185,8 +200,15 @@ console.log("COMPONENT RENDERED");
       <h1>Customization Panel</h1>
       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
       <p>Saved Layouts: </p>
-      <select>
+      <select
+        value={selectedSavedLayout} 
+        onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
         <option value="">Select a saved layout</option>
+        {savedLayoutNames.map((name) => (
+          <option key={name} value={name}>
+            {name}
+          </option>
+        ))}
       </select>
       </div>
       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
@@ -227,8 +249,12 @@ console.log("COMPONENT RENDERED");
           ))}
         </tbody>
       </table>
+      <p>
+        Save your layout:
+        <input type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
+        <button onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save Layout </button>
+      </p>
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
-      <button onClick={() => saveLayout(arr, 'My Layout')}>Save Layout </button>
       
     </div>
   )
