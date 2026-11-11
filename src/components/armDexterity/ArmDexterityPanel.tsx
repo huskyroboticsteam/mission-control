@@ -40,7 +40,6 @@ export const ArmDexterityPanel = () => {
             <CameraStream key={`wristcam-${coord[0]}-${coord[1]}`} camera="wrist" />
           </div>
         ))}
-      
     </div>
   )
 }

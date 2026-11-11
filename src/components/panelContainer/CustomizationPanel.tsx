@@ -23,6 +23,7 @@ type CustomizationPanelProps = {
   onSend: (data: (ComponentName | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
+  setEdit: (edit: boolean) => void
 }
 
 function convertComponentToCoordMap(
@@ -96,6 +97,7 @@ function CustomizationPanel({
   numColsP,
   edit,
   onSend,
+  setEdit,
 }: CustomizationPanelProps) {
   const [numRows, setNumRows] = useState(numRowsP)
   const [numCols, setNumCols] = useState(numColsP)
@@ -167,7 +169,10 @@ function CustomizationPanel({
   function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string | null, key: string) {
     const saveName = name ?? "unnamed"
     const layoutString = convertToString(layoutToSave)
-    setSavedLayoutNames((prev) => [...prev, saveName]);
+    // update saved layout names list
+    if (!savedLayoutNames.includes(saveName)) {
+      setSavedLayoutNames((prev) => [...prev, saveName]);
+    }
     if (name != null) {
       name = key + ": "  + name
       
@@ -249,12 +254,13 @@ function CustomizationPanel({
           ))}
         </tbody>
       </table>
-      <p>
-        Save your layout:
-        <input type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
-        <button onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save Layout </button>
-      </p>
+      <div style={{display: "flex",alignItems: "center", fontSize: "12px" , width: "100%"}}>
+        <p style = {{ width: "30%"}}>Save your layout:</p>
+        <input style = {{ width: "40%"}} type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
+        <button  style = {{ width: "30%"}} onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
+      </div> 
       <button onClick={() => onSend(arr, panelKey)}>Set</button>
+      <button onClick={() => setEdit(false)}>Close</button>
       
     </div>
   )

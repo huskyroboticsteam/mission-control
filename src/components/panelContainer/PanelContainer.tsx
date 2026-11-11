@@ -183,6 +183,7 @@ function PanelContainer() {
                     panelKey="navigation"
                     edit={editStatus.navigation}
                     defaultSettings={layouts.navigation}
+                    setEdit={(edit) => setEditStatus({...editStatus, navigation: edit})}
                   />
                 )}
               </div>
