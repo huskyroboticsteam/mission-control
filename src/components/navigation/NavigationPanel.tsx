@@ -53,27 +53,37 @@ export const NavigationPanel = ({
         gridTemplateColumns: `repeat(${colData}, 1fr)`,
       }}>
       {(coordinateData['cam'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <CamWrapper />
         </div>
       ))}
       {(coordinateData['compass'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <Compass />
         </div>
       ))}
       {(coordinateData['waypointlist'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <WaypointList />
         </div>
       ))}
       {(coordinateData['waypointnav'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <WaypointNav />
         </div>
       ))}
       {(coordinateData['driveGP'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <div
             className="drive-gpad"
             style={{
@@ -89,7 +99,9 @@ export const NavigationPanel = ({
         </div>
       ))}
       {(coordinateData['peripheralGP'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <div
             className="peripheral-gpad"
             style={{
@@ -106,7 +118,9 @@ export const NavigationPanel = ({
       ))}
 
       {(coordinateData['keyboard'] ?? []).map((coord) => (
-        <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <div
             className="keyboard-container"
             style={{

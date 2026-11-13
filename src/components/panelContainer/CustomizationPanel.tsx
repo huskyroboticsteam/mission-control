@@ -108,7 +108,6 @@ function CustomizationPanel({
   const [currLayoutName, setCurrLayoutName] = useState<string | null>(null)
   const [savedLayoutNames, setSavedLayoutNames] = useState<string[]>(getSavedLayoutNames(panelKey))
   const [selectedSavedLayout, setSelectedSavedLayout] = useState('')
-  
 
   // sets up component options
   useEffect(() => {
@@ -125,67 +124,67 @@ function CustomizationPanel({
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numCols, numRows])
 
-// Convert layout to string
-// layout structure: first line is numRows, numCols
-//                   remaining lines are formatted like coordinate : component 
-//                   new line for each coord mapping
-  function convertToString(layoutToSave : Array<Array<ComponentName>> ) : string {
-    let s = layoutToSave.length + "," + layoutToSave[0].length + "\n";
+  // Convert layout to string
+  // layout structure: first line is numRows, numCols
+  //                   remaining lines are formatted like coordinate : component
+  //                   new line for each coord mapping
+  function convertToString(layoutToSave: Array<Array<ComponentName>>): string {
+    let s = layoutToSave.length + ',' + layoutToSave[0].length + '\n'
     for (let i = 0; i < layoutToSave.length; i++) {
       for (let j = 0; j < layoutToSave[i].length; j++) {
-        if (layoutToSave[i][j] !== "") {
-          s += i +"," + j + ":" + layoutToSave[i][j]
-          s += "\n"
+        if (layoutToSave[i][j] !== '') {
+          s += i + ',' + j + ':' + layoutToSave[i][j]
+          s += '\n'
         }
       }
-      
     }
     return s
   }
 
   function getSavedLayoutNames(key: string) {
-    const keys = Object.keys(localStorage).filter((k) => k.startsWith(key)).map((k) => k.split(": ")[1]) // grabs only name not associated key
+    const keys = Object.keys(localStorage)
+      .filter((k) => k.startsWith(key))
+      .map((k) => k.split(': ')[1]) // grabs only name not associated key
     return keys
   }
 
   // convert string to layout (2d array map of components)
-  function convertStringToLayout(layoutString : string) : Array<Array<ComponentName>> {
-    const lines = layoutString.split("\n")
-    const [numRows, numCols] = lines[0].split(",").map(Number)
-    const layout: ComponentName[][] = Array.from({ length: numRows }, () => 
-  Array.from({ length: numCols }, () => "")
-    );
+  function convertStringToLayout(layoutString: string): Array<Array<ComponentName>> {
+    const lines = layoutString.split('\n')
+    const [numRows, numCols] = lines[0].split(',').map(Number)
+    const layout: ComponentName[][] = Array.from({length: numRows}, () =>
+      Array.from({length: numCols}, () => '')
+    )
 
     for (let i = 1; i < lines.length; i++) {
-      const [coords, component] = lines[i].split(":")
-      const [row, col] = coords.split(",").map(Number)
+      const [coords, component] = lines[i].split(':')
+      const [row, col] = coords.split(',').map(Number)
       if (!(row === undefined || col === undefined || component === undefined)) {
-       layout[row][col] = component as ComponentName
+        layout[row][col] = component as ComponentName
       }
     }
     return layout
   }
 
   function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string | null, key: string) {
-    const saveName = name ?? "unnamed"
+    const saveName = name ?? 'unnamed'
     const layoutString = convertToString(layoutToSave)
     // update saved layout names list
     if (!savedLayoutNames.includes(saveName)) {
-      setSavedLayoutNames((prev) => [...prev, saveName]);
+      setSavedLayoutNames((prev) => [...prev, saveName])
     }
     if (name != null) {
-      name = key + ": "  + name
-      
+      name = key + ': ' + name
     } else {
-      name = key + ": unnamed"
+      name = key + ': unnamed'
     }
     setItem(name, layoutString)
     setCurrLayoutName(null)
   }
 
-  function chooseThisLayout(layoutName: string, key: string){
-    const str = localStorage.getItem(key + ": " + layoutName)
-    if (str != null){
+  function chooseThisLayout(layoutName: string, key: string) {
+    const str = localStorage.getItem(key + ': ' + layoutName)
+    if (str != null) {
       const layout = convertStringToLayout(str)
       setArr(layout)
       setNumRows(layout.length)
@@ -206,69 +205,83 @@ function CustomizationPanel({
         backgroundColor: 'white',
         color: 'black',
       }}>
-        <div style = {{margin: '5px'}}>
-          <h1>Customization Panel</h1>
-      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-      <p>Saved Layouts: </p>
-      <select
-        value={selectedSavedLayout} 
-        onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
-        <option value="">Select a saved layout</option>
-        {savedLayoutNames.map((name) => (
-          <option key={name} value={name}>
-            {name}
-          </option>
-        ))}
-      </select>
-      </div>
-      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-        <p>Rows:</p>
-        <button onClick={() => setNumRows((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
-        <p>{numRows}</p>
-        <button onClick={() => setNumRows((prev) => (prev < components.length ? prev + 1 : prev))}>
-          &gt;
-        </button>
-
-        <p>Columns:</p>
-        <button onClick={() => setNumCols((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
-        <p>{numCols}</p>
-        <button onClick={() => setNumCols((prev) => (prev < components.length ? prev + 1 : prev))}>
-          &gt;
-        </button>
-      </div>
-
-      <table>
-        <tbody>
-          {arr.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((cell, colIndex) => (
-                <td key={colIndex}>
-                  <select
-                    value={cell}
-                    onChange={(e) =>
-                      setArr((prev) =>
-                        putInArray(rowIndex, colIndex, prev, e.target.value as ComponentName)
-                      )
-                    }>
-                    <option value={-1} key={-1}></option>
-                    {componentSelect}
-                  </select>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div style={{display: "flex",alignItems: "flex-start", fontSize: "12px" , width: "100%", gap: "10px"}}>
-        <p>Save your layout:</p>
-        <input type="text" placeholder="Layout name" value={currLayoutName || ''} onChange={(e) => setCurrLayoutName(e.target.value)} />
-        <button onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
-      </div> 
-      <div>
-      <button onClick={() => onSend(arr, panelKey)}>Set</button>
-      <button onClick={() => setEdit(false)}>Close</button>
-      </div>
+      <div style={{margin: '5px'}}>
+        <h1>Customization Panel</h1>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+          <p>Saved Layouts: </p>
+          <select
+            value={selectedSavedLayout}
+            onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
+            <option value="">Select a saved layout</option>
+            {savedLayoutNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
         </div>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+          <p>Rows:</p>
+          <button onClick={() => setNumRows((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
+          <p>{numRows}</p>
+          <button
+            onClick={() => setNumRows((prev) => (prev < components.length ? prev + 1 : prev))}>
+            &gt;
+          </button>
+
+          <p>Columns:</p>
+          <button onClick={() => setNumCols((prev) => (prev > 1 ? prev - 1 : prev))}>&lt;</button>
+          <p>{numCols}</p>
+          <button
+            onClick={() => setNumCols((prev) => (prev < components.length ? prev + 1 : prev))}>
+            &gt;
+          </button>
+        </div>
+
+        <table>
+          <tbody>
+            {arr.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((cell, colIndex) => (
+                  <td key={colIndex}>
+                    <select
+                      value={cell}
+                      onChange={(e) =>
+                        setArr((prev) =>
+                          putInArray(rowIndex, colIndex, prev, e.target.value as ComponentName)
+                        )
+                      }>
+                      <option value={-1} key={-1}></option>
+                      {componentSelect}
+                    </select>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            fontSize: '12px',
+            width: '100%',
+            gap: '10px',
+          }}>
+          <p>Save your layout:</p>
+          <input
+            type="text"
+            placeholder="Layout name"
+            value={currLayoutName || ''}
+            onChange={(e) => setCurrLayoutName(e.target.value)}
+          />
+          <button onClick={() => saveLayout(arr, currLayoutName, panelKey)}>Save</button>
+        </div>
+        <div>
+          <button onClick={() => onSend(arr, panelKey)}>Set</button>
+          <button onClick={() => setEdit(false)}>Close</button>
+        </div>
+      </div>
     </div>
   )
 }
