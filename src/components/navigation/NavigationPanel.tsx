@@ -9,6 +9,7 @@ import {KeyboardDisplay} from '../help/KeyboardDisplay.js'
 import {Gamepad} from '../help/Gamepad.js'
 import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
+import CamWrapper from '../camera/CamWrapper.js'
 
 type Coordinate = [number, number]
 type ComponentName =
@@ -53,7 +54,7 @@ export const NavigationPanel = ({
       }}>
       {(coordinateData['cam'] ?? []).map((coord) => (
         <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-          <CameraStream camera="mast" />
+          <CamWrapper />
         </div>
       ))}
       {(coordinateData['compass'] ?? []).map((coord) => (
