@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Compass from '../navigation/Compass.js'
 import './ArmDexterityPanel.css'
 import {WaypointList} from '../navigation/WaypointList.js'
@@ -10,6 +10,7 @@ import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
 import CamWrapper from '../camera/CamWrapper.js'
 import type {Coordinate, ComponentName} from '../../constants/types.js'
+import type {CameraNames} from '../../constants/cameraConstants.js'
 
 export const ArmDexterityPanel = ({
   coordinateData,
@@ -20,6 +21,13 @@ export const ArmDexterityPanel = ({
   rowData: number
   colData: number
 }) => {
+
+  // default cam config 
+  const [defaultCam, setDefaultCam] = useState<Array<Array<keyof typeof CameraNames>> | null>([['hand', 'wrist']])
+  useEffect(() => {
+    setDefaultCam(null)
+  }, [coordinateData && (defaultCam != null)]) // runs just once when default load layout is changed
+  
   return (
     <div
       className="arm-dexterity-panel"
@@ -32,7 +40,7 @@ export const ArmDexterityPanel = ({
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-          <CamWrapper camera="mast" />
+          <CamWrapper camera={defaultCam?.[coord[0]]?.[coord[1]] ?? 'mast'} />
         </div>
       ))}
       {(coordinateData?.['compass'] ?? []).map((coord) => (
