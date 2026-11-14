@@ -9,7 +9,13 @@ import './PanelContainer.css'
 import React from 'react'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 import {useState} from 'react'
-import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
+import type {
+  Coordinate,
+  ComponentName,
+  ComponentCoordinates,
+  PanelKey,
+  PanelCoordinates,
+} from '../../constants/types.js'
 
 function PanelContainer() {
   const components: ComponentName[] = [

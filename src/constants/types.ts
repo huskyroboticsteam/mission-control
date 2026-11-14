@@ -5,15 +5,14 @@ export type DriveMode = 'normal' | 'tank'
 // Types for panel container customization
 export type Coordinate = [number, number]
 export type ComponentName =
-    | 'cam'
-    | 'compass'
-    | 'waypointlist'
-    | 'waypointnav'
-    | 'driveGP'
-    | 'peripheralGP'
-    | 'keyboard'
-    | ''
+  | 'cam'
+  | 'compass'
+  | 'waypointlist'
+  | 'waypointnav'
+  | 'driveGP'
+  | 'peripheralGP'
+  | 'keyboard'
+  | ''
 export type ComponentCoordinates = Partial<Record<ComponentName, Coordinate[] | null>>
 export type PanelKey = 'navigation' | 'armDexterity' | 'help'
 export type PanelCoordinates = Partial<Record<PanelKey, ComponentCoordinates>>
-

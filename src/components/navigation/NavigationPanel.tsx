@@ -10,7 +10,13 @@ import {Gamepad} from '../help/Gamepad.js'
 import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
 import CamWrapper from '../camera/CamWrapper.js'
-import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
+import type {
+  Coordinate,
+  ComponentName,
+  ComponentCoordinates,
+  PanelKey,
+  PanelCoordinates,
+} from '../../constants/types.js'
 
 const components: ComponentName[] = [
   'cam',

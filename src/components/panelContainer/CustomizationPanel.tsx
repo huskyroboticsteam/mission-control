@@ -1,25 +1,29 @@
 import React, {useState, useEffect} from 'react'
-import {getItem, setItem} from '../../util/localStorage.js'
-import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
+import {setItem} from '../../util/localStorage.js'
+import type {Coordinate, ComponentName, PanelKey} from '../../constants/types.js'
 
+// Parameters for customization panel
 type CustomizationPanelProps = {
   prevCoordinates: Partial<Record<ComponentName, Coordinate[] | null>> | undefined
   components: ComponentName[]
-  panelKey: PanelKey
-  numRowsP: number
-  numColsP: number
+  panelKey: PanelKey // determines which panel this customization panel is for (nav/arm dexterity/help)
+  numRowsP: number // holds data on previous # of rows
+  numColsP: number // holds data on previous # of columns
   onSend: (data: (ComponentName | null)[][], key: PanelKey) => void
   edit: boolean
   defaultSettings: number[] // [defaultNumRows, defaultNumCols]
   setEdit: (edit: boolean) => void
 }
 
+// Data is passed to customization panel as a component as a map of component names to coordinates
+// for easy readibility, but we want to work with it in 2D array form to represent the grid layout.
+// This function converts the map to the 2D array representation of the grid layout
 function convertComponentToCoordMap(
   prevCoordinates: Partial<Record<ComponentName, Coordinate[] | null>> | undefined,
   numRows: number,
   numCols: number
 ): Array<Array<ComponentName>> {
-  const rows = numRows // adjust to your grid size
+  const rows = numRows
   const cols = numCols
 
   const arr: Array<Array<ComponentName>> = Array.from({length: rows}, () =>
@@ -34,17 +38,17 @@ function convertComponentToCoordMap(
       arr[row][col] = component as ComponentName
     })
   })
-
   return arr
 }
 
+// Helper function to put a component into a 2D array at a specific row and column
 function putInArray(row: number, col: number, arr: ComponentName[][], toPut: ComponentName) {
   const arrCopy = arr.map((row) => [...row])
   arrCopy[row][col] = toPut
   return arrCopy
 }
 
-// helper function to manage the array (representing the grid) state
+// Helper function to manage the array (representing the grid) state
 function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
   const arrCopy = arr.map((row) => [...row])
   // Case 1: row is less than current array row length - slice extra rows off
@@ -75,8 +79,51 @@ function resize2DArray(rows: number, cols: number, arr: ComponentName[][]) {
   return arrCopy
 }
 
-// sends array of coordinates back to parent component, will be same indexing as passed components array and
-// have value of -1 if not selected, else will be coordinate in grid where component should be placed
+// Convert layout to string
+// layout structure: first line is numRows, numCols
+//                   remaining lines are formatted like coordinate : component
+//                   new line for each coord mapping
+function convertToString(layoutToSave: Array<Array<ComponentName>>): string {
+  let s = layoutToSave.length + ',' + layoutToSave[0].length + '\n'
+  for (let i = 0; i < layoutToSave.length; i++) {
+    for (let j = 0; j < layoutToSave[i].length; j++) {
+      if (layoutToSave[i][j] !== '') {
+        s += i + ',' + j + ':' + layoutToSave[i][j]
+        s += '\n'
+      }
+    }
+  }
+  return s
+}
+
+// Gets the names of saved layouts for a given key from localStorage
+function getSavedLayoutNames(key: string) {
+  const keys = Object.keys(localStorage)
+    .filter((k) => k.startsWith(key))
+    .map((k) => k.split(': ')[1]) // grabs only name not associated key
+  return keys
+}
+
+// Convert string to layout (2d array of components that represents the grid layout)
+function convertStringToLayout(layoutString: string): Array<Array<ComponentName>> {
+  const lines = layoutString.split('\n')
+  const [numRows, numCols] = lines[0].split(',').map(Number)
+  const layout: ComponentName[][] = Array.from({length: numRows}, () =>
+    Array.from({length: numCols}, () => '')
+  )
+
+  for (let i = 1; i < lines.length; i++) {
+    const [coords, component] = lines[i].split(':')
+    const [row, col] = coords.split(',').map(Number)
+    if (!(row === undefined || col === undefined || component === undefined)) {
+      layout[row][col] = component as ComponentName
+    }
+  }
+  return layout
+}
+
+// On closure, returns a 2D array of components back to parent component
+// Will contain an empty string in a (row,col) pair if there is no component selected in the area
 function CustomizationPanel({
   prevCoordinates,
   components,
@@ -91,13 +138,12 @@ function CustomizationPanel({
   const [numCols, setNumCols] = useState(numColsP)
   const [arr, setArr] = useState<Array<Array<ComponentName>>>(
     convertComponentToCoordMap(prevCoordinates, numRows, numCols)
-  ) // grid array
-  const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // array of component options
-  const [currLayoutName, setCurrLayoutName] = useState<string | null>(null)
+  ) // 2D array representing the grid layout of components
+  const [componentSelect, setComponentSelect] = useState<JSX.Element[]>([]) // arr of component options
+  const [currLayoutName, setCurrLayoutName] = useState<string | null>(null) // Name for saved layout
   const [savedLayoutNames, setSavedLayoutNames] = useState<string[]>(getSavedLayoutNames(panelKey))
-  const [selectedSavedLayout, setSelectedSavedLayout] = useState('')
 
-  // sets up component options
+  // Populates component options on start
   useEffect(() => {
     const selectOptions = components.map((component, index) => (
       <option value={component} key={index}>
@@ -107,52 +153,10 @@ function CustomizationPanel({
     setComponentSelect(selectOptions)
   }, [])
 
-  // updates grid array when number of columns or rows changes
+  // Updates grid array when number of columns or rows changes
   useEffect(() => {
     setArr((prev) => resize2DArray(numRows, numCols, prev))
   }, [numCols, numRows])
-
-  // Convert layout to string
-  // layout structure: first line is numRows, numCols
-  //                   remaining lines are formatted like coordinate : component
-  //                   new line for each coord mapping
-  function convertToString(layoutToSave: Array<Array<ComponentName>>): string {
-    let s = layoutToSave.length + ',' + layoutToSave[0].length + '\n'
-    for (let i = 0; i < layoutToSave.length; i++) {
-      for (let j = 0; j < layoutToSave[i].length; j++) {
-        if (layoutToSave[i][j] !== '') {
-          s += i + ',' + j + ':' + layoutToSave[i][j]
-          s += '\n'
-        }
-      }
-    }
-    return s
-  }
-
-  function getSavedLayoutNames(key: string) {
-    const keys = Object.keys(localStorage)
-      .filter((k) => k.startsWith(key))
-      .map((k) => k.split(': ')[1]) // grabs only name not associated key
-    return keys
-  }
-
-  // convert string to layout (2d array map of components)
-  function convertStringToLayout(layoutString: string): Array<Array<ComponentName>> {
-    const lines = layoutString.split('\n')
-    const [numRows, numCols] = lines[0].split(',').map(Number)
-    const layout: ComponentName[][] = Array.from({length: numRows}, () =>
-      Array.from({length: numCols}, () => '')
-    )
-
-    for (let i = 1; i < lines.length; i++) {
-      const [coords, component] = lines[i].split(':')
-      const [row, col] = coords.split(',').map(Number)
-      if (!(row === undefined || col === undefined || component === undefined)) {
-        layout[row][col] = component as ComponentName
-      }
-    }
-    return layout
-  }
 
   function saveLayout(layoutToSave: Array<Array<ComponentName>>, name: string | null, key: string) {
     const saveName = name ?? 'unnamed'
@@ -198,7 +202,7 @@ function CustomizationPanel({
         <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
           <p>Saved Layouts: </p>
           <select
-            value={selectedSavedLayout}
+            defaultValue=""
             onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
             <option value="">Select a saved layout</option>
             {savedLayoutNames.map((name) => (
