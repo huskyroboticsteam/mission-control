@@ -3,6 +3,8 @@
   flex-direction: column;
   gap: 1rem;
   margin: 0.5rem;
+
+  align-items: center;
 }
 
 #axis-table,
@@ -20,7 +22,7 @@
 
 #axis-table td {
   color: black;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #button-table,
@@ -42,5 +44,5 @@
 }
 
 #button-table td {
-  font-size: 14px;
+  font-size: 12px;
 }

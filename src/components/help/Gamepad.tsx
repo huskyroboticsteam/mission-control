@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react'
-import FULL_GPAD_SVG_SOURCE_CODE from 'virtual-gamepad-lib/gamepad_assets/rounded/display-gamepad-full.svg?raw'
+import FULL_GPAD_SVG_SOURCE_CODE from './GamepadSVG.svg?raw'
 import {Axes, Buttons, gamepadEmulator} from '../../constants/gamepadConstants.js'
 import {addGamepadDisplay, setupEmulatedGamepadInput} from '../../util/gamepads.js'
 

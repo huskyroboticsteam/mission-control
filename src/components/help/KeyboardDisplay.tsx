@@ -1,20 +1,26 @@
 import {KeyboardReact} from 'react-simple-keyboard'
 import 'react-simple-keyboard/build/css/index.css'
 import './KeyboardDisplay.css'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import {selectPressedKeys} from '../../store/inputSlice.js'
 
 export const KeyboardDisplay = () => {
-  const shifting = useSelector(selectPressedKeys).some(
-    (key) => key === 'SHIFT' || key === 'CAPSLOCK'
-  )
+  const [capsLockDown, setCapsLockDown] = useState(false)
+  const pressedKeys = useSelector(selectPressedKeys)
+  const shifting = pressedKeys.some((key) => key === 'SHIFT')
+
+  useEffect(() => {
+    if (pressedKeys.some((key) => key === 'CAPSLOCK')) {
+      setCapsLockDown(!capsLockDown)
+    }
+  }, [pressedKeys])
 
   return (
     <KeyboardReact
       layout={{
         default: [
-          '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+          '` 1 2 3 4 5 6 7 8 9 0 - = {bks}',
           '{tab} q w e r t y u i o p [ ] \\',
           "{lock} a s d f g h j k l ; ' {enter}",
           '{shift} z x c v b n m , . / {shift}',
@@ -46,7 +52,7 @@ export const KeyboardDisplay = () => {
           buttons: '{space}',
         },
       ]}
-      layoutName={shifting ? 'shift' : 'default'}
+      layoutName={shifting || capsLockDown ? 'shift' : 'default'}
       useTouchEvents={true}
       physicalKeyboardHighlight={true}
       physicalKeyboardHighlightPress={true}
