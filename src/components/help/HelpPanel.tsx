@@ -1,7 +1,7 @@
 import './HelpPanel.css'
 import {GamepadTable} from './GamepadTable.js'
 import {useEffect} from 'react'
-import React, {useState} from 'react'
+import React from 'react'
 import {
   Axes,
   Buttons,
@@ -16,25 +16,9 @@ import type {RootState} from '../../store/store.js'
 import {gamepadAxisChanged, gamepadButtonChanged} from '../../store/inputSlice.js'
 import {KeyboardTable} from './KeyboardTable.js'
 import {KeyboardDisplay} from './KeyboardDisplay.js'
-import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
-import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 
 export const HelpPanel = () => {
   const store = useStore<RootState>()
-  const defaultSettings = [2, 2]
-  const components = ['driveGP', 'peripheralGP', 'keyboard']
-  const [rowNum, setRowNum] = React.useState(defaultSettings[0])
-  const [colNum, setColNum] = React.useState(defaultSettings[1])
-  const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
-  const [edit, setEdit] = useState(false)
-
-  const handleChildData = (data: (number | null)[][]) => {
-    const processedData = processCustomizationPanelData(data, components)
-    setCoordinates(processedData.coordinates)
-    setRowNum(processedData.rowNum)
-    setColNum(processedData.colNum)
-    setEdit(false)
-  }
 
   // Adds listener for gamepad button changes + updates buttonChange state accordingly
   useEffect(() => {
@@ -86,18 +70,17 @@ export const HelpPanel = () => {
       id="help-panel"
       style={{
         display: 'grid',
-        gridTemplateRows: `repeat(${rowNum}, 1fr)`,
-        gridTemplateColumns: `repeat(${colNum}, 1fr)`,
+        gridTemplateRows: `1fr 1fr`,
+        gridTemplateColumns: `1fr 1fr`,
         alignItems: 'center',
         justifyItems: 'stretch',
       }}>
-      {coordinates[0]?.length > 0 &&
-        coordinates[0].map((coord) => (
+
           <div
             className="drive-gpad"
             style={{
-              gridColumn: `${coord[1] + 1}`,
-              gridRow: `${coord[0] + 1}`,
+              gridColumn: `${1}`,
+              gridRow: `${1}`,
             }}>
             <GamepadTable gamepadName={GamepadNames.driveGamepad} />
             <div className="g1-text-wrapper">
@@ -105,14 +88,13 @@ export const HelpPanel = () => {
               <Gamepad index={GamepadIndex.driveGamepad} />
             </div>
           </div>
-        ))}
-      {coordinates[1]?.length > 0 &&
-        coordinates[1].map((coord) => (
+        
+
           <div
             className="peripheral-gpad"
             style={{
-              gridColumn: `${coord[1] + 1}`,
-              gridRow: `${coord[0] + 1}`,
+              gridColumn: `${2}`,
+              gridRow: `${1}`,
             }}>
             <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
             <div className="g2-text-wrapper">
@@ -120,14 +102,12 @@ export const HelpPanel = () => {
               <Gamepad index={GamepadIndex.peripheralGamepad} />
             </div>
           </div>
-        ))}
-      {coordinates[2]?.length > 0 &&
-        coordinates[2].map((coord) => (
+
           <div
             className="keyboard-container"
             style={{
-              gridColumn: `${coord[1] + 1}/-1`,
-              gridRow: `${coord[0] + 1}`,
+              gridColumn: `1/-1`,
+              gridRow: `${2}`,
               alignSelf: 'center',
             }}>
             <KeyboardTable />
@@ -136,7 +116,6 @@ export const HelpPanel = () => {
               <KeyboardDisplay />
             </div>
           </div>
-        ))}
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import CameraStream from '../camera/CameraStream.js'
 import Compass from './Compass.js'
 import './NavigationPanel.css'
 import {WaypointList} from './WaypointList.js'
@@ -10,24 +9,8 @@ import {Gamepad} from '../help/Gamepad.js'
 import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
 import CamWrapper from '../camera/CamWrapper.js'
-import type {
-  Coordinate,
-  ComponentName,
-  ComponentCoordinates,
-  PanelKey,
-  PanelCoordinates,
-} from '../../constants/types.js'
+import type {Coordinate, ComponentName} from '../../constants/types.js'
 
-const components: ComponentName[] = [
-  'cam',
-  'compass',
-  'waypointlist',
-  'waypointnav',
-  'driveGP',
-  'peripheralGP',
-  'keyboard',
-  '',
-]
 export const NavigationPanel = ({
   coordinateData,
   rowData,

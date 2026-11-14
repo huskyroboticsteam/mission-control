@@ -201,9 +201,7 @@ function CustomizationPanel({
         <h1>Customization Panel</h1>
         <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
           <p>Saved Layouts: </p>
-          <select
-            defaultValue=""
-            onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
+          <select defaultValue="" onChange={(e) => chooseThisLayout(e.target.value, panelKey)}>
             <option value="">Select a saved layout</option>
             {savedLayoutNames.map((name) => (
               <option key={name} value={name}>

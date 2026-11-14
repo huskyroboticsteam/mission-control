@@ -1,45 +1,117 @@
-import React, {useState} from 'react'
-import {CameraStream} from '../camera/CameraStream.js'
-import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
+import React from 'react'
+import Compass from '../navigation/Compass.js'
 import './ArmDexterityPanel.css'
-import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
+import {WaypointList} from '../navigation/WaypointList.js'
+import {WaypointNav} from '../navigation/WaypointNav.js'
+import {KeyboardTable} from '../help/KeyboardTable.js'
+import {KeyboardDisplay} from '../help/KeyboardDisplay.js'
+import {Gamepad} from '../help/Gamepad.js'
+import {GamepadTable} from '../help/GamepadTable.js'
+import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
+import CamWrapper from '../camera/CamWrapper.js'
+import type {Coordinate, ComponentName} from '../../constants/types.js'
 
-export const ArmDexterityPanel = () => {
-  const defaultSettings = [1, 2]
-  const components = ['handcam', 'wristcam']
-  const [rowNum, setRowNum] = useState(defaultSettings[0])
-  const [colNum, setColNum] = useState(defaultSettings[1])
-  const [coordinates, setCoordinates] = useState([[[0, 0]], [[0, 1]], [[1, 0]]])
-  const [edit, setEdit] = useState(false)
-
-  const handleChildData = (data: (number | null)[][]) => {
-    const processedData = processCustomizationPanelData(data, components)
-    setCoordinates(processedData.coordinates)
-    setRowNum(processedData.rowNum)
-    setColNum(processedData.colNum)
-    setEdit(false)
-  }
-
+export const ArmDexterityPanel = ({
+  coordinateData,
+  rowData,
+  colData,
+}: {
+  coordinateData: Partial<Record<ComponentName, Coordinate[] | null>> | undefined
+  rowData: number
+  colData: number
+}) => {
   return (
     <div
       className="arm-dexterity-panel"
       style={{
         display: 'grid',
-        gridTemplateRows: `repeat(${rowNum}, 1fr)`,
-        gridTemplateColumns: `repeat(${colNum}, 1fr)`,
+        gridTemplateRows: `repeat(${rowData}, 1fr)`,
+        gridTemplateColumns: `repeat(${colData}, 1fr)`,
       }}>
-      {coordinates[0]?.length > 0 &&
-        coordinates[0].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <CameraStream key={`handcam-${coord[0]}-${coord[1]}`} camera="hand" />
+      {(coordinateData?.['cam'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <CamWrapper />
+        </div>
+      ))}
+      {(coordinateData?.['compass'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <Compass />
+        </div>
+      ))}
+      {(coordinateData?.['waypointlist'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <WaypointList />
+        </div>
+      ))}
+      {(coordinateData?.['waypointnav'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <WaypointNav />
+        </div>
+      ))}
+      {(coordinateData?.['driveGP'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div
+            className="drive-gpad"
+            style={{
+              gridColumn: `${coord[1] + 1}`,
+              gridRow: `${coord[0] + 1}`,
+            }}>
+            <GamepadTable gamepadName={GamepadNames.driveGamepad} />
+            <div className="g1-text-wrapper">
+              <b className="label">Driver Gamepad</b>
+              <Gamepad index={GamepadIndex.driveGamepad} />
+            </div>
           </div>
-        ))}
-      {coordinates[1]?.length > 0 &&
-        coordinates[1].map((coord) => (
-          <div style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-            <CameraStream key={`wristcam-${coord[0]}-${coord[1]}`} camera="wrist" />
+        </div>
+      ))}
+      {(coordinateData?.['peripheralGP'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div
+            className="peripheral-gpad"
+            style={{
+              gridColumn: `${coord[1] + 1}`,
+              gridRow: `${coord[0] + 1}`,
+            }}>
+            <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
+            <div className="g2-text-wrapper">
+              <b className="label">Peripheral Gamepad</b>
+              <Gamepad index={GamepadIndex.peripheralGamepad} />
+            </div>
           </div>
-        ))}
+        </div>
+      ))}
+
+      {(coordinateData?.['keyboard'] ?? []).map((coord) => (
+        <div
+          key={coord.join(',')}
+          style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
+          <div
+            className="keyboard-container"
+            style={{
+              gridColumn: `${coord[1] + 1}/-1`,
+              gridRow: `${coord[0] + 1}`,
+              alignSelf: 'center',
+            }}>
+            <KeyboardTable />
+            <div className="keyboard">
+              <b className="label">Keyboard Controls</b>
+              <KeyboardDisplay />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
