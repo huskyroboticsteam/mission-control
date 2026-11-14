@@ -29,7 +29,7 @@ function PanelContainer() {
   ]
   // Layouts holds the default num of rows/cols for each panel for layout customization
   // ex. layouts[navigation] = [2,3] means the navigation panel has 2 rows and 3 cols by default
-  const layouts = {navigation: [2, 3], armDexterity: [1, 2], help: [2, 2]}
+  const layouts = {navigation: [2, 3], armDexterity: [1, 2]}
   // Coordinates holds the default configuration of each panel
   const [coordinates, setCoordinates] = useState<PanelCoordinates>({
     navigation: {
@@ -58,33 +58,20 @@ function PanelContainer() {
       peripheralGP: null,
       keyboard: null,
       '': null,
-    },
-    help: {
-      cam: null,
-      compass: null,
-      waypointlist: null,
-      waypointnav: null,
-      driveGP: [[0, 0]],
-      peripheralGP: [[0, 1]],
-      keyboard: [[1, 0]],
-      '': null,
-    },
+    }
   })
 
   const [rowNum, setRowNum] = useState({
     navigation: layouts.navigation[0],
     armDexterity: layouts.armDexterity[0],
-    help: layouts.help[0],
   })
   const [colNum, setColNum] = useState({
     navigation: layouts.navigation[1],
     armDexterity: layouts.armDexterity[1],
-    help: layouts.help[1],
   })
   const [editStatus, setEditStatus] = useState({
     navigation: false,
     armDexterity: false,
-    help: false,
   })
 
   // Processes data from customization panel and updates states accordingly

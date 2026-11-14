@@ -32,7 +32,7 @@ export const ArmDexterityPanel = ({
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
-          <CamWrapper />
+          <CamWrapper camera="mast" />
         </div>
       ))}
       {(coordinateData?.['compass'] ?? []).map((coord) => (

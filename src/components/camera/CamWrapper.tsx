@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 import {CameraStream} from './CameraStream.js'
 import type {CameraNames} from '../../constants/cameraConstants.js'
 
-function CamWrapper() {
-  const [selectedCam, setSelectedCam] = useState<keyof typeof CameraNames>('mast')
+function CamWrapper({camera}: {camera: keyof typeof CameraNames}) {
+  const [selectedCam, setSelectedCam] = useState<keyof typeof CameraNames>(camera)
   return (
     <div className="camwrapper" style={{width: '100%', height: '100%'}}>
       <CameraStream camera={selectedCam} />

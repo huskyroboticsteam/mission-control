@@ -14,5 +14,5 @@ export type ComponentName =
   | 'keyboard'
   | ''
 export type ComponentCoordinates = Partial<Record<ComponentName, Coordinate[] | null>>
-export type PanelKey = 'navigation' | 'armDexterity' | 'help'
+export type PanelKey = 'navigation' | 'armDexterity'
 export type PanelCoordinates = Partial<Record<PanelKey, ComponentCoordinates>>
