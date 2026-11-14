@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Compass from './Compass.js'
 import './NavigationPanel.css'
 import {WaypointList} from './WaypointList.js'
@@ -10,7 +10,7 @@ import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
 import CamWrapper from '../camera/CamWrapper.js'
 import type {Coordinate, ComponentName} from '../../constants/types.js'
-import type { CameraNames } from '../../constants/cameraConstants.js'
+import type {CameraNames} from '../../constants/cameraConstants.js'
 
 export const NavigationPanel = ({
   coordinateData,
@@ -21,11 +21,14 @@ export const NavigationPanel = ({
   rowData: number
   colData: number
 }) => {
-  // default cam config 
-    const [defaultCam, setDefaultCam] = useState<Array<Array<keyof typeof CameraNames>> | null>([['mast', 'hand'],['wrist']])
-    useEffect(() => {
-      setDefaultCam(null)
-    }, [coordinateData && (defaultCam != null)]) // runs just once when default load layout is changed
+  // default cam config
+  const [defaultCam, setDefaultCam] = useState<Array<Array<keyof typeof CameraNames>> | null>([
+    ['mast', 'hand'],
+    ['wrist'],
+  ])
+  useEffect(() => {
+    setDefaultCam(null)
+  }, [coordinateData && defaultCam != null]) // runs just once when default load layout is changed
   return (
     <div
       className="navigation-panel"

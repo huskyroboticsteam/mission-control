@@ -58,7 +58,7 @@ function PanelContainer() {
       peripheralGP: null,
       keyboard: null,
       '': null,
-    }
+    },
   })
 
   const [rowNum, setRowNum] = useState({
@@ -161,10 +161,16 @@ function PanelContainer() {
             </>
           }
         />
-        <Route path="/arm-dexterity" element={<><ArmDexterityPanel coordinateData={coordinates.armDexterity}
+        <Route
+          path="/arm-dexterity"
+          element={
+            <>
+              <ArmDexterityPanel
+                coordinateData={coordinates.armDexterity}
                 rowData={rowNum.armDexterity}
-                colData={colNum.armDexterity}/>
-                <div
+                colData={colNum.armDexterity}
+              />
+              <div
                 className="customization-container"
                 style={{
                   position: 'absolute',
@@ -194,8 +200,9 @@ function PanelContainer() {
                   />
                 )}
               </div>
-
-                </>} />
+            </>
+          }
+        />
 
         <Route path="/telemetry" element={<TelemetryPanel />} />
 

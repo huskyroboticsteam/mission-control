@@ -21,13 +21,14 @@ export const ArmDexterityPanel = ({
   rowData: number
   colData: number
 }) => {
-
-  // default cam config 
-  const [defaultCam, setDefaultCam] = useState<Array<Array<keyof typeof CameraNames>> | null>([['hand', 'wrist']])
+  // default cam config
+  const [defaultCam, setDefaultCam] = useState<Array<Array<keyof typeof CameraNames>> | null>([
+    ['hand', 'wrist'],
+  ])
   useEffect(() => {
     setDefaultCam(null)
-  }, [coordinateData && (defaultCam != null)]) // runs just once when default load layout is changed
-  
+  }, [coordinateData && defaultCam != null]) // runs just once when default load layout is changed
+
   return (
     <div
       className="arm-dexterity-panel"

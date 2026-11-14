@@ -75,47 +75,45 @@ export const HelpPanel = () => {
         alignItems: 'center',
         justifyItems: 'stretch',
       }}>
+      <div
+        className="drive-gpad"
+        style={{
+          gridColumn: `${1}`,
+          gridRow: `${1}`,
+        }}>
+        <GamepadTable gamepadName={GamepadNames.driveGamepad} />
+        <div className="g1-text-wrapper">
+          <b className="label">Driver Gamepad</b>
+          <Gamepad index={GamepadIndex.driveGamepad} />
+        </div>
+      </div>
 
-          <div
-            className="drive-gpad"
-            style={{
-              gridColumn: `${1}`,
-              gridRow: `${1}`,
-            }}>
-            <GamepadTable gamepadName={GamepadNames.driveGamepad} />
-            <div className="g1-text-wrapper">
-              <b className="label">Driver Gamepad</b>
-              <Gamepad index={GamepadIndex.driveGamepad} />
-            </div>
-          </div>
-        
+      <div
+        className="peripheral-gpad"
+        style={{
+          gridColumn: `${2}`,
+          gridRow: `${1}`,
+        }}>
+        <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
+        <div className="g2-text-wrapper">
+          <b className="label">Peripheral Gamepad</b>
+          <Gamepad index={GamepadIndex.peripheralGamepad} />
+        </div>
+      </div>
 
-          <div
-            className="peripheral-gpad"
-            style={{
-              gridColumn: `${2}`,
-              gridRow: `${1}`,
-            }}>
-            <GamepadTable gamepadName={GamepadNames.peripheralGamepad} />
-            <div className="g2-text-wrapper">
-              <b className="label">Peripheral Gamepad</b>
-              <Gamepad index={GamepadIndex.peripheralGamepad} />
-            </div>
-          </div>
-
-          <div
-            className="keyboard-container"
-            style={{
-              gridColumn: `1/-1`,
-              gridRow: `${2}`,
-              alignSelf: 'center',
-            }}>
-            <KeyboardTable />
-            <div className="keyboard">
-              <b className="label">Keyboard Controls</b>
-              <KeyboardDisplay />
-            </div>
-          </div>
+      <div
+        className="keyboard-container"
+        style={{
+          gridColumn: `1/-1`,
+          gridRow: `${2}`,
+          alignSelf: 'center',
+        }}>
+        <KeyboardTable />
+        <div className="keyboard">
+          <b className="label">Keyboard Controls</b>
+          <KeyboardDisplay />
+        </div>
+      </div>
     </div>
   )
 }
