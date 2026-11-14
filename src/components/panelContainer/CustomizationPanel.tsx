@@ -1,21 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import {getItem, setItem} from '../../util/localStorage.js'
-type Coordinate = [number, number]
-type ComponentName =
-  | 'cam'
-  | 'compass'
-  | 'waypointlist'
-  | 'waypointnav'
-  | 'driveGP'
-  | 'peripheralGP'
-  | 'keyboard'
-  | ''
-type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
-type PanelKey = 'navigation' | 'armDexterity' | 'help'
-type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
+import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
 
 type CustomizationPanelProps = {
-  prevCoordinates: Record<ComponentName, Coordinate[] | null>
+  prevCoordinates: Partial<Record<ComponentName, Coordinate[] | null>> | undefined
   components: ComponentName[]
   panelKey: PanelKey
   numRowsP: number
@@ -27,7 +15,7 @@ type CustomizationPanelProps = {
 }
 
 function convertComponentToCoordMap(
-  prevCoordinates: Record<ComponentName, Coordinate[] | null>,
+  prevCoordinates: Partial<Record<ComponentName, Coordinate[] | null>> | undefined,
   numRows: number,
   numCols: number
 ): Array<Array<ComponentName>> {
@@ -38,7 +26,7 @@ function convertComponentToCoordMap(
     Array(cols).fill('' as ComponentName)
   )
 
-  Object.entries(prevCoordinates).forEach(([component, coordinates]) => {
+  Object.entries(prevCoordinates ?? {}).forEach(([component, coordinates]) => {
     coordinates?.forEach(([row, col]) => {
       if (!arr[row]) {
         arr[row] = Array(cols).fill('' as ComponentName)

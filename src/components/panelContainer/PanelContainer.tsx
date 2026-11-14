@@ -6,25 +6,12 @@ import {ArmDexterityPanel} from '../armDexterity/ArmDexterityPanel.js'
 import {MapPanel} from '../map/MapPanel.js'
 import CustomizationPanel from '../panelContainer/CustomizationPanel.js'
 import './PanelContainer.css'
-import React, {useEffect} from 'react'
+import React from 'react'
 import {processCustomizationPanelData} from '../../util/processCustomizationPanelData.js'
 import {useState} from 'react'
+import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
 
 function PanelContainer() {
-  type Coordinate = [number, number]
-  type ComponentName =
-    | 'cam'
-    | 'compass'
-    | 'waypointlist'
-    | 'waypointnav'
-    | 'driveGP'
-    | 'peripheralGP'
-    | 'keyboard'
-    | ''
-  type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
-  type PanelKey = 'navigation' | 'armDexterity' | 'help'
-  type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
-
   const components: ComponentName[] = [
     'cam',
     'compass',
@@ -38,9 +25,7 @@ function PanelContainer() {
   // layouts holds the default num of rows/cols for each panel for layout customization
   // ex. layouts[navigation] = [2,3] means the navigation panel has 2 rows and 3 cols by default
   const [layouts, setLayouts] = useState({navigation: [2, 3], armDexterity: [1, 2], help: [2, 2]})
-  const [coordinates, setCoordinates] = useState<
-    Record<PanelKey, Record<ComponentName, Coordinate[] | null>>
-  >({
+  const [coordinates, setCoordinates] = useState<PanelCoordinates>({
     navigation: {
       cam: [
         [0, 0],

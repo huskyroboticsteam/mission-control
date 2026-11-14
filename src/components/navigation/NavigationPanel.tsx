@@ -10,20 +10,7 @@ import {Gamepad} from '../help/Gamepad.js'
 import {GamepadTable} from '../help/GamepadTable.js'
 import {GamepadIndex, GamepadNames} from '../../constants/gamepadConstants.js'
 import CamWrapper from '../camera/CamWrapper.js'
-
-type Coordinate = [number, number]
-type ComponentName =
-  | 'cam'
-  | 'compass'
-  | 'waypointlist'
-  | 'waypointnav'
-  | 'driveGP'
-  | 'peripheralGP'
-  | 'keyboard'
-  | ''
-type ComponentCoordinates = Record<ComponentName, Coordinate[] | null>
-type PanelKey = 'navigation' | 'armDexterity' | 'help'
-type PanelCoordinates = Record<PanelKey, ComponentCoordinates>
+import type {Coordinate, ComponentName, ComponentCoordinates, PanelKey, PanelCoordinates} from '../../constants/types.js'
 
 const components: ComponentName[] = [
   'cam',
@@ -40,7 +27,7 @@ export const NavigationPanel = ({
   rowData,
   colData,
 }: {
-  coordinateData: Record<ComponentName, Coordinate[] | null>
+  coordinateData: Partial<Record<ComponentName, Coordinate[] | null>> | undefined
   rowData: number
   colData: number
 }) => {
@@ -52,35 +39,35 @@ export const NavigationPanel = ({
         gridTemplateRows: `repeat(${rowData}, 1fr)`,
         gridTemplateColumns: `repeat(${colData}, 1fr)`,
       }}>
-      {(coordinateData['cam'] ?? []).map((coord) => (
+      {(coordinateData?.['cam'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <CamWrapper />
         </div>
       ))}
-      {(coordinateData['compass'] ?? []).map((coord) => (
+      {(coordinateData?.['compass'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <Compass />
         </div>
       ))}
-      {(coordinateData['waypointlist'] ?? []).map((coord) => (
+      {(coordinateData?.['waypointlist'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <WaypointList />
         </div>
       ))}
-      {(coordinateData['waypointnav'] ?? []).map((coord) => (
+      {(coordinateData?.['waypointnav'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
           <WaypointNav />
         </div>
       ))}
-      {(coordinateData['driveGP'] ?? []).map((coord) => (
+      {(coordinateData?.['driveGP'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
@@ -98,7 +85,7 @@ export const NavigationPanel = ({
           </div>
         </div>
       ))}
-      {(coordinateData['peripheralGP'] ?? []).map((coord) => (
+      {(coordinateData?.['peripheralGP'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
@@ -117,7 +104,7 @@ export const NavigationPanel = ({
         </div>
       ))}
 
-      {(coordinateData['keyboard'] ?? []).map((coord) => (
+      {(coordinateData?.['keyboard'] ?? []).map((coord) => (
         <div
           key={coord.join(',')}
           style={{gridColumn: `${coord[1] + 1}`, gridRow: `${coord[0] + 1}`}}>
