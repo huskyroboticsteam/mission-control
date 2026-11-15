@@ -5,7 +5,6 @@ import {RoverBody} from './RoverBody.js'
 import './DriveDisplayPanel.css'
 
 export const DriveDisplayPanel = () => {
-
   return (
     <div className="drive-display-panel">
       <RoverBody>
