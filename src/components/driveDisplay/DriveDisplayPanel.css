@@ -1,0 +1,37 @@
+.drive-display-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel-fl {
+  top: 20px;
+  left: -30px;
+}
+
+.wheel-fr {
+  top: 20px;
+  right: -30px;
+}
+
+.wheel-rl {
+  bottom: 20px;
+  left: -30px;
+}
+
+.wheel-rr {
+  bottom: 20px;
+  right: -30px;
+}
+
+.wheel-fl .wheel-readout,
+.wheel-rl .wheel-readout {
+  right: calc(100% + 35px);
+}
+
+.wheel-fr .wheel-readout,
+.wheel-rr .wheel-readout {
+  left: calc(100% + 35px);
+}
